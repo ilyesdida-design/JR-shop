@@ -304,7 +304,7 @@
 
       return;
     }
-
+window.products = data;
     productsContainer.innerHTML = data.map(product => {
 
       const image = product.image_url
@@ -350,9 +350,37 @@
 
     }).join("");
   }
-  function addToCart(productId) {
-  alert("تمت إضافة المنتج إلى السلة: " + productId);
-}
+ function updateCartCount() {
+  const cartCount = document.getElementById("cartCount");
+
+  const totalItems = cart.reduce((total, item) => {
+    return total + item.quantity;
+  }, 0);
+
+  cartCount.textContent = totalItems;
+  } function addToCart(productId) {
+  const product = window.products?.find(p => p.id === productId);
+
+  if (!product) {
+    alert("لم يتم العثور على المنتج");
+    return;
+  }
+
+  const existingItem = cart.find(item => item.id === productId);
+
+  if (existingItem) {
+    existingItem.quantity += 1;
+  } else {
+    cart.push({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      quantity: 1
+    });
+  }
+
+  updateCartCount();
+  }
 
   loadProducts();
 </script>
