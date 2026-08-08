@@ -479,16 +479,16 @@ function renderCart() {
 <button
   onclick="removeFromCart('${item.id}')"
   style="
-    width: 100%;
-    margin-top: 10px;
-    padding: 10px;
-    border: 0;
-    border-radius: 8px;
-    background: #dc2626;
-    color: white;
-    font-weight: bold;
-  "
-
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border: 0;
+  border-radius: 8px;
+  background: #dc2626;
+  color: white;
+  font-weight: bold;
+"
+>
   🗑️ حذف المنتج
 </button>
     </div>
@@ -499,7 +499,7 @@ function renderCart() {
   }, 0);
 
   cartTotal.textContent = `المجموع: ${total} دج`;
-}function updateCartCount() {
+function updateCartCount() {
   const cartCount = document.getElementById("cartCount");
 
   const totalItems = cart.reduce((total, item) => {
@@ -507,22 +507,7 @@ function renderCart() {
   }, 0);
 
   cartCount.textContent = totalItems;
-  } function decreaseQuantity(productId) {
-  const item = cart.find(item => item.id === productId);
-
-  if (!item) {
-    return;
-  }
-
-  if (item.quantity > 1) {
-    item.quantity -= 1;
-  } else {
-    cart = cart.filter(item => item.id !== productId);
-  }
-
-  updateCartCount();
-  renderCart();
-  }}
+}
 
 function decreaseQuantity(productId) {
   const item = cart.find(item => item.id === productId);
@@ -541,7 +526,7 @@ function decreaseQuantity(productId) {
   renderCart();
 }
 
-function increaseQuantity(productId) {function increaseQuantity(productId) {
+function increaseQuantity(productId) {
   const item = cart.find(item => item.id === productId);
 
   if (!item) {
@@ -552,13 +537,16 @@ function increaseQuantity(productId) {function increaseQuantity(productId) {
 
   updateCartCount();
   renderCart();
-  function removeFromCart(productId) {
+}
+
+function removeFromCart(productId) {
   cart = cart.filter(item => item.id !== productId);
 
   updateCartCount();
   renderCart();
-  }
-  }function addToCart(productId) {
+}
+
+function addToCart(productId) {
   const product = window.products?.find(p => p.id === productId);
 
   if (!product) {
