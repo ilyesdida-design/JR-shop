@@ -421,10 +421,62 @@ function renderCart() {
       padding: 12px 0;
       border-bottom: 1px solid #ddd;
     ">
+
       <strong>${item.name}</strong>
-      <div>
-        ${item.quantity} × ${item.price} دج
+
+      <div style="
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      ">
+
+        <button
+          onclick="decreaseQuantity('${item.id}')"
+          style="
+            width: 40px;
+            height: 40px;
+            border: 0;
+            border-radius: 8px;
+            background: #111;
+            color: white;
+            font-size: 22px;
+          "
+        >
+          −
+        </button>
+
+        <span style="
+          font-size: 18px;
+          font-weight: bold;
+        ">
+          ${item.quantity}
+        </span>
+
+        <button
+          onclick="increaseQuantity('${item.id}')"
+          style="
+            width: 40px;
+            height: 40px;
+            border: 0;
+            border-radius: 8px;
+            background: #16a34a;
+            color: white;
+            font-size: 22px;
+          "
+        >
+          +
+        </button>
+
       </div>
+
+      <div style="
+        margin-top: 8px;
+        font-weight: bold;
+      ">
+        ${item.price} دج × ${item.quantity}
+      </div>
+
     </div>
   `).join("");
 
@@ -433,7 +485,7 @@ function renderCart() {
   }, 0);
 
   cartTotal.textContent = `المجموع: ${total} دج`;
-  } function updateCartCount() {
+}function updateCartCount() {
   const cartCount = document.getElementById("cartCount");
 
   const totalItems = cart.reduce((total, item) => {
