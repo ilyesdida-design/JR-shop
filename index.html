@@ -215,9 +215,7 @@
     <div class="logo">
       JR <span>Shop</span>
     </div>
-function addToCart(productId) {
-  alert("تمت إضافة المنتج إلى السلة: " + productId);
-}
+    
     <button class="buy" onclick="addToCart('${product.id}')">
   أضف إلى السلة
     </button>
@@ -354,6 +352,9 @@ function addToCart(productId) {
   }
   function addToCart(productId) {
     console.log("تمت إضافة المنتج إلى السلة:", productId);
+    function addToCart(productId) {
+  alert("تمت إضافة المنتج إلى السلة: " + productId);
+  }
   }
   loadProducts();
 </script>
