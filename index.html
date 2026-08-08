@@ -350,7 +350,43 @@ window.products = data;
 
     }).join("");
   }
- function updateCartCount() {
+function openCart() {
+  document.getElementById("cartModal").style.display = "block";
+  renderCart();
+}
+
+function closeCart() {
+  document.getElementById("cartModal").style.display = "none";
+}
+
+function renderCart() {
+  const cartItems = document.getElementById("cartItems");
+  const cartTotal = document.getElementById("cartTotal");
+
+  if (cart.length === 0) {
+    cartItems.innerHTML = "السلة فارغة";
+    cartTotal.textContent = "المجموع: 0 دج";
+    return;
+  }
+
+  cartItems.innerHTML = cart.map(item => `
+    <div style="
+      padding: 12px 0;
+      border-bottom: 1px solid #ddd;
+    ">
+      <strong>${item.name}</strong>
+      <div>
+        ${item.quantity} × ${item.price} دج
+      </div>
+    </div>
+  `).join("");
+
+  const total = cart.reduce((sum, item) => {
+    return sum + (item.price * item.quantity);
+  }, 0);
+
+  cartTotal.textContent = `المجموع: ${total} دج`;
+  } function updateCartCount() {
   const cartCount = document.getElementById("cartCount");
 
   const totalItems = cart.reduce((total, item) => {
