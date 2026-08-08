@@ -493,7 +493,18 @@ function renderCart() {
   }, 0);
 
   cartCount.textContent = totalItems;
-  } function addToCart(productId) {
+  } function increaseQuantity(productId) {
+  const item = cart.find(item => item.id === productId);
+
+  if (!item) {
+    return;
+  }
+
+  item.quantity += 1;
+
+  updateCartCount();
+  renderCart();
+  }function addToCart(productId) {
   const product = window.products?.find(p => p.id === productId);
 
   if (!product) {
