@@ -396,7 +396,6 @@ window.products = data;
       `;
 
     }).join("");
-  }
 function openCart() {
   document.getElementById("cartModal").style.display = "block";
   renderCart();
@@ -406,11 +405,7 @@ function closeCart() {
   document.getElementById("cartModal").style.display = "none";
 }
 
-           
-"
->
-  🗑️ حذف المنتج
-  function renderCart() {
+function renderCart() {
   const cartItems = document.getElementById("cartItems");
   const cartTotal = document.getElementById("cartTotal");
 
@@ -501,12 +496,11 @@ function closeCart() {
   `).join("");
 
   const total = cart.reduce((sum, item) => {
-    return sum + (item.price * item.quantity);
+    return sum + (Number(item.price) * item.quantity);
   }, 0);
 
   cartTotal.textContent = `المجموع: ${total} دج`;
 }
-
 
 function updateCartCount() {
   const cartCount = document.getElementById("cartCount");
@@ -518,13 +512,10 @@ function updateCartCount() {
   cartCount.textContent = totalItems;
 }
 
-
 function decreaseQuantity(productId) {
   const item = cart.find(item => item.id === productId);
 
-  if (!item) {
-    return;
-  }
+  if (!item) return;
 
   if (item.quantity > 1) {
     item.quantity -= 1;
@@ -536,13 +527,10 @@ function decreaseQuantity(productId) {
   renderCart();
 }
 
-
 function increaseQuantity(productId) {
   const item = cart.find(item => item.id === productId);
 
-  if (!item) {
-    return;
-  }
+  if (!item) return;
 
   item.quantity += 1;
 
@@ -550,14 +538,12 @@ function increaseQuantity(productId) {
   renderCart();
 }
 
-
 function removeFromCart(productId) {
   cart = cart.filter(item => item.id !== productId);
 
   updateCartCount();
   renderCart();
 }
-
 
 function addToCart(productId) {
   const product = window.products?.find(p => p.id === productId);
@@ -579,16 +565,6 @@ function addToCart(productId) {
       quantity: 1
     });
   }
-
-  updateCartCount();
-  renderCart();
-}
-
-loadProducts();
-
-  updateCartCount();
-  renderCart();
-}
 
   loadProducts();
 </script>
