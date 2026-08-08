@@ -303,19 +303,19 @@
 
 <!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
+  <script>
   const SUPABASE_URL = "https://cstjgsuehmqcolajspqh.supabase.co";
-
   const SUPABASE_KEY = "sb_publishable_e_wQxqCrx21Qq1kRYKjFMg_yR6TQfKX";
 
   const supabaseClient = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_KEY
-  );let cart = [];
+  );
+
+  let cart = [];
+  window.products = [];
 
   async function loadProducts() {
-
     const productsContainer = document.getElementById("products");
 
     productsContainer.innerHTML = `
@@ -351,7 +351,9 @@
 
       return;
     }
-window.products = data;
+
+    window.products = data;
+
     productsContainer.innerHTML = data.map(product => {
 
       const image = product.image_url
@@ -386,7 +388,10 @@ window.products = data;
               المخزون: ${product.stock ?? 0}
             </div>
 
-            <button class="buy" onclick="addToCart('${product.id}')">
+            <button
+              class="buy"
+              onclick="addToCart('${product.id}')"
+            >
               أضف إلى السلة
             </button>
 
@@ -396,178 +401,198 @@ window.products = data;
       `;
 
     }).join("");
-function openCart() {
-  document.getElementById("cartModal").style.display = "block";
-  renderCart();
-}
-
-function closeCart() {
-  document.getElementById("cartModal").style.display = "none";
-}
-
-function renderCart() {
-  const cartItems = document.getElementById("cartItems");
-  const cartTotal = document.getElementById("cartTotal");
-
-  if (cart.length === 0) {
-    cartItems.innerHTML = "السلة فارغة";
-    cartTotal.textContent = "المجموع: 0 دج";
-    return;
   }
 
-  cartItems.innerHTML = cart.map(item => `
-    <div style="
-      padding: 12px 0;
-      border-bottom: 1px solid #ddd;
-    ">
 
-      <strong>${item.name}</strong>
+  function openCart() {
+    document.getElementById("cartModal").style.display = "block";
+    renderCart();
+  }
 
+
+  function closeCart() {
+    document.getElementById("cartModal").style.display = "none";
+  }
+
+
+  function renderCart() {
+    const cartItems = document.getElementById("cartItems");
+    const cartTotal = document.getElementById("cartTotal");
+
+    if (cart.length === 0) {
+      cartItems.innerHTML = "السلة فارغة";
+      cartTotal.textContent = "المجموع: 0 دج";
+      return;
+    }
+
+    cartItems.innerHTML = cart.map(item => `
       <div style="
-        margin-top: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid #ddd;
       ">
 
-        <button
-          onclick="decreaseQuantity('${item.id}')"
-          style="
-            width: 40px;
-            height: 40px;
-            border: 0;
-            border-radius: 8px;
-            background: #111;
-            color: white;
-            font-size: 22px;
-          "
-        >
-          −
-        </button>
+        <strong>${item.name}</strong>
 
-        <span style="
-          font-size: 18px;
+        <div style="
+          margin-top: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        ">
+
+          <button
+            onclick="decreaseQuantity('${item.id}')"
+            style="
+              width: 40px;
+              height: 40px;
+              border: 0;
+              border-radius: 8px;
+              background: #111;
+              color: white;
+              font-size: 22px;
+            "
+          >
+            −
+          </button>
+
+          <span style="
+            font-size: 18px;
+            font-weight: bold;
+          ">
+            ${item.quantity}
+          </span>
+
+          <button
+            onclick="increaseQuantity('${item.id}')"
+            style="
+              width: 40px;
+              height: 40px;
+              border: 0;
+              border-radius: 8px;
+              background: #16a34a;
+              color: white;
+              font-size: 22px;
+            "
+          >
+            +
+          </button>
+
+        </div>
+
+        <div style="
+          margin-top: 8px;
           font-weight: bold;
         ">
-          ${item.quantity}
-        </span>
+          ${item.price} دج × ${item.quantity}
+        </div>
 
         <button
-          onclick="increaseQuantity('${item.id}')"
+          onclick="removeFromCart('${item.id}')"
           style="
-            width: 40px;
-            height: 40px;
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
             border: 0;
             border-radius: 8px;
-            background: #16a34a;
+            background: #dc2626;
             color: white;
-            font-size: 22px;
+            font-weight: bold;
           "
         >
-          +
+          🗑️ حذف المنتج
         </button>
 
       </div>
+    `).join("");
 
-      <div style="
-        margin-top: 8px;
-        font-weight: bold;
-      ">
-        ${item.price} دج × ${item.quantity}
-      </div>
+    const total = cart.reduce((sum, item) => {
+      return sum + (Number(item.price) * item.quantity);
+    }, 0);
 
-      <button
-        onclick="removeFromCart('${item.id}')"
-        style="
-          width: 100%;
-          margin-top: 10px;
-          padding: 10px;
-          border: 0;
-          border-radius: 8px;
-          background: #dc2626;
-          color: white;
-          font-weight: bold;
-        "
-      >
-        🗑️ حذف المنتج
-      </button>
+    cartTotal.textContent = `المجموع: ${total} دج`;
+  }
 
-    </div>
-  `).join("");
 
-  const total = cart.reduce((sum, item) => {
-    return sum + (Number(item.price) * item.quantity);
-  }, 0);
+  function updateCartCount() {
+    const cartCount = document.getElementById("cartCount");
 
-  cartTotal.textContent = `المجموع: ${total} دج`;
-}
+    const totalItems = cart.reduce((total, item) => {
+      return total + item.quantity;
+    }, 0);
 
-function updateCartCount() {
-  const cartCount = document.getElementById("cartCount");
+    cartCount.textContent = totalItems;
+  }
 
-  const totalItems = cart.reduce((total, item) => {
-    return total + item.quantity;
-  }, 0);
 
-  cartCount.textContent = totalItems;
-}
+  function decreaseQuantity(productId) {
+    const item = cart.find(item => item.id === productId);
 
-function decreaseQuantity(productId) {
-  const item = cart.find(item => item.id === productId);
+    if (!item) return;
 
-  if (!item) return;
+    if (item.quantity > 1) {
+      item.quantity -= 1;
+    } else {
+      cart = cart.filter(item => item.id !== productId);
+    }
 
-  if (item.quantity > 1) {
-    item.quantity -= 1;
-  } else {
+    updateCartCount();
+    renderCart();
+  }
+
+
+  function increaseQuantity(productId) {
+    const item = cart.find(item => item.id === productId);
+
+    if (!item) return;
+
+    item.quantity += 1;
+
+    updateCartCount();
+    renderCart();
+  }
+
+
+  function removeFromCart(productId) {
     cart = cart.filter(item => item.id !== productId);
+
+    updateCartCount();
+    renderCart();
   }
 
-  updateCartCount();
-  renderCart();
-}
 
-function increaseQuantity(productId) {
-  const item = cart.find(item => item.id === productId);
+  function addToCart(productId) {
+    const product = window.products.find(
+      p => p.id === productId
+    );
 
-  if (!item) return;
+    if (!product) {
+      alert("لم يتم العثور على المنتج");
+      return;
+    }
 
-  item.quantity += 1;
+    const existingItem = cart.find(
+      item => item.id === productId
+    );
 
-  updateCartCount();
-  renderCart();
-}
+    if (existingItem) {
+      existingItem.quantity += 1;
+    } else {
+      cart.push({
+        id: product.id,
+        name: product.name,
+        price: Number(product.price),
+        quantity: 1
+      });
+    }
 
-function removeFromCart(productId) {
-  cart = cart.filter(item => item.id !== productId);
-
-  updateCartCount();
-  renderCart();
-}
-
-function addToCart(productId) {
-  const product = window.products?.find(p => p.id === productId);
-
-  if (!product) {
-    alert("لم يتم العثور على المنتج");
-    return;
+    updateCartCount();
+    renderCart();
   }
 
-  const existingItem = cart.find(item => item.id === productId);
-
-  if (existingItem) {
-    existingItem.quantity += 1;
-  } else {
-    cart.push({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      quantity: 1
-    });
-  }
-
+  // تشغيل الموقع
   loadProducts();
-</script>
-
+  updateCartCount();
+  renderCart();
+  </script>
 </body>
 </html>
