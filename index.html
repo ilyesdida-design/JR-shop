@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>JR Shop</title>
 
   <style>
@@ -116,6 +117,12 @@
       font-size: 45px;
     }
 
+    .product-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
     .product-info {
       padding: 13px;
     }
@@ -125,10 +132,30 @@
       margin-bottom: 8px;
     }
 
+    .description {
+      color: #666;
+      font-size: 13px;
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+
     .price {
       color: #16a34a;
       font-size: 18px;
       font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .old-price {
+      color: #999;
+      text-decoration: line-through;
+      font-size: 13px;
+      margin-right: 5px;
+    }
+
+    .stock {
+      color: #666;
+      font-size: 13px;
       margin-bottom: 10px;
     }
 
@@ -145,6 +172,17 @@
 
     .buy:hover {
       background: #16a34a;
+    }
+
+    .loading,
+    .error {
+      text-align: center;
+      padding: 30px;
+      font-size: 16px;
+    }
+
+    .error {
+      color: #dc2626;
     }
 
     footer {
@@ -174,4 +212,145 @@
 
 <header>
   <div class="top">
-    <div class="logo
+    <div class="logo">
+      JR <span>Shop</span>
+    </div>
+
+    <button class="cart">
+      🛒 السلة
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>
+    مرحباً بكم في <span>JR Shop</span>
+  </h1>
+
+  <p>
+    اكتشف منتجاتنا الجديدة
+  </p>
+</section>
+
+<main class="container">
+
+  <div class="section-title">
+    <h2>المنتجات</h2>
+  </div>
+
+  <div id="products" class="products">
+    <div class="loading">
+      جاري تحميل المنتجات...
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>
+    جميع الحقوق محفوظة © <strong>JR Shop</strong>
+  </p>
+</footer>
+
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  const SUPABASE_URL = "https://cstjgsuehmqcolajspqh.supabase.co";
+
+  const SUPABASE_KEY = "sb_publishable_e_wQxqCrx21Qq1kRYKjFMg_yR6TQfKX";
+
+  const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+  async function loadProducts() {
+
+    const productsContainer = document.getElementById("products");
+
+    productsContainer.innerHTML = `
+      <div class="loading">
+        جاري تحميل المنتجات...
+      </div>
+    `;
+
+    const { data, error } = await supabaseClient
+      .from("products")
+      .select("*")
+      .eq("is_active", true)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Supabase error:", error);
+
+      productsContainer.innerHTML = `
+        <div class="error">
+          حدث خطأ أثناء تحميل المنتجات.
+        </div>
+      `;
+
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      productsContainer.innerHTML = `
+        <div class="loading">
+          لا توجد منتجات حالياً.
+        </div>
+      `;
+
+      return;
+    }
+
+    productsContainer.innerHTML = data.map(product => {
+
+      const image = product.image_url
+        ? `<img src="${product.image_url}" alt="${product.name || "منتج JR"}">`
+        : "🛍️";
+
+      const oldPrice = product.old_price
+        ? `<span class="old-price">${product.old_price} دج</span>`
+        : "";
+
+      return `
+        <article class="product">
+
+          <div class="product-img">
+            ${image}
+          </div>
+
+          <div class="product-info">
+
+            <h3>${product.name || "منتج JR"}</h3>
+
+            <div class="description">
+              ${product.description || ""}
+            </div>
+
+            <div class="price">
+              ${product.price} دج
+              ${oldPrice}
+            </div>
+
+            <div class="stock">
+              المخزون: ${product.stock ?? 0}
+            </div>
+
+            <button class="buy">
+              أضف إلى السلة
+            </button>
+
+          </div>
+
+        </article>
+      `;
+
+    }).join("");
+  }
+
+  loadProducts();
+</script>
+
+</body>
+</html>
