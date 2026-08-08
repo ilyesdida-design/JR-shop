@@ -558,41 +558,36 @@
     updateCartCount();
     renderCart();
   }
+function addToCart(productId) {
+  const product = window.products?.find(p => p.id === productId);
 
-
-  function addToCart(productId) {
-    const product = window.products.find(
-      p => p.id === productId
-    );
-
-    if (!product) {
-      alert("لم يتم العثور على المنتج");
-      return;
-    }
-
-    const existingItem = cart.find(
-      item => item.id === productId
-    );
-
-    if (existingItem) {
-      existingItem.quantity += 1;
-    } else {
-      cart.push({
-        id: product.id,
-        name: product.name,
-        price: Number(product.price),
-        quantity: 1
-      });
-    }
-
-    updateCartCount();
-    renderCart();
+  if (!product) {
+    alert("لم يتم العثور على المنتج");
+    return;
   }
 
-  // تشغيل الموقع
-  loadProducts();
+  const existingItem = cart.find(item => item.id === productId);
+
+  if (existingItem) {
+    existingItem.quantity += 1;
+  } else {
+    cart.push({
+      id: product.id,
+      name: product.name,
+      price: Number(product.price),
+      quantity: 1
+    });
+  }
+
   updateCartCount();
   renderCart();
-  </script>
+}
+
+// تشغيل الموقع
+loadProducts();
+updateCartCount();
+renderCart();
+
+</script>
 </body>
 </html>
