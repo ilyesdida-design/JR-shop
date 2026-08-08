@@ -406,123 +406,10 @@ function closeCart() {
   document.getElementById("cartModal").style.display = "none";
 }
 
-function renderCart() {
-  const cartItems = document.getElementById("cartItems");
-  const cartTotal = document.getElementById("cartTotal");
-
-  if (cart.length === 0) {
-    cartItems.innerHTML = "السلة فارغة";
-    cartTotal.textContent = "المجموع: 0 دج";
-    return;
-  }
-
-  cartItems.innerHTML = cart.map(item => `
-    <div style="
-      padding: 12px 0;
-      border-bottom: 1px solid #ddd;
-    ">
-
-      <strong>${item.name}</strong>
-
-      <div style="
-        margin-top: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      ">
-
-        <button
-          onclick="decreaseQuantity('${item.id}')"
-          style="
-            width: 40px;
-            height: 40px;
-            border: 0;
-            border-radius: 8px;
-            background: #111;
-            color: white;
-            font-size: 22px;
-          "
-        >
-          −
-        </button>
-
-        <span style="
-          font-size: 18px;
-          font-weight: bold;
-        ">
-          ${item.quantity}
-        </span>
-
-        <button
-          onclick="increaseQuantity('${item.id}')"
-          style="
-            width: 40px;
-            height: 40px;
-            border: 0;
-            border-radius: 8px;
-            background: #16a34a;
-            color: white;
-            font-size: 22px;
-          "
-        >
-          +
-        </button>
-
-      </div>
-
-      <div style="
-        margin-top: 8px;
-        font-weight: bold;
-      ">
-        ${item.price} دج × ${item.quantity}
-      </div>
-<button
-  onclick="removeFromCart('${item.id}')"
-  style="
-  width: 100%;
-  margin-top: 10px;
-  padding: 10px;
-  border: 0;
-  border-radius: 8px;
-  background: #dc2626;
-  color: white;
-  font-weight: bold;
+           
 "
 >
   🗑️ حذف المنتج
-</button>
-    </div>
-  `).join("");
-
-  const total = cart.reduce((sum, item) => {
-    return sum + (item.price * item.quantity);
-  }, 0);
-
-  cartTotal.textContent = `المجموع: ${total} دج`;
-function updateCartCount() {
-  const cartCount = document.getElementById("cartCount");
-
-  const totalItems = cart.reduce((total, item) => {
-    return total + item.quantity;
-  }, 0);
-
-  cartCount.textContent = totalItems;
-}
-
-function decreaseQuantity(productId) {
-  const item = cart.find(item => item.id === productId);
-
-  if (!item) {
-    return;
-  }
-
-  if (item.quantity > 1) {
-    item.quantity -= 1;
-  } else {
-    cart = cart.filter(item => item.id !== productId);
-  }
-
-  updateCartCount();
   function renderCart() {
   const cartItems = document.getElementById("cartItems");
   const cartTotal = document.getElementById("cartTotal");
@@ -692,6 +579,12 @@ function addToCart(productId) {
       quantity: 1
     });
   }
+
+  updateCartCount();
+  renderCart();
+}
+
+loadProducts();
 
   updateCartCount();
   renderCart();
