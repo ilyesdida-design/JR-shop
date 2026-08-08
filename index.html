@@ -219,8 +219,7 @@
     <button class="cart" onclick="openCart()">
   🛒 السلة (<span id="cartCount">0</span>)
     </button>
-      🛒 السلة
-    </button>
+
   </div>
 </header>
 
@@ -247,6 +246,54 @@
   </div>
 
 </main>
+  <div id="cartModal" style="
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  z-index: 100;
+  padding: 20px;
+">
+
+  <div style="
+    background: white;
+    max-width: 500px;
+    margin: 50px auto;
+    border-radius: 16px;
+    padding: 20px;
+  ">
+
+    <h2 style="margin-bottom: 15px;">
+      🛒 سلة المشتريات
+    </h2>
+
+    <div id="cartItems">
+      السلة فارغة
+    </div>
+
+    <div id="cartTotal" style="
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 15px;
+    ">
+      المجموع: 0 دج
+    </div>
+
+    <button onclick="closeCart()" style="
+      width: 100%;
+      margin-top: 15px;
+      padding: 12px;
+      border: 0;
+      border-radius: 10px;
+      background: #111;
+      color: white;
+      font-weight: bold;
+    ">
+      إغلاق
+    </button>
+
+  </div>
+</div>
 
 <footer>
   <p>
