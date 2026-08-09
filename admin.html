@@ -1,2010 +1,630 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>JR Shop - Admin</title>
 
 <style>
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial;background:#f3f4f6;color:#111}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;border:0}
+.login{min-height:100vh;background:#111;display:flex;align-items:center;justify-content:center;padding:20px}
+.box{background:#fff;width:100%;max-width:420px;padding:28px;border-radius:20px}
+.logo{text-align:center;font-size:32px;font-weight:bold;margin-bottom:8px}
+.green{color:#16a34a}
+.sub{text-align:center;color:#777;margin-bottom:22px}
+input,select,textarea{width:100%;padding:13px;margin:6px 0;border:1px solid #ddd;border-radius:10px}
+.btn{padding:12px 16px;border-radius:10px;font-weight:bold}
+.btn-green{background:#16a34a;color:#fff}
+.btn-red{background:#dc2626;color:#fff}
+.btn-dark{background:#111;color:#fff}
+.btn-gray{background:#ddd}
+.full{width:100%}
+.error{color:#dc2626;text-align:center;margin-top:10px}
+#admin{display:none}
+header{background:#111;color:#fff;padding:15px}
+.head{max-width:1100px;margin:auto;display:flex;justify-content:space-between;align-items:center}
+main{max-width:1100px;margin:auto;padding:20px 15px}
+h1{margin:0 0 5px}
+.muted{color:#777}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0}
+.stat,.card{background:#fff;border-radius:15px;padding:18px;box-shadow:0 2px 10px #0000000d}
+.stat b{font-size:24px}
+.tabs{display:flex;gap:8px;margin-bottom:15px}
+.tab{padding:11px 18px;border-radius:10px;background:#ddd;font-weight:bold}
+.tab.active{background:#111;color:#fff}
+.section{display:none}
+.section.active{display:block}
+.order,.product{background:#fff;border-radius:15px;padding:17px;margin:12px 0;box-shadow:0 2px 10px #0000000d}
+.order h3,.product h3{margin:0 0 8px}
+.status{padding:6px 9px;border-radius:7px;font-size:12px;font-weight:bold;display:inline-block}
+.pending{background:#fef3c7;color:#92400e}
+.confirmed{background:#dbeafe;color:#1d4ed8}
+.shipped{background:#e0e7ff;color:#4338ca}
+.delivered{background:#dcfce7;color:#166534}
+.cancelled{background:#fee2e2;color:#991b1b}
+.actions{display:flex;gap:7px;margin-top:12px;flex-wrap:wrap}
+.product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.product img{width:100%;height:180px;object-fit:cover;border-radius:10px}
+.empty{background:#fff;padding:25px;text-align:center;border-radius:12px;color:#777}
+.modal{display:none;position:fixed;inset:0;background:#000a;padding:20px;overflow:auto}
+.modalbox{background:#fff;max-width:450px;margin:40px auto;padding:20px;border-radius:18px}
+@media(max-width:700px){
+.stats{grid-template-columns:repeat(2,1fr)}
+.product-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:450px){
+.product-grid{grid-template-columns:1fr}
+.head{gap:10px}
 }
-
-body {
-  font-family: Arial, sans-serif;
-  background: #f3f4f6;
-  color: #111;
-}
-
-button,
-input,
-select,
-textarea {
-  font-family: inherit;
-}
-
-button {
-  cursor: pointer;
-}
-
-/* =========================
-   LOGIN
-========================= */
-
-#loginPage {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  background: #111;
-}
-
-.login-box {
-  width: 100%;
-  max-width: 430px;
-  background: white;
-  border-radius: 22px;
-  padding: 30px;
-  box-shadow: 0 15px 50px rgba(0,0,0,.3);
-}
-
-.login-logo {
-  text-align: center;
-  font-size: 32px;
-  font-weight: 900;
-  margin-bottom: 8px;
-}
-
-.login-logo span {
-  color: #16a34a;
-}
-
-.login-subtitle {
-  text-align: center;
-  color: #777;
-  margin-bottom: 25px;
-}
-
-.input {
-  width: 100%;
-  padding: 14px;
-  border: 1px solid #ddd;
-  border-radius: 11px;
-  margin-bottom: 12px;
-  font-size: 15px;
-  outline: none;
-  background: white;
-}
-
-.input:focus {
-  border-color: #16a34a;
-}
-
-.btn {
-  border: 0;
-  border-radius: 11px;
-  padding: 12px 16px;
-  font-weight: bold;
-  font-size: 14px;
-}
-
-.btn-green {
-  background: #16a34a;
-  color: white;
-}
-
-.btn-black {
-  background: #111;
-  color: white;
-}
-
-.btn-red {
-  background: #dc2626;
-  color: white;
-}
-
-.btn-gray {
-  background: #e5e7eb;
-  color: #111;
-}
-
-.full {
-  width: 100%;
-}
-
-#loginError {
-  color: #dc2626;
-  text-align: center;
-  margin-top: 13px;
-  display: none;
-  line-height: 1.7;
-  font-size: 14px;
-}
-
-/* =========================
-   ADMIN
-========================= */
-
-#adminPage {
-  display: none;
-  min-height: 100vh;
-}
-
-header {
-  background: #111;
-  color: white;
-  padding: 16px;
-  position: sticky;
-  top: 0;
-  z-index: 20;
-}
-
-.header-inner {
-  max-width: 1200px;
-  margin: auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
-}
-
-.logo {
-  font-size: 25px;
-  font-weight: 900;
-}
-
-.logo span {
-  color: #22c55e;
-}
-
-.logout {
-  background: #dc2626;
-  color: white;
-  border: 0;
-  padding: 10px 14px;
-  border-radius: 10px;
-  font-weight: bold;
-}
-
-.container {
-  max-width: 1200px;
-  margin: auto;
-  padding: 20px 15px 50px;
-}
-
-/* =========================
-   WELCOME
-========================= */
-
-.welcome {
-  margin-bottom: 20px;
-}
-
-.welcome h1 {
-  font-size: 27px;
-  margin-bottom: 5px;
-}
-
-.welcome p {
-  color: #666;
-}
-
-/* =========================
-   STATS
-========================= */
-
-.stats {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  margin-bottom: 25px;
-}
-
-.stat {
-  background: white;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 3px 12px rgba(0,0,0,.06);
-}
-
-.stat-title {
-  color: #666;
-  font-size: 14px;
-  margin-bottom: 8px;
-}
-
-.stat-value {
-  font-size: 25px;
-  font-weight: 900;
-}
-
-/* =========================
-   TABS
-========================= */
-
-.tabs {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  margin-bottom: 20px;
-}
-
-.tab {
-  white-space: nowrap;
-  border: 0;
-  padding: 11px 16px;
-  border-radius: 10px;
-  background: #e5e7eb;
-  font-weight: bold;
-}
-
-.tab.active {
-  background: #111;
-  color: white;
-}
-
-.section {
-  display: none;
-}
-
-.section.active {
-  display: block;
-}
-
-/* =========================
-   SECTION HEADER
-========================= */
-
-.section-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 15px;
-  flex-wrap: wrap;
-}
-
-.section-head h2 {
-  font-size: 22px;
-}
-
-.search {
-  width: 100%;
-  max-width: 400px;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  outline: none;
-  background: white;
-}
-
-/* =========================
-   ORDERS
-========================= */
-
-.orders {
-  display: grid;
-  gap: 15px;
-}
-
-.order-card {
-  background: white;
-  border-radius: 16px;
-  padding: 18px;
-  box-shadow: 0 3px 12px rgba(0,0,0,.06);
-}
-
-.order-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-.order-number {
-  font-size: 12px;
-  color: #777;
-  margin-bottom: 5px;
-  word-break: break-all;
-}
-
-.customer-name {
-  font-size: 19px;
-  font-weight: bold;
-}
-
-.order-date {
-  color: #777;
-  font-size: 12px;
-  margin-top: 5px;
-}
-
-/* =========================
-   STATUS
-========================= */
-
-.status {
-  padding: 7px 10px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: bold;
-  white-space: nowrap;
-}
-
-.status-pending {
-  background: #fef3c7;
-  color: #92400e;
-}
-
-.status-confirmed {
-  background: #dbeafe;
-  color: #1d4ed8;
-}
-
-.status-shipped {
-  background: #e0e7ff;
-  color: #4338ca;
-}
-
-.status-delivered {
-  background: #dcfce7;
-  color: #166534;
-}
-
-.status-cancelled {
-  background: #fee2e2;
-  color: #991b1b;
-}
-
-/* =========================
-   CUSTOMER INFO
-========================= */
-
-.customer-info {
-  background: #f8f9fa;
-  border-radius: 12px;
-  padding: 12px;
-  margin-bottom: 12px;
-  line-height: 1.9;
-}
-
-.customer-info div {
-  border-bottom: 1px solid #eee;
-  padding: 4px 0;
-}
-
-.customer-info div:last-child {
-  border-bottom: 0;
-}
-
-/* =========================
-   ITEMS
-========================= */
-
-.items-box {
-  border-top: 1px solid #eee;
-  padding-top: 12px;
-  margin-top: 12px;
-}
-
-.items-title {
-  font-weight: bold;
-  margin-bottom: 8px;
-}
-
-.item {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 8px 0;
-  border-bottom: 1px solid #eee;
-}
-
-.item:last-child {
-  border-bottom: 0;
-}
-
-.item-name {
-  font-weight: bold;
-}
-
-.item-details {
-  color: #666;
-  font-size: 13px;
-  margin-top: 4px;
-}
-
-.item-price {
-  font-weight: bold;
-  white-space: nowrap;
-}
-
-.order-total {
-  margin-top: 12px;
-  font-size: 20px;
-  font-weight: 900;
-  color: #16a34a;
-}
-
-/* =========================
-   ORDER ACTIONS
-========================= */
-
-.order-actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 15px;
-  flex-wrap: wrap;
-}
-
-.status-select {
-  flex: 1;
-  min-width: 160px;
-  padding: 11px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  background: white;
-}
-
-/* =========================
-   PRODUCTS
-========================= */
-
-.products {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
-}
-
-.product-card {
-  background: white;
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 0 3px 12px rgba(0,0,0,.06);
-}
-
-.product-image {
-  height: 180px;
-  background: #e5e7eb;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 45px;
-  color: #777;
-}
-
-.product-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.product-body {
-  padding: 14px;
-}
-
-.product-body h3 {
-  margin-bottom: 8px;
-}
-
-.product-description {
-  color: #666;
-  font-size: 13px;
-  line-height: 1.5;
-  margin-bottom: 8px;
-}
-
-.product-price {
-  color: #16a34a;
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.product-old-price {
-  color: #999;
-  text-decoration: line-through;
-  font-size: 13px;
-  margin-right: 5px;
-}
-
-.product-stock {
-  color: #666;
-  margin-bottom: 12px;
-}
-
-.active-badge,
-.inactive-badge {
-  display: inline-block;
-  padding: 5px 8px;
-  border-radius: 7px;
-  font-size: 12px;
-  margin-bottom: 10px;
-}
-
-.active-badge {
-  background: #dcfce7;
-  color: #166534;
-}
-
-.inactive-badge {
-  background: #fee2e2;
-  color: #991b1b;
-}
-
-.product-actions {
-  display: flex;
-  gap: 7px;
-}
-
-.product-actions button {
-  flex: 1;
-}
-
-/* =========================
-   MODAL
-========================= */
-
-.modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.65);
-  z-index: 100;
-  padding: 20px;
-  overflow-y: auto;
-}
-
-.modal-box {
-  background: white;
-  width: 100%;
-  max-width: 500px;
-  margin: 40px auto;
-  padding: 20px;
-  border-radius: 18px;
-}
-
-.modal-box h2 {
-  margin-bottom: 18px;
-}
-
-.modal-actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 10px;
-}
-
-.modal-actions button {
-  flex: 1;
-}
-
-/* =========================
-   STATES
-========================= */
-
-.empty {
-  background: white;
-  padding: 30px;
-  border-radius: 15px;
-  text-align: center;
-  color: #777;
-  line-height: 1.8;
-}
-
-.loading {
-  text-align: center;
-  padding: 30px;
-  background: white;
-  border-radius: 15px;
-}
-
-.error-box {
-  background: #fee2e2;
-  color: #991b1b;
-  padding: 15px;
-  border-radius: 12px;
-  line-height: 1.7;
-  margin-bottom: 15px;
-  word-break: break-word;
-}
-
-/* =========================
-   DESKTOP
-========================= */
-
-@media (min-width: 700px) {
-
-  .stats {
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  .products {
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  .product-image {
-    height: 210px;
-  }
-
-}
-
-@media (max-width: 500px) {
-
-  .order-top {
-    flex-direction: column;
-  }
-
-  .order-actions {
-    flex-direction: column;
-  }
-
-  .status-select {
-    width: 100%;
-  }
-
-  .product-actions {
-    flex-direction: column;
-  }
-
-}
-
 </style>
-
 </head>
 
 <body>
 
+<!-- LOGIN -->
+<div id="loginPage" class="login">
+<div class="box">
+<div class="logo">JR <span class="green">Shop</span></div>
+<div class="sub">لوحة تحكم الإدارة</div>
+
+<input id="email" type="email"
+value="ilyesdida@hotmail.fr"
+placeholder="البريد الإلكتروني">
+
+<input id="password" type="password"
+placeholder="كلمة المرور">
+
+<button class="btn btn-green full" onclick="login()">
+🔐 تسجيل الدخول
+</button>
+
+<div id="loginError" class="error"></div>
+</div>
+</div>
+
+
+<!-- ADMIN -->
+<div id="admin">
+
+<header>
+<div class="head">
+<div class="logo">JR <span class="green">Shop</span></div>
+<button class="btn btn-red" onclick="logout()">خروج</button>
+</div>
+</header>
+
+<main>
+
+<h1>لوحة التحكم</h1>
+<div class="muted">إدارة الطلبات والمنتجات</div>
+
+<div class="stats">
+<div class="stat">
+<div class="muted">كل الطلبات</div>
+<b id="allOrders">0</b>
+</div>
+
+<div class="stat">
+<div class="muted">معلقة</div>
+<b id="pendingOrders">0</b>
+</div>
+
+<div class="stat">
+<div class="muted">مكتملة</div>
+<b id="doneOrders">0</b>
+</div>
+
+<div class="stat">
+<div class="muted">المبيعات</div>
+<b id="sales">0 دج</b>
+</div>
+</div>
+
+<div class="tabs">
+<button class="tab active" onclick="tab('orders',this)">📦 الطلبات</button>
+<button class="tab" onclick="tab('products',this)">🛍️ المنتجات</button>
+</div>
+
+
+<!-- ORDERS -->
+<section id="orders" class="section active">
+
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<input id="search" placeholder="🔎 بحث بالاسم أو الهاتف أو الولاية"
+oninput="showOrders()">
+
+<button class="btn btn-dark" onclick="loadOrders()">🔄 تحديث</button>
+</div>
+
+<div id="ordersList">جاري التحميل...</div>
+
+</section>
+
+
+<!-- PRODUCTS -->
+<section id="products" class="section">
+
+<button class="btn btn-green" onclick="openProduct()">
+➕ إضافة منتج
+</button>
+
+<div id="productsList" class="product-grid">
+جاري التحميل...
+</div>
+
+</section>
+
+</main>
+</div>
+
+
+<!-- PRODUCT MODAL -->
+<div id="modal" class="modal">
+<div class="modalbox">
+
+<h2 id="modalTitle">إضافة منتج</h2>
+
+<input id="pid" type="hidden">
+<input id="pname" placeholder="اسم المنتج">
+<input id="pprice" type="number" placeholder="السعر">
+<input id="pold" type="number" placeholder="السعر القديم">
+<input id="pstock" type="number" placeholder="المخزون">
+<input id="pimage" placeholder="رابط الصورة">
+
+<textarea id="pdesc" rows="4"
+placeholder="وصف المنتج"></textarea>
+
+<div class="actions">
+<button class="btn btn-green" onclick="saveProduct()">💾 حفظ</button>
+<button class="btn btn-gray" onclick="closeProduct()">إلغاء</button>
+</div>
+
+</div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const URL="https://cstjgsuehmqcolajspqh.supabase.co";
+const KEY="sb_publishable_e_wQxqCrx21Qq1kRYKjFMg_yR6TQfKX";
+
+const db=window.supabase.createClient(URL,KEY);
+
+let orders=[];
+let products=[];
+
+
+/* LOGIN */
+async function login(){
+
+const email=document.getElementById("email").value.trim();
+const password=document.getElementById("password").value;
+const err=document.getElementById("loginError");
+
+err.textContent="";
+
+if(!email||!password){
+err.textContent="أدخل البريد وكلمة المرور";
+return;
+}
+
+const {data,error}=await db.auth.signInWithPassword({
+email,password
+});
+
+if(error){
+err.textContent=error.message;
+return;
+}
+
+if(data.session) showAdmin();
+}
+
+
+/* SESSION */
+async function check(){
+
+const {data}=await db.auth.getSession();
+
+if(data.session) showAdmin();
+else document.getElementById("loginPage").style.display="flex";
+}
+
+
+/* SHOW ADMIN */
+async function showAdmin(){
+
+document.getElementById("loginPage").style.display="none";
+document.getElementById("admin").style.display="block";
+
+await loadOrders();
+await loadProducts();
+}
+
+
+/* LOGOUT */
+async function logout(){
+
+await db.auth.signOut();
+
+document.getElementById("admin").style.display="none";
+document.getElementById("loginPage").style.display="flex";
+}
+
+
+/* TABS */
+function tab(id,btn){
+
+document.querySelectorAll(".section")
+.forEach(x=>x.classList.remove("active"));
+
+document.querySelectorAll(".tab")
+.forEach(x=>x.classList.remove("active"));
+
+document.getElementById(id).classList.add("active");
+btn.classList.add("active");
+}
+
+
+/* LOAD ORDERS */
+async function loadOrders(){
+
+const box=document.getElementById("ordersList");
+box.innerHTML="<div class='empty'>جاري تحميل الطلبات...</div>";
+
+const {data,error}=await db
 .from("orders")
-      .select("*")
-      .order("created_at", {
-        ascending: false
-      });
+.select("*")
+.order("created_at",{ascending:false});
 
-  if (error) {
+if(error){
 
-    console.error(error);
+box.innerHTML=
+"<div class='empty' style='color:#dc2626'>❌ خطأ: "+
+esc(error.message)+"</div>";
 
-    container.innerHTML = `
-      <div class="error-box">
-        ❌ حدث خطأ أثناء تحميل الطلبات.
-        <br><br>
-        ${escapeHtml(error.message)}
-      </div>
-    `;
+return;
+}
 
-    return;
-  }
-
-  orders = data || [];
-
-  updateStats();
-
-  renderOrders();
-
+orders=data||[];
+updateStats();
+showOrders();
 }
 
 
-/* =====================================================
-   UPDATE STATS
-===================================================== */
+/* STATS */
+function updateStats(){
 
-function updateStats() {
+document.getElementById("allOrders").textContent=orders.length;
 
-  const totalOrders =
-    orders.length;
+document.getElementById("pendingOrders").textContent=
+orders.filter(x=>x.status==="pending").length;
 
+document.getElementById("doneOrders").textContent=
+orders.filter(x=>x.status==="delivered").length;
 
-  const pendingOrders =
-    orders.filter(
-      order =>
-        order.status === "pending"
-    ).length;
+let total=0;
 
+orders.forEach(x=>{
+if(x.status!=="cancelled")
+total+=Number(x.total||0);
+});
 
-  const deliveredOrders =
-    orders.filter(
-      order =>
-        order.status === "delivered"
-    ).length;
-
-
-  const totalSales =
-    orders
-      .filter(
-        order =>
-          order.status !== "cancelled"
-      )
-      .reduce(
-        (total, order) =>
-          total +
-          Number(order.total || 0),
-        0
-      );
-
-
-  document
-    .getElementById("statOrders")
-    .textContent =
-    totalOrders;
-
-
-  document
-    .getElementById("statPending")
-    .textContent =
-    pendingOrders;
-
-
-  document
-    .getElementById("statDelivered")
-    .textContent =
-    deliveredOrders;
-
-
-  document
-    .getElementById("statSales")
-    .textContent =
-    formatNumber(totalSales) +
-    " دج";
-
+document.getElementById("sales").textContent=
+total.toLocaleString("fr-FR")+" دج";
 }
 
 
-/* =====================================================
-   RENDER ORDERS
-===================================================== */
+/* SHOW ORDERS */
+function showOrders(){
 
-function renderOrders() {
+const box=document.getElementById("ordersList");
+const q=(document.getElementById("search").value||"").toLowerCase();
 
-  const container =
-    document.getElementById("orders");
+let list=orders.filter(o=>{
 
+const text=JSON.stringify(o).toLowerCase();
+return text.includes(q);
+});
 
-  const searchInput =
-    document.getElementById("orderSearch");
+if(!list.length){
+box.innerHTML="<div class='empty'>لا توجد طلبات</div>";
+return;
+}
 
+box.innerHTML=list.map(o=>{
 
-  const search =
-    searchInput
-      ? searchInput.value
-          .trim()
-          .toLowerCase()
-      : "";
+const status=o.status||"pending";
 
+return `
+<div class="order">
 
-  const filteredOrders =
-    orders.filter(order => {
+<h3>📦 طلب ${esc(o.id||"")}</h3>
 
-      if (!search) {
-        return true;
-      }
+<div class="muted">
+${esc(o.name||o.customer_name||"بدون اسم")}
+</div>
 
+<p>📞 ${esc(o.phone||o.customer_phone||"")}</p>
 
-      const text = [
+<p>📍 ${esc(o.wilaya||o.address||o.city||"")}</p>
 
-        order.customer_name,
+<p>💰 <b>${Number(o.total||0).toLocaleString("fr-FR")} دج</b></p>
 
-        order.name,
+<p class="muted">${esc(o.created_at||"")}</p>
 
-        order.phone,
+<span class="status ${status}">
+${statusText(status)}
+</span>
 
-        order.customer_phone,
+<div class="actions">
 
-        order.phone_number,
+<select onchange="changeStatus('${esc(o.id)}',this.value)">
+<option value="pending" ${status==="pending"?"selected":""}>معلق</option>
+<option value="confirmed" ${status==="confirmed"?"selected":""}>مؤكد</option>
+<option value="shipped" ${status==="shipped"?"selected":""}>تم الشحن</option>
+<option value="delivered" ${status==="delivered"?"selected":""}>تم التسليم</option>
+<option value="cancelled" ${status==="cancelled"?"selected":""}>ملغى</option>
+</select>
 
-        order.wilaya,
+<button class="btn btn-red"
+onclick="deleteOrder('${esc(o.id)}')">
+🗑️ حذف
+</button>
 
-        order.state,
+</div>
+</div>
+`;
 
-        order.address,
-
-        order.city,
-
-        order.id
-
-      ]
-      .filter(Boolean)
-      .join(" ")
-      .toLowerCase();
-
-
-      return text.includes(search);
-
-    });
-
-
-  if (!filteredOrders.length) {
-
-    container.innerHTML = `
-      <div class="empty">
-        📭 لا توجد طلبات.
-      </div>
-    `;
-
-    return;
-  }
-
-
-  container.innerHTML =
-    filteredOrders
-      .map(renderOrderCard)
-      .join("");
-
+}).join("");
 }
 
 
-/* =====================================================
-   RENDER ONE ORDER
-===================================================== */
+/* STATUS */
+function statusText(s){
 
-function renderOrderCard(order) {
-
-  const customerName =
-    order.customer_name ||
-    order.name ||
-    "بدون اسم";
-
-
-  const phone =
-    order.phone ||
-    order.customer_phone ||
-    order.phone_number ||
-    "غير متوفر";
-
-
-  const wilaya =
-    order.wilaya ||
-    order.state ||
-    "غير محددة";
-
-
-  const address =
-    order.address ||
-    order.city ||
-    "غير متوفر";
-
-
-  const status =
-    order.status ||
-    "pending";
-
-
-  const total =
-    Number(order.total || 0);
-
-
-  const items =
-    parseItems(
-      order.items ||
-      order.order_items ||
-      order.products
-    );
-
-
-  return `
-    <div class="order-card">
-
-      <div class="order-top">
-
-        <div>
-
-          <div class="order-number">
-            الطلب: ${escapeHtml(order.id || "بدون رقم")}
-          </div>
-
-          <div class="customer-name">
-            ${escapeHtml(customerName)}
-          </div>
-
-          <div class="order-date">
-            ${escapeHtml(
-              formatDate(order.created_at)
-            )}
-          </div>
-
-        </div>
-
-        <div class="status ${statusClass(status)}">
-          ${escapeHtml(statusText(status))}
-        </div>
-
-      </div>
-
-
-      <div class="customer-info">
-
-        <div>
-          📞 <strong>الهاتف:</strong>
-          ${escapeHtml(phone)}
-        </div>
-
-        <div>
-          📍 <strong>الولاية:</strong>
-          ${escapeHtml(wilaya)}
-        </div>
-
-        <div>
-          🏠 <strong>العنوان:</strong>
-          ${escapeHtml(address)}
-        </div>
-
-      </div>
-
-
-      <div class="items-box">
-
-        <div class="items-title">
-          🛍️ المنتجات
-        </div>
-
-        ${
-          renderItems(items)
-        }
-
-      </div>
-
-
-      <div class="order-total">
-        الإجمالي:
-        ${formatNumber(total)}
-        دج
-      </div>
-
-
-      <div class="order-actions">
-
-        <select
-          class="status-select"
-          id="status-${escapeHtml(order.id)}"
-        >
-
-          <option
-            value="pending"
-            ${status === "pending" ? "selected" : ""}
-          >
-            معلق
-          </option>
-
-          <option
-            value="confirmed"
-            ${status === "confirmed" ? "selected" : ""}
-          >
-            مؤكد
-          </option>
-
-          <option
-            value="shipped"
-            ${status === "shipped" ? "selected" : ""}
-          >
-            تم الشحن
-          </option>
-
-          <option
-            value="delivered"
-            ${status === "delivered" ? "selected" : ""}
-          >
-            تم التسليم
-          </option>
-
-          <option
-            value="cancelled"
-            ${status === "cancelled" ? "selected" : ""}
-          >
-            ملغى
-          </option>
-
-        </select>
-
-
-        <button
-          class="btn btn-green"
-          onclick="updateOrderStatus('${escapeJs(order.id)}')"
-        >
-          💾 تحديث الحالة
-        </button>
-
-
-        <button
-          class="btn btn-red"
-          onclick="deleteOrder('${escapeJs(order.id)}')"
-        >
-          🗑️ حذف
-        </button>
-
-      </div>
-
-    </div>
-  `;
-
+return {
+pending:"معلق",
+confirmed:"مؤكد",
+shipped:"تم الشحن",
+delivered:"تم التسليم",
+cancelled:"ملغى"
+}[s]||s;
 }
 
 
-/* =====================================================
-   PARSE ITEMS
-===================================================== */
+async function changeStatus(id,status){
 
-function parseItems(items) {
+const {error}=await db
+.from("orders")
+.update({status:status})
+.eq("id",id);
 
-  if (!items) {
-    return [];
-  }
+if(error){
+alert("خطأ: "+error.message);
+return;
+}
 
-
-  if (Array.isArray(items)) {
-    return items;
-  }
-
-
-  if (typeof items === "string") {
-
-    try {
-
-      const parsed =
-        JSON.parse(items);
-
-      return Array.isArray(parsed)
-        ? parsed
-        : [];
-
-    } catch (error) {
-
-      return [];
-
-    }
-
-  }
-
-
-  return [];
-
+await loadOrders();
 }
 
 
-/* =====================================================
-   RENDER ITEMS
-===================================================== */
+/* DELETE ORDER */
+async function deleteOrder(id){
 
-function renderItems(items) {
+if(!confirm("هل تريد حذف هذا الطلب؟")) return;
 
-  if (!items.length) {
+const {error}=await db
+.from("orders")
+.delete()
+.eq("id",id);
 
-    return `
-      <div style="color:#777">
-        لا توجد تفاصيل للمنتجات.
-      </div>
-    `;
+if(error){
+alert("خطأ: "+error.message);
+return;
+}
 
-  }
-
-
-  return items.map(item => {
-
-    const name =
-      item.name ||
-      item.product_name ||
-      item.title ||
-      "منتج";
-
-
-    const quantity =
-      Number(
-        item.quantity ||
-        item.qty ||
-        1
-      );
-
-
-    const price =
-      Number(
-        item.price ||
-        item.product_price ||
-        0
-      );
-
-
-    return `
-      <div class="item">
-
-        <div>
-
-          <div class="item-name">
-            ${escapeHtml(name)}
-          </div>
-
-          <div class="item-details">
-            الكمية: ${quantity}
-          </div>
-
-        </div>
-
-        <div class="item-price">
-          ${formatNumber(price * quantity)}
-          دج
-        </div>
-
-      </div>
-    `;
-
-  }).join("");
-
+await loadOrders();
 }
 
 
-/* =====================================================
-   UPDATE ORDER STATUS
-===================================================== */
+/* LOAD PRODUCTS */
+async function loadProducts(){
 
-async function updateOrderStatus(orderId) {
+const box=document.getElementById("productsList");
+box.innerHTML="<div class='empty'>جاري تحميل المنتجات...</div>";
 
-  const select =
-    document.getElementById(
-      "status-" + orderId
-    );
+const {data,error}=await db
+.from("products")
+.select("*")
+.order("created_at",{ascending:false});
 
+if(error){
 
-  if (!select) {
-    return;
-  }
+box.innerHTML=
+"<div class='empty'>❌ خطأ: "+
+esc(error.message)+"</div>";
 
+return;
+}
 
-  const newStatus =
-    select.value;
-
-
-  const {
-    error
-  } =
-    await supabaseClient
-      .from("orders")
-      .update({
-        status: newStatus
-      })
-      .eq("id", orderId);
-
-
-  if (error) {
-
-    alert(
-      "❌ لم يتم تحديث الحالة:\n" +
-      error.message
-    );
-
-    console.error(error);
-
-    return;
-  }
-
-
-  alert("✅ تم تحديث حالة الطلب");
-
-
-  await loadOrders();
-
+products=data||[];
+showProducts();
 }
 
 
-/* =====================================================
-   DELETE ORDER
-===================================================== */
+/* SHOW PRODUCTS */
+function showProducts(){
 
-async function deleteOrder(orderId) {
+const box=document.getElementById("productsList");
 
-  const confirmed =
-    confirm(
-      "هل أنت متأكد من حذف هذا الطلب؟"
-    );
+if(!products.length){
+box.innerHTML="<div class='empty'>لا توجد منتجات</div>";
+return;
+}
 
+box.innerHTML=products.map(p=>`
 
-  if (!confirmed) {
-    return;
-  }
+<div class="product">
 
+${p.image_url||p.image?
+`<img src="${esc(p.image_url||p.image)}">`
+:""}
 
-  const {
-    error
-  } =
-    await supabaseClient
-      .from("orders")
-      .delete()
-      .eq("id", orderId);
+<h3>${esc(p.name||"بدون اسم")}</h3>
 
+<div class="muted">
+${esc(p.description||"")}
+</div>
 
-  if (error) {
+<p class="green">
+<b>${Number(p.price||0).toLocaleString("fr-FR")} دج</b>
+</p>
 
-    alert(
-      "❌ لم يتم حذف الطلب:\n" +
-      error.message
-    );
+<p>المخزون: ${Number(p.stock||0)}</p>
 
-    console.error(error);
+<div class="actions">
 
-    return;
-  }
+<button class="btn btn-dark"
+onclick="editProduct('${esc(p.id)}')">
+✏️ تعديل
+</button>
 
+<button class="btn btn-red"
+onclick="deleteProduct('${esc(p.id)}')">
+🗑️ حذف
+</button>
 
-  alert("✅ تم حذف الطلب");
+</div>
 
+</div>
 
-  await loadOrders();
-
+`).join("");
 }
 
 
-/* =====================================================
-   LOAD PRODUCTS
-===================================================== */
+/* OPEN PRODUCT */
+function openProduct(){
 
-async function loadProducts() {
+document.getElementById("modal").style.display="block";
 
-  const container =
-    document.getElementById("products");
+document.getElementById("modalTitle").textContent="➕ إضافة منتج";
 
-
-  container.innerHTML =
-    '<div class="loading">جاري تحميل المنتجات...</div>';
-
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .from("products")
-      .select("*")
-      .order(
-        "created_at",
-        {
-          ascending: false
-        }
-      );
-
-
-  if (error) {
-
-    console.error(error);
-
-    container.innerHTML = `
-      <div class="error-box">
-        ❌ حدث خطأ أثناء تحميل المنتجات.
-        <br><br>
-        ${escapeHtml(error.message)}
-      </div>
-    `;
-
-    return;
-  }
-
-
-  products = data || [];
-
-
-  renderProducts();
-
+["pid","pname","pprice","pold","pstock","pimage","pdesc"]
+.forEach(id=>document.getElementById(id).value="");
 }
 
 
-/* =====================================================
-   RENDER PRODUCTS
-===================================================== */
-
-function renderProducts() {
-
-  const container =
-    document.getElementById("products");
-
-
-  if (!products.length) {
-
-    container.innerHTML = `
-      <div class="empty">
-        🛍️ لا توجد منتجات حالياً.
-      </div>
-    `;
-
-    return;
-  }
-
-
-  container.innerHTML =
-    products
-      .map(renderProductCard)
-      .join("");
-
+/* CLOSE */
+function closeProduct(){
+document.getElementById("modal").style.display="none";
 }
 
 
-/* =====================================================
-   RENDER PRODUCT
-===================================================== */
+/* EDIT */
+function editProduct(id){
 
-function renderProductCard(product) {
+const p=products.find(x=>String(x.id)===String(id));
 
-  const name =
-    product.name ||
-    product.title ||
-    "منتج";
+if(!p)return;
 
+document.getElementById("modal").style.display="block";
+document.getElementById("modalTitle").textContent="✏️ تعديل المنتج";
 
-  const price =
-    Number(product.price || 0);
-
-
-  const oldPrice =
-    Number(
-      product.old_price ||
-      product.oldPrice ||
-      0
-    );
-
-
-  const stock =
-    Number(product.stock || 0);
-
-
-  const image =
-    product.image ||
-    product.image_url ||
-    product.imageUrl ||
-    "";
-
-
-  const description =
-    product.description ||
-    "";
-
-
-  const isActive =
-    product.active !== false &&
-    product.is_active !== false;
-
-
-  return `
-    <div class="product-card">
-
-      <div class="product-image">
-
-        ${
-          image
-          ? `
-            <img
-              src="${escapeHtml(image)}"
-              alt="${escapeHtml(name)}"
-              onerror="this.style.display='none'"
-            >
-          `
-          : "🛍️"
-        }
-
-      </div>
-
-
-      <div class="product-body">
-
-        <h3>
-          ${escapeHtml(name)}
-        </h3>
-
-
-        ${
-          description
-          ? `
-            <div class="product-description">
-              ${escapeHtml(description)}
-            </div>
-          `
-          : ""
-        }
-
-
-        <div class="product-price">
-
-          ${formatNumber(price)}
-          دج
-
-          ${
-            oldPrice > 0
-            ? `
-              <span class="product-old-price">
-                ${formatNumber(oldPrice)} دج
-              </span>
-            `
-            : ""
-          }
-
-        </div>
-
-
-        <div class="product-stock">
-          📦 المخزون: ${stock}
-        </div>
-
-
-        ${
-          isActive
-          ? `
-            <span class="active-badge">
-              فعال
-            </span>
-          `
-          : `
-            <span class="inactive-badge">
-              غير فعال
-            </span>
-          `
-        }
-
-
-        <div class="product-actions">
-
-          <button
-            class="btn btn-black"
-            onclick="editProduct('${escapeJs(product.id)}')"
-          >
-            ✏️ تعديل
-          </button>
-
-
-          <button
-            class="btn btn-red"
-            onclick="deleteProduct('${escapeJs(product.id)}')"
-          >
-            🗑️ حذف
-          </button>
-
-        </div>
-
-      </div>
-
-    </div>
-  `;
-
+document.getElementById("pid").value=p.id||"";
+document.getElementById("pname").value=p.name||"";
+document.getElementById("pprice").value=p.price||"";
+document.getElementById("pold").value=p.old_price||"";
+document.getElementById("pstock").value=p.stock||"";
+document.getElementById("pimage").value=p.image_url||p.image||"";
+document.getElementById("pdesc").value=p.description||"";
 }
 
 
-/* =====================================================
-   OPEN PRODUCT MODAL
-===================================================== */
+/* SAVE PRODUCT */
+async function saveProduct(){
 
-function openProductModal() {
+const id=document.getElementById("pid").value;
 
-  document
-    .getElementById("productModalTitle")
-    .textContent =
-    "➕ إضافة منتج";
+const product={
+name:document.getElementById("pname").value.trim(),
+price:Number(document.getElementById("pprice").value||0),
+old_price:Number(document.getElementById("pold").value||0),
+stock:Number(document.getElementById("pstock").value||0),
+image_url:document.getElementById("pimage").value.trim(),
+description:document.getElementById("pdesc").value.trim()
+};
 
+if(!product.name){
+alert("أدخل اسم المنتج");
+return;
+}
 
-  document
-    .getElementById("productId")
-    .value = "";
+let result;
 
+if(id){
 
-  document
-    .getElementById("productName")
-    .value = "";
+result=await db
+.from("products")
+.update(product)
+.eq("id",id);
 
+}else{
 
-  document
-    .getElementById("productPrice")
-    .value = "";
+result=await db
+.from("products")
+.insert(product);
+}
 
+if(result.error){
 
-  document
-    .getElementById("productOldPrice")
-    .value = "";
+alert("خطأ: "+result.error.message);
+return;
+}
 
-
-  document
-    .getElementById("productStock")
-    .value = "";
-
-
-  document
-    .getElementById("productImage")
-    .value = "";
-
-
-  document
-    .getElementById("productDescription")
-    .value = "";
-
-
-  document
-    .getElementById("productModal")
-    .style.display = "block";
-
+closeProduct();
+await loadProducts();
 }
 
 
-/* =====================================================
-   CLOSE PRODUCT MODAL
-===================================================== */
+/* DELETE PRODUCT */
+async function deleteProduct(id){
 
-function closeProductModal() {
+if(!confirm("هل تريد حذف المنتج؟"))return;
 
-  document
-    .getElementById("productModal")
-    .style.display = "none";
+const {error}=await db
+.from("products")
+.delete()
+.eq("id",id);
 
+if(error){
+alert("خطأ: "+error.message);
+return;
+}
+
+await loadProducts();
 }
 
 
-/* =====================================================
-   EDIT PRODUCT
-===================================================== */
+/* ESCAPE */
+function esc(v){
 
-function editProduct(productId) {
-
-  const product =
-    products.find(
-      item =>
-        String(item.id) ===
-        String(productId)
-    );
-
-
-  if (!product) {
-
-    alert("❌ المنتج غير موجود");
-
-    return;
-  }
-
-
-  document
-    .getElementById("productModalTitle")
-    .textContent =
-    "✏️ تعديل المنتج";
-
-
-  document
-    .getElementById("productId")
-    .value =
-    product.id || "";
-
-
-  document
-    .getElementById("productName")
-    .value =
-    product.name ||
-    product.title ||
-    "";
-
-
-  document
-    .getElementById("productPrice")
-    .value =
-    product.price || "";
-
-
-  document
-    .getElementById("productOldPrice")
-    .value =
-    product.old_price ||
-    product.oldPrice ||
-    "";
-
-
-  document
-    .getElementById("productStock")
-    .value =
-    product.stock || "";
-
-
-  document
-    .getElementById("productImage")
-    .value =
-    product.image ||
-    product.image_url ||
-    product.imageUrl ||
-    "";
-
-
-  document
-    .getElementById("productDescription")
-    .value =
-    product.description ||
-    "";
-
-
-  document
-    .getElementById("productModal")
-    .style.display = "block";
-
+return String(v??"")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 }
 
 
-/* =====================================================
-   SAVE PRODUCT
-===================================================== */
-
-async function saveProduct() {
-
-  const id =
-    document
-      .getElementById("productId")
-      .value
-      .trim();
-
-
-  const name =
-    document
-      .getElementById("productName")
-      .value
-      .trim();
-
-
-  const price =
-    Number(
-      document
-        .getElementById("productPrice")
-        .value
-    );
-
-
-  const oldPriceValue =
-    document
-      .getElementById("productOldPrice")
-      .value;
-
-
-  const stock =
-    Number(
-      document
-        .getElementById("productStock")
-        .value
-    );
-
-
-  const image =
-    document
-      .getElementById("productImage")
-      .value
-      .trim();
-
-
-  const description =
-    document
-      .getElementById("productDescription")
-      .value
-      .trim();
-
-
-  if (!name) {
-
-    alert(
-      "⚠️ أدخل اسم المنتج"
-    );
-
-    return;
-  }
-
-
-  if (
-    isNaN(price) ||
-    price < 0
-  ) {
-
-    alert(
-      "⚠️ أدخل سعراً صحيحاً"
-    );
-
-    return;
-  }
-
-
-  if (
-    isNaN(stock) ||
-    stock < 0
-  ) {
-
-    alert(
-      "⚠️ أدخل المخزون"
-    );
-
-    return;
-  }
-
-
-  const button =
-    document
-      .getElementById("saveProductButton");
-
-
-  button.disabled = true;
-
-  button.textContent =
-    "جاري الحفظ...";
-
-
-  const oldPrice =
-    oldPriceValue === ""
-      ? null
-      : Number(oldPriceValue);
-
-
-  const productData = {
-
-    name: name,
-
-    price: price,
-
-    old_price: oldPrice,
-
-    stock: stock,
-
-    image: image || null,
-
-    description:
-      description || null
-
-  };
-
-
-  let result;
-
-
-  if (id) {
-
-    result =
-      await supabaseClient
-        .from("products")
-        .update(productData)
-        .eq("id", id);
-
-  } else {
-
-    result =
-      await supabaseClient
-        .from("products")
-        .insert([
-          productData
-        ]);
-
-  }
-
-
-  button.disabled = false;
-
-  button.textContent =
-    "💾 حفظ";
-
-
-  if (result.error) {
-
-    console.error(result.error);
-
-    alert(
-      "❌ حدث خطأ:\n" +
-      result.error.message
-    );
-
-    return;
-  }
-
-
-  alert(
-    id
-      ? "✅ تم تعديل المنتج"
-      : "✅ تمت إضافة المنتج"
-  );
-
-
-  closeProductModal();
-
-  await loadProducts();
-
-}
-
-
-/* =====================================================
-   DELETE PRODUCT
-===================================================== */
-
-async function deleteProduct(productId) {
-
-  const confirmed =
-    confirm(
-      "هل أنت متأكد من حذف هذا المنتج؟"
-    );
-
-
-  if (!confirmed) {
-    return;
-  }
-
-
-  const {
-    error
-  } =
-    await supabaseClient
-      .from("products")
-      .delete()
-      .eq("id", productId);
-
-
-  if (error) {
-
-    console.error(error);
-
-    alert(
-      "❌ لم يتم حذف المنتج:\n" +
-      error.message
-    );
-
-    return;
-  }
-
-
-  alert("✅ تم حذف المنتج");
-
-
-  await loadProducts();
-
-}
-
-
-/* =====================================================
-   TABS
-===================================================== */
-
-function showSection(
-  sectionId,
-  button
-) {
-
-  document
-    .querySelectorAll(".section")
-    .forEach(
-      section =>
-        section.classList.remove("active")
-    );
-
-
-  document
-    .querySelectorAll(".tab")
-    .forEach(
-      tab =>
-        tab.classList.remove("active")
-    );
-
-
-  const section =
-    document.getElementById(sectionId);
-
-
-  if (section) {
-    section.classList.add("active");
-  }
-
-
-  if (button) {
-    button.classList.add("active");
-  }
-
-}
-
-
-/* =====================================================
-   ESCAPE JAVASCRIPT
-===================================================== */
-
-function escapeJs(value) {
-
-  return String(value || "")
-    .replace(/\\/g, "\\\\")
-    .replace(/'/g, "\\'")
-    .replace(/"/g, '\\"')
-    .replace(/\n/g, "\\n")
-    .replace(/\r/g, "\\r");
-
-}
-
-
-/* =====================================================
-   CLOSE MODAL BY CLICKING OUTSIDE
-===================================================== */
-
-document
-  .getElementById("productModal")
-  .addEventListener(
-    "click",
-    function(event) {
-
-      if (
-        event.target === this
-      ) {
-
-        closeProductModal();
-
-      }
-
-    }
-  );
-
-
-/* =====================================================
-   ENTER LOGIN
-===================================================== */
-
-document
-  .getElementById("loginPassword")
-  .addEventListener(
-    "keydown",
-    function(event) {
-
-      if (
-        event.key === "Enter"
-      ) {
-
-        loginAdmin();
-
-      }
-
-    }
-  );
-
-
-/* =====================================================
-   AUTH STATE
-===================================================== */
-
-supabaseClient.auth
-  .onAuthStateChange(
-    function(event, session) {
-
-      if (
-        event === "SIGNED_IN" &&
-        session
-      ) {
-
-        showAdminPage();
-
-      }
-
-
-      if (
-        event === "SIGNED_OUT"
-      ) {
-
-        document
-          .getElementById("adminPage")
-          .style.display = "none";
-
-        document
-          .getElementById("loginPage")
-          .style.display = "flex";
-
-      }
-
-    }
-  );
-
-
-/* =====================================================
-   START
-===================================================== */
-
-document.addEventListener(
-  "DOMContentLoaded",
-  function() {
-
-    checkSession();
-
-  }
-);
+/* START */
+check();
 
 </script>
-
 </body>
   </html>
