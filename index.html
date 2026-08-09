@@ -364,9 +364,9 @@ async function loadProducts() {
 
   productsContainer.innerHTML = data.map(product => {
 
-    const image = product.image_url
-      ? `<img src="${product.image_url}" alt="${product.name || "منتج JR"}">`
-      : "🛍️";
+    const image = product.image
+  ? `<img src="${product.image}" alt="${product.name || "منتج JR"}">`
+  : "🛍️";
 
     const oldPrice = product.old_price
       ? `<span class="old-price">${product.old_price} دج</span>`
