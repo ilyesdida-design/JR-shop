@@ -108,6 +108,40 @@ const money=x=>Number(x||0).toLocaleString("fr-FR");
 const status=x=>({pending:"معلق",confirmed:"مؤكد",shipped:"تم الشحن",delivered:"تم التسليم",cancelled:"ملغى"}[x]||x||"معلق");
 
 async function login(){
+  err.textContent="";
+  loginBtn.disabled=true;
+  loginBtn.textContent="جاري الدخول...";
+
+  try{
+    if(!email.value.trim()||!password.value){
+      throw new Error("أدخل البريد وكلمة المرور");
+    }
+
+    const r=await Promise.race([
+      db.auth.signInWithPassword({
+        email:email.value.trim(),
+        password:password.value
+      }),
+      new Promise((_,reject)=>
+        setTimeout(()=>reject(new Error("الاتصال بـ Supabase أخذ وقتًا طويلاً. تحقق من الإنترنت ثم أعد المحاولة.")),10000)
+      )
+    ]);
+
+    if(r.error) throw r.error;
+
+    if(!r.data.session)
+      throw new Error("لم يتم إنشاء جلسة تسجيل الدخول.");
+
+    show();
+
+  }catch(e){
+    console.error(e);
+    err.textContent="❌ "+e.message;
+  }finally{
+    loginBtn.disabled=false;
+    loginBtn.textContent="🔐 تسجيل الدخول";
+  }
+ }
  err.textContent="";
  if(!email.value||!password.value){err.textContent="أدخل البريد وكلمة المرور";return}
  loginBtn.disabled=true;loginBtn.textContent="جاري الدخول...";
