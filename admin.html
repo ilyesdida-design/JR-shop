@@ -509,19 +509,18 @@ header{
 <script>
 
 const SUPABASE_URL =
-"https://cstjgsuehmqcolajspqh.supabase.co";
-
-const SUPABASE_KEY =
-"sb_publishable_e_wQxqCrx21Qq1kRYKjFMg_yR6TQfKX";
-
-const db = supabase.createClient(URL, KEY, {
-  auth: {
-    persistSession: true,
-    autoRefreshToken: true,
-    detectSessionInUrl: true,
-    storage: window.localStorage
+const db = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY,
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+      storage: window.localStorage
+    }
   }
-});
+);
 
 let orders = [];
 let products = [];
