@@ -611,21 +611,29 @@ async function login(){
 
 async function checkSession(){
 
-  const r =
-    await db.auth.getSession();
+  const { data, error } = await db.auth.getSession();
 
-  if(r.data.session){
+  if(error){
+    console.error(error);
+    return;
+  }
 
-    document.getElementById("login")
-      .style.display="none";
+  if(data.session){
 
-    document.getElementById("admin")
-      .style.display="block";
+    document.getElementById("login").style.display = "none";
+    document.getElementById("admin").style.display = "block";
 
     await loadOrders();
     await loadProducts();
+
+  }else{
+
+    document.getElementById("login").style.display = "flex";
+    document.getElementById("admin").style.display = "none";
+
   }
-}
+
+  }
 
 
 /* LOGOUT */
