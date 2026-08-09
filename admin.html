@@ -1,15 +1,62 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
+
 <title>JR Shop - Admin</title>
 
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f3f4f6;color:#111}
-button,input,textarea,select{font:inherit}
-button{cursor:pointer;border:0}
+
+/* =========================
+   GENERAL
+========================= */
+
+*{
+  box-sizing:border-box
+}
+
+html,
+body{
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif;
+  background:#f3f4f6;
+  color:#111
+}
+
+body{
+  min-height:100vh
+}
+
+button,
+input,
+textarea,
+select{
+  font:inherit
+}
+
+button{
+  cursor:pointer;
+  border:0
+}
+
+button:disabled{
+  opacity:.6;
+  cursor:not-allowed
+}
+
+
+/* =========================
+   LOGIN
+========================= */
 
 #login{
   min-height:100vh;
@@ -35,7 +82,9 @@ button{cursor:pointer;border:0}
   margin-bottom:8px
 }
 
-.logo span{color:#16a34a}
+.logo span{
+  color:#16a34a
+}
 
 .sub{
   text-align:center;
@@ -43,7 +92,14 @@ button{cursor:pointer;border:0}
   margin-bottom:25px
 }
 
-input,textarea,select{
+
+/* =========================
+   INPUTS
+========================= */
+
+input,
+textarea,
+select{
   width:100%;
   padding:13px;
   margin:6px 0;
@@ -53,9 +109,20 @@ input,textarea,select{
   background:#fff
 }
 
-input:focus,textarea:focus,select:focus{
+input:focus,
+textarea:focus,
+select:focus{
   border-color:#16a34a
 }
+
+textarea{
+  resize:vertical
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
 
 .btn{
   padding:12px 16px;
@@ -63,11 +130,30 @@ input:focus,textarea:focus,select:focus{
   font-weight:bold
 }
 
-.green{background:#16a34a;color:#fff}
-.red{background:#dc2626;color:#fff}
-.dark{background:#111;color:#fff}
-.gray{background:#e5e7eb;color:#111}
-.full{width:100%;margin-top:8px}
+.green{
+  background:#16a34a;
+  color:#fff
+}
+
+.red{
+  background:#dc2626;
+  color:#fff
+}
+
+.dark{
+  background:#111;
+  color:#fff
+}
+
+.gray{
+  background:#e5e7eb;
+  color:#111
+}
+
+.full{
+  width:100%;
+  margin-top:8px
+}
 
 .err{
   color:#dc2626;
@@ -76,7 +162,14 @@ input:focus,textarea:focus,select:focus{
   line-height:1.7
 }
 
-#admin{display:none}
+
+/* =========================
+   ADMIN
+========================= */
+
+#admin{
+  display:none
+}
 
 header{
   background:#111;
@@ -99,14 +192,25 @@ header{
 .container{
   max-width:1100px;
   margin:auto;
-  padding:20px 14px 50px
+  padding:20px 14px 60px
 }
 
-.title{margin-bottom:20px}
+.title{
+  margin-bottom:20px
+}
 
-.title h1{margin-bottom:5px}
+.title h1{
+  margin-bottom:5px
+}
 
-.title p{color:#666}
+.title p{
+  color:#666
+}
+
+
+/* =========================
+   STATS
+========================= */
 
 .stats{
   display:grid;
@@ -115,7 +219,8 @@ header{
   margin-bottom:20px
 }
 
-.stat,.card{
+.stat,
+.card{
   background:#fff;
   border-radius:14px;
   padding:16px;
@@ -127,6 +232,11 @@ header{
   font-size:25px;
   margin-top:7px
 }
+
+
+/* =========================
+   TABS
+========================= */
 
 .tabs{
   display:flex;
@@ -146,8 +256,18 @@ header{
   color:#fff
 }
 
-.section{display:none}
-.section.show{display:block}
+.section{
+  display:none
+}
+
+.section.show{
+  display:block
+}
+
+
+/* =========================
+   ROW
+========================= */
 
 .row{
   display:flex;
@@ -157,14 +277,24 @@ header{
   margin-bottom:15px
 }
 
-.search{max-width:350px}
+.search{
+  max-width:350px
+}
 
-.orders,.products{
+
+/* =========================
+   ORDERS
+========================= */
+
+.orders,
+.products{
   display:grid;
   gap:12px
 }
 
-.order h3{margin:5px 0}
+.order h3{
+  margin:5px 0
+}
 
 .muted{
   color:#777;
@@ -193,7 +323,9 @@ header{
   margin-top:8px
 }
 
-.actions>*{flex:1}
+.actions>*{
+  flex:1
+}
 
 .empty{
   text-align:center;
@@ -202,6 +334,11 @@ header{
   border-radius:14px;
   color:#777
 }
+
+
+/* =========================
+   PRODUCTS
+========================= */
 
 .productgrid{
   display:grid;
@@ -216,7 +353,14 @@ header{
   border-radius:10px
 }
 
-.product .p{padding-top:8px}
+.product .p{
+  padding-top:8px
+}
+
+
+/* =========================
+   MODAL
+========================= */
 
 .modal{
   display:none;
@@ -224,31 +368,101 @@ header{
   inset:0;
   background:#0009;
   z-index:20;
-  padding:20px;
-  overflow:auto
+  padding:12px;
+  overflow-y:auto
 }
 
 .modalbox{
   background:#fff;
+  width:100%;
   max-width:450px;
-  margin:30px auto;
+  margin:20px auto 30px;
   padding:20px;
   border-radius:16px
 }
 
-@media(max-width:700px){
-  .stats{grid-template-columns:repeat(2,1fr)}
-  .productgrid{grid-template-columns:repeat(2,1fr)}
-  .row{flex-wrap:wrap}
-  .search{max-width:none}
-  .head .logo{font-size:20px}
+.modalbox h2{
+  margin-top:0;
+  margin-bottom:15px
 }
+
+.file-title{
+  display:block;
+  margin-top:10px;
+  margin-bottom:4px;
+  font-weight:bold
+}
+
+#pfile{
+  padding:10px;
+  background:#f8f8f8
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:700px){
+
+  .stats{
+    grid-template-columns:repeat(2,1fr)
+  }
+
+  .productgrid{
+    grid-template-columns:repeat(2,1fr)
+  }
+
+  .row{
+    flex-wrap:wrap
+  }
+
+  .search{
+    max-width:none
+  }
+
+  .head .logo{
+    font-size:20px
+  }
+
+  .modal{
+    padding:8px
+  }
+
+  .modalbox{
+    margin:8px auto 30px;
+    padding:16px;
+    border-radius:14px
+  }
+
+  .modalbox h2{
+    font-size:23px
+  }
+
+  .actions{
+    flex-direction:row
+  }
+
+  .actions .btn{
+    min-height:48px
+  }
+
+}
+
 </style>
+
 </head>
+
 
 <body>
 
+
+<!-- =========================
+     LOGIN
+========================= -->
+
 <div id="login">
+
   <div class="box">
 
     <div class="logo">
@@ -274,152 +488,246 @@ header{
 
     <button
       id="loginBtn"
+      type="button"
       class="btn green full"
       onclick="login()"
     >
       🔐 تسجيل الدخول
     </button>
 
-    <div id="err" class="err"></div>
+    <div
+      id="err"
+      class="err"
+    ></div>
 
   </div>
+
 </div>
+
+
+
+<!-- =========================
+     ADMIN
+========================= -->
 
 <div id="admin">
 
-<header>
-  <div class="head">
+  <header>
 
-    <div class="logo">
-      JR <span>Shop</span>
-    </div>
+    <div class="head">
 
-    <button
-      class="btn red"
-      onclick="logout()"
-    >
-      خروج
-    </button>
-
-  </div>
-</header>
-
-<div class="container">
-
-  <div class="title">
-    <h1>👋 لوحة التحكم</h1>
-    <p>إدارة الطلبات والمنتجات</p>
-  </div>
-
-  <div class="stats">
-
-    <div class="stat">
-      الطلبات
-      <b id="s1">0</b>
-    </div>
-
-    <div class="stat">
-      المعلقة
-      <b id="s2">0</b>
-    </div>
-
-    <div class="stat">
-      المكتملة
-      <b id="s3">0</b>
-    </div>
-
-    <div class="stat">
-      المبيعات
-      <b id="s4">0 دج</b>
-    </div>
-
-  </div>
-
-  <div class="tabs">
-
-    <button
-      class="tab active"
-      onclick="tab('orders',this)"
-    >
-      📦 الطلبات
-    </button>
-
-    <button
-      class="tab"
-      onclick="tab('products',this)"
-    >
-      🛍️ المنتجات
-    </button>
-
-  </div>
-
-  <section
-    id="orders"
-    class="section show"
-  >
-
-    <div class="row">
-
-      <h2>📦 الطلبات</h2>
-
-      <input
-        id="search"
-        class="search"
-        placeholder="بحث..."
-        oninput="drawOrders()"
-      >
+      <div class="logo">
+        JR <span>Shop</span>
+      </div>
 
       <button
-        class="btn dark"
-        onclick="loadOrders()"
+        type="button"
+        class="btn red"
+        onclick="logout()"
       >
-        🔄
+        خروج
       </button>
 
     </div>
 
-    <div
-      id="orderList"
-      class="orders"
-    >
-      <div class="empty">
-        جاري التحميل...
-      </div>
+  </header>
+
+
+  <div class="container">
+
+
+    <!-- TITLE -->
+
+    <div class="title">
+
+      <h1>
+        👋 لوحة التحكم
+      </h1>
+
+      <p>
+        إدارة الطلبات والمنتجات
+      </p>
+
     </div>
 
-  </section>
 
-  <section
-    id="products"
-    class="section"
-  >
 
-    <div class="row">
+    <!-- STATS -->
 
-      <h2>🛍️ المنتجات</h2>
+    <div class="stats">
+
+      <div class="stat">
+
+        الطلبات
+
+        <b id="s1">
+          0
+        </b>
+
+      </div>
+
+
+      <div class="stat">
+
+        المعلقة
+
+        <b id="s2">
+          0
+        </b>
+
+      </div>
+
+
+      <div class="stat">
+
+        المكتملة
+
+        <b id="s3">
+          0
+        </b>
+
+      </div>
+
+
+      <div class="stat">
+
+        المبيعات
+
+        <b id="s4">
+          0 دج
+        </b>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- TABS -->
+
+    <div class="tabs">
 
       <button
-        class="btn green"
-        onclick="openModal()"
+        type="button"
+        class="tab active"
+        onclick="tab('orders',this)"
       >
-        ➕ إضافة
+        📦 الطلبات
+      </button>
+
+
+      <button
+        type="button"
+        class="tab"
+        onclick="tab('products',this)"
+      >
+        🛍️ المنتجات
       </button>
 
     </div>
 
-    <div
-      id="productList"
-      class="productgrid"
+
+
+    <!-- =====================
+         ORDERS SECTION
+    ====================== -->
+
+    <section
+      id="orders"
+      class="section show"
     >
-      <div class="empty">
-        جاري التحميل...
+
+      <div class="row">
+
+        <h2>
+          📦 الطلبات
+        </h2>
+
+
+        <input
+          id="search"
+          class="search"
+          placeholder="بحث..."
+          oninput="drawOrders()"
+        >
+
+
+        <button
+          type="button"
+          class="btn dark"
+          onclick="loadOrders()"
+        >
+          🔄
+        </button>
+
       </div>
-    </div>
 
-  </section>
+
+      <div
+        id="orderList"
+        class="orders"
+      >
+
+        <div class="empty">
+          جاري التحميل...
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =====================
+         PRODUCTS SECTION
+    ====================== -->
+
+    <section
+      id="products"
+      class="section"
+    >
+
+      <div class="row">
+
+        <h2>
+          🛍️ المنتجات
+        </h2>
+
+
+        <button
+          type="button"
+          class="btn green"
+          onclick="openModal()"
+        >
+          ➕ إضافة
+        </button>
+
+      </div>
+
+
+      <div
+        id="productList"
+        class="productgrid"
+      >
+
+        <div class="empty">
+          جاري التحميل...
+        </div>
+
+      </div>
+
+    </section>
+
+
+  </div>
 
 </div>
-</div>
+
+
+
+<!-- =========================
+     PRODUCT MODAL
+========================= -->
 
 <div
   id="modal"
@@ -432,46 +740,62 @@ header{
       ➕ منتج جديد
     </h2>
 
+
     <input
       id="pid"
       type="hidden"
     >
 
+
     <input
       id="pname"
+      type="text"
       placeholder="اسم المنتج"
     >
+
 
     <input
       id="pprice"
       type="number"
+      inputmode="numeric"
       placeholder="السعر"
     >
+
 
     <input
       id="pold"
       type="number"
+      inputmode="numeric"
       placeholder="السعر القديم"
     >
+
 
     <input
       id="pstock"
       type="number"
+      inputmode="numeric"
       placeholder="المخزون"
     >
 
-    <input id="pimage" placeholder="رابط الصورة">
 
-<label style="display:block;margin-top:8px;font-weight:bold">
-📱 تحميل صورة من الهاتف
-</label>
+    <input
+      id="pimage"
+      type="url"
+      placeholder="رابط الصورة"
+    >
 
-<input
-  id="pfile"
-  type="file"
-  accept="image/*"
-  style="padding:10px;background:#f8f8f8"
->
+
+    <label class="file-title">
+      📱 تحميل صورة من الهاتف
+    </label>
+
+
+    <input
+      id="pfile"
+      type="file"
+      accept="image/*"
+    >
+
 
     <textarea
       id="pdesc"
@@ -479,21 +803,34 @@ header{
       placeholder="الوصف"
     ></textarea>
 
+
     <select id="pactive">
-      <option value="true">نشط</option>
-      <option value="false">غير نشط</option>
+
+      <option value="true">
+        نشط
+      </option>
+
+      <option value="false">
+        غير نشط
+      </option>
+
     </select>
+
 
     <div class="actions">
 
       <button
+        id="saveProductBtn"
+        type="button"
         class="btn green"
         onclick="saveProduct()"
       >
         💾 حفظ
       </button>
 
+
       <button
+        type="button"
         class="btn gray"
         onclick="closeModal()"
       >
@@ -503,10 +840,15 @@ header{
     </div>
 
   </div>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
+
+/* =========================
+   SUPABASE
+========================= */
 
 const SUPABASE_URL =
 "https://cstjgsuehmqcolajspqh.supabase.co";
@@ -514,158 +856,331 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
 "sb_publishable_e_wQxqCrx21Qq1kRYKjFMg_yR6TQfKX";
 
-const db = supabase.createClient(
+const db =
+supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY,
   {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true,
-      storage: window.localStorage
+    auth:{
+      persistSession:true,
+      autoRefreshToken:true,
+      detectSessionInUrl:true,
+      storage:window.localStorage
     }
   }
 );
+
+
+/* =========================
+   VARIABLES
+========================= */
 
 let orders = [];
 let products = [];
 
 
-/* HELPERS */
+/* =========================
+   ELEMENTS
+========================= */
+
+const loginBox =
+document.getElementById("login");
+
+const adminBox =
+document.getElementById("admin");
+
+const emailInput =
+document.getElementById("email");
+
+const passwordInput =
+document.getElementById("password");
+
+const loginBtn =
+document.getElementById("loginBtn");
+
+const errBox =
+document.getElementById("err");
+
+const orderList =
+document.getElementById("orderList");
+
+const productList =
+document.getElementById("productList");
+
+const searchInput =
+document.getElementById("search");
+
+const modal =
+document.getElementById("modal");
+
+const modalTitle =
+document.getElementById("modalTitle");
+
+const pid =
+document.getElementById("pid");
+
+const pname =
+document.getElementById("pname");
+
+const pprice =
+document.getElementById("pprice");
+
+const pold =
+document.getElementById("pold");
+
+const pstock =
+document.getElementById("pstock");
+
+const pimage =
+document.getElementById("pimage");
+
+const pfile =
+document.getElementById("pfile");
+
+const pdesc =
+document.getElementById("pdesc");
+
+const pactive =
+document.getElementById("pactive");
+
+const saveProductBtn =
+document.getElementById("saveProductBtn");
+
+
+/* =========================
+   HELPERS
+========================= */
 
 function esc(x){
+
   return String(x ?? "")
     .replace(/[&<>"']/g,m=>({
+
       "&":"&amp;",
       "<":"&lt;",
       ">":"&gt;",
       '"':"&quot;",
       "'":"&#039;"
+
     }[m]));
+
 }
+
 
 function money(x){
+
   return Number(x || 0)
     .toLocaleString("fr-FR");
+
 }
 
+
 function status(x){
+
   return {
+
     pending:"معلق",
     confirmed:"مؤكد",
     shipped:"تم الشحن",
     delivered:"تم التسليم",
     cancelled:"ملغى"
+
   }[x] || x || "معلق";
+
 }
 
 
-/* LOGIN */
+/* =========================
+   LOGIN
+========================= */
 
 async function login(){
 
-  err.textContent="";
+  errBox.textContent = "";
 
-  const e = email.value.trim();
-  const p = password.value;
+  const e =
+    emailInput.value.trim();
+
+  const p =
+    passwordInput.value;
+
 
   if(!e || !p){
-    err.textContent =
+
+    errBox.textContent =
       "أدخل البريد وكلمة المرور";
+
     return;
   }
 
-  loginBtn.disabled=true;
-  loginBtn.textContent=
+
+  loginBtn.disabled = true;
+
+  loginBtn.textContent =
     "جاري الدخول...";
 
-  const r =
-    await db.auth.signInWithPassword({
-      email:e,
-      password:p
-    });
 
-  if(r.error){
+  try{
 
-    loginBtn.disabled=false;
-    loginBtn.textContent=
+    const r =
+      await db.auth.signInWithPassword({
+
+        email:e,
+        password:p
+
+      });
+
+
+    if(r.error){
+
+      loginBtn.disabled = false;
+
+      loginBtn.textContent =
+        "🔐 تسجيل الدخول";
+
+      errBox.textContent =
+        "❌ " +
+        r.error.message;
+
+      return;
+    }
+
+
+    loginBtn.textContent =
+      "تم الدخول ✅";
+
+
+    loginBox.style.display =
+      "none";
+
+    adminBox.style.display =
+      "block";
+
+
+    await loadOrders();
+
+    await loadProducts();
+
+
+  }catch(error){
+
+    console.error(error);
+
+    loginBtn.disabled = false;
+
+    loginBtn.textContent =
       "🔐 تسجيل الدخول";
 
-    err.textContent=
-      "❌ " + r.error.message;
+    errBox.textContent =
+      "❌ " +
+      (
+        error.message ||
+        error
+      );
 
-    return;
   }
 
-  loginBtn.textContent=
-    "تم الدخول ✅";
-
-  document.getElementById("login")
-    .style.display="none";
-
-  document.getElementById("admin")
-    .style.display="block";
-
-  await loadOrders();
-  await loadProducts();
 }
 
 
-/* SESSION */
+/* =========================
+   SESSION
+========================= */
 
 async function checkSession(){
 
-  const { data, error } = await db.auth.getSession();
+  try{
 
-  if(error){
+    const result =
+      await db.auth.getSession();
+
+
+    if(result.error){
+
+      console.error(
+        result.error
+      );
+
+      loginBox.style.display =
+        "flex";
+
+      adminBox.style.display =
+        "none";
+
+      return;
+    }
+
+
+    if(result.data.session){
+
+      loginBox.style.display =
+        "none";
+
+      adminBox.style.display =
+        "block";
+
+
+      await loadOrders();
+
+      await loadProducts();
+
+    }else{
+
+      loginBox.style.display =
+        "flex";
+
+      adminBox.style.display =
+        "none";
+
+    }
+
+  }catch(error){
+
     console.error(error);
-    return;
-  }
-
-  if(data.session){
-
-    document.getElementById("login").style.display = "none";
-    document.getElementById("admin").style.display = "block";
-
-    await loadOrders();
-    await loadProducts();
-
-  }else{
-
-    document.getElementById("login").style.display = "flex";
-    document.getElementById("admin").style.display = "none";
 
   }
 
-  }
+}
 
 
-/* LOGOUT */
+/* =========================
+   LOGOUT
+========================= */
 
 async function logout(){
 
   await db.auth.signOut();
 
   location.reload();
+
 }
 
 
-/* ORDERS */
+/* =========================
+   LOAD ORDERS
+========================= */
 
 async function loadOrders(){
 
   orderList.innerHTML =
     '<div class="empty">جاري تحميل الطلبات...</div>';
 
+
   const r =
     await db
       .from("orders")
       .select("*")
-      .order("created_at",{
-        ascending:false
-      });
+      .order(
+        "created_at",
+        {
+          ascending:false
+        }
+      );
+
 
   if(r.error){
+
+    console.error(r.error);
 
     orderList.innerHTML =
       '<div class="empty">❌ ' +
@@ -675,59 +1190,95 @@ async function loadOrders(){
     return;
   }
 
-  orders = r.data || [];
+
+  orders =
+    r.data || [];
+
 
   updateStats();
+
   drawOrders();
+
 }
 
 
-/* STATS */
+/* =========================
+   STATS
+========================= */
 
 function updateStats(){
 
-  s1.textContent =
-    orders.length;
+  document
+    .getElementById("s1")
+    .textContent =
+      orders.length;
 
-  s2.textContent =
-    orders.filter(
-      x=>x.status==="pending"
-    ).length;
 
-  s3.textContent =
-    orders.filter(
-      x=>x.status==="delivered"
-    ).length;
+  document
+    .getElementById("s2")
+    .textContent =
+      orders.filter(
+        x =>
+          x.status === "pending"
+      ).length;
+
+
+  document
+    .getElementById("s3")
+    .textContent =
+      orders.filter(
+        x =>
+          x.status === "delivered"
+      ).length;
+
 
   const sales =
     orders
-      .filter(x=>x.status!=="cancelled")
+      .filter(
+        x =>
+          x.status !== "cancelled"
+      )
       .reduce(
-        (a,x)=>a+Number(x.total||0),
+        (a,x) =>
+          a + Number(x.total || 0),
         0
       );
 
-  s4.textContent =
-    money(sales)+" دج";
+
+  document
+    .getElementById("s4")
+    .textContent =
+      money(sales) +
+      " دج";
+
 }
 
 
-/* DRAW ORDERS */
+/* =========================
+   DRAW ORDERS
+========================= */
 
 function drawOrders(){
 
   const q =
-    (search.value || "")
+    (
+      searchInput.value || ""
+    )
     .toLowerCase()
     .trim();
 
+
   const list =
     orders.filter(o =>
+
       !q ||
+
       JSON.stringify(o)
         .toLowerCase()
         .includes(q)
+
     );
+
 
   if(!list.length){
 
@@ -736,6 +1287,7 @@ function drawOrders(){
 
     return;
   }
+
 
   orderList.innerHTML =
     list.map(o => {
@@ -746,19 +1298,35 @@ function drawOrders(){
         o.order_items ||
         [];
 
-      if(typeof items==="string"){
+
+      if(
+        typeof items === "string"
+      ){
 
         try{
-          items=JSON.parse(items);
-        }catch(e){}
+
+          items =
+            JSON.parse(items);
+
+        }catch(e){
+
+          console.error(e);
+
+        }
+
       }
 
-      let itemText="";
 
-      if(Array.isArray(items)){
+      let itemText = "";
+
+
+      if(
+        Array.isArray(items)
+      ){
 
         itemText =
           items.map(i =>
+
             `<div>
               • ${esc(
                 i.name ||
@@ -767,127 +1335,154 @@ function drawOrders(){
               )}
               × ${i.quantity || 1}
             </div>`
+
           ).join("");
 
       }else{
 
         itemText =
           esc(items);
+
       }
 
+
       return `
-      <div class="card order">
 
-        <div class="row">
+        <div class="card order">
 
-          <div>
+          <div class="row">
 
-            <h3>
-              📦 ${esc(
-                o.name ||
-                o.full_name ||
-                o.customer_name ||
-                "زبون"
-              )}
-            </h3>
+            <div>
 
-            <div class="muted">
-              #${esc(o.id)}
-              <br>
-              ${esc(o.created_at || "")}
+              <h3>
+                📦 ${esc(
+                  o.name ||
+                  o.full_name ||
+                  o.customer_name ||
+                  "زبون"
+                )}
+              </h3>
+
+              <div class="muted">
+
+                #${esc(o.id)}
+
+                <br>
+
+                ${esc(
+                  o.created_at || ""
+                )}
+
+              </div>
+
             </div>
+
+
+            <b>
+              ${esc(
+                status(o.status)
+              )}
+            </b>
 
           </div>
 
-          <b>
-            ${esc(status(o.status))}
-          </b>
+
+          <div class="info">
+
+            📞 ${esc(
+              o.phone ||
+              o.telephone ||
+              ""
+            )}
+
+            <br>
+
+            📍 ${esc(
+              o.wilaya ||
+              o.state ||
+              ""
+            )}
+
+            ${esc(
+              o.address || ""
+            )}
+
+            <br><br>
+
+            ${itemText}
+
+          </div>
+
+
+          <div class="total">
+
+            ${money(o.total)} دج
+
+          </div>
+
+
+          <div class="actions">
+
+            <select
+              onchange="
+                changeStatus(
+                  '${esc(o.id)}',
+                  this.value
+                )
+              "
+            >
+
+              ${[
+                "pending",
+                "confirmed",
+                "shipped",
+                "delivered",
+                "cancelled"
+              ].map(s=>`
+
+                <option
+                  value="${s}"
+                  ${o.status===s?"selected":""}
+                >
+                  ${status(s)}
+                </option>
+
+              `).join("")}
+
+            </select>
+
+
+            <button
+              type="button"
+              class="btn red"
+              onclick="
+                deleteOrder(
+                  '${esc(o.id)}'
+                )
+              "
+            >
+              🗑️
+            </button>
+
+          </div>
 
         </div>
 
-
-        <div class="info">
-
-          📞 ${esc(
-            o.phone ||
-            o.telephone ||
-            ""
-          )}
-
-          <br>
-
-          📍 ${esc(
-            o.wilaya ||
-            o.state ||
-            ""
-          )}
-
-          ${esc(o.address || "")}
-
-          <br><br>
-
-          ${itemText}
-
-        </div>
-
-
-        <div class="total">
-          ${money(o.total)} دج
-        </div>
-
-
-        <div class="actions">
-
-          <select
-            onchange="
-              changeStatus(
-                '${esc(o.id)}',
-                this.value
-              )
-            "
-          >
-
-            ${[
-              "pending",
-              "confirmed",
-              "shipped",
-              "delivered",
-              "cancelled"
-            ].map(s=>`
-
-              <option
-                value="${s}"
-                ${o.status===s?"selected":""}
-              >
-                ${status(s)}
-              </option>
-
-            `).join("")}
-
-          </select>
-
-
-          <button
-            class="btn red"
-            onclick="
-              deleteOrder('${esc(o.id)}')
-            "
-          >
-            🗑️
-          </button>
-
-        </div>
-
-      </div>
       `;
 
     }).join("");
+
 }
 
 
-/* CHANGE ORDER STATUS */
+/* =========================
+   CHANGE ORDER STATUS
+========================= */
 
-async function changeStatus(id,value){
+async function changeStatus(
+  id,
+  value
+){
 
   const r =
     await db
@@ -895,65 +1490,96 @@ async function changeStatus(id,value){
       .update({
         status:value
       })
-      .eq("id",id);
+      .eq(
+        "id",
+        id
+      );
+
 
   if(r.error){
 
     alert(
-      "خطأ: " +
+      "❌ خطأ:\n\n" +
       r.error.message
     );
 
     return;
   }
 
+
   await loadOrders();
+
 }
 
 
-/* DELETE ORDER */
+/* =========================
+   DELETE ORDER
+========================= */
 
 async function deleteOrder(id){
 
-  if(!confirm("هل تريد حذف هذا الطلب؟"))
+  if(
+    !confirm(
+      "هل تريد حذف هذا الطلب؟"
+    )
+  ){
+
     return;
+
+  }
+
 
   const r =
     await db
       .from("orders")
       .delete()
-      .eq("id",id);
+      .eq(
+        "id",
+        id
+      );
+
 
   if(r.error){
 
     alert(
-      "خطأ: " +
+      "❌ خطأ:\n\n" +
       r.error.message
     );
 
     return;
   }
 
+
   await loadOrders();
+
 }
 
 
-/* PRODUCTS */
+/* =========================
+   LOAD PRODUCTS
+========================= */
 
 async function loadProducts(){
 
   productList.innerHTML =
     '<div class="empty">جاري تحميل المنتجات...</div>';
 
+
   const r =
     await db
       .from("products")
       .select("*")
-      .order("created_at",{
-        ascending:false
-      });
+      .order(
+        "created_at",
+        {
+          ascending:false
+        }
+      );
+
 
   if(r.error){
+
+    console.error(r.error);
 
     productList.innerHTML =
       '<div class="empty">❌ ' +
@@ -963,14 +1589,19 @@ async function loadProducts(){
     return;
   }
 
+
   products =
     r.data || [];
 
+
   drawProducts();
+
 }
 
 
-/* DRAW PRODUCTS */
+/* =========================
+   DRAW PRODUCTS
+========================= */
 
 function drawProducts(){
 
@@ -982,6 +1613,7 @@ function drawProducts(){
     return;
   }
 
+
   productList.innerHTML =
     products.map(p => {
 
@@ -990,388 +1622,747 @@ function drawProducts(){
         p.image_url ||
         "";
 
+
       return `
 
-      <div class="card product">
+        <div class="card product">
 
-        ${
-          image
+          ${
+            image
 
-          ?
+            ?
 
-          `<img
-            src="${esc(image)}"
-            alt="${esc(
-              p.name ||
-              p.title ||
-              "منتج"
-            )}"
-          >`
+            `<img
+              src="${esc(image)}"
+              alt="${esc(
+                p.name ||
+                p.title ||
+                "منتج"
+              )}"
+              onerror="
+                this.style.display='none';
+              "
+            >`
 
-          :
+            :
 
-          `<div
-            style="
-              height:180px;
-              display:flex;
-              align-items:center;
-              justify-content:center;
-              font-size:50px;
-              background:#eee;
-              border-radius:10px
-            "
-          >
-            🛍️
-          </div>`
-        }
-
-
-        <div class="p">
-
-          <h3>
-            ${esc(
-              p.name ||
-              p.title ||
-              "منتج"
-            )}
-          </h3>
-
-          <b
-            style="color:#16a34a"
-          >
-            ${money(p.price)} دج
-          </b>
-
-          <div class="muted">
-            المخزون:
-            ${esc(p.stock ?? 0)}
-          </div>
-
-          <p class="muted">
-            ${esc(
-              p.description || ""
-            )}
-          </p>
-
-          <div class="actions">
-
-            <button
-              class="btn dark"
-              onclick='editProduct(${JSON.stringify(p)})'
-            >
-              ✏️
-            </button>
-
-            <button
-              class="btn red"
-              onclick="
-                deleteProduct('${esc(p.id)}')
+            `<div
+              style="
+                height:180px;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                font-size:50px;
+                background:#eee;
+                border-radius:10px
               "
             >
-              🗑️
-            </button>
+              🛍️
+            </div>`
+
+          }
+
+
+          <div class="p">
+
+            <h3>
+              ${esc(
+                p.name ||
+                p.title ||
+                "منتج"
+              )}
+            </h3>
+
+
+            <b
+              style="color:#16a34a"
+            >
+              ${money(p.price)} دج
+            </b>
+
+
+            <div class="muted">
+
+              المخزون:
+              ${esc(
+                p.stock ?? 0
+              )}
+
+            </div>
+
+
+            <p class="muted">
+
+              ${esc(
+                p.description || ""
+              )}
+
+            </p>
+
+
+            <div class="actions">
+
+              <button
+                type="button"
+                class="btn dark"
+                onclick="
+                  editProductById(
+                    '${esc(p.id)}'
+                  )
+                "
+              >
+                ✏️
+              </button>
+
+
+              <button
+                type="button"
+                class="btn red"
+                onclick="
+                  deleteProduct(
+                    '${esc(p.id)}'
+                  )
+                "
+              >
+                🗑️
+              </button>
+
+            </div>
 
           </div>
 
         </div>
 
-      </div>
-
       `;
 
     }).join("");
+
 }
-
-
-/* MODAL */
+  /* =========================
+   OPEN MODAL
+========================= */
 
 function openModal(){
 
-  modal.style.display="block";
+  modal.style.display = "block";
 
-  modalTitle.textContent=
+  document.body.style.overflow = "hidden";
+
+  modalTitle.textContent =
     "➕ منتج جديد";
 
-  pid.value="";
-  pname.value="";
-  pprice.value="";
-  pold.value="";
-  pstock.value="";
-  pimage.value="";
-  pdesc.value="";
-  pactive.value="true";
+  pid.value = "";
+  pname.value = "";
+  pprice.value = "";
+  pold.value = "";
+  pstock.value = "";
+  pimage.value = "";
+  pdesc.value = "";
+  pactive.value = "true";
+  pfile.value = "";
+
+  setTimeout(function(){
+    pname.focus();
+  },100);
+
 }
 
+
+/* =========================
+   CLOSE MODAL
+========================= */
 
 function closeModal(){
 
-  modal.style.display="none";
+  modal.style.display = "none";
+
+  document.body.style.overflow = "";
+
 }
 
 
-/* EDIT PRODUCT */
+/* =========================
+   EDIT PRODUCT
+========================= */
+
+function editProductById(id){
+
+  const p =
+    products.find(function(x){
+
+      return String(x.id) === String(id);
+
+    });
+
+
+  if(!p){
+
+    alert(
+      "❌ لم يتم العثور على المنتج"
+    );
+
+    return;
+  }
+
+
+  editProduct(p);
+
+}
+
 
 function editProduct(p){
 
   openModal();
 
-  modalTitle.textContent=
+  modalTitle.textContent =
     "✏️ تعديل المنتج";
+
 
   pid.value =
     p.id || "";
+
 
   pname.value =
     p.name ||
     p.title ||
     "";
 
+
   pprice.value =
-    p.price || "";
+    p.price ?? "";
+
 
   pold.value =
-    p.old_price || "";
+    p.old_price ?? "";
+
 
   pstock.value =
-    p.stock || 0;
+    p.stock ?? 0;
+
 
   pimage.value =
     p.image ||
     p.image_url ||
     "";
 
+
   pdesc.value =
     p.description ||
     "";
+
 
   pactive.value =
     String(
       p.active !== false
     );
+
+
+  pfile.value = "";
+
 }
 
 
-/* SAVE PRODUCT */
+/* =========================
+   SAVE PRODUCT
+========================= */
+
 async function saveProduct(){
 
-  const name = pname.value.trim();
-  const price = Number(pprice.value || 0);
-  const old_price = Number(pold.value || 0);
-  const stock = Number(pstock.value || 0);
-  let imageUrl = pimage.value.trim();
-  const description = pdesc.value.trim();
-  const active = pactive.value === "true";
+  if(saveProductBtn.disabled){
 
-  /* التحقق */
-  if(!name){
-    alert("اكتب اسم المنتج");
     return;
+
   }
 
-  if(price <= 0){
-    alert("اكتب سعر صحيح");
-    return;
-  }
 
-  /* رفع الصورة من الهاتف */
-  const file = pfile.files[0];
+  try{
 
-  if(file){
+    const name =
+      pname.value.trim();
 
-    const ext =
-      file.name
-        .split(".")
-        .pop()
-        .toLowerCase();
 
-    const fileName =
-      crypto.randomUUID() + "." + ext;
+    const price =
+      Number(
+        pprice.value || 0
+      );
 
-    const upload =
-      await db.storage
-        .from("product-images")
-        .upload(
-          fileName,
-          file,
-          {
-            cacheControl: "3600",
-            upsert: false
-          }
-        );
 
-    if(upload.error){
+    const old_price =
+      Number(
+        pold.value || 0
+      );
+
+
+    const stock =
+      Number(
+        pstock.value || 0
+      );
+
+
+    let imageUrl =
+      pimage.value.trim();
+
+
+    const description =
+      pdesc.value.trim();
+
+
+    const active =
+      pactive.value === "true";
+
+
+    const productId =
+      pid.value;
+
+
+    const file =
+      pfile.files &&
+      pfile.files[0];
+
+
+    /* =====================
+       VALIDATION
+    ===================== */
+
+    if(!name){
 
       alert(
-        "❌ خطأ في رفع الصورة:\n" +
-        upload.error.message
+        "❌ اكتب اسم المنتج"
       );
+
+      pname.focus();
 
       return;
     }
 
-    const publicUrl =
-      db.storage
-        .from("product-images")
-        .getPublicUrl(fileName);
 
-    imageUrl =
-      publicUrl.data.publicUrl;
-  }
+    if(price <= 0){
 
-  /* بيانات المنتج */
-  const data = {
+      alert(
+        "❌ اكتب سعر صحيح"
+      );
 
-    name: name,
+      pprice.focus();
 
-    price: price,
+      return;
+    }
 
-    old_price: old_price,
 
-    stock: stock,
+    if(stock < 0){
 
-    image: imageUrl,
+      alert(
+        "❌ المخزون لا يمكن أن يكون سالب"
+      );
 
-    description: description,
+      pstock.focus();
 
-    active: active
+      return;
+    }
 
-  };
 
-  let r;
+    /* =====================
+       START SAVING
+    ===================== */
 
-  /* تعديل */
-  if(pid.value){
+    saveProductBtn.disabled =
+      true;
 
-    r =
-      await db
-        .from("products")
-        .update(data)
-        .eq("id", pid.value);
+    saveProductBtn.textContent =
+      "⏳ جاري الحفظ...";
 
-  }
 
-  /* إضافة */
-  else{
+    /* =====================
+       UPLOAD IMAGE
+    ===================== */
 
-    r =
-      await db
-        .from("products")
-        .insert([data]);
+    if(file){
 
-  }
+      saveProductBtn.textContent =
+        "📤 جاري رفع الصورة...";
 
-  /* خطأ Supabase */
-  if(r.error){
 
-    alert(
-      "❌ خطأ:\n" +
-      r.error.message
+      const extension =
+        file.name.includes(".")
+          ? file.name
+              .split(".")
+              .pop()
+              .toLowerCase()
+          : "jpg";
+
+
+      const allowed =
+        [
+          "jpg",
+          "jpeg",
+          "png",
+          "webp",
+          "gif"
+        ];
+
+
+      const ext =
+        allowed.includes(extension)
+          ? extension
+          : "jpg";
+
+
+      const fileName =
+        Date.now() +
+        "-" +
+        Math.random()
+          .toString(36)
+          .substring(2) +
+        "." +
+        ext;
+
+
+      console.log(
+        "Uploading image:",
+        fileName
+      );
+
+
+      const upload =
+        await db.storage
+          .from("product-images")
+          .upload(
+            fileName,
+            file,
+            {
+              cacheControl:"3600",
+              upsert:false,
+              contentType:
+                file.type ||
+                "image/jpeg"
+            }
+          );
+
+
+      if(upload.error){
+
+        console.error(
+          "STORAGE ERROR:",
+          upload.error
+        );
+
+
+        throw new Error(
+          "فشل رفع الصورة:\n" +
+          upload.error.message
+        );
+
+      }
+
+
+      const publicData =
+        db.storage
+          .from("product-images")
+          .getPublicUrl(
+            fileName
+          );
+
+
+      imageUrl =
+        publicData
+          .data
+          .publicUrl;
+
+
+      console.log(
+        "Image URL:",
+        imageUrl
+      );
+
+    }
+
+
+    /* =====================
+       PRODUCT DATA
+    ===================== */
+
+    const data = {
+
+      name: name,
+
+      price: price,
+
+      old_price: old_price,
+
+      stock: stock,
+
+      image: imageUrl,
+
+      description: description,
+
+      active: active
+
+    };
+
+
+    console.log(
+      "Product data:",
+      data
     );
 
-    console.error(r.error);
 
-    return;
+    /* =====================
+       DATABASE
+    ===================== */
+
+    saveProductBtn.textContent =
+      "💾 جاري حفظ المنتج...";
+
+
+    let r;
+
+
+    if(productId){
+
+      r =
+        await db
+          .from("products")
+          .update(data)
+          .eq(
+            "id",
+            productId
+          );
+
+    }else{
+
+      r =
+        await db
+          .from("products")
+          .insert([
+            data
+          ]);
+
+    }
+
+
+    /* =====================
+       DATABASE ERROR
+    ===================== */
+
+    if(r.error){
+
+      console.error(
+        "DATABASE ERROR:",
+        r.error
+      );
+
+
+      throw new Error(
+        r.error.message
+      );
+
+    }
+
+
+    /* =====================
+       SUCCESS
+    ===================== */
+
+    pfile.value = "";
+
+    closeModal();
+
+    await loadProducts();
+
+
+    alert(
+      productId
+        ? "✅ تم تعديل المنتج بنجاح"
+        : "✅ تمت إضافة المنتج بنجاح"
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "SAVE PRODUCT ERROR:",
+      error
+    );
+
+
+    alert(
+      "❌ لم يتم حفظ المنتج:\n\n" +
+      (
+        error.message ||
+        error
+      )
+    );
+
+
+  }finally{
+
+    saveProductBtn.disabled =
+      false;
+
+    saveProductBtn.textContent =
+      "💾 حفظ";
+
   }
 
-  /* نجاح */
-  closeModal();
+}
 
-  pfile.value = "";
 
-  await loadProducts();
-
-  alert(
-    pid.value
-      ? "✅ تم تعديل المنتج"
-      : "✅ تمت إضافة المنتج"
-  );
-  }
-
-/* DELETE PRODUCT */
+/* =========================
+   DELETE PRODUCT
+========================= */
 
 async function deleteProduct(id){
 
-  if(!confirm("هل تريد حذف المنتج؟"))
+  if(
+    !confirm(
+      "هل تريد حذف المنتج؟"
+    )
+  ){
+
     return;
+
+  }
+
 
   const r =
     await db
       .from("products")
       .delete()
-      .eq("id",id);
+      .eq(
+        "id",
+        id
+      );
+
 
   if(r.error){
 
+    console.error(
+      r.error
+    );
+
+
     alert(
-      "خطأ: " +
+      "❌ خطأ:\n\n" +
       r.error.message
     );
 
     return;
   }
 
+
   await loadProducts();
+
+  alert(
+    "✅ تم حذف المنتج"
+  );
+
 }
 
 
-/* TABS */
+/* =========================
+   TABS
+========================= */
 
 function tab(id,button){
 
   document
     .querySelectorAll(".section")
-    .forEach(x =>
-      x.classList.remove("show")
-    );
+    .forEach(function(x){
+
+      x.classList.remove(
+        "show"
+      );
+
+    });
+
 
   document
     .querySelectorAll(".tab")
-    .forEach(x =>
-      x.classList.remove("active")
-    );
+    .forEach(function(x){
+
+      x.classList.remove(
+        "active"
+      );
+
+    });
+
 
   document
     .getElementById(id)
-    .classList.add("show");
+    .classList.add(
+      "show"
+    );
 
-  button.classList.add("active");
+
+  button.classList.add(
+    "active"
+  );
+
 }
-  /* START */
+
+
+/* =========================
+   MODAL OUTSIDE CLICK
+========================= */
+
+modal.addEventListener(
+  "click",
+  function(e){
+
+    if(e.target === modal){
+
+      closeModal();
+
+    }
+
+  }
+);
+
+
+/* =========================
+   ESC TO CLOSE MODAL
+========================= */
+
+document.addEventListener(
+  "keydown",
+  function(e){
+
+    if(
+      e.key === "Escape" &&
+      modal.style.display === "block"
+    ){
+
+      closeModal();
+
+    }
+
+  }
+);
+
+
+/* =========================
+   ENTER TO LOGIN
+========================= */
+
+passwordInput.addEventListener(
+  "keydown",
+  function(e){
+
+    if(e.key === "Enter"){
+
+      login();
+
+    }
+
+  }
+);
+
+
+/* =========================
+   START APP
+========================= */
 
 checkSession();
 
-
-/* CLOSE MODAL WHEN CLICK OUTSIDE */
-
-modal.addEventListener("click",function(e){
-
-  if(e.target === modal){
-    closeModal();
-  }
-
-});
-
-
-/* ENTER TO LOGIN */
-
-password.addEventListener("keydown",function(e){
-
-  if(e.key === "Enter"){
-    login();
-  }
-
-});
-
-
-/* ESC TO CLOSE MODAL */
-
-document.addEventListener("keydown",function(e){
-
-  if(e.key === "Escape"){
-    closeModal();
-  }
-
-});
 
 </script>
 
