@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -231,6 +232,41 @@
       background: #20b957;
     }
 
+    .form-label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 10px;
+    }
+
+    .form-select,
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: Arial, sans-serif;
+      background: white;
+    }
+
+    .form-select:focus,
+    .form-input:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: #16a34a;
+    }
+
+    .form-select:disabled {
+      background: #f0f0f0;
+      color: #777;
+    }
+
     .toast {
       position: fixed;
       bottom: 20px;
@@ -368,7 +404,6 @@
 </div>
 
 
-<!-- TOAST -->
 <div id="toast" class="toast"></div>
 
 
@@ -413,7 +448,25 @@ const supabaseClient =
    WHATSAPP
 ========================= */
 
-const WHATSAPP_NUMBER = "213697005313";
+const WHATSAPP_NUMBER =
+  "213697005313";
+
+
+/* =========================
+   COMMUNES DATA
+========================= */
+
+/*
+  Dataset:
+  1541 communes
+  Algeria
+*/
+
+const COMMUNES_URL =
+  "https://raw.githubusercontent.com/ihahachi/Algeria-Cities/main/json/algeria_cities.json";
+
+
+let algeriaData = [];
 
 
 /* =========================
@@ -507,24 +560,426 @@ function showToast(message) {
 
 
 /* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHtml(value) {
+
+  if (
+    value === null ||
+    value === undefined
+  ) {
+    return "";
+  }
+
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
+
+/* =========================
+   LOAD WILAYAS + COMMUNES
+========================= */
+
+async function loadAlgeriaData() {
+
+  try {
+
+    const response =
+      await fetch(COMMUNES_URL);
+
+    if (!response.ok) {
+      throw new Error(
+        "Impossible de charger la liste des communes"
+      );
+    }
+
+    const data =
+      await response.json();
+
+
+    /*
+      بعض datasets تكون:
+      Array
+      وبعضها object فيه data
+    */
+
+    if (Array.isArray(data)) {
+
+      algeriaData = data;
+
+    } else if (
+      data &&
+      Array.isArray(data.data)
+    ) {
+
+      algeriaData = data.data;
+
+    } else {
+
+      throw new Error(
+        "Format de données incorrect"
+      );
+
+    }
+
+
+    console.log(
+      "Algeria communes loaded:",
+      algeriaData.length
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "Algeria data error:",
+      error
+    );
+
+    /*
+      إذا فشل التحميل نخلي select
+      يقول للزبون يعاود المحاولة.
+    */
+
+    const wilaya =
+      document.getElementById(
+        "customerWilaya"
+      );
+
+    if (wilaya) {
+
+      wilaya.innerHTML = `
+        <option value="">
+          تعذر تحميل الولايات
+        </option>
+      `;
+
+    }
+
+  }
+
+}
+
+
+/* =========================
+   GET WILAYA CODE
+========================= */
+
+function getWilayaCode(item) {
+
+  return String(
+    item.wilaya_code ??
+    item.wilayaCode ??
+    item.code ??
+    item.wilaya_id ??
+    ""
+  );
+
+}
+
+
+/* =========================
+   GET WILAYA NAME
+========================= */
+
+function getWilayaName(item) {
+
+  return (
+    item.wilaya_name ??
+    item.nameAr ??
+    item.name_ar ??
+    item.wilayaName ??
+    item.name ??
+    ""
+  );
+
+}
+
+
+/* =========================
+   GET COMMUNE NAME
+========================= */
+
+function getCommuneName(item) {
+
+  return (
+    item.commune_name ??
+    item.nameAr ??
+    item.name_ar ??
+    item.communeName ??
+    item.name ??
+    ""
+  );
+
+}
+
+
+/* =========================
+   POPULATE WILAYAS
+========================= */
+
+function populateWilayas() {
+
+  const select =
+    document.getElementById(
+      "customerWilaya"
+    );
+
+
+  if (!select) {
+    return;
+  }
+
+
+  /*
+    نجيب الولايات unique
+  */
+
+  const wilayas = [];
+
+
+  const seen =
+    new Set();
+
+
+  algeriaData.forEach(item => {
+
+    const code =
+      getWilayaCode(item);
+
+    const name =
+      getWilayaName(item);
+
+
+    if (
+      code &&
+      name &&
+      !seen.has(code)
+    ) {
+
+      seen.add(code);
+
+      wilayas.push({
+        code,
+        name
+      });
+
+    }
+
+  });
+
+
+  wilayas.sort(
+    (a, b) =>
+      Number(a.code) -
+      Number(b.code)
+  );
+
+
+  select.innerHTML = `
+
+    <option value="">
+      اختر الولاية
+    </option>
+
+  `;
+
+
+  wilayas.forEach(wilaya => {
+
+    const option =
+      document.createElement(
+        "option"
+      );
+
+    option.value =
+      wilaya.code;
+
+    option.textContent =
+      wilaya.name;
+
+
+    select.appendChild(
+      option
+    );
+
+  });
+
+}
+
+
+/* =========================
+   POPULATE COMMUNES
+========================= */
+
+function populateCommunes(wilayaCode) {
+
+  const select =
+    document.getElementById(
+      "customerCommune"
+    );
+
+
+  if (!select) {
+    return;
+  }
+
+
+  select.innerHTML = `
+
+    <option value="">
+      جاري تحميل البلديات...
+    </option>
+
+  `;
+
+
+  select.disabled = true;
+
+
+  if (!wilayaCode) {
+
+    select.innerHTML = `
+
+      <option value="">
+        اختر الولاية أولاً
+      </option>
+
+    `;
+
+    return;
+  }
+
+
+  const communes =
+    algeriaData
+      .filter(item =>
+        getWilayaCode(item) ===
+        String(wilayaCode)
+      )
+      .map(item => ({
+        name:
+          getCommuneName(item)
+      }))
+      .filter(item => item.name);
+
+
+  communes.sort(
+    (a, b) =>
+      a.name.localeCompare(
+        b.name,
+        "ar"
+      )
+  );
+
+
+  select.innerHTML = `
+
+    <option value="">
+      اختر البلدية
+    </option>
+
+  `;
+
+
+  communes.forEach(commune => {
+
+    const option =
+      document.createElement(
+        "option"
+      );
+
+    option.value =
+      commune.name;
+
+    option.textContent =
+      commune.name;
+
+
+    select.appendChild(
+      option
+    );
+
+  });
+
+
+  select.disabled =
+    communes.length === 0;
+
+
+  if (communes.length === 0) {
+
+    select.innerHTML = `
+
+      <option value="">
+        لا توجد بلديات
+      </option>
+
+    `;
+
+  }
+
+}
+
+
+/* =========================
+   WILAYA CHANGE
+========================= */
+
+document
+  .getElementById("cartItems")
+  .addEventListener(
+    "change",
+    function(event) {
+
+      if (
+        event.target.id ===
+        "customerWilaya"
+      ) {
+
+        populateCommunes(
+          event.target.value
+        );
+
+      }
+
+    }
+  );
+
+
+/* =========================
    LOAD PRODUCTS
 ========================= */
 
 async function loadProducts() {
 
   const productsContainer =
-    document.getElementById("products");
+    document.getElementById(
+      "products"
+    );
+
 
   productsContainer.innerHTML = `
+
     <div class="loading">
       جاري تحميل المنتجات...
     </div>
+
   `;
 
 
   try {
 
-    const { data, error } =
+    const {
+      data,
+      error
+    } =
       await supabaseClient
         .from("products")
         .select("*")
@@ -541,24 +996,38 @@ async function loadProducts() {
         error
       );
 
+
       productsContainer.innerHTML = `
+
         <div class="error">
+
           حدث خطأ أثناء تحميل المنتجات.
+
           <br><br>
+
           ${escapeHtml(error.message)}
+
         </div>
+
       `;
 
       return;
     }
 
 
-    if (!data || data.length === 0) {
+    if (
+      !data ||
+      data.length === 0
+    ) {
 
       productsContainer.innerHTML = `
+
         <div class="loading">
+
           لا توجد منتجات حالياً.
+
         </div>
+
       `;
 
       products = [];
@@ -572,18 +1041,12 @@ async function loadProducts() {
 
     renderProducts();
 
-
-    /*
-      بعد تحميل المنتجات،
-      نتأكد أن المنتجات الموجودة
-      في السلة مازالت صالحة.
-    */
-
     cleanCart();
 
     updateCartCount();
 
     renderCart();
+
 
   } catch (error) {
 
@@ -592,33 +1055,18 @@ async function loadProducts() {
       error
     );
 
+
     productsContainer.innerHTML = `
+
       <div class="error">
+
         حدث خطأ غير متوقع أثناء تحميل المنتجات.
+
       </div>
+
     `;
 
   }
-
-}
-
-
-/* =========================
-   ESCAPE HTML
-========================= */
-
-function escapeHtml(value) {
-
-  if (value === null || value === undefined) {
-    return "";
-  }
-
-  return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
 
 }
 
@@ -630,7 +1078,9 @@ function escapeHtml(value) {
 function renderProducts() {
 
   const productsContainer =
-    document.getElementById("products");
+    document.getElementById(
+      "products"
+    );
 
 
   productsContainer.innerHTML =
@@ -639,14 +1089,17 @@ function renderProducts() {
       const productId =
         String(product.id);
 
+
       const image =
         product.image
           ? `
+
             <img
               src="${escapeHtml(product.image)}"
               alt="${escapeHtml(product.name || "منتج JR")}"
               loading="lazy"
             >
+
           `
           : "🛍️";
 
@@ -654,15 +1107,19 @@ function renderProducts() {
       const oldPrice =
         product.old_price
           ? `
+
             <span class="old-price">
               ${Number(product.old_price)} دج
             </span>
+
           `
           : "";
 
 
       const stock =
-        Number(product.stock || 0);
+        Number(
+          product.stock || 0
+        );
 
 
       return `
@@ -677,23 +1134,39 @@ function renderProducts() {
           <div class="product-info">
 
             <h3>
-              ${escapeHtml(product.name || "منتج JR")}
+              ${escapeHtml(
+                product.name ||
+                "منتج JR"
+              )}
             </h3>
 
 
             <div class="description">
-              ${escapeHtml(product.description || "")}
+
+              ${escapeHtml(
+                product.description ||
+                ""
+              )}
+
             </div>
 
 
             <div class="price">
-              ${Number(product.price || 0)} دج
+
+              ${Number(
+                product.price || 0
+              )} دج
+
               ${oldPrice}
+
             </div>
 
 
             <div class="stock">
-              المخزون: ${stock}
+
+              المخزون:
+              ${stock}
+
             </div>
 
 
@@ -724,34 +1197,36 @@ function renderProducts() {
 
 
 /* =========================
-   ADD TO CART BUTTON
-   EVENT DELEGATION
+   ADD TO CART EVENT
 ========================= */
 
 document
   .getElementById("products")
-  .addEventListener("click", function(event) {
+  .addEventListener(
+    "click",
+    function(event) {
 
-    const button =
-      event.target.closest(
-        ".add-to-cart-btn"
-      );
+      const button =
+        event.target.closest(
+          ".add-to-cart-btn"
+        );
 
 
-    if (!button) {
-      return;
+      if (!button) {
+        return;
+      }
+
+
+      const productId =
+        button.getAttribute(
+          "data-product-id"
+        );
+
+
+      addToCart(productId);
+
     }
-
-
-    const productId =
-      button.getAttribute(
-        "data-product-id"
-      );
-
-
-    addToCart(productId);
-
-  });
+  );
 
 
 /* =========================
@@ -760,40 +1235,18 @@ document
 
 function addToCart(productId) {
 
-  /*
-    مهم جداً:
-    نحول ID إلى String
-    لأن Supabase ممكن يرجعو UUID
-    أو رقم.
-  */
-
   const id =
     String(productId);
 
 
-  console.log(
-    "Adding product:",
-    id
-  );
-
-
   const product =
     products.find(
-      p => String(p.id) === id
+      p =>
+        String(p.id) === id
     );
 
 
   if (!product) {
-
-    console.error(
-      "Product not found:",
-      id
-    );
-
-    console.log(
-      "Products:",
-      products
-    );
 
     alert(
       "لم يتم العثور على المنتج"
@@ -804,7 +1257,9 @@ function addToCart(productId) {
 
 
   const stock =
-    Number(product.stock || 0);
+    Number(
+      product.stock || 0
+    );
 
 
   if (stock <= 0) {
@@ -819,17 +1274,17 @@ function addToCart(productId) {
 
   const existingItem =
     cart.find(
-      item => String(item.id) === id
+      item =>
+        String(item.id) === id
     );
 
 
   if (existingItem) {
 
-    const currentQuantity =
-      Number(existingItem.quantity || 0);
-
-
-    if (currentQuantity >= stock) {
+    if (
+      Number(existingItem.quantity) >=
+      stock
+    ) {
 
       alert(
         "لا يمكن تجاوز كمية المخزون"
@@ -840,22 +1295,29 @@ function addToCart(productId) {
 
 
     existingItem.quantity =
-      currentQuantity + 1;
+      Number(
+        existingItem.quantity
+      ) + 1;
 
 
   } else {
 
     cart.push({
 
-      id: product.id,
+      id:
+        product.id,
 
       name:
-        product.name || "منتج JR",
+        product.name ||
+        "منتج JR",
 
       price:
-        Number(product.price || 0),
+        Number(
+          product.price || 0
+        ),
 
-      quantity: 1
+      quantity:
+        1
 
     });
 
@@ -886,7 +1348,9 @@ function cleanCart() {
 
       const product =
         products.find(
-          p => String(p.id) === String(item.id)
+          p =>
+            String(p.id) ===
+            String(item.id)
         );
 
 
@@ -896,7 +1360,9 @@ function cleanCart() {
 
 
       const stock =
-        Number(product.stock || 0);
+        Number(
+          product.stock || 0
+        );
 
 
       if (stock <= 0) {
@@ -905,10 +1371,12 @@ function cleanCart() {
 
 
       if (
-        Number(item.quantity) > stock
+        Number(item.quantity) >
+        stock
       ) {
 
-        item.quantity = stock;
+        item.quantity =
+          stock;
 
       }
 
@@ -931,7 +1399,9 @@ function openCart() {
 
   document.getElementById(
     "cartModal"
-  ).style.display = "block";
+  ).style.display =
+    "block";
+
 
   renderCart();
 
@@ -946,7 +1416,8 @@ function closeCart() {
 
   document.getElementById(
     "cartModal"
-  ).style.display = "none";
+  ).style.display =
+    "none";
 
 }
 
@@ -969,7 +1440,9 @@ function renderCart() {
     );
 
 
-  if (cart.length === 0) {
+  if (
+    cart.length === 0
+  ) {
 
     cartItems.innerHTML = `
 
@@ -1008,7 +1481,9 @@ function renderCart() {
 
       const stock =
         product
-          ? Number(product.stock || 0)
+          ? Number(
+              product.stock || 0
+            )
           : 999999;
 
 
@@ -1020,7 +1495,11 @@ function renderCart() {
         ">
 
           <strong>
-            ${escapeHtml(item.name)}
+
+            ${escapeHtml(
+              item.name
+            )}
+
           </strong>
 
 
@@ -1056,7 +1535,11 @@ function renderCart() {
               font-size:18px;
               font-weight:bold;
             ">
-              ${Number(item.quantity)}
+
+              ${Number(
+                item.quantity
+              )}
+
             </span>
 
 
@@ -1064,7 +1547,12 @@ function renderCart() {
               type="button"
               class="quantity-plus"
               data-id="${escapeHtml(String(item.id))}"
-              ${Number(item.quantity) >= stock ? "disabled" : ""}
+              ${
+                Number(item.quantity) >=
+                stock
+                  ? "disabled"
+                  : ""
+              }
               style="
                 width:40px;
                 height:40px;
@@ -1073,7 +1561,12 @@ function renderCart() {
                 background:#16a34a;
                 color:white;
                 font-size:22px;
-                opacity:${Number(item.quantity) >= stock ? "0.5" : "1"};
+                opacity:${
+                  Number(item.quantity) >=
+                  stock
+                    ? "0.5"
+                    : "1"
+                };
                 cursor:pointer;
               "
             >
@@ -1089,9 +1582,15 @@ function renderCart() {
             font-weight:bold;
           ">
 
-            ${Number(item.price)} دج
+            ${Number(
+              item.price
+            )} دج
+
             ×
-            ${Number(item.quantity)}
+
+            ${Number(
+              item.quantity
+            )}
 
           </div>
 
@@ -1130,8 +1629,12 @@ function renderCart() {
       (sum, item) =>
         sum +
         (
-          Number(item.price || 0) *
-          Number(item.quantity || 0)
+          Number(
+            item.price || 0
+          ) *
+          Number(
+            item.quantity || 0
+          )
         ),
       0
     );
@@ -1171,81 +1674,126 @@ function renderCart() {
 
 
 /* =========================
-   CART BUTTON EVENTS
+   CART EVENTS
 ========================= */
 
 document
   .getElementById("cartItems")
-  .addEventListener("click", function(event) {
+  .addEventListener(
+    "click",
+    function(event) {
 
-    const minusButton =
-      event.target.closest(
-        ".quantity-minus"
-      );
-
-
-    const plusButton =
-      event.target.closest(
-        ".quantity-plus"
-      );
+      const minusButton =
+        event.target.closest(
+          ".quantity-minus"
+        );
 
 
-    const removeButton =
-      event.target.closest(
-        ".remove-cart-item"
-      );
+      const plusButton =
+        event.target.closest(
+          ".quantity-plus"
+        );
 
 
-    if (minusButton) {
+      const removeButton =
+        event.target.closest(
+          ".remove-cart-item"
+        );
 
-      decreaseQuantity(
-        minusButton.getAttribute("data-id")
-      );
 
-      return;
+      if (minusButton) {
+
+        decreaseQuantity(
+          minusButton.getAttribute(
+            "data-id"
+          )
+        );
+
+        return;
+      }
+
+
+      if (plusButton) {
+
+        increaseQuantity(
+          plusButton.getAttribute(
+            "data-id"
+          )
+        );
+
+        return;
+      }
+
+
+      if (removeButton) {
+
+        removeFromCart(
+          removeButton.getAttribute(
+            "data-id"
+          )
+        );
+
+        return;
+      }
+
+
+      if (
+        event.target.id ===
+        "submitOrderBtn"
+      ) {
+
+        submitOrder();
+
+        return;
+      }
+
+
+      if (
+        event.target.id ===
+        "whatsappOrderBtn"
+      ) {
+
+        sendOrderToWhatsApp();
+
+        return;
+      }
+
+
+      if (
+        event.target.id ===
+        "backToCartBtn"
+      ) {
+
+        renderCart();
+
+        return;
+      }
+
     }
-
-
-    if (plusButton) {
-
-      increaseQuantity(
-        plusButton.getAttribute("data-id")
-      );
-
-      return;
-    }
-
-
-    if (removeButton) {
-
-      removeFromCart(
-        removeButton.getAttribute("data-id")
-      );
-
-      return;
-    }
-
-  });
+  );
 
 
 /* =========================
-   CART TOTAL EVENTS
+   CHECKOUT BUTTON
 ========================= */
 
 document
   .getElementById("cartTotal")
-  .addEventListener("click", function(event) {
+  .addEventListener(
+    "click",
+    function(event) {
 
-    if (
-      event.target.id ===
-      "checkoutBtn"
-    ) {
+      if (
+        event.target.id ===
+        "checkoutBtn"
+      ) {
 
-      showCheckout();
+        showCheckout();
+
+      }
 
     }
-
-  });
+  );
 
 
 /* =========================
@@ -1264,7 +1812,9 @@ function updateCartCount() {
     cart.reduce(
       (total, item) =>
         total +
-        Number(item.quantity || 0),
+        Number(
+          item.quantity || 0
+        ),
       0
     );
 
@@ -1279,7 +1829,9 @@ function updateCartCount() {
    DECREASE
 ========================= */
 
-function decreaseQuantity(productId) {
+function decreaseQuantity(
+  productId
+) {
 
   const id =
     String(productId);
@@ -1287,7 +1839,8 @@ function decreaseQuantity(productId) {
 
   const item =
     cart.find(
-      item => String(item.id) === id
+      item =>
+        String(item.id) === id
     );
 
 
@@ -1327,7 +1880,9 @@ function decreaseQuantity(productId) {
    INCREASE
 ========================= */
 
-function increaseQuantity(productId) {
+function increaseQuantity(
+  productId
+) {
 
   const id =
     String(productId);
@@ -1335,7 +1890,8 @@ function increaseQuantity(productId) {
 
   const item =
     cart.find(
-      item => String(item.id) === id
+      item =>
+        String(item.id) === id
     );
 
 
@@ -1346,18 +1902,22 @@ function increaseQuantity(productId) {
 
   const product =
     products.find(
-      p => String(p.id) === id
+      p =>
+        String(p.id) === id
     );
 
 
   const stock =
     product
-      ? Number(product.stock || 0)
+      ? Number(
+          product.stock || 0
+        )
       : 0;
 
 
   if (
-    Number(item.quantity) >= stock
+    Number(item.quantity) >=
+    stock
   ) {
 
     alert(
@@ -1385,7 +1945,9 @@ function increaseQuantity(productId) {
    REMOVE
 ========================= */
 
-function removeFromCart(productId) {
+function removeFromCart(
+  productId
+) {
 
   const id =
     String(productId);
@@ -1412,12 +1974,14 @@ function removeFromCart(productId) {
 
 
 /* =========================
-   CHECKOUT
+   SHOW CHECKOUT
 ========================= */
 
 function showCheckout() {
 
-  if (cart.length === 0) {
+  if (
+    cart.length === 0
+  ) {
 
     alert(
       "السلة فارغة"
@@ -1438,8 +2002,12 @@ function showCheckout() {
       (sum, item) =>
         sum +
         (
-          Number(item.price || 0) *
-          Number(item.quantity || 0)
+          Number(
+            item.price || 0
+          ) *
+          Number(
+            item.quantity || 0
+          )
         ),
       0
     );
@@ -1447,9 +2015,7 @@ function showCheckout() {
 
   cartItems.innerHTML = `
 
-    <div style="
-      margin-top:10px;
-    ">
+    <div>
 
       <h3 style="
         margin-bottom:15px;
@@ -1460,65 +2026,106 @@ function showCheckout() {
       </h3>
 
 
-      <input
-        id="customerName"
-        type="text"
-        placeholder="الاسم الكامل"
-        style="
-          width:100%;
-          padding:12px;
-          margin-bottom:10px;
-          border:1px solid #ddd;
-          border-radius:10px;
-          font-size:15px;
-        "
-      >
+      <div class="form-group">
+
+        <label class="form-label">
+          الاسم الكامل
+        </label>
+
+        <input
+          id="customerName"
+          type="text"
+          class="form-input"
+          placeholder="الاسم الكامل"
+        >
+
+      </div>
 
 
-      <input
-        id="customerPhone"
-        type="tel"
-        placeholder="رقم الهاتف"
-        style="
-          width:100%;
-          padding:12px;
-          margin-bottom:10px;
-          border:1px solid #ddd;
-          border-radius:10px;
-          font-size:15px;
-        "
-      >
+      <div class="form-group">
+
+        <label class="form-label">
+          رقم الهاتف
+        </label>
+
+        <input
+          id="customerPhone"
+          type="tel"
+          class="form-input"
+          placeholder="رقم الهاتف"
+        >
+
+      </div>
 
 
-      <input
-        id="customerWilaya"
-        type="text"
-        placeholder="الولاية"
-        style="
-          width:100%;
-          padding:12px;
-          margin-bottom:10px;
-          border:1px solid #ddd;
-          border-radius:10px;
-          font-size:15px;
-        "
-      >
+      <!-- WILAYA -->
+
+      <div class="form-group">
+
+        <label
+          for="customerWilaya"
+          class="form-label"
+        >
+          الولاية
+        </label>
+
+        <select
+          id="customerWilaya"
+          class="form-select"
+        >
+
+          <option value="">
+            جاري تحميل الولايات...
+          </option>
+
+        </select>
+
+      </div>
 
 
-      <textarea
-        id="customerAddress"
-        placeholder="العنوان بالتفصيل"
-        rows="3"
-        style="
-          width:100%;
-          padding:12px;
-          margin-bottom:10px;
-          border:1px solid #ddd;
-          border-radius:10px;
-          font-size:15px;
-          resize:none;
-        "
-      ></textarea>
+      <!-- COMMUNE -->
+
+      <div class="form-group">
+
+        <label
+          for="customerCommune"
+          class="form-label"
+        >
+          البلدية
+        </label>
+
+        <select
+          id="customerCommune"
+          class="form-select"
+          disabled
+        >
+
+          <option value="">
+            اختر الولاية أولاً
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label
+          for="customerAddress"
+          class="form-label"
+        >
+          العنوان بالتفصيل
+        </label>
+
+        <textarea
+          id="customerAddress"
+          class="form-textarea"
+          placeholder="الحي، الشارع، رقم المنزل..."
+          rows="3"
+        ></textarea>
+
+      </div>
 
 
       <div style="
@@ -1598,47 +2205,15 @@ function showCheckout() {
   ).innerHTML =
     `المجموع: ${total} دج`;
 
+
+  /*
+    نحمل الولايات
+    ثم نعطي المستخدم الاختيار.
+  */
+
+  populateWilayas();
+
 }
-
-
-/* =========================
-   CHECKOUT EVENTS
-========================= */
-
-document
-  .getElementById("cartItems")
-  .addEventListener("click", function(event) {
-
-    if (
-      event.target.id ===
-      "submitOrderBtn"
-    ) {
-
-      submitOrder();
-
-    }
-
-
-    if (
-      event.target.id ===
-      "whatsappOrderBtn"
-    ) {
-
-      sendOrderToWhatsApp();
-
-    }
-
-
-    if (
-      event.target.id ===
-      "backToCartBtn"
-    ) {
-
-      renderCart();
-
-    }
-
-  });
 
 
 /* =========================
@@ -1665,6 +2240,12 @@ function getCustomerData() {
     );
 
 
+  const communeElement =
+    document.getElementById(
+      "customerCommune"
+    );
+
+
   const addressElement =
     document.getElementById(
       "customerAddress"
@@ -1675,6 +2256,7 @@ function getCustomerData() {
     !nameElement ||
     !phoneElement ||
     !wilayaElement ||
+    !communeElement ||
     !addressElement
   ) {
 
@@ -1694,8 +2276,18 @@ function getCustomerData() {
     phoneElement.value.trim();
 
 
-  const wilaya =
-    wilayaElement.value.trim();
+  const wilayaCode =
+    wilayaElement.value;
+
+
+  const wilayaName =
+    wilayaElement.options[
+      wilayaElement.selectedIndex
+    ]?.text || "";
+
+
+  const commune =
+    communeElement.value.trim();
 
 
   const address =
@@ -1705,7 +2297,8 @@ function getCustomerData() {
   if (
     !name ||
     !phone ||
-    !wilaya ||
+    !wilayaCode ||
+    !commune ||
     !address
   ) {
 
@@ -1718,10 +2311,19 @@ function getCustomerData() {
 
 
   return {
+
     name,
+
     phone,
-    wilaya,
+
+    wilayaCode,
+
+    wilayaName,
+
+    commune,
+
     address
+
   };
 
 }
@@ -1733,7 +2335,9 @@ function getCustomerData() {
 
 function sendOrderToWhatsApp() {
 
-  if (cart.length === 0) {
+  if (
+    cart.length === 0
+  ) {
 
     alert(
       "السلة فارغة"
@@ -1757,8 +2361,12 @@ function sendOrderToWhatsApp() {
       (sum, item) =>
         sum +
         (
-          Number(item.price || 0) *
-          Number(item.quantity || 0)
+          Number(
+            item.price || 0
+          ) *
+          Number(
+            item.quantity || 0
+          )
         ),
       0
     );
@@ -1782,7 +2390,13 @@ function sendOrderToWhatsApp() {
 
   message +=
     "📍 الولاية: " +
-    customer.wilaya +
+    customer.wilayaName +
+    "\n";
+
+
+  message +=
+    "🏘️ البلدية: " +
+    customer.commune +
     "\n";
 
 
@@ -1800,8 +2414,12 @@ function sendOrderToWhatsApp() {
     (item, index) => {
 
       const subtotal =
-        Number(item.price || 0) *
-        Number(item.quantity || 0);
+        Number(
+          item.price || 0
+        ) *
+        Number(
+          item.quantity || 0
+        );
 
 
       message +=
@@ -1847,7 +2465,9 @@ function sendOrderToWhatsApp() {
 
 async function submitOrder() {
 
-  if (cart.length === 0) {
+  if (
+    cart.length === 0
+  ) {
 
     alert(
       "السلة فارغة"
@@ -1871,8 +2491,12 @@ async function submitOrder() {
       (sum, item) =>
         sum +
         (
-          Number(item.price || 0) *
-          Number(item.quantity || 0)
+          Number(
+            item.price || 0
+          ) *
+          Number(
+            item.quantity || 0
+          )
         ),
       0
     );
@@ -1888,14 +2512,22 @@ async function submitOrder() {
         item.name,
 
       price:
-        Number(item.price || 0),
+        Number(
+          item.price || 0
+        ),
 
       quantity:
-        Number(item.quantity || 0),
+        Number(
+          item.quantity || 0
+        ),
 
       subtotal:
-        Number(item.price || 0) *
-        Number(item.quantity || 0)
+        Number(
+          item.price || 0
+        ) *
+        Number(
+          item.quantity || 0
+        )
 
     }));
 
@@ -1908,12 +2540,39 @@ async function submitOrder() {
 
   if (submitButton) {
 
-    submitButton.disabled = true;
+    submitButton.disabled =
+      true;
 
     submitButton.textContent =
       "⏳ جاري إرسال الطلب...";
 
   }
+
+
+  /*
+    مهم:
+    الـRPC الحالي تاعك عندو p_wilaya فقط.
+    لذلك نرسل الولاية + البلدية داخل
+    p_wilaya بدون تغيير قاعدة البيانات.
+  */
+
+  const wilayaForOrder =
+    customer.wilayaName +
+    " - " +
+    customer.commune;
+
+
+  /*
+    نضيف البلدية أيضاً إلى العنوان
+    باش تبقى واضحة حتى لو فتحت الطلب
+    من Supabase.
+  */
+
+  const addressForOrder =
+    "البلدية: " +
+    customer.commune +
+    "\n" +
+    customer.address;
 
 
   try {
@@ -1925,6 +2584,7 @@ async function submitOrder() {
       await supabaseClient.rpc(
         "create_order",
         {
+
           p_customer_name:
             customer.name,
 
@@ -1932,16 +2592,17 @@ async function submitOrder() {
             customer.phone,
 
           p_wilaya:
-            customer.wilaya,
+            wilayaForOrder,
 
           p_address:
-            customer.address,
+            addressForOrder,
 
           p_items:
             orderItems,
 
           p_total:
             total
+
         }
       );
 
@@ -1953,10 +2614,12 @@ async function submitOrder() {
         error
       );
 
+
       alert(
         "حدث خطأ أثناء إرسال الطلب.\n\n" +
         error.message
       );
+
 
       return;
     }
@@ -1976,9 +2639,12 @@ async function submitOrder() {
 
     cart = [];
 
+
     saveCart();
 
+
     updateCartCount();
+
 
     renderCart();
 
@@ -1990,15 +2656,18 @@ async function submitOrder() {
       error
     );
 
+
     alert(
       "حدث خطأ غير متوقع أثناء إرسال الطلب."
     );
+
 
   } finally {
 
     if (submitButton) {
 
-      submitButton.disabled = false;
+      submitButton.disabled =
+        false;
 
       submitButton.textContent =
         "✅ تأكيد الطلب";
@@ -2015,7 +2684,9 @@ async function submitOrder() {
 ========================= */
 
 document
-  .getElementById("openCartBtn")
+  .getElementById(
+    "openCartBtn"
+  )
   .addEventListener(
     "click",
     openCart
@@ -2023,7 +2694,9 @@ document
 
 
 document
-  .getElementById("closeCartBtn")
+  .getElementById(
+    "closeCartBtn"
+  )
   .addEventListener(
     "click",
     closeCart
@@ -2031,7 +2704,9 @@ document
 
 
 document
-  .getElementById("cartModal")
+  .getElementById(
+    "cartModal"
+  )
   .addEventListener(
     "click",
     function(event) {
@@ -2059,10 +2734,12 @@ updateCartCount();
 
 renderCart();
 
+loadAlgeriaData();
+
 loadProducts();
 
 </script>
 
 </body>
 </html>
-
+```
