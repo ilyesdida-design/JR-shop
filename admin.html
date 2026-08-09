@@ -4,56 +4,244 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>JR Shop - Admin</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial;background:#f3f4f6;color:#111}
+body{margin:0;font-family:Arial,sans-serif;background:#f3f4f6;color:#111}
 button,input,textarea,select{font:inherit}
 button{cursor:pointer;border:0}
-#login{min-height:100vh;background:#111;display:flex;align-items:center;justify-content:center;padding:20px}
-.box{background:#fff;width:100%;max-width:420px;padding:30px;border-radius:22px}
-.logo{text-align:center;font-size:34px;font-weight:bold;margin-bottom:8px}
+
+#login{
+  min-height:100vh;
+  background:#111;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px
+}
+
+.box{
+  background:#fff;
+  width:100%;
+  max-width:420px;
+  padding:30px;
+  border-radius:22px
+}
+
+.logo{
+  text-align:center;
+  font-size:34px;
+  font-weight:bold;
+  margin-bottom:8px
+}
+
 .logo span{color:#16a34a}
-.sub{text-align:center;color:#777;margin-bottom:25px}
-input,textarea,select{width:100%;padding:13px;margin:6px 0;border:1px solid #ddd;border-radius:10px;outline:0;background:#fff}
-.btn{padding:12px 16px;border-radius:10px;font-weight:bold}
+
+.sub{
+  text-align:center;
+  color:#777;
+  margin-bottom:25px
+}
+
+input,textarea,select{
+  width:100%;
+  padding:13px;
+  margin:6px 0;
+  border:1px solid #ddd;
+  border-radius:10px;
+  outline:0;
+  background:#fff
+}
+
+input:focus,textarea:focus,select:focus{
+  border-color:#16a34a
+}
+
+.btn{
+  padding:12px 16px;
+  border-radius:10px;
+  font-weight:bold
+}
+
 .green{background:#16a34a;color:#fff}
 .red{background:#dc2626;color:#fff}
 .dark{background:#111;color:#fff}
-.gray{background:#e5e7eb}
+.gray{background:#e5e7eb;color:#111}
 .full{width:100%;margin-top:8px}
-.err{color:#dc2626;text-align:center;margin-top:12px;line-height:1.6}
+
+.err{
+  color:#dc2626;
+  text-align:center;
+  margin-top:12px;
+  line-height:1.7
+}
+
 #admin{display:none}
-header{background:#111;color:#fff;padding:15px;position:sticky;top:0;z-index:5}
-.head{max-width:1100px;margin:auto;display:flex;justify-content:space-between;align-items:center}
-.container{max-width:1100px;margin:auto;padding:20px 14px}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
-.stat,.card{background:#fff;border-radius:14px;padding:16px;box-shadow:0 2px 10px #0001}
-.stat b{display:block;font-size:25px;margin-top:7px}
-.tabs{display:flex;gap:8px;margin-bottom:18px}
-.tab{padding:11px 16px;border-radius:9px;background:#ddd;font-weight:bold}
-.tab.active{background:#111;color:#fff}
+
+header{
+  background:#111;
+  color:#fff;
+  padding:15px;
+  position:sticky;
+  top:0;
+  z-index:5
+}
+
+.head{
+  max-width:1100px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px
+}
+
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:20px 14px 50px
+}
+
+.title{margin-bottom:20px}
+
+.title h1{margin-bottom:5px}
+
+.title p{color:#666}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin-bottom:20px
+}
+
+.stat,.card{
+  background:#fff;
+  border-radius:14px;
+  padding:16px;
+  box-shadow:0 2px 10px #0001
+}
+
+.stat b{
+  display:block;
+  font-size:25px;
+  margin-top:7px
+}
+
+.tabs{
+  display:flex;
+  gap:8px;
+  margin-bottom:18px
+}
+
+.tab{
+  padding:11px 16px;
+  border-radius:9px;
+  background:#ddd;
+  font-weight:bold
+}
+
+.tab.active{
+  background:#111;
+  color:#fff
+}
+
 .section{display:none}
 .section.show{display:block}
-.row{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-bottom:15px}
+
+.row{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:15px
+}
+
 .search{max-width:350px}
-.orders{display:grid;gap:12px}
+
+.orders,.products{
+  display:grid;
+  gap:12px
+}
+
 .order h3{margin:5px 0}
-.muted{color:#777;font-size:13px;line-height:1.8}
-.info{background:#f8f8f8;padding:10px;border-radius:10px;margin:10px 0;line-height:1.8}
-.total{color:#16a34a;font-size:20px;font-weight:bold;margin:10px 0}
-.productgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.product img{width:100%;height:180px;object-fit:cover;border-radius:10px}
-.p{padding-top:8px}
-.empty{text-align:center;background:#fff;padding:30px;border-radius:14px;color:#777}
-.modal{display:none;position:fixed;inset:0;background:#0009;z-index:20;padding:20px;overflow:auto}
-.modalbox{background:#fff;max-width:450px;margin:30px auto;padding:20px;border-radius:16px}
-.actions{display:flex;gap:8px;margin-top:8px}
+
+.muted{
+  color:#777;
+  font-size:13px;
+  line-height:1.8
+}
+
+.info{
+  background:#f8f8f8;
+  padding:10px;
+  border-radius:10px;
+  margin:10px 0;
+  line-height:1.8
+}
+
+.total{
+  color:#16a34a;
+  font-size:20px;
+  font-weight:bold;
+  margin:10px 0
+}
+
+.actions{
+  display:flex;
+  gap:8px;
+  margin-top:8px
+}
+
 .actions>*{flex:1}
+
+.empty{
+  text-align:center;
+  background:#fff;
+  padding:30px;
+  border-radius:14px;
+  color:#777
+}
+
+.productgrid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px
+}
+
+.product img{
+  width:100%;
+  height:180px;
+  object-fit:cover;
+  border-radius:10px
+}
+
+.product .p{padding-top:8px}
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#0009;
+  z-index:20;
+  padding:20px;
+  overflow:auto
+}
+
+.modalbox{
+  background:#fff;
+  max-width:450px;
+  margin:30px auto;
+  padding:20px;
+  border-radius:16px
+}
+
 @media(max-width:700px){
-.stats{grid-template-columns:repeat(2,1fr)}
-.productgrid{grid-template-columns:repeat(2,1fr)}
-.row{flex-wrap:wrap}
-.search{max-width:none}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .productgrid{grid-template-columns:repeat(2,1fr)}
+  .row{flex-wrap:wrap}
+  .search{max-width:none}
+  .head .logo{font-size:20px}
 }
 </style>
 </head>
@@ -61,176 +249,254 @@ header{background:#111;color:#fff;padding:15px;position:sticky;top:0;z-index:5}
 <body>
 
 <div id="login">
-<div class="box">
-<div class="logo">JR <span>Shop</span></div>
-<div class="sub">لوحة تحكم الإدارة</div>
+  <div class="box">
 
-<input id="email" type="email"
-value="ilyesdida@hotmail.fr"
-placeholder="البريد الإلكتروني">
+    <div class="logo">
+      JR <span>Shop</span>
+    </div>
 
-<input id="password" type="password"
-placeholder="كلمة المرور">
+    <div class="sub">
+      لوحة تحكم الإدارة
+    </div>
 
-<button id="loginBtn"
-class="btn green full"
-onclick="login()">
-🔐 تسجيل الدخول
-</button>
+    <input
+      id="email"
+      type="email"
+      value="ilyesdida@hotmail.fr"
+      placeholder="البريد الإلكتروني"
+    >
 
-<div id="err" class="err"></div>
+    <input
+      id="password"
+      type="password"
+      placeholder="كلمة المرور"
+    >
+
+    <button
+      id="loginBtn"
+      class="btn green full"
+      onclick="login()"
+    >
+      🔐 تسجيل الدخول
+    </button>
+
+    <div id="err" class="err"></div>
+
+  </div>
 </div>
-</div>
-
 
 <div id="admin">
 
 <header>
-<div class="head">
-<div class="logo">JR <span>Shop</span></div>
-<button class="btn red" onclick="logout()">خروج</button>
-</div>
+  <div class="head">
+
+    <div class="logo">
+      JR <span>Shop</span>
+    </div>
+
+    <button
+      class="btn red"
+      onclick="logout()"
+    >
+      خروج
+    </button>
+
+  </div>
 </header>
 
 <div class="container">
 
-<h1>👋 لوحة التحكم</h1>
-<p>إدارة الطلبات والمنتجات</p>
+  <div class="title">
+    <h1>👋 لوحة التحكم</h1>
+    <p>إدارة الطلبات والمنتجات</p>
+  </div>
 
-<div class="stats">
+  <div class="stats">
 
-<div class="stat">
-الطلبات
-<b id="s1">0</b>
-</div>
+    <div class="stat">
+      الطلبات
+      <b id="s1">0</b>
+    </div>
 
-<div class="stat">
-المعلقة
-<b id="s2">0</b>
-</div>
+    <div class="stat">
+      المعلقة
+      <b id="s2">0</b>
+    </div>
 
-<div class="stat">
-المكتملة
-<b id="s3">0</b>
-</div>
+    <div class="stat">
+      المكتملة
+      <b id="s3">0</b>
+    </div>
 
-<div class="stat">
-المبيعات
-<b id="s4">0 دج</b>
-</div>
+    <div class="stat">
+      المبيعات
+      <b id="s4">0 دج</b>
+    </div>
 
-</div>
+  </div>
 
+  <div class="tabs">
 
-<div class="tabs">
+    <button
+      class="tab active"
+      onclick="tab('orders',this)"
+    >
+      📦 الطلبات
+    </button>
 
-<button class="tab active"
-onclick="tab('orders',this)">
-📦 الطلبات
-</button>
+    <button
+      class="tab"
+      onclick="tab('products',this)"
+    >
+      🛍️ المنتجات
+    </button>
 
-<button class="tab"
-onclick="tab('products',this)">
-🛍️ المنتجات
-</button>
+  </div>
 
-</div>
+  <section
+    id="orders"
+    class="section show"
+  >
 
+    <div class="row">
 
-<section id="orders" class="section show">
+      <h2>📦 الطلبات</h2>
 
-<div class="row">
+      <input
+        id="search"
+        class="search"
+        placeholder="بحث..."
+        oninput="drawOrders()"
+      >
 
-<h2>📦 الطلبات</h2>
+      <button
+        class="btn dark"
+        onclick="loadOrders()"
+      >
+        🔄
+      </button>
 
-<input id="search"
-class="search"
-placeholder="بحث..."
-oninput="drawOrders()">
+    </div>
 
-<button class="btn dark"
-onclick="loadOrders()">
-🔄
-</button>
+    <div
+      id="orderList"
+      class="orders"
+    >
+      <div class="empty">
+        جاري التحميل...
+      </div>
+    </div>
 
-</div>
+  </section>
 
-<div id="orderList" class="orders">
-<div class="empty">جاري التحميل...</div>
-</div>
+  <section
+    id="products"
+    class="section"
+  >
 
-</section>
+    <div class="row">
 
+      <h2>🛍️ المنتجات</h2>
 
-<section id="products" class="section">
+      <button
+        class="btn green"
+        onclick="openModal()"
+      >
+        ➕ إضافة
+      </button>
 
-<div class="row">
+    </div>
 
-<h2>🛍️ المنتجات</h2>
+    <div
+      id="productList"
+      class="productgrid"
+    >
+      <div class="empty">
+        جاري التحميل...
+      </div>
+    </div>
 
-<button class="btn green"
-onclick="openModal()">
-➕ إضافة
-</button>
-
-</div>
-
-<div id="productList" class="productgrid">
-<div class="empty">جاري التحميل...</div>
-</div>
-
-</section>
-
-</div>
-</div>
-
-
-<div id="modal" class="modal">
-
-<div class="modalbox">
-
-<h2 id="modalTitle">➕ منتج جديد</h2>
-
-<input id="pid" type="hidden">
-
-<input id="pname" placeholder="اسم المنتج">
-
-<input id="pprice" type="number" placeholder="السعر">
-
-<input id="pold" type="number" placeholder="السعر القديم">
-
-<input id="pstock" type="number" placeholder="المخزون">
-
-<input id="pimage" placeholder="رابط الصورة">
-
-<textarea id="pdesc"
-rows="4"
-placeholder="الوصف"></textarea>
-
-<select id="pactive">
-<option value="true">نشط</option>
-<option value="false">غير نشط</option>
-</select>
-
-<div class="actions">
-
-<button class="btn green"
-onclick="saveProduct()">
-💾 حفظ
-</button>
-
-<button class="btn gray"
-onclick="closeModal()">
-إلغاء
-</button>
-
-</div>
+  </section>
 
 </div>
 </div>
 
+<div
+  id="modal"
+  class="modal"
+>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <div class="modalbox">
+
+    <h2 id="modalTitle">
+      ➕ منتج جديد
+    </h2>
+
+    <input
+      id="pid"
+      type="hidden"
+    >
+
+    <input
+      id="pname"
+      placeholder="اسم المنتج"
+    >
+
+    <input
+      id="pprice"
+      type="number"
+      placeholder="السعر"
+    >
+
+    <input
+      id="pold"
+      type="number"
+      placeholder="السعر القديم"
+    >
+
+    <input
+      id="pstock"
+      type="number"
+      placeholder="المخزون"
+    >
+
+    <input
+      id="pimage"
+      placeholder="رابط الصورة"
+    >
+
+    <textarea
+      id="pdesc"
+      rows="4"
+      placeholder="الوصف"
+    ></textarea>
+
+    <select id="pactive">
+      <option value="true">نشط</option>
+      <option value="false">غير نشط</option>
+    </select>
+
+    <div class="actions">
+
+      <button
+        class="btn green"
+        onclick="saveProduct()"
+      >
+        💾 حفظ
+      </button>
+
+      <button
+        class="btn gray"
+        onclick="closeModal()"
+      >
+        إلغاء
+      </button>
+
+    </div>
+
+  </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
@@ -240,39 +506,41 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
 "sb_publishable_e_wQxqCrx21Qq1kRYKjFMg_yR6TQfKX";
 
-const db =
-window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
+const db = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
 );
 
-let orders=[];
-let products=[];
+let orders = [];
+let products = [];
 
 
-const $=id=>document.getElementById(id);
+/* HELPERS */
 
-const esc=x=>String(x??"")
-.replace(/[&<>"']/g,m=>({
-"&":"&amp;",
-"<":"&lt;",
-">":"&gt;",
-'"':"&quot;",
-"'":"&#039;"
-}[m]));
+function esc(x){
+  return String(x ?? "")
+    .replace(/[&<>"']/g,m=>({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#039;"
+    }[m]));
+}
 
-const money=x=>
-Number(x||0).toLocaleString("fr-FR");
+function money(x){
+  return Number(x || 0)
+    .toLocaleString("fr-FR");
+}
 
-
-function statusText(x){
-return({
-pending:"معلق",
-confirmed:"مؤكد",
-shipped:"تم الشحن",
-delivered:"تم التسليم",
-cancelled:"ملغى"
-}[x]||x||"معلق");
+function status(x){
+  return {
+    pending:"معلق",
+    confirmed:"مؤكد",
+    shipped:"تم الشحن",
+    delivered:"تم التسليم",
+    cancelled:"ملغى"
+  }[x] || x || "معلق";
 }
 
 
@@ -280,61 +548,50 @@ cancelled:"ملغى"
 
 async function login(){
 
-const email=$("email").value.trim();
-const password=$("password").value;
-const error=$("err");
-const button=$("loginBtn");
+  err.textContent="";
 
-error.textContent="";
+  const e = email.value.trim();
+  const p = password.value;
 
-if(!email||!password){
-error.textContent="⚠️ أدخل البريد وكلمة المرور";
-return;
-}
+  if(!e || !p){
+    err.textContent =
+      "أدخل البريد وكلمة المرور";
+    return;
+  }
 
-button.disabled=true;
-button.textContent="جاري الدخول...";
+  loginBtn.disabled=true;
+  loginBtn.textContent=
+    "جاري الدخول...";
 
-try{
+  const r =
+    await db.auth.signInWithPassword({
+      email:e,
+      password:p
+    });
 
-const result=await Promise.race([
+  if(r.error){
 
-db.auth.signInWithPassword({
-email:email,
-password:password
-}),
+    loginBtn.disabled=false;
+    loginBtn.textContent=
+      "🔐 تسجيل الدخول";
 
-new Promise((_,reject)=>
-setTimeout(
-()=>reject(new Error("تعذر الاتصال بـ Supabase")),
-12000
-))
+    err.textContent=
+      "❌ " + r.error.message;
 
-]);
+    return;
+  }
 
-if(result.error)
-throw result.error;
+  loginBtn.textContent=
+    "تم الدخول ✅";
 
-$("login").style.display="none";
-$("admin").style.display="block";
+  document.getElementById("login")
+    .style.display="none";
 
-button.textContent="تم الدخول ✅";
+  document.getElementById("admin")
+    .style.display="block";
 
-await loadOrders();
-await loadProducts();
-
-}catch(e){
-
-console.error(e);
-
-error.textContent=
-"❌ "+e.message;
-
-button.disabled=false;
-button.textContent="🔐 تسجيل الدخول";
-
-}
-
+  await loadOrders();
+  await loadProducts();
 }
 
 
@@ -342,24 +599,20 @@ button.textContent="🔐 تسجيل الدخول";
 
 async function checkSession(){
 
-const {data,error}=
-await db.auth.getSession();
+  const r =
+    await db.auth.getSession();
 
-if(error){
-console.error(error);
-return;
-}
+  if(r.data.session){
 
-if(data.session){
+    document.getElementById("login")
+      .style.display="none";
 
-$("login").style.display="none";
-$("admin").style.display="block";
+    document.getElementById("admin")
+      .style.display="block";
 
-await loadOrders();
-await loadProducts();
-
-}
-
+    await loadOrders();
+    await loadProducts();
+  }
 }
 
 
@@ -367,10 +620,9 @@ await loadProducts();
 
 async function logout(){
 
-await db.auth.signOut();
+  await db.auth.signOut();
 
-location.reload();
-
+  location.reload();
 }
 
 
@@ -378,247 +630,287 @@ location.reload();
 
 async function loadOrders(){
 
-$("orderList").innerHTML=
-'<div class="empty">جاري تحميل الطلبات...</div>';
+  orderList.innerHTML =
+    '<div class="empty">جاري تحميل الطلبات...</div>';
 
-const {data,error}=
-await db
-.from("orders")
-.select("*")
-.order("created_at",{ascending:false});
+  const r =
+    await db
+      .from("orders")
+      .select("*")
+      .order("created_at",{
+        ascending:false
+      });
 
-if(error){
+  if(r.error){
 
-$("orderList").innerHTML=
-'<div class="empty">❌ '+
-esc(error.message)+
-'</div>';
+    orderList.innerHTML =
+      '<div class="empty">❌ ' +
+      esc(r.error.message) +
+      '</div>';
 
-return;
+    return;
+  }
+
+  orders = r.data || [];
+
+  updateStats();
+  drawOrders();
 }
 
-orders=data||[];
 
-updateStats();
-drawOrders();
-
-}
-
+/* STATS */
 
 function updateStats(){
 
-$("s1").textContent=orders.length;
+  s1.textContent =
+    orders.length;
 
-$("s2").textContent=
-orders.filter(x=>x.status==="pending").length;
+  s2.textContent =
+    orders.filter(
+      x=>x.status==="pending"
+    ).length;
 
-$("s3").textContent=
-orders.filter(x=>x.status==="delivered").length;
+  s3.textContent =
+    orders.filter(
+      x=>x.status==="delivered"
+    ).length;
 
-const sales=
-orders
-.filter(x=>x.status!=="cancelled")
-.reduce(
-(a,x)=>a+Number(x.total||0),
-0
-);
+  const sales =
+    orders
+      .filter(x=>x.status!=="cancelled")
+      .reduce(
+        (a,x)=>a+Number(x.total||0),
+        0
+      );
 
-$("s4").textContent=
-money(sales)+" دج";
-
+  s4.textContent =
+    money(sales)+" دج";
 }
 
+
+/* DRAW ORDERS */
 
 function drawOrders(){
 
-const q=
-($("search").value||"")
-.toLowerCase()
-.trim();
+  const q =
+    (search.value || "")
+    .toLowerCase()
+    .trim();
 
-const list=
-orders.filter(o=>
-!q||
-JSON.stringify(o)
-.toLowerCase()
-.includes(q)
-);
+  const list =
+    orders.filter(o =>
+      !q ||
+      JSON.stringify(o)
+        .toLowerCase()
+        .includes(q)
+    );
 
-if(!list.length){
+  if(!list.length){
 
-$("orderList").innerHTML=
-'<div class="empty">لا توجد طلبات</div>';
+    orderList.innerHTML =
+      '<div class="empty">لا توجد طلبات</div>';
 
-return;
+    return;
+  }
 
+  orderList.innerHTML =
+    list.map(o => {
+
+      let items =
+        o.items ||
+        o.products ||
+        o.order_items ||
+        [];
+
+      if(typeof items==="string"){
+
+        try{
+          items=JSON.parse(items);
+        }catch(e){}
+      }
+
+      let itemText="";
+
+      if(Array.isArray(items)){
+
+        itemText =
+          items.map(i =>
+            `<div>
+              • ${esc(
+                i.name ||
+                i.title ||
+                "منتج"
+              )}
+              × ${i.quantity || 1}
+            </div>`
+          ).join("");
+
+      }else{
+
+        itemText =
+          esc(items);
+      }
+
+      return `
+      <div class="card order">
+
+        <div class="row">
+
+          <div>
+
+            <h3>
+              📦 ${esc(
+                o.name ||
+                o.full_name ||
+                o.customer_name ||
+                "زبون"
+              )}
+            </h3>
+
+            <div class="muted">
+              #${esc(o.id)}
+              <br>
+              ${esc(o.created_at || "")}
+            </div>
+
+          </div>
+
+          <b>
+            ${esc(status(o.status))}
+          </b>
+
+        </div>
+
+
+        <div class="info">
+
+          📞 ${esc(
+            o.phone ||
+            o.telephone ||
+            ""
+          )}
+
+          <br>
+
+          📍 ${esc(
+            o.wilaya ||
+            o.state ||
+            ""
+          )}
+
+          ${esc(o.address || "")}
+
+          <br><br>
+
+          ${itemText}
+
+        </div>
+
+
+        <div class="total">
+          ${money(o.total)} دج
+        </div>
+
+
+        <div class="actions">
+
+          <select
+            onchange="
+              changeStatus(
+                '${esc(o.id)}',
+                this.value
+              )
+            "
+          >
+
+            ${[
+              "pending",
+              "confirmed",
+              "shipped",
+              "delivered",
+              "cancelled"
+            ].map(s=>`
+
+              <option
+                value="${s}"
+                ${o.status===s?"selected":""}
+              >
+                ${status(s)}
+              </option>
+
+            `).join("")}
+
+          </select>
+
+
+          <button
+            class="btn red"
+            onclick="
+              deleteOrder('${esc(o.id)}')
+            "
+          >
+            🗑️
+          </button>
+
+        </div>
+
+      </div>
+      `;
+
+    }).join("");
 }
 
-$("orderList").innerHTML=
-list.map(o=>{
 
-let items=
-o.items||
-o.products||
-o.order_items||
-[];
-
-if(typeof items==="string"){
-
-try{
-items=JSON.parse(items);
-}catch(e){}
-
-}
-
-let itemText="";
-
-if(Array.isArray(items)){
-
-itemText=
-items.map(i=>
-`• ${esc(i.name||i.title||"منتج")}
-× ${i.quantity||1}`
-).join("<br>");
-
-}else{
-
-itemText=esc(items);
-
-}
-
-return `
-
-<div class="card order">
-
-<div class="row">
-
-<div>
-
-<h3>
-📦 ${esc(
-o.name||
-o.full_name||
-o.customer_name||
-"زبون"
-)}
-</h3>
-
-<div class="muted">
-#${esc(o.id||"")}
-<br>
-${esc(o.created_at||"")}
-</div>
-
-</div>
-
-<b>${esc(statusText(o.status))}</b>
-
-</div>
-
-
-<div class="info">
-
-📞 ${esc(
-o.phone||
-o.telephone||
-""
-)}
-
-<br>
-
-📍 ${esc(
-o.wilaya||
-o.state||
-""
-)}
-
-<br>
-
-${esc(o.address||"")}
-
-<br><br>
-
-${itemText}
-
-</div>
-
-
-<div class="total">
-${money(o.total)} دج
-</div>
-
-
-<div class="actions">
-
-<select
-onchange="changeStatus('${esc(o.id)}',this.value)"
->
-
-${[
-"pending",
-"confirmed",
-"shipped",
-"delivered",
-"cancelled"
-].map(s=>
-`<option value="${s}"
-${o.status===s?"selected":""}>
-${statusText(s)}
-</option>`
-).join("")}
-
-</select>
-
-
-<button
-class="btn red"
-onclick="deleteOrder('${esc(o.id)}')">
-🗑️
-</button>
-
-</div>
-
-</div>
-
-`;
-
-}).join("");
-
-}
-
+/* CHANGE ORDER STATUS */
 
 async function changeStatus(id,value){
 
-const {error}=
-await db
-.from("orders")
-.update({status:value})
-.eq("id",id);
+  const r =
+    await db
+      .from("orders")
+      .update({
+        status:value
+      })
+      .eq("id",id);
 
-if(error)
-alert(error.message);
-else
-loadOrders();
+  if(r.error){
 
+    alert(
+      "خطأ: " +
+      r.error.message
+    );
+
+    return;
+  }
+
+  await loadOrders();
 }
 
 
+/* DELETE ORDER */
+
 async function deleteOrder(id){
 
-if(!confirm("حذف الطلب؟"))
-return;
+  if(!confirm("هل تريد حذف هذا الطلب؟"))
+    return;
 
-const {error}=
-await db
-.from("orders")
-.delete()
-.eq("id",id);
+  const r =
+    await db
+      .from("orders")
+      .delete()
+      .eq("id",id);
 
-if(error)
-alert(error.message);
-else
-loadOrders();
+  if(r.error){
 
+    alert(
+      "خطأ: " +
+      r.error.message
+    );
+
+    return;
+  }
+
+  await loadOrders();
 }
 
 
@@ -626,107 +918,144 @@ loadOrders();
 
 async function loadProducts(){
 
-$("productList").innerHTML=
-'<div class="empty">جاري التحميل...</div>';
+  productList.innerHTML =
+    '<div class="empty">جاري تحميل المنتجات...</div>';
 
-const {data,error}=
-await db
-.from("products")
-.select("*")
-.order("created_at",{ascending:false});
+  const r =
+    await db
+      .from("products")
+      .select("*")
+      .order("created_at",{
+        ascending:false
+      });
 
-if(error){
+  if(r.error){
 
-$("productList").innerHTML=
-'<div class="empty">❌ '+
-esc(error.message)+
-'</div>';
+    productList.innerHTML =
+      '<div class="empty">❌ ' +
+      esc(r.error.message) +
+      '</div>';
 
-return;
+    return;
+  }
 
+  products =
+    r.data || [];
+
+  drawProducts();
 }
 
-products=data||[];
 
-drawProducts();
-
-}
-
+/* DRAW PRODUCTS */
 
 function drawProducts(){
 
-if(!products.length){
+  if(!products.length){
 
-$("productList").innerHTML=
-'<div class="empty">لا توجد منتجات</div>';
+    productList.innerHTML =
+      '<div class="empty">لا توجد منتجات</div>';
 
-return;
+    return;
+  }
 
-}
+  productList.innerHTML =
+    products.map(p => {
 
-$("productList").innerHTML=
-products.map(p=>{
+      const image =
+        p.image ||
+        p.image_url ||
+        "";
 
-const image=
-p.image||
-p.image_url||
-"";
+      return `
 
-return `
+      <div class="card product">
 
-<div class="card product">
+        ${
+          image
 
-${
-image
-?
-`<img src="${esc(image)}">`
-:
-`<div style="height:180px;text-align:center;padding:60px">
-🛍️
-</div>`
-}
+          ?
 
-<div class="p">
+          `<img
+            src="${esc(image)}"
+            alt="${esc(
+              p.name ||
+              p.title ||
+              "منتج"
+            )}"
+          >`
 
-<h3>
-${esc(p.name||p.title||"منتج")}
-</h3>
+          :
 
-<b style="color:#16a34a">
-${money(p.price)} دج
-</b>
+          `<div
+            style="
+              height:180px;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              font-size:50px;
+              background:#eee;
+              border-radius:10px
+            "
+          >
+            🛍️
+          </div>`
+        }
 
-<div class="muted">
-المخزون: ${esc(p.stock??0)}
-</div>
 
-<p class="muted">
-${esc(p.description||"")}
-</p>
+        <div class="p">
 
-<div class="actions">
+          <h3>
+            ${esc(
+              p.name ||
+              p.title ||
+              "منتج"
+            )}
+          </h3>
 
-<button
-class="btn dark"
-onclick='editProduct(${JSON.stringify(p).replace(/'/g,"&#39;")})'>
-✏️
-</button>
+          <b
+            style="color:#16a34a"
+          >
+            ${money(p.price)} دج
+          </b>
 
-<button
-class="btn red"
-onclick="deleteProduct('${esc(p.id)}')">
-🗑️
-</button>
+          <div class="muted">
+            المخزون:
+            ${esc(p.stock ?? 0)}
+          </div>
 
-</div>
+          <p class="muted">
+            ${esc(
+              p.description || ""
+            )}
+          </p>
 
-</div>
-</div>
+          <div class="actions">
 
-`;
+            <button
+              class="btn dark"
+              onclick='editProduct(${JSON.stringify(p)})'
+            >
+              ✏️
+            </button>
 
-}).join("");
+            <button
+              class="btn red"
+              onclick="
+                deleteProduct('${esc(p.id)}')
+              "
+            >
+              🗑️
+            </button>
 
+          </div>
+
+        </div>
+
+      </div>
+
+      `;
+
+    }).join("");
 }
 
 
@@ -734,125 +1063,168 @@ onclick="deleteProduct('${esc(p.id)}')">
 
 function openModal(){
 
-$("modal").style.display="block";
+  modal.style.display="block";
 
-$("modalTitle").textContent=
-"➕ منتج جديد";
+  modalTitle.textContent=
+    "➕ منتج جديد";
 
-$("pid").value="";
-$("pname").value="";
-$("pprice").value="";
-$("pold").value="";
-$("pstock").value="";
-$("pimage").value="";
-$("pdesc").value="";
-$("pactive").value="true";
-
+  pid.value="";
+  pname.value="";
+  pprice.value="";
+  pold.value="";
+  pstock.value="";
+  pimage.value="";
+  pdesc.value="";
+  pactive.value="true";
 }
 
 
 function closeModal(){
 
-$("modal").style.display="none";
-
+  modal.style.display="none";
 }
 
+
+/* EDIT PRODUCT */
 
 function editProduct(p){
 
-openModal();
+  openModal();
 
-$("modalTitle").textContent=
-"✏️ تعديل المنتج";
+  modalTitle.textContent=
+    "✏️ تعديل المنتج";
 
-$("pid").value=p.id||"";
-$("pname").value=p.name||p.title||"";
-$("pprice").value=p.price||"";
-$("pold").value=p.old_price||"";
-$("pstock").value=p.stock||0;
-$("pimage").value=p.image||p.image_url||"";
-$("pdesc").value=p.description||"";
-$("pactive").value=
-String(p.active!==false);
+  pid.value =
+    p.id || "";
 
+  pname.value =
+    p.name ||
+    p.title ||
+    "";
+
+  pprice.value =
+    p.price || "";
+
+  pold.value =
+    p.old_price || "";
+
+  pstock.value =
+    p.stock || 0;
+
+  pimage.value =
+    p.image ||
+    p.image_url ||
+    "";
+
+  pdesc.value =
+    p.description ||
+    "";
+
+  pactive.value =
+    String(
+      p.active !== false
+    );
 }
 
+
+/* SAVE PRODUCT */
 
 async function saveProduct(){
 
-const data={
+  const data={
 
-name:$("pname").value.trim(),
+    name:pname.value.trim(),
 
-price:Number(
-$("pprice").value||0
-),
+    price:Number(
+      pprice.value || 0
+    ),
 
-old_price:Number(
-$("pold").value||0
-),
+    old_price:Number(
+      pold.value || 0
+    ),
 
-stock:Number(
-$("pstock").value||0
-),
+    stock:Number(
+      pstock.value || 0
+    ),
 
-image:$("pimage").value.trim(),
+    image:pimage.value.trim(),
 
-description:$("pdesc").value.trim(),
+    description:
+      pdesc.value.trim(),
 
-active:$("pactive").value==="true"
+    active:
+      pactive.value==="true"
 
-};
+  };
 
-let result;
+  if(!data.name){
 
-if($("pid").value){
+    alert(
+      "أدخل اسم المنتج"
+    );
 
-result=
-await db
-.from("products")
-.update(data)
-.eq("id",$("pid").value);
+    return;
+  }
 
-}else{
+  let r;
 
-result=
-await db
-.from("products")
-.insert(data);
+  if(pid.value){
 
+    r =
+      await db
+        .from("products")
+        .update(data)
+        .eq("id",pid.value);
+
+  }else{
+
+    r =
+      await db
+        .from("products")
+        .insert(data);
+
+  }
+
+  if(r.error){
+
+    alert(
+      "خطأ: " +
+      r.error.message
+    );
+
+    return;
+  }
+
+  closeModal();
+
+  await loadProducts();
 }
 
-if(result.error){
 
-alert("❌ "+result.error.message);
-return;
-
-}
-
-closeModal();
-
-await loadProducts();
-
-}
-
+/* DELETE PRODUCT */
 
 async function deleteProduct(id){
 
-if(!confirm("حذف المنتج؟"))
-return;
+  if(!confirm("هل تريد حذف المنتج؟"))
+    return;
 
-const {error}=
-await db
-.from("products")
-.delete()
-.eq("id",id);
+  const r =
+    await db
+      .from("products")
+      .delete()
+      .eq("id",id);
 
-if(error)
-alert("❌ "+error.message);
-else
-loadProducts();
+  if(r.error){
 
+    alert(
+      "خطأ: " +
+      r.error.message
+    );
+
+    return;
+  }
+
+  await loadProducts();
 }
 
 
@@ -860,30 +1232,62 @@ loadProducts();
 
 function tab(id,button){
 
-document
-.querySelectorAll(".section")
-.forEach(x=>
-x.classList.remove("show")
-);
+  document
+    .querySelectorAll(".section")
+    .forEach(x =>
+      x.classList.remove("show")
+    );
 
-document
-.querySelectorAll(".tab")
-.forEach(x=>
-x.classList.remove("active")
-);
+  document
+    .querySelectorAll(".tab")
+    .forEach(x =>
+      x.classList.remove("active")
+    );
 
-$(id).classList.add("show");
+  document
+    .getElementById(id)
+    .classList.add("show");
 
-button.classList.add("active");
-
+  button.classList.add("active");
 }
-
-
-/* START */
+  /* START */
 
 checkSession();
+
+
+/* CLOSE MODAL WHEN CLICK OUTSIDE */
+
+modal.addEventListener("click",function(e){
+
+  if(e.target === modal){
+    closeModal();
+  }
+
+});
+
+
+/* ENTER TO LOGIN */
+
+password.addEventListener("keydown",function(e){
+
+  if(e.key === "Enter"){
+    login();
+  }
+
+});
+
+
+/* ESC TO CLOSE MODAL */
+
+document.addEventListener("keydown",function(e){
+
+  if(e.key === "Escape"){
+    closeModal();
+  }
+
+});
 
 </script>
 
 </body>
-  </html>
+</html>
