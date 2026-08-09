@@ -109,47 +109,38 @@ const status=x=>({pending:"معلق",confirmed:"مؤكد",shipped:"تم الشح
 
 async function login(){
   err.textContent="";
+
+  const e=email.value.trim();
+  const p=password.value;
+
+  if(!e||!p){
+    err.textContent="أدخل البريد وكلمة المرور";
+    return;
+  }
+
   loginBtn.disabled=true;
   loginBtn.textContent="جاري الدخول...";
 
-  try{
-    if(!email.value.trim()||!password.value){
-      throw new Error("أدخل البريد وكلمة المرور");
-    }
+  const r=await db.auth.signInWithPassword({
+    email:e,
+    password:p
+  });
 
-    const r=await Promise.race([
-      db.auth.signInWithPassword({
-        email:email.value.trim(),
-        password:password.value
-      }),
-      new Promise((_,reject)=>
-        setTimeout(()=>reject(new Error("الاتصال بـ Supabase أخذ وقتًا طويلاً. تحقق من الإنترنت ثم أعد المحاولة.")),10000)
-      )
-    ]);
-
-    if(r.error) throw r.error;
-
-    if(!r.data.session)
-      throw new Error("لم يتم إنشاء جلسة تسجيل الدخول.");
-
-    show();
-
-  }catch(e){
-    console.error(e);
-    err.textContent="❌ "+e.message;
-  }finally{
+  if(r.error){
     loginBtn.disabled=false;
     loginBtn.textContent="🔐 تسجيل الدخول";
+    err.textContent="❌ "+r.error.message;
+    return;
   }
- }
- err.textContent="";
- if(!email.value||!password.value){err.textContent="أدخل البريد وكلمة المرور";return}
- loginBtn.disabled=true;loginBtn.textContent="جاري الدخول...";
- const r=await db.auth.signInWithPassword({email:email.value.trim(),password:password.value});
- loginBtn.disabled=false;loginBtn.textContent="🔐 تسجيل الدخول";
- if(r.error){err.textContent=r.error.message;return}
- show();
-}
+
+  loginBtn.textContent="تم الدخول ✅";
+
+  document.getElementById("login").style.display="none";
+  document.getElementById("admin").style.display="block";
+
+  loadOrders();
+  loadProducts();
+  }
 
 async function show(){
  login.style.display="none";admin.style.display="block";
