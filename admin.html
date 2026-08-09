@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>JR Shop - Admin</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+      color: #111;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font-family: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    /* =========================
+       LOGIN
+    ========================= */
+
+    #loginPage {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: #111;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 420px;
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 40px rgba(0,0,0,.25);
+    }
+
+    .login-logo {
+      text-align: center;
+      font-size: 30px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .login-logo span {
+      color: #16a34a;
+    }
+
+    .login-subtitle {
+      text-align: center;
+      color: #777;
+      margin-bottom: 25px;
+    }
+
+    .input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      font-size: 15px;
+      outline: none;
+      background: white;
+    }
+
+    .input:focus {
+      border-color: #16a34a;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 16px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .btn-green {
+      background: #16a34a;
+      color: white;
+    }
+
+    .btn-black {
+      background: #111;
+      color: white;
+    }
+
+    .btn-red {
+      background: #dc2626;
+      color: white;
+    }
+
+    .btn-gray {
+      background: #e5e7eb;
+      color: #111;
+    }
+
+    .full {
+      width: 100%;
+    }
+
+    #loginError {
+      color: #dc2626;
+      text-align: center;
+      margin-top: 12px;
+      display: none;
+      line-height: 1.6;
+    }
+
+
+    /* =========================
+       ADMIN PAGE
+    ========================= */
+
+    #adminPage {
+      display: none;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #111;
+      color: white;
+      padding: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo {
+      font-size: 25px;
+      font-weight: 900;
+    }
+
+    .logo span {
+      color: #22c55e;
+    }
+
+    .logout {
+      background: #dc2626;
+      color: white;
+      border: 0;
+      padding: 10px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px 15px 50px;
+    }
+
+
+    /* =========================
+       WELCOME
+    ========================= */
+
+    .welcome {
+      margin-bottom: 20px;
+    }
+
+    .welcome h1 {
+      font-size: 27px;
+      margin-bottom: 5px;
+    }
+
+    .welcome p {
+      color: #666;
+    }
+
+
+    /* =========================
+       STATS
+    ========================= */
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    .stat {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 3px 12px rgba(0,0,0,.06);
+    }
+
+    .stat-title {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 25px;
+      font-weight: 900;
+    }
+
+
+    /* =========================
+       TABS
+    ========================= */
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      margin-bottom: 20px;
+    }
+
+    .tab {
+      white-space: nowrap;
+      border: 0;
+      padding: 11px 16px;
+      border-radius: 10px;
+      background: #e5e7eb;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .tab.active {
+      background: #111;
+      color: white;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+
+    /* =========================
+       SECTION HEADER
+    ========================= */
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    .section-head h2 {
+      font-size: 22px;
+    }
+
+    .search {
+      width: 100%;
+      max-width: 400px;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      outline: none;
+      background: white;
+    }
+
+
+    /* =========================
+       ORDERS
+    ========================= */
+
+    .orders {
+      display: grid;
+      gap: 15px;
+    }
+
+    .order-card {
+      background: white;
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 3px 12px rgba(0,0,0,.06);
+    }
+
+    .order-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .order-number {
+      font-size: 13px;
+      color: #777;
+      margin-bottom: 5px;
+      word-break: break-all;
+    }
+
+    .customer-name {
+      font-size: 19px;
+      font-weight: bold;
+    }
+
+    .order-date {
+      color: #777;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+
+    /* =========================
+       STATUS
+    ========================= */
+
+    .status {
+      padding: 7px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .status-pending {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .status-confirmed {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .status-shipped {
+      background: #e0e7ff;
+      color: #4338ca;
+    }
+
+    .status-delivered {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .status-cancelled {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+
+    /* =========================
+       CUSTOMER INFO
+    ========================= */
+
+    .customer-info {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+      line-height: 1.9;
+    }
+
+    .customer-info div {
+      border-bottom: 1px solid #eee;
+      padding: 4px 0;
+    }
+
+    .customer-info div:last-child {
+      border-bottom: 0;
+    }
+
+
+    /* =========================
+       ORDER ITEMS
+    ========================= */
+
+    .items-box {
+      border-top: 1px solid #eee;
+      padding-top: 12px;
+      margin-top: 12px;
+    }
+
+    .items-title {
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .item {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .item:last-child {
+      border-bottom: 0;
+    }
+
+    .item-name {
+      font-weight: bold;
+    }
+
+    .item-details {
+      color: #666;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .item-price {
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+
+    /* =========================
+       ORDER TOTAL
+    ========================= */
+
+    .order-total {
+      margin-top: 12px;
+      font-size: 20px;
+      font-weight: 900;
+      color: #16a34a;
+    }
+
+
+    /* =========================
+       ORDER ACTIONS
+    ========================= */
+
+    .order-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+
+    .status-select {
+      flex: 1;
+      min-width: 160px;
+      padding: 11px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: white;
+    }
+
+
+    /* =========================
+       PRODUCTS
+    ========================= */
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 3px 12px rgba(0,0,0,.06);
+    }
+
+    .product-image {
+      height: 180px;
+      background: #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 45px;
+      color: #777;
+    }
+
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-body {
+      padding: 14px;
+    }
+
+    .product-body h3 {
+      margin-bottom: 8px;
+    }
+
+    .product-description {
+      color: #666;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+
+    .product-price {
+      color: #16a34a;
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .product-old-price {
+      color: #999;
+      text-decoration: line-through;
+      font-size: 13px;
+      margin-right: 5px;
+    }
+
+    .product-stock {
+      color: #666;
+      margin-bottom: 12px;
+    }
+
+    .active-badge {
+      display: inline-block;
+      padding: 5px 8px;
+      border-radius: 7px;
+      background: #dcfce7;
+      color: #166534;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .inactive-badge {
+      display: inline-block;
+      padding: 5px 8px;
+      border-radius: 7px;
+      background: #fee2e2;
+      color: #991b1b;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .product-actions {
+      display: flex;
+      gap: 7px;
+    }
+
+    .product-actions button {
+      flex: 1;
+    }
+
+
+    /* =========================
+       MODAL
+    ========================= */
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.65);
+      z-index: 100;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .modal-box {
+      background: white;
+      width: 100%;
+      max-width: 500px;
+      margin: 40px auto;
+      padding: 20px;
+      border-radius: 18px;
+    }
+
+    .modal-box h2 {
+      margin-bottom: 18px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .modal-actions button {
+      flex: 1;
+    }
+
+
+    /* =========================
+       EMPTY / LOADING
+    ========================= */
+
+    .empty {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      color: #777;
+      line-height: 1.8;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 30px;
+    }
+
+
+    /* =========================
+       DESKTOP
+    ========================= */
+
+    @media (min-width: 700px) {
+
+      .stats {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .products {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .product-image {
+        height: 210px;
+      }
+
+    }
+
+
+    @media (max-width: 500px) {
+
+      .order-top {
+        flex-direction: column;
+      }
+
+      .order-actions {
+        flex-direction: column;
+      }
+
+      .status-select {
+        width: 100%;
+      }
+
+      .product-actions {
+        flex-direction: column;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     LOGIN PAGE
+===================================================== -->
+
+<div id="loginPage">
+
+  <div class="login-box">
+
+    <div class="login-logo">
+      JR <span>Shop</span>
+    </div>
+
+    <div class="login-subtitle">
+      لوحة تحكم الإدارة
+    </div>
+
+    <input
+      id="loginEmail"
+      class="input"
+      type="email"
+      placeholder="البريد الإلكتروني"
+      autocomplete="email"
+    >
+
+    <input
+      id="loginPassword"
+      class="input"
+      type="password"
+      placeholder="كلمة المرور"
+      autocomplete="current-password"
+    >
+
+    <button
+      id="loginButton"
+      class="btn btn-green full"
+      onclick="loginAdmin()"
+    >
+      🔐 تسجيل الدخول
+    </button>
+
+    <div id="loginError"></div>
+
+  </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     ADMIN PAGE
+===================================================== -->
+
+<div id="adminPage">
+
+  <header>
+
+    <div class="header-inner">
+
+      <div class="logo">
+        JR <span>Shop Admin</span>
+      </div>
+
+      <button
+        class="logout"
+        onclick="logoutAdmin()"
+      >
+        تسجيل الخروج
+      </button>
+
+    </div>
+
+  </header>
+
+
+  <main class="container">
+
+
+    <!-- WELCOME -->
+
+    <div class="welcome">
+
+      <h1>
+        👋 لوحة التحكم
+      </h1>
+
+      <p>
+        إدارة الطلبات والمنتجات
+      </p>
+
+    </div>
+
+
+
+    <!-- =================================================
+         STATS
+    ================================================= -->
+
+    <div class="stats">
+
+      <div class="stat">
+
+        <div class="stat-title">
+          جميع الطلبات
+        </div>
+
+        <div
+          id="statOrders"
+          class="stat-value"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-title">
+          الطلبات المعلقة
+        </div>
+
+        <div
+          id="statPending"
+          class="stat-value"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-title">
+          الطلبات المكتملة
+        </div>
+
+        <div
+          id="statDelivered"
+          class="stat-value"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-title">
+          إجمالي المبيعات
+        </div>
+
+        <div
+          id="statSales"
+          class="stat-value"
+        >
+          0 دج
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         TABS
+    ================================================= -->
+
+    <div class="tabs">
+
+      <button
+        class="tab active"
+        onclick="showSection('ordersSection', this)"
+      >
+        📦 الطلبات
+      </button>
+
+
+      <button
+        class="tab"
+        onclick="showSection('productsSection', this)"
+      >
+        🛍️ المنتجات
+      </button>
+
+    </div>
+
+
+
+    <!-- =================================================
+         ORDERS SECTION
+    ================================================= -->
+
+    <section
+      id="ordersSection"
+      class="section active"
+    >
+
+      <div class="section-head">
+
+        <h2>
+          📦 الطلبات
+        </h2>
+
+
+        <input
+          id="orderSearch"
+          class="search"
+          type="search"
+          placeholder="🔎 ابحث بالاسم أو الهاتف أو الولاية..."
+          oninput="renderOrders()"
+        >
+
+
+        <button
+          class="btn btn-black"
+          onclick="loadOrders()"
+        >
+          🔄 تحديث
+        </button>
+
+      </div>
+
+
+      <div
+        id="orders"
+        class="orders"
+      >
+
+        <div class="loading">
+          جاري تحميل الطلبات...
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         PRODUCTS SECTION
+    ================================================= -->
+
+    <section
+      id="productsSection"
+      class="section"
+    >
+
+      <div class="section-head">
+
+        <h2>
+          🛍️ المنتجات
+        </h2>
+
+
+        <button
+          class="btn btn-green"
+          onclick="openProductModal()"
+        >
+          ➕ إضافة منتج
+        </button>
+
+      </div>
+
+
+      <div
+        id="products"
+        class="products"
+      >
+
+        <div class="loading">
+          جاري تحميل المنتجات...
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+
+
+<!-- =====================================================
+     PRODUCT MODAL
+===================================================== -->
+
+<div
+  id="productModal"
+  class="modal"
+>
+
+  <div class="modal-box">
+
+    <h2 id="productModalTitle">
+      ➕ إضافة منتج
+    </h2>
+
+
+    <input
+      id="productId"
+      type="hidden"
+    >
+
+
+    <input
+      id="productName"
+      class="input"
+      placeholder="اسم المنتج"
+    >
+
+
+    <input
+      id="productPrice"
+      class="input"
+      type="number"
+      min="0"
+      placeholder="السعر بالدج"
+    >
+
+
+    <input
+      id="productOldPrice"
+      class="input"
+      type="number"
+      min="0"
+      placeholder="السعر القديم - اختياري"
+    >
+
+
+    <input
+      id="productStock"
+      class="input"
+      type="number"
+      min="0"
+      placeholder="المخزون"
+    >
+
+
+    <input
+      id="productImage"
+      class="input"
+      type="url"
+      placeholder="رابط صورة المنتج - اختياري"
+    >
+
+
+    <textarea
+      id="productDescription"
+      class="input"
+      rows="4"
+      placeholder="وصف المنتج"
+    ></textarea>
+
+
+    <div class="modal-actions">
+
+      <button
+        id="saveProductButton"
+        class="btn btn-green"
+        onclick="saveProduct()"
+      >
+        💾 حفظ
+      </button>
+
+
+      <button
+        class="btn btn-gray"
+        onclick="closeProductModal()"
+      >
+        إلغاء
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     SUPABASE
+===================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+
+/* =====================================================
+   SUPABASE CONFIG
+===================================================== */
+
+const SUPABASE_URL =
+  "https://cstjgsuehmqcolajspqh.supabase.co";
+
+
+const SUPABASE_KEY =
+  "sb_publishable_e_wQxqCrx21Qq1kRYKjFMg_yR6TQfKX";
+
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+
+/* =====================================================
+   GLOBAL DATA
+===================================================== */
+
+let orders = [];
+
+let products = [];
+
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value) {
+
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+
+
+/* =====================================================
+   FORMAT NUMBER
+===================================================== */
+
+function formatNumber(number) {
+
+  return Number(number || 0).toLocaleString("fr-FR");
+
+}
+
+
+
+/* =====================================================
+   FORMAT DATE
+===================================================== */
+
+function formatDate(date) {
+
+  if (!date) {
+    return "";
+  }
+
+  try {
+
+    return new Date(date).toLocaleString(
+      "fr-FR",
+      {
+        dateStyle: "medium",
+        timeStyle: "short"
+      }
+    );
+
+  } catch (error) {
+
+    return date;
+
+  }
+
+}
+
+
+
+/* =====================================================
+   STATUS TEXT
+===================================================== */
+
+function getStatusText(status) {
+
+  const statuses = {
+
+    pending: "معلق",
+
+    confirmed: "مؤكد",
+
+    shipped: "تم الشحن",
+
+    delivered: "تم التسليم",
+
+    cancelled: "ملغى"
+
+  };
+
+  return statuses[status] || status || "غير معروف";
+
+}
+
+
+
+/* =====================================================
+   STATUS CLASS
+===================================================== */
+
+function getStatusClass(status) {
+
+  const classes = {
+
+    pending: "status-pending",
+
+    confirmed: "status-confirmed",
+
+    shipped: "status-shipped",
+
+    delivered: "status-delivered",
+
+    cancelled: "status-cancelled"
+
+  };
+
+  return classes[status] || "status-pending";
+
+}
+
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+async function loginAdmin() {
+
+  const email =
+    document
+      .getElementById("loginEmail")
+      .value
+      .trim();
+
+
+  const password =
+    document
+      .getElementById("loginPassword")
+      .value;
+
+
+  const errorBox =
+    document.getElementById("loginError");
+
+
+  errorBox.style.display = "none";
+
+
+  if (!email || !password) {
+
+    errorBox.textContent =
+      "من ف
