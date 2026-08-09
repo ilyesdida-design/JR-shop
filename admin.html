@@ -820,14 +820,13 @@ header{
     <div class="actions">
 
       <button
-        id="saveProductBtn"
-        type="button"
-        class="btn green"
-        onclick="saveProduct()"
-      >
-        💾 حفظ
+  id="saveProductBtn"
+  type="button"
+  class="btn green"
+  onclick="saveProduct();"
+>
+  💾 حفظ
       </button>
-
 
       <button
         type="button"
@@ -1868,12 +1867,283 @@ function editProduct(p){
 
 async function saveProduct(){
 
-  if(saveProductBtn.disabled){
+  const btn = document.getElementById("saveProductBtn");
 
-    return;
+  try{
+
+    btn.disabled = true;
+    btn.textContent = "⏳ جاري...";
+
+
+    const name =
+      document.getElementById("pname").value.trim();
+
+    const price =
+      Number(document.getElementById("pprice").value || 0);
+
+    const old_price =
+      Number(document.getElementById("pold").value || 0);
+
+    const stock =
+      Number(document.getElementById("pstock").value || 0);
+
+    const description =
+      document.getElementById("pdesc").value.trim();
+
+    const active =
+      document.getElementById("pactive").value === "true";
+
+    const productId =
+      document.getElementById("pid").value;
+
+    let imageUrl =
+      document.getElementById("pimage").value.trim();
+
+    const fileInput =
+      document.getElementById("pfile");
+
+    const file =
+      fileInput.files &&
+      fileInput.files.length
+        ? fileInput.files[0]
+        : null;
+
+
+    /* =====================
+       CHECK
+    ===================== */
+
+    if(!name){
+
+      alert("❌ اكتب اسم المنتج");
+
+      return;
+    }
+
+
+    if(price <= 0){
+
+      alert("❌ اكتب السعر");
+
+      return;
+    }
+
+
+    if(stock < 0){
+
+      alert("❌ المخزون غير صحيح");
+
+      return;
+    }
+
+
+    /* =====================
+       IMAGE
+    ===================== */
+
+    if(file){
+
+      btn.textContent =
+        "📤 رفع الصورة...";
+
+
+      const ext =
+        file.name
+          .split(".")
+          .pop()
+          .toLowerCase();
+
+
+      const fileName =
+        Date.now() +
+        "_" +
+        Math.random()
+          .toString(36)
+          .substring(2) +
+        "." +
+        ext;
+
+
+      console.log(
+        "بدأ رفع الصورة:",
+        fileName
+      );
+
+
+      const upload =
+        await db.storage
+          .from("product-images")
+          .upload(
+            fileName,
+            file,
+            {
+              cacheControl:"3600",
+              upsert:false,
+              contentType:file.type
+            }
+          );
+
+
+      if(upload.error){
+
+        console.error(
+          "UPLOAD ERROR:",
+          upload.error
+        );
+
+
+        alert(
+          "❌ مشكلة رفع الصورة:\n\n" +
+          upload.error.message
+        );
+
+        return;
+      }
+
+
+      const publicUrl =
+        db.storage
+          .from("product-images")
+          .getPublicUrl(fileName);
+
+
+      imageUrl =
+        publicUrl.data.publicUrl;
+
+
+      console.log(
+        "رابط الصورة:",
+        imageUrl
+      );
+
+    }
+
+
+    /* =====================
+       DATA
+    ===================== */
+
+    const data = {
+
+      name:name,
+
+      price:price,
+
+      old_price:old_price,
+
+      stock:stock,
+
+      image:imageUrl,
+
+      description:description,
+
+      active:active
+
+    };
+
+
+    console.log(
+      "بيانات المنتج:",
+      data
+    );
+
+
+    /* =====================
+       DATABASE
+    ===================== */
+
+    btn.textContent =
+      "💾 حفظ المنتج...";
+
+
+    let result;
+
+
+    if(productId){
+
+      result =
+        await db
+          .from("products")
+          .update(data)
+          .eq(
+            "id",
+            productId
+          );
+
+    }else{
+
+      result =
+        await db
+          .from("products")
+          .insert([
+            data
+          ]);
+
+    }
+
+
+    if(result.error){
+
+      console.error(
+        "DATABASE ERROR:",
+        result.error
+      );
+
+
+      alert(
+        "❌ مشكلة قاعدة البيانات:\n\n" +
+        result.error.message
+      );
+
+      return;
+    }
+
+
+    /* =====================
+       SUCCESS
+    ===================== */
+
+    alert(
+      productId
+        ? "✅ تم تعديل المنتج"
+        : "✅ تمت إضافة المنتج"
+    );
+
+
+    closeModal();
+
+    fileInput.value = "";
+
+    await loadProducts();
+
+
+  }catch(error){
+
+    console.error(
+      "SAVE ERROR:",
+      error
+    );
+
+
+    alert(
+      "❌ حدث خطأ:\n\n" +
+      (
+        error.message ||
+        String(error)
+      )
+    );
+
+
+  }finally{
+
+    btn.disabled = false;
+
+    btn.textContent =
+      "💾 حفظ";
 
   }
 
+  }
 
   try{
 
