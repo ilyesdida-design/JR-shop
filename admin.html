@@ -12,13 +12,7 @@
 
 <title>JR Shop - Admin</title>
 
-
 <style>
-
-/* =========================
-   GENERAL
-========================= */
-
 *{
   box-sizing:border-box
 }
@@ -52,7 +46,6 @@ button:disabled{
   opacity:.6;
   cursor:not-allowed
 }
-
 
 /* =========================
    LOGIN
@@ -92,7 +85,6 @@ button:disabled{
   margin-bottom:25px
 }
 
-
 /* =========================
    INPUTS
 ========================= */
@@ -118,7 +110,6 @@ select:focus{
 textarea{
   resize:vertical
 }
-
 
 /* =========================
    BUTTONS
@@ -161,7 +152,6 @@ textarea{
   margin-top:12px;
   line-height:1.7
 }
-
 
 /* =========================
    ADMIN
@@ -207,7 +197,6 @@ header{
   color:#666
 }
 
-
 /* =========================
    STATS
 ========================= */
@@ -232,7 +221,6 @@ header{
   font-size:25px;
   margin-top:7px
 }
-
 
 /* =========================
    TABS
@@ -264,7 +252,6 @@ header{
   display:block
 }
 
-
 /* =========================
    ROW
 ========================= */
@@ -280,7 +267,6 @@ header{
 .search{
   max-width:350px
 }
-
 
 /* =========================
    ORDERS
@@ -335,7 +321,6 @@ header{
   color:#777
 }
 
-
 /* =========================
    PRODUCTS
 ========================= */
@@ -356,7 +341,6 @@ header{
 .product .p{
   padding-top:8px
 }
-
 
 /* =========================
    MODAL
@@ -397,7 +381,6 @@ header{
   padding:10px;
   background:#f8f8f8
 }
-
 
 /* =========================
    MOBILE
@@ -453,9 +436,7 @@ header{
 
 </head>
 
-
 <body>
-
 
 <!-- =========================
      LOGIN
@@ -504,8 +485,6 @@ header{
 
 </div>
 
-
-
 <!-- =========================
      ADMIN
 ========================= -->
@@ -532,9 +511,7 @@ header{
 
   </header>
 
-
   <div class="container">
-
 
     <!-- TITLE -->
 
@@ -550,8 +527,6 @@ header{
 
     </div>
 
-
-
     <!-- STATS -->
 
     <div class="stats">
@@ -566,7 +541,6 @@ header{
 
       </div>
 
-
       <div class="stat">
 
         المعلقة
@@ -577,7 +551,6 @@ header{
 
       </div>
 
-
       <div class="stat">
 
         المكتملة
@@ -587,7 +560,6 @@ header{
         </b>
 
       </div>
-
 
       <div class="stat">
 
@@ -601,8 +573,6 @@ header{
 
     </div>
 
-
-
     <!-- TABS -->
 
     <div class="tabs">
@@ -615,7 +585,6 @@ header{
         📦 الطلبات
       </button>
 
-
       <button
         type="button"
         class="tab"
@@ -625,8 +594,6 @@ header{
       </button>
 
     </div>
-
-
 
     <!-- =====================
          ORDERS SECTION
@@ -643,14 +610,12 @@ header{
           📦 الطلبات
         </h2>
 
-
         <input
           id="search"
           class="search"
           placeholder="بحث..."
           oninput="drawOrders()"
         >
-
 
         <button
           type="button"
@@ -661,7 +626,6 @@ header{
         </button>
 
       </div>
-
 
       <div
         id="orderList"
@@ -675,8 +639,6 @@ header{
       </div>
 
     </section>
-
-
 
     <!-- =====================
          PRODUCTS SECTION
@@ -693,7 +655,6 @@ header{
           🛍️ المنتجات
         </h2>
 
-
         <button
           type="button"
           class="btn green"
@@ -703,7 +664,6 @@ header{
         </button>
 
       </div>
-
 
       <div
         id="productList"
@@ -718,12 +678,9 @@ header{
 
     </section>
 
-
   </div>
 
 </div>
-
-
 
 <!-- =========================
      PRODUCT MODAL
@@ -740,19 +697,16 @@ header{
       ➕ منتج جديد
     </h2>
 
-
     <input
       id="pid"
       type="hidden"
     >
-
 
     <input
       id="pname"
       type="text"
       placeholder="اسم المنتج"
     >
-
 
     <input
       id="pprice"
@@ -761,14 +715,12 @@ header{
       placeholder="السعر"
     >
 
-
     <input
       id="pold"
       type="number"
       inputmode="numeric"
       placeholder="السعر القديم"
     >
-
 
     <input
       id="pstock"
@@ -777,18 +729,15 @@ header{
       placeholder="المخزون"
     >
 
-
     <input
       id="pimage"
       type="url"
       placeholder="رابط الصورة"
     >
 
-
     <label class="file-title">
       📱 تحميل صورة من الهاتف
     </label>
-
 
     <input
       id="pfile"
@@ -796,13 +745,11 @@ header{
       accept="image/*"
     >
 
-
     <textarea
       id="pdesc"
       rows="4"
       placeholder="الوصف"
     ></textarea>
-
 
     <select id="pactive">
 
@@ -816,16 +763,15 @@ header{
 
     </select>
 
-
     <div class="actions">
 
       <button
-  id="saveProductBtn"
-  type="button"
-  class="btn green"
-  onclick="saveProduct();"
->
-  💾 حفظ
+        id="saveProductBtn"
+        type="button"
+        class="btn green"
+        onclick="saveProduct();"
+      >
+        💾 حفظ
       </button>
 
       <button
@@ -839,9 +785,9 @@ header{
     </div>
 
   </div>
+  </div>
 
-        </div>
-        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
@@ -992,6 +938,7 @@ function status(x){
 /* =========================
    LOGIN
 ========================= */
+
 async function login(){
 
   errBox.textContent = "";
@@ -1000,7 +947,10 @@ async function login(){
   const p = passwordInput.value;
 
   if(!e || !p){
-    errBox.textContent = "❌ أدخل البريد وكلمة المرور";
+
+    errBox.textContent =
+      "❌ أدخل البريد وكلمة المرور";
+
     return;
   }
 
@@ -1062,8 +1012,12 @@ async function login(){
 
     loginBtn.disabled = false;
     loginBtn.textContent = "🔐 تسجيل الدخول";
+
   }
-  }
+
+}
+
+
 /* =========================
    SESSION
 ========================= */
@@ -1719,904 +1673,627 @@ function drawProducts(){
     }).join("");
 
 }
-  /* =========================
-   OPEN MODAL
-========================= */
+    /* =========================
+     OPEN MODAL
+  ========================= */
 
-function openModal(){
+  function openModal(){
 
-  modal.style.display = "block";
+    modal.style.display = "block";
 
-  document.body.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
 
-  modalTitle.textContent =
-    "➕ منتج جديد";
+    modalTitle.textContent =
+      "➕ منتج جديد";
 
-  pid.value = "";
-  pname.value = "";
-  pprice.value = "";
-  pold.value = "";
-  pstock.value = "";
-  pimage.value = "";
-  pdesc.value = "";
-  pactive.value = "true";
-  pfile.value = "";
+    pid.value = "";
+    pname.value = "";
+    pprice.value = "";
+    pold.value = "";
+    pstock.value = "";
+    pimage.value = "";
+    pdesc.value = "";
+    pactive.value = "true";
+    pfile.value = "";
 
-  setTimeout(function(){
-    pname.focus();
-  },100);
+    setTimeout(function(){
+      pname.focus();
+    },100);
 
-}
-
-
-/* =========================
-   CLOSE MODAL
-========================= */
-
-function closeModal(){
-
-  modal.style.display = "none";
-
-  document.body.style.overflow = "";
-
-}
-
-
-/* =========================
-   EDIT PRODUCT
-========================= */
-
-function editProductById(id){
-
-  const p =
-    products.find(function(x){
-
-      return String(x.id) === String(id);
-
-    });
-
-
-  if(!p){
-
-    alert(
-      "❌ لم يتم العثور على المنتج"
-    );
-
-    return;
   }
 
 
-  editProduct(p);
+  /* =========================
+     CLOSE MODAL
+  ========================= */
 
-}
+  function closeModal(){
 
+    modal.style.display = "none";
 
-function editProduct(p){
+    document.body.style.overflow = "";
 
-  openModal();
-
-  modalTitle.textContent =
-    "✏️ تعديل المنتج";
-
-
-  pid.value =
-    p.id || "";
+  }
 
 
-  pname.value =
-    p.name ||
-    p.title ||
-    "";
+  /* =========================
+     EDIT PRODUCT
+  ========================= */
+
+  function editProductById(id){
+
+    const p =
+      products.find(function(x){
+
+        return String(x.id) === String(id);
+
+      });
 
 
-  pprice.value =
-    p.price ?? "";
+    if(!p){
 
-
-  pold.value =
-    p.old_price ?? "";
-
-
-  pstock.value =
-    p.stock ?? 0;
-
-
-  pimage.value =
-    p.image ||
-    p.image_url ||
-    "";
-
-
-  pdesc.value =
-    p.description ||
-    "";
-
-
-  pactive.value =
-    String(
-      p.active !== false
-    );
-
-
-  pfile.value = "";
-
-}
-
-
-/* =========================
-   SAVE PRODUCT
-========================= */
-
-async function saveProduct(){
-
-  const btn = document.getElementById("saveProductBtn");
-
-  try{
-
-    btn.disabled = true;
-    btn.textContent = "⏳ جاري...";
-
-
-    const name =
-      document.getElementById("pname").value.trim();
-
-    const price =
-      Number(document.getElementById("pprice").value || 0);
-
-    const old_price =
-      Number(document.getElementById("pold").value || 0);
-
-    const stock =
-      Number(document.getElementById("pstock").value || 0);
-
-    const description =
-      document.getElementById("pdesc").value.trim();
-
-    const active =
-      document.getElementById("pactive").value === "true";
-
-    const productId =
-      document.getElementById("pid").value;
-
-    let imageUrl =
-      document.getElementById("pimage").value.trim();
-
-    const fileInput =
-      document.getElementById("pfile");
-
-    const file =
-      fileInput.files &&
-      fileInput.files.length
-        ? fileInput.files[0]
-        : null;
-
-
-    /* =====================
-       CHECK
-    ===================== */
-
-    if(!name){
-
-      alert("❌ اكتب اسم المنتج");
+      alert(
+        "❌ لم يتم العثور على المنتج"
+      );
 
       return;
     }
 
 
-    if(price <= 0){
+    editProduct(p);
 
-      alert("❌ اكتب السعر");
-
-      return;
-    }
+  }
 
 
-    if(stock < 0){
+  function editProduct(p){
 
-      alert("❌ المخزون غير صحيح");
+    openModal();
 
-      return;
-    }
-
-
-    /* =====================
-       IMAGE
-    ===================== */
-
-    if(file){
-
-      btn.textContent =
-        "📤 رفع الصورة...";
+    modalTitle.textContent =
+      "✏️ تعديل المنتج";
 
 
-      const ext =
-        file.name
-          .split(".")
-          .pop()
-          .toLowerCase();
+    pid.value =
+      p.id || "";
 
 
-      const fileName =
-        Date.now() +
-        "_" +
-        Math.random()
-          .toString(36)
-          .substring(2) +
-        "." +
-        ext;
+    pname.value =
+      p.name ||
+      p.title ||
+      "";
 
 
-      console.log(
-        "بدأ رفع الصورة:",
-        fileName
+    pprice.value =
+      p.price ?? "";
+
+
+    pold.value =
+      p.old_price ?? "";
+
+
+    pstock.value =
+      p.stock ?? 0;
+
+
+    pimage.value =
+      p.image ||
+      p.image_url ||
+      "";
+
+
+    pdesc.value =
+      p.description ||
+      "";
+
+
+    pactive.value =
+      String(
+        p.active !== false
       );
 
 
-      const upload =
-        await db.storage
-          .from("product-images")
-          .upload(
-            fileName,
-            file,
-            {
-              cacheControl:"3600",
-              upsert:false,
-              contentType:file.type
-            }
-          );
+    pfile.value = "";
+
+  }
 
 
-      if(upload.error){
+  /* =========================
+     SAVE PRODUCT
+  ========================= */
 
-        console.error(
-          "UPLOAD ERROR:",
-          upload.error
+  async function saveProduct(){
+
+    const btn =
+      document.getElementById(
+        "saveProductBtn"
+      );
+
+    try{
+
+      btn.disabled = true;
+
+      btn.textContent =
+        "⏳ جاري...";
+
+
+      const name =
+        document
+          .getElementById("pname")
+          .value
+          .trim();
+
+
+      const price =
+        Number(
+          document
+            .getElementById("pprice")
+            .value || 0
         );
 
 
+      const old_price =
+        Number(
+          document
+            .getElementById("pold")
+            .value || 0
+        );
+
+
+      const stock =
+        Number(
+          document
+            .getElementById("pstock")
+            .value || 0
+        );
+
+
+      const description =
+        document
+          .getElementById("pdesc")
+          .value
+          .trim();
+
+
+      const active =
+        document
+          .getElementById("pactive")
+          .value === "true";
+
+
+      const productId =
+        document
+          .getElementById("pid")
+          .value;
+
+
+      let imageUrl =
+        document
+          .getElementById("pimage")
+          .value
+          .trim();
+
+
+      const fileInput =
+        document.getElementById(
+          "pfile"
+        );
+
+
+      const file =
+        fileInput.files &&
+        fileInput.files.length
+          ? fileInput.files[0]
+          : null;
+
+
+      /* =====================
+         CHECK
+      ===================== */
+
+      if(!name){
+
         alert(
-          "❌ مشكلة رفع الصورة:\n\n" +
-          upload.error.message
+          "❌ اكتب اسم المنتج"
         );
 
         return;
       }
 
 
-      const publicUrl =
-        db.storage
-          .from("product-images")
-          .getPublicUrl(fileName);
+      if(price <= 0){
 
+        alert(
+          "❌ اكتب السعر"
+        );
 
-      imageUrl =
-        publicUrl.data.publicUrl;
+        return;
+      }
 
 
-      console.log(
-        "رابط الصورة:",
-        imageUrl
-      );
+      if(stock < 0){
 
-    }
+        alert(
+          "❌ المخزون غير صحيح"
+        );
 
+        return;
+      }
 
-    /* =====================
-       DATA
-    ===================== */
 
-    const data = {
+      /* =====================
+         IMAGE
+      ===================== */
 
-      name:name,
+      if(file){
 
-      price:price,
+        btn.textContent =
+          "📤 رفع الصورة...";
 
-      old_price:old_price,
 
-      stock:stock,
+        const ext =
+          file.name
+            .split(".")
+            .pop()
+            .toLowerCase();
 
-      image:imageUrl,
 
-      description:description,
+        const fileName =
+          Date.now() +
+          "_" +
+          Math.random()
+            .toString(36)
+            .substring(2) +
+          "." +
+          ext;
 
-      active:active
 
-    };
-
-
-    console.log(
-      "بيانات المنتج:",
-      data
-    );
-
-
-    /* =====================
-       DATABASE
-    ===================== */
-
-    btn.textContent =
-      "💾 حفظ المنتج...";
-
-
-    let result;
-
-
-    if(productId){
-
-      result =
-        await db
-          .from("products")
-          .update(data)
-          .eq(
-            "id",
-            productId
-          );
-
-    }else{
-
-      result =
-        await db
-          .from("products")
-          .insert([
-            data
-          ]);
-
-    }
-
-
-    if(result.error){
-
-      console.error(
-        "DATABASE ERROR:",
-        result.error
-      );
-
-
-      alert(
-        "❌ مشكلة قاعدة البيانات:\n\n" +
-        result.error.message
-      );
-
-      return;
-    }
-
-
-    /* =====================
-       SUCCESS
-    ===================== */
-
-    alert(
-      productId
-        ? "✅ تم تعديل المنتج"
-        : "✅ تمت إضافة المنتج"
-    );
-
-
-    closeModal();
-
-    fileInput.value = "";
-
-    await loadProducts();
-
-
-  }catch(error){
-
-    console.error(
-      "SAVE ERROR:",
-      error
-    );
-
-
-    alert(
-      "❌ حدث خطأ:\n\n" +
-      (
-        error.message ||
-        String(error)
-      )
-    );
-
-
-  }finally{
-
-    btn.disabled = false;
-
-    btn.textContent =
-      "💾 حفظ";
-
-  }
-
-  }
-
-  try{
-
-    const name =
-      pname.value.trim();
-
-
-    const price =
-      Number(
-        pprice.value || 0
-      );
-
-
-    const old_price =
-      Number(
-        pold.value || 0
-      );
-
-
-    const stock =
-      Number(
-        pstock.value || 0
-      );
-
-
-    let imageUrl =
-      pimage.value.trim();
-
-
-    const description =
-      pdesc.value.trim();
-
-
-    const active =
-      pactive.value === "true";
-
-
-    const productId =
-      pid.value;
-
-
-    const file =
-      pfile.files &&
-      pfile.files[0];
-
-
-    /* =====================
-       VALIDATION
-    ===================== */
-
-    if(!name){
-
-      alert(
-        "❌ اكتب اسم المنتج"
-      );
-
-      pname.focus();
-
-      return;
-    }
-
-
-    if(price <= 0){
-
-      alert(
-        "❌ اكتب سعر صحيح"
-      );
-
-      pprice.focus();
-
-      return;
-    }
-
-
-    if(stock < 0){
-
-      alert(
-        "❌ المخزون لا يمكن أن يكون سالب"
-      );
-
-      pstock.focus();
-
-      return;
-    }
-
-
-    /* =====================
-       START SAVING
-    ===================== */
-
-    saveProductBtn.disabled =
-      true;
-
-    saveProductBtn.textContent =
-      "⏳ جاري الحفظ...";
-
-
-    /* =====================
-       UPLOAD IMAGE
-    ===================== */
-
-    if(file){
-
-      saveProductBtn.textContent =
-        "📤 جاري رفع الصورة...";
-
-
-      const extension =
-        file.name.includes(".")
-          ? file.name
-              .split(".")
-              .pop()
-              .toLowerCase()
-          : "jpg";
-
-
-      const allowed =
-        [
-          "jpg",
-          "jpeg",
-          "png",
-          "webp",
-          "gif"
-        ];
-
-
-      const ext =
-        allowed.includes(extension)
-          ? extension
-          : "jpg";
-
-
-      const fileName =
-        Date.now() +
-        "-" +
-        Math.random()
-          .toString(36)
-          .substring(2) +
-        "." +
-        ext;
-
-
-      console.log(
-        "Uploading image:",
-        fileName
-      );
-
-
-      const upload =
-        await db.storage
-          .from("product-images")
-          .upload(
-            fileName,
-            file,
-            {
-              cacheControl:"3600",
-              upsert:false,
-              contentType:
-                file.type ||
-                "image/jpeg"
-            }
-          );
-
-
-      if(upload.error){
-
-        console.error(
-          "STORAGE ERROR:",
-          upload.error
+        console.log(
+          "بدأ رفع الصورة:",
+          fileName
         );
 
 
-        throw new Error(
-          "فشل رفع الصورة:\n" +
-          upload.error.message
+        const upload =
+          await db.storage
+            .from("product-images")
+            .upload(
+              fileName,
+              file,
+              {
+                cacheControl:"3600",
+                upsert:false,
+                contentType:file.type
+              }
+            );
+
+
+        if(upload.error){
+
+          console.error(
+            "UPLOAD ERROR:",
+            upload.error
+          );
+
+
+          alert(
+            "❌ مشكلة رفع الصورة:\n\n" +
+            upload.error.message
+          );
+
+          return;
+        }
+
+
+        const publicUrl =
+          db.storage
+            .from("product-images")
+            .getPublicUrl(
+              fileName
+            );
+
+
+        imageUrl =
+          publicUrl.data.publicUrl;
+
+
+        console.log(
+          "رابط الصورة:",
+          imageUrl
         );
 
       }
 
 
-      const publicData =
-        db.storage
-          .from("product-images")
-          .getPublicUrl(
-            fileName
-          );
+      /* =====================
+         DATA
+      ===================== */
 
+      const data = {
 
-      imageUrl =
-        publicData
-          .data
-          .publicUrl;
+        name:name,
+
+        price:price,
+
+        old_price:old_price,
+
+        stock:stock,
+
+        image:imageUrl,
+
+        description:description,
+
+        active:active
+
+      };
 
 
       console.log(
-        "Image URL:",
-        imageUrl
+        "بيانات المنتج:",
+        data
       );
 
+
+      /* =====================
+         DATABASE
+      ===================== */
+
+      btn.textContent =
+        "💾 حفظ المنتج...";
+
+
+      let result;
+
+
+      if(productId){
+
+        result =
+          await db
+            .from("products")
+            .update(data)
+            .eq(
+              "id",
+              productId
+            );
+
+      }else{
+
+        result =
+          await db
+            .from("products")
+            .insert([
+              data
+            ]);
+
+      }
+
+
+      if(result.error){
+
+        console.error(
+          "DATABASE ERROR:",
+          result.error
+        );
+
+
+        alert(
+          "❌ مشكلة قاعدة البيانات:\n\n" +
+          result.error.message
+        );
+
+        return;
+      }
+
+
+      /* =====================
+         SUCCESS
+      ===================== */
+
+      alert(
+        productId
+          ? "✅ تم تعديل المنتج"
+          : "✅ تمت إضافة المنتج"
+      );
+
+
+      closeModal();
+
+
+      fileInput.value = "";
+
+
+      await loadProducts();
+
+
+    }catch(error){
+
+      console.error(
+        "SAVE ERROR:",
+        error
+      );
+
+
+      alert(
+        "❌ حدث خطأ:\n\n" +
+        (
+          error.message ||
+          String(error)
+        )
+      );
+
+
+    }finally{
+
+      btn.disabled = false;
+
+      btn.textContent =
+        "💾 حفظ";
+
+    }
+
+  }
+
+
+  /* =========================
+     DELETE PRODUCT
+  ========================= */
+
+  async function deleteProduct(id){
+
+    if(
+      !confirm(
+        "هل تريد حذف المنتج؟"
+      )
+    ){
+
+      return;
+
     }
 
 
-    /* =====================
-       PRODUCT DATA
-    ===================== */
+    const r =
+      await db
+        .from("products")
+        .delete()
+        .eq(
+          "id",
+          id
+        );
 
-    const data = {
-
-      name: name,
-
-      price: price,
-
-      old_price: old_price,
-
-      stock: stock,
-
-      image: imageUrl,
-
-      description: description,
-
-      active: active
-
-    };
-
-
-    console.log(
-      "Product data:",
-      data
-    );
-
-
-    /* =====================
-       DATABASE
-    ===================== */
-
-    saveProductBtn.textContent =
-      "💾 جاري حفظ المنتج...";
-
-
-    let r;
-
-
-    if(productId){
-
-      r =
-        await db
-          .from("products")
-          .update(data)
-          .eq(
-            "id",
-            productId
-          );
-
-    }else{
-
-      r =
-        await db
-          .from("products")
-          .insert([
-            data
-          ]);
-
-    }
-
-
-    /* =====================
-       DATABASE ERROR
-    ===================== */
 
     if(r.error){
 
       console.error(
-        "DATABASE ERROR:",
         r.error
       );
 
 
-      throw new Error(
+      alert(
+        "❌ خطأ:\n\n" +
         r.error.message
       );
 
+      return;
     }
 
-
-    /* =====================
-       SUCCESS
-    ===================== */
-
-    pfile.value = "";
-
-    closeModal();
 
     await loadProducts();
 
 
     alert(
-      productId
-        ? "✅ تم تعديل المنتج بنجاح"
-        : "✅ تمت إضافة المنتج بنجاح"
+      "✅ تم حذف المنتج"
     );
-
-
-  }catch(error){
-
-    console.error(
-      "SAVE PRODUCT ERROR:",
-      error
-    );
-
-
-    alert(
-      "❌ لم يتم حفظ المنتج:\n\n" +
-      (
-        error.message ||
-        error
-      )
-    );
-
-
-  }finally{
-
-    saveProductBtn.disabled =
-      false;
-
-    saveProductBtn.textContent =
-      "💾 حفظ";
-
-  }
-
-}
-
-
-/* =========================
-   DELETE PRODUCT
-========================= */
-
-async function deleteProduct(id){
-
-  if(
-    !confirm(
-      "هل تريد حذف المنتج؟"
-    )
-  ){
-
-    return;
 
   }
 
 
-  const r =
-    await db
-      .from("products")
-      .delete()
-      .eq(
-        "id",
-        id
-      );
+  /* =========================
+     TABS
+  ========================= */
+
+  function tab(id,button){
+
+    document
+      .querySelectorAll(".section")
+      .forEach(function(x){
+
+        x.classList.remove(
+          "show"
+        );
+
+      });
 
 
-  if(r.error){
+    document
+      .querySelectorAll(".tab")
+      .forEach(function(x){
 
-    console.error(
-      r.error
-    );
+        x.classList.remove(
+          "active"
+        );
 
-
-    alert(
-      "❌ خطأ:\n\n" +
-      r.error.message
-    );
-
-    return;
-  }
+      });
 
 
-  await loadProducts();
-
-  alert(
-    "✅ تم حذف المنتج"
-  );
-
-}
-
-
-/* =========================
-   TABS
-========================= */
-
-function tab(id,button){
-
-  document
-    .querySelectorAll(".section")
-    .forEach(function(x){
-
-      x.classList.remove(
+    document
+      .getElementById(id)
+      .classList.add(
         "show"
       );
 
-    });
 
-
-  document
-    .querySelectorAll(".tab")
-    .forEach(function(x){
-
-      x.classList.remove(
-        "active"
-      );
-
-    });
-
-
-  document
-    .getElementById(id)
-    .classList.add(
-      "show"
+    button.classList.add(
+      "active"
     );
 
+  }
 
-  button.classList.add(
-    "active"
+
+  /* =========================
+     MODAL OUTSIDE CLICK
+  ========================= */
+
+  modal.addEventListener(
+    "click",
+    function(e){
+
+      if(e.target === modal){
+
+        closeModal();
+
+      }
+
+    }
   );
 
-}
 
+  /* =========================
+     ESC TO CLOSE MODAL
+  ========================= */
 
-/* =========================
-   MODAL OUTSIDE CLICK
-========================= */
+  document.addEventListener(
+    "keydown",
+    function(e){
 
-modal.addEventListener(
-  "click",
-  function(e){
+      if(
+        e.key === "Escape" &&
+        modal.style.display === "block"
+      ){
 
-    if(e.target === modal){
+        closeModal();
 
-      closeModal();
-
-    }
-
-  }
-);
-
-
-/* =========================
-   ESC TO CLOSE MODAL
-========================= */
-
-document.addEventListener(
-  "keydown",
-  function(e){
-
-    if(
-      e.key === "Escape" &&
-      modal.style.display === "block"
-    ){
-
-      closeModal();
+      }
 
     }
-
-  }
-);
+  );
 
 
-/* =========================
-   ENTER TO LOGIN
-========================= */
+  /* =========================
+     ENTER TO LOGIN
+  ========================= */
 
-passwordInput.addEventListener(
-  "keydown",
-  function(e){
+  passwordInput.addEventListener(
+    "keydown",
+    function(e){
 
-    if(e.key === "Enter"){
+      if(e.key === "Enter"){
 
-      login();
+        login();
+
+      }
 
     }
-
-  }
-);
+  );
 
 
-/* =========================
-   START APP
-========================= */
+  /* =========================
+     START APP
+  ========================= */
 
-checkSession();
+  checkSession();
 
 
 </script>
 
 </body>
+
 </html>
