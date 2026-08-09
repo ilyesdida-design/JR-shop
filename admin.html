@@ -992,96 +992,78 @@ function status(x){
 /* =========================
    LOGIN
 ========================= */
-
 async function login(){
 
   errBox.textContent = "";
 
-  const e =
-    emailInput.value.trim();
-
-  const p =
-    passwordInput.value;
-
+  const e = emailInput.value.trim();
+  const p = passwordInput.value;
 
   if(!e || !p){
-
-    errBox.textContent =
-      "أدخل البريد وكلمة المرور";
-
+    errBox.textContent = "❌ أدخل البريد وكلمة المرور";
     return;
   }
 
-
   loginBtn.disabled = true;
-
-  loginBtn.textContent =
-    "جاري الدخول...";
-
+  loginBtn.textContent = "⏳ جاري الدخول...";
 
   try{
 
-    const r =
+    console.log("LOGIN START");
+    console.log("EMAIL:", e);
+
+    const { data, error } =
       await db.auth.signInWithPassword({
-
-        email:e,
-        password:p
-
+        email: e,
+        password: p
       });
 
+    console.log("LOGIN RESULT:", data);
+    console.log("LOGIN ERROR:", error);
 
-    if(r.error){
-
-      loginBtn.disabled = false;
-
-      loginBtn.textContent =
-        "🔐 تسجيل الدخول";
+    if(error){
 
       errBox.textContent =
-        "❌ " +
-        r.error.message;
+        "❌ فشل تسجيل الدخول:\n" +
+        error.message;
+
+      loginBtn.disabled = false;
+      loginBtn.textContent = "🔐 تسجيل الدخول";
 
       return;
     }
 
+    if(!data || !data.session){
 
-    loginBtn.textContent =
-      "تم الدخول ✅";
+      errBox.textContent =
+        "❌ لم يتم إنشاء جلسة الدخول";
 
+      loginBtn.disabled = false;
+      loginBtn.textContent = "🔐 تسجيل الدخول";
 
-    loginBox.style.display =
-      "none";
+      return;
+    }
 
-    adminBox.style.display =
-      "block";
+    loginBtn.textContent = "✅ تم الدخول";
 
+    loginBox.style.display = "none";
+    adminBox.style.display = "block";
 
     await loadOrders();
-
     await loadProducts();
-
 
   }catch(error){
 
-    console.error(error);
-
-    loginBtn.disabled = false;
-
-    loginBtn.textContent =
-      "🔐 تسجيل الدخول";
+    console.error("LOGIN EXCEPTION:", error);
 
     errBox.textContent =
-      "❌ " +
-      (
-        error.message ||
-        error
-      );
+      "❌ خطأ:\n" +
+      (error.message || String(error));
 
+    loginBtn.disabled = false;
+    loginBtn.textContent = "🔐 تسجيل الدخول";
   }
-
-}
-
-
+  }
 /* =========================
    SESSION
 ========================= */
