@@ -2,18 +2,12 @@
 <html lang="ar" dir="rtl">
 
 <head>
-
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>JR Shop - Admin</title>
 
   <style>
-
     * {
       box-sizing: border-box;
       margin: 0;
@@ -36,10 +30,6 @@
     button {
       cursor: pointer;
     }
-
-    /* =========================
-       LOGIN
-    ========================= */
 
     #loginPage {
       min-height: 100vh;
@@ -95,7 +85,6 @@
       border: 0;
       border-radius: 10px;
       padding: 12px 16px;
-      cursor: pointer;
       font-weight: bold;
     }
 
@@ -130,11 +119,6 @@
       display: none;
       line-height: 1.6;
     }
-
-
-    /* =========================
-       ADMIN PAGE
-    ========================= */
 
     #adminPage {
       display: none;
@@ -174,7 +158,6 @@
       border: 0;
       padding: 10px 14px;
       border-radius: 10px;
-      cursor: pointer;
       font-weight: bold;
     }
 
@@ -183,11 +166,6 @@
       margin: auto;
       padding: 20px 15px 50px;
     }
-
-
-    /* =========================
-       WELCOME
-    ========================= */
 
     .welcome {
       margin-bottom: 20px;
@@ -201,11 +179,6 @@
     .welcome p {
       color: #666;
     }
-
-
-    /* =========================
-       STATS
-    ========================= */
 
     .stats {
       display: grid;
@@ -232,11 +205,6 @@
       font-weight: 900;
     }
 
-
-    /* =========================
-       TABS
-    ========================= */
-
     .tabs {
       display: flex;
       gap: 8px;
@@ -250,7 +218,6 @@
       padding: 11px 16px;
       border-radius: 10px;
       background: #e5e7eb;
-      cursor: pointer;
       font-weight: bold;
     }
 
@@ -266,11 +233,6 @@
     .section.active {
       display: block;
     }
-
-
-    /* =========================
-       SECTION HEADER
-    ========================= */
 
     .section-head {
       display: flex;
@@ -294,11 +256,6 @@
       outline: none;
       background: white;
     }
-
-
-    /* =========================
-       ORDERS
-    ========================= */
 
     .orders {
       display: grid;
@@ -338,11 +295,6 @@
       margin-top: 5px;
     }
 
-
-    /* =========================
-       STATUS
-    ========================= */
-
     .status {
       padding: 7px 10px;
       border-radius: 8px;
@@ -376,11 +328,6 @@
       color: #991b1b;
     }
 
-
-    /* =========================
-       CUSTOMER INFO
-    ========================= */
-
     .customer-info {
       background: #f8f9fa;
       border-radius: 12px;
@@ -397,11 +344,6 @@
     .customer-info div:last-child {
       border-bottom: 0;
     }
-
-
-    /* =========================
-       ORDER ITEMS
-    ========================= */
 
     .items-box {
       border-top: 1px solid #eee;
@@ -441,22 +383,12 @@
       white-space: nowrap;
     }
 
-
-    /* =========================
-       ORDER TOTAL
-    ========================= */
-
     .order-total {
       margin-top: 12px;
       font-size: 20px;
       font-weight: 900;
       color: #16a34a;
     }
-
-
-    /* =========================
-       ORDER ACTIONS
-    ========================= */
 
     .order-actions {
       display: flex;
@@ -473,11 +405,6 @@
       border-radius: 10px;
       background: white;
     }
-
-
-    /* =========================
-       PRODUCTS
-    ========================= */
 
     .products {
       display: grid;
@@ -571,11 +498,6 @@
       flex: 1;
     }
 
-
-    /* =========================
-       MODAL
-    ========================= */
-
     .modal {
       display: none;
       position: fixed;
@@ -609,11 +531,6 @@
       flex: 1;
     }
 
-
-    /* =========================
-       EMPTY / LOADING
-    ========================= */
-
     .empty {
       background: white;
       padding: 30px;
@@ -628,13 +545,7 @@
       padding: 30px;
     }
 
-
-    /* =========================
-       DESKTOP
-    ========================= */
-
     @media (min-width: 700px) {
-
       .stats {
         grid-template-columns: repeat(4, 1fr);
       }
@@ -646,12 +557,9 @@
       .product-image {
         height: 210px;
       }
-
     }
 
-
     @media (max-width: 500px) {
-
       .order-top {
         flex-direction: column;
       }
@@ -667,20 +575,17 @@
       .product-actions {
         flex-direction: column;
       }
-
     }
-
   </style>
 
 </head>
 
-
 <body>
 
 
-<!-- =====================================================
-     LOGIN PAGE
-===================================================== -->
+<!-- =========================
+     LOGIN
+========================= -->
 
 <div id="loginPage">
 
@@ -725,10 +630,9 @@
 </div>
 
 
-
-<!-- =====================================================
-     ADMIN PAGE
-===================================================== -->
+<!-- =========================
+     ADMIN
+========================= -->
 
 <div id="adminPage">
 
@@ -754,9 +658,6 @@
 
   <main class="container">
 
-
-    <!-- WELCOME -->
-
     <div class="welcome">
 
       <h1>
@@ -770,10 +671,7 @@
     </div>
 
 
-
-    <!-- =================================================
-         STATS
-    ================================================= -->
+    <!-- STATS -->
 
     <div class="stats">
 
@@ -843,10 +741,7 @@
     </div>
 
 
-
-    <!-- =================================================
-         TABS
-    ================================================= -->
+    <!-- TABS -->
 
     <div class="tabs">
 
@@ -856,7 +751,6 @@
       >
         📦 الطلبات
       </button>
-
 
       <button
         class="tab"
@@ -868,10 +762,7 @@
     </div>
 
 
-
-    <!-- =================================================
-         ORDERS SECTION
-    ================================================= -->
+    <!-- ORDERS -->
 
     <section
       id="ordersSection"
@@ -884,7 +775,6 @@
           📦 الطلبات
         </h2>
 
-
         <input
           id="orderSearch"
           class="search"
@@ -892,7 +782,6 @@
           placeholder="🔎 ابحث بالاسم أو الهاتف أو الولاية..."
           oninput="renderOrders()"
         >
-
 
         <button
           class="btn btn-black"
@@ -918,10 +807,7 @@
     </section>
 
 
-
-    <!-- =================================================
-         PRODUCTS SECTION
-    ================================================= -->
+    <!-- PRODUCTS -->
 
     <section
       id="productsSection"
@@ -933,7 +819,6 @@
         <h2>
           🛍️ المنتجات
         </h2>
-
 
         <button
           class="btn btn-green"
@@ -963,10 +848,9 @@
 </div>
 
 
-
-<!-- =====================================================
+<!-- =========================
      PRODUCT MODAL
-===================================================== -->
+========================= -->
 
 <div
   id="productModal"
@@ -979,19 +863,16 @@
       ➕ إضافة منتج
     </h2>
 
-
     <input
       id="productId"
       type="hidden"
     >
-
 
     <input
       id="productName"
       class="input"
       placeholder="اسم المنتج"
     >
-
 
     <input
       id="productPrice"
@@ -1001,7 +882,6 @@
       placeholder="السعر بالدج"
     >
 
-
     <input
       id="productOldPrice"
       class="input"
@@ -1009,7 +889,6 @@
       min="0"
       placeholder="السعر القديم - اختياري"
     >
-
 
     <input
       id="productStock"
@@ -1019,7 +898,6 @@
       placeholder="المخزون"
     >
 
-
     <input
       id="productImage"
       class="input"
@@ -1027,14 +905,12 @@
       placeholder="رابط صورة المنتج - اختياري"
     >
 
-
     <textarea
       id="productDescription"
       class="input"
       rows="4"
       placeholder="وصف المنتج"
     ></textarea>
-
 
     <div class="modal-actions">
 
@@ -1045,7 +921,6 @@
       >
         💾 حفظ
       </button>
-
 
       <button
         class="btn btn-gray"
@@ -1061,16 +936,13 @@
 </div>
 
 
-
-<!-- =====================================================
+<!-- =========================
      SUPABASE
-===================================================== -->
+========================= -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-
 <script>
-
 
 /* =====================================================
    SUPABASE CONFIG
@@ -1079,10 +951,8 @@
 const SUPABASE_URL =
   "https://cstjgsuehmqcolajspqh.supabase.co";
 
-
 const SUPABASE_KEY =
   "sb_publishable_e_wQxqCrx21Qq1kRYKjFMg_yR6TQfKX";
-
 
 const supabaseClient =
   window.supabase.createClient(
@@ -1091,19 +961,16 @@ const supabaseClient =
   );
 
 
-
 /* =====================================================
    GLOBAL DATA
 ===================================================== */
 
 let orders = [];
-
 let products = [];
 
 
-
 /* =====================================================
-   ESCAPE HTML
+   HELPERS
 ===================================================== */
 
 function escapeHtml(value) {
@@ -1121,22 +988,12 @@ function escapeHtml(value) {
 }
 
 
-
-/* =====================================================
-   FORMAT NUMBER
-===================================================== */
-
 function formatNumber(number) {
 
   return Number(number || 0).toLocaleString("fr-FR");
 
 }
 
-
-
-/* =====================================================
-   FORMAT DATE
-===================================================== */
 
 function formatDate(date) {
 
@@ -1156,30 +1013,21 @@ function formatDate(date) {
 
   } catch (error) {
 
-    return date;
+    return String(date);
 
   }
 
 }
 
 
-
-/* =====================================================
-   STATUS TEXT
-===================================================== */
-
 function getStatusText(status) {
 
   const statuses = {
 
     pending: "معلق",
-
     confirmed: "مؤكد",
-
     shipped: "تم الشحن",
-
     delivered: "تم التسليم",
-
     cancelled: "ملغى"
 
   };
@@ -1189,23 +1037,14 @@ function getStatusText(status) {
 }
 
 
-
-/* =====================================================
-   STATUS CLASS
-===================================================== */
-
 function getStatusClass(status) {
 
   const classes = {
 
     pending: "status-pending",
-
     confirmed: "status-confirmed",
-
     shipped: "status-shipped",
-
     delivered: "status-delivered",
-
     cancelled: "status-cancelled"
 
   };
@@ -1213,7 +1052,6 @@ function getStatusClass(status) {
   return classes[status] || "status-pending";
 
 }
-
 
 
 /* =====================================================
@@ -1228,21 +1066,193 @@ async function loginAdmin() {
       .value
       .trim();
 
-
   const password =
     document
       .getElementById("loginPassword")
       .value;
 
-
   const errorBox =
     document.getElementById("loginError");
 
-
   errorBox.style.display = "none";
-
 
   if (!email || !password) {
 
     errorBox.textContent =
-      "من ف
+      "من فضلك أدخل البريد الإلكتروني وكلمة المرور.";
+
+    errorBox.style.display = "block";
+
+    return;
+  }
+
+  const button =
+    document.getElementById("loginButton");
+
+  button.disabled = true;
+
+  button.textContent =
+    "جاري تسجيل الدخول...";
+
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient.auth.signInWithPassword({
+
+      email: email,
+
+      password: password
+
+    });
+
+
+  button.disabled = false;
+
+  button.textContent =
+    "🔐 تسجيل الدخول";
+
+
+  if (error) {
+
+    console.error(error);
+
+    errorBox.textContent =
+      "فشل تسجيل الدخول: " + error.message;
+
+    errorBox.style.display = "block";
+
+    return;
+  }
+
+
+  if (!data || !data.session) {
+
+    errorBox.textContent =
+      "لم يتم إنشاء جلسة تسجيل الدخول.";
+
+    errorBox.style.display = "block";
+
+    return;
+  }
+
+
+  showAdminPage();
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+async function logoutAdmin() {
+
+  await supabaseClient.auth.signOut();
+
+  orders = [];
+  products = [];
+
+  document
+    .getElementById("adminPage")
+    .style.display = "none";
+
+  document
+    .getElementById("loginPage")
+    .style.display = "flex";
+
+}
+
+
+/* =====================================================
+   CHECK SESSION
+===================================================== */
+
+async function checkSession() {
+
+  const {
+    data: {
+      session
+    }
+  } =
+    await supabaseClient.auth.getSession();
+
+
+  if (session) {
+
+    showAdminPage();
+
+  } else {
+
+    document
+      .getElementById("loginPage")
+      .style.display = "flex";
+
+    document
+      .getElementById("adminPage")
+      .style.display = "none";
+
+  }
+
+}
+
+
+/* =====================================================
+   SHOW ADMIN
+===================================================== */
+
+async function showAdminPage() {
+
+  document
+    .getElementById("loginPage")
+    .style.display = "none";
+
+  document
+    .getElementById("adminPage")
+    .style.display = "block";
+
+
+  await loadOrders();
+
+  await loadProducts();
+
+}
+
+
+/* =====================================================
+   AUTH STATE
+===================================================== */
+
+supabaseClient.auth.onAuthStateChange(
+  function(event, session) {
+
+    if (session) {
+
+      document
+        .getElementById("loginPage")
+        .style.display = "none";
+
+      document
+        .getElementById("adminPage")
+        .style.display = "block";
+
+    } else {
+
+      document
+        .getElementById("loginPage")
+        .style.display = "flex";
+
+      document
+        .getElementById("adminPage")
+        .style.display = "none";
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   TABS
+==============================
