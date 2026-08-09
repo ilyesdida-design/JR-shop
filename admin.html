@@ -1131,6 +1131,70 @@ function editProduct(p){
 
 async function saveProduct(){
 
+  const name = pname.value.trim();
+  const price = Number(pprice.value || 0);
+  const old_price = Number(pold.value || 0);
+  const stock = Number(pstock.value || 0);
+  const image = pimage.value.trim();
+  const description = pdesc.value.trim();
+  const active = pactive.value === "true";
+
+  if(!name){
+    alert("اكتب اسم المنتج");
+    return;
+  }
+
+  if(price <= 0){
+    alert("اكتب سعر صحيح");
+    return;
+  }
+
+  const data = {
+    name,
+    price,
+    old_price,
+    stock,
+    image,
+    description,
+    active
+  };
+
+  let result;
+
+  if(pid.value){
+
+    result = await db
+      .from("products")
+      .update(data)
+      .eq("id", pid.value);
+
+  }else{
+
+    result = await db
+      .from("products")
+      .insert([data]);
+
+  }
+
+  if(result.error){
+
+    alert("❌ خطأ:\n" + result.error.message);
+    console.error(result.error);
+    return;
+
+  }
+
+  alert(
+    pid.value
+      ? "✅ تم تعديل المنتج"
+      : "✅ تمت إضافة المنتج"
+  );
+
+  closeModal();
+
+  await loadProducts();
+  }
+
   const data={
 
     name:pname.value.trim(),
