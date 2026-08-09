@@ -1147,88 +1147,17 @@ function editProduct(p){
 
 
 /* SAVE PRODUCT */
-
 async function saveProduct(){
-
-  let imageUrl = pimage.value.trim();
-
-  const file = pfile.files[0];
-
-  if(file){
-
-    const ext = file.name.split(".").pop().toLowerCase();
-    const fileName = crypto.randomUUID() + "." + ext;
-
-    const upload = await db.storage
-      .from("product-images")
-      .upload(fileName, file, {
-        cacheControl: "3600",
-        upsert: false
-      });
-
-    if(upload.error){
-      alert("❌ خطأ في رفع الصورة:\n" + upload.error.message);
-      return;
-    }
-
-    const publicUrl = db.storage
-      .from("product-images")
-      .getPublicUrl(fileName);
-
-    imageUrl = publicUrl.data.publicUrl;
-  }
-
-  const data = {
-    name: pname.value.trim(),
-    price: Number(pprice.value || 0),
-    old_price: Number(pold.value || 0),
-    stock: Number(pstock.value || 0),
-    image: imageUrl,
-    description: pdesc.value.trim(),
-    active: pactive.value === "true"
-  };
-
-  let r;
-
-  if(pid.value){
-
-    r = await db
-      .from("products")
-      .update(data)
-      .eq("id", pid.value);
-
-  }else{
-
-    r = await db
-      .from("products")
-      .insert(data);
-
-  }
-
-  if(r.error){
-
-    alert("❌ خطأ:\n" + r.error.message);
-    return;
-
-  }
-
-  closeModal();
-
-  pfile.value = "";
-
-  await loadProducts();
-
-  alert("✅ تم حفظ المنتج بنجاح");
-  }
 
   const name = pname.value.trim();
   const price = Number(pprice.value || 0);
   const old_price = Number(pold.value || 0);
   const stock = Number(pstock.value || 0);
-  const image = pimage.value.trim();
+  let imageUrl = pimage.value.trim();
   const description = pdesc.value.trim();
   const active = pactive.value === "true";
 
+  /* التحقق */
   if(!name){
     alert("اكتب اسم المنتج");
     return;
@@ -1239,121 +1168,119 @@ async function saveProduct(){
     return;
   }
 
+  /* رفع الصورة من الهاتف */
+  const file = pfile.files[0];
+
+  if(file){
+
+    const ext =
+      file.name
+        .split(".")
+        .pop()
+        .toLowerCase();
+
+    const fileName =
+      crypto.randomUUID() + "." + ext;
+
+    const upload =
+      await db.storage
+        .from("product-images")
+        .upload(
+          fileName,
+          file,
+          {
+            cacheControl: "3600",
+            upsert: false
+          }
+        );
+
+    if(upload.error){
+
+      alert(
+        "❌ خطأ في رفع الصورة:\n" +
+        upload.error.message
+      );
+
+      return;
+    }
+
+    const publicUrl =
+      db.storage
+        .from("product-images")
+        .getPublicUrl(fileName);
+
+    imageUrl =
+      publicUrl.data.publicUrl;
+  }
+
+  /* بيانات المنتج */
   const data = {
-    name,
-    price,
-    old_price,
-    stock,
-    image,
-    description,
-    active
-  };
 
-  let result;
+    name: name,
 
-  if(pid.value){
+    price: price,
 
-    result = await db
-      .from("products")
-      .update(data)
-      .eq("id", pid.value);
+    old_price: old_price,
 
-  }else{
+    stock: stock,
 
-    result = await db
-      .from("products")
-      .insert([data]);
+    image: imageUrl,
 
-  }
+    description: description,
 
-  if(result.error){
-
-    alert("❌ خطأ:\n" + result.error.message);
-    console.error(result.error);
-    return;
-
-  }
-
-  alert(
-    pid.value
-      ? "✅ تم تعديل المنتج"
-      : "✅ تمت إضافة المنتج"
-  );
-
-  closeModal();
-
-  await loadProducts();
-  }
-
-  const data={
-
-    name:pname.value.trim(),
-
-    price:Number(
-      pprice.value || 0
-    ),
-
-    old_price:Number(
-      pold.value || 0
-    ),
-
-    stock:Number(
-      pstock.value || 0
-    ),
-
-    image:pimage.value.trim(),
-
-    description:
-      pdesc.value.trim(),
-
-    active:
-      pactive.value==="true"
+    active: active
 
   };
-
-  if(!data.name){
-
-    alert(
-      "أدخل اسم المنتج"
-    );
-
-    return;
-  }
 
   let r;
 
+  /* تعديل */
   if(pid.value){
 
     r =
       await db
         .from("products")
         .update(data)
-        .eq("id",pid.value);
+        .eq("id", pid.value);
 
-  }else{
+  }
+
+  /* إضافة */
+  else{
 
     r =
       await db
         .from("products")
-        .insert(data);
+        .insert([data]);
 
   }
 
+  /* خطأ Supabase */
   if(r.error){
 
     alert(
-      "خطأ: " +
+      "❌ خطأ:\n" +
       r.error.message
     );
+
+    console.error(r.error);
 
     return;
   }
 
+  /* نجاح */
   closeModal();
 
-  await loadProducts();
-}
+  pfile.value = "";
 
+  await loadProducts();
+
+  alert(
+    pid.value
+      ? "✅ تم تعديل المنتج"
+      : "✅ تمت إضافة المنتج"
+  );
+  }
 
 /* DELETE PRODUCT */
 
