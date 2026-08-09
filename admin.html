@@ -822,6 +822,8 @@ supabase.createClient(
 
 let orders = [];
 let products = [];
+let customers = [];
+let customerMap = {};
 
 
 /* =========================
@@ -1100,7 +1102,7 @@ async function loadOrders(){
   orderList.innerHTML =
     '<div class="empty">جاري تحميل الطلبات...</div>';
 
-
+  /* تحميل الطلبات */
   const r =
     await db
       .from("orders")
@@ -1112,9 +1114,7 @@ async function loadOrders(){
         }
       );
 
-
   if(r.error){
-
     console.error(r.error);
 
     orderList.innerHTML =
@@ -1125,13 +1125,39 @@ async function loadOrders(){
     return;
   }
 
+  /* تحميل الزبائن حتى تظهر المعلومات حتى لو orders فيها customer_id فقط */
+  const c =
+    await db
+      .from("customers")
+      .select("*");
 
-  orders =
-    r.data || [];
+  if(c.error){
+    console.warn("CUSTOMERS LOAD ERROR:", c.error.message);
+    customers = [];
+  }else{
+    customers = c.data || [];
+  }
 
+  customerMap = {};
+
+  customers.forEach(function(customer){
+    if(customer && customer.id){
+      customerMap[String(customer.id)] = customer;
+    }
+  });
+
+  /* ربط كل طلب بالزبون */
+  orders = (r.data || []).map(function(order){
+    const customer =
+      customerMap[String(order.customer_id || "")] || {};
+
+    return {
+      ...order,
+      customer: customer
+    };
+  });
 
   updateStats();
-
   drawOrders();
 
 }
@@ -1281,6 +1307,41 @@ function drawOrders(){
       }
 
 
+      const customer = o.customer || {};
+
+      const customerName =
+        o.name ||
+        o.full_name ||
+        o.customer_name ||
+        customer.full_name ||
+        "زبون";
+
+      const customerPhone =
+        o.phone ||
+        o.telephone ||
+        customer.phone ||
+        "";
+
+      const customerWilaya =
+        o.wilaya ||
+        o.state ||
+        customer.wilaya ||
+        "";
+
+      const customerCommune =
+        o.commune ||
+        o.baladiya ||
+        o.municipality ||
+        customer.commune ||
+        customer.baladiya ||
+        customer.municipality ||
+        "";
+
+      const customerAddress =
+        o.address ||
+        o.notes ||
+        "";
+
       return `
 
         <div class="card order">
@@ -1291,10 +1352,7 @@ function drawOrders(){
 
               <h3>
                 📦 ${esc(
-                  o.name ||
-                  o.full_name ||
-                  o.customer_name ||
-                  "زبون"
+                  customerName
                 )}
               </h3>
 
@@ -1325,21 +1383,21 @@ function drawOrders(){
           <div class="info">
 
             📞 ${esc(
-              o.phone ||
-              o.telephone ||
-              ""
+              customerPhone
             )}
 
             <br>
 
-            📍 ${esc(
-              o.wilaya ||
-              o.state ||
-              ""
+            📍 الولاية: ${esc(
+              customerWilaya || "غير محددة"
             )}
 
-            ${esc(
-              o.address || ""
+            🏘️ البلدية: ${esc(
+              customerCommune || "غير محددة"
+            )}
+
+            🏠 العنوان: ${esc(
+              customerAddress || "غير محدد"
             )}
 
             <br><br>
