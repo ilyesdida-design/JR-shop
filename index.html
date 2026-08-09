@@ -978,27 +978,14 @@ async function submitOrder() {
   }));
 
 
-  const { data, error } = await supabaseClient
-    .from("orders")
-    .insert([{
-
-      customer_name: name,
-
-      phone: phone,
-
-      wilaya: wilaya,
-
-      address: address,
-
-      items: orderItems,
-
-      total: total,
-
-      status: "new"
-
-    }])
-    .select();
-
+  const { data, error } = await supabaseClient.rpc("create_order", {
+  p_customer_name: name,
+  p_phone: phone,
+  p_wilaya: wilaya,
+  p_address: address,
+  p_items: orderItems,
+  p_total: total
+});
 
   if (error) {
 
