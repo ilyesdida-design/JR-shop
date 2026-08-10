@@ -1102,6 +1102,102 @@ footer{
   font-size:11px;
 }
 
+
+/* =====================================================
+   JR SHOP — PRODUCT DETAILS PRO TOUCHES
+===================================================== */
+.detail-pro-tools{
+  display:flex;
+  gap:8px;
+  margin-bottom:16px;
+}
+.detail-tool{
+  width:42px;height:42px;
+  border:1px solid #e5e7eb;
+  background:#fff;
+  border-radius:50%;
+  cursor:pointer;
+  font-size:18px;
+  transition:.2s;
+}
+.detail-tool:hover{
+  border-color:var(--jr-green);
+  color:var(--jr-green);
+  transform:translateY(-2px);
+}
+.detail-tool.active{
+  background:#fff1f2;
+  border-color:#fecdd3;
+  color:#e11d48;
+}
+.detail-trust{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-top:14px;
+}
+.detail-trust-card{
+  border:1px solid #eee;
+  background:#fafafa;
+  padding:11px 8px;
+  text-align:center;
+  border-radius:10px;
+  font-size:10px;
+  color:#666;
+  font-weight:700;
+}
+.detail-trust-card strong{
+  display:block;
+  color:#111;
+  font-size:16px;
+  margin-bottom:4px;
+}
+.detail-share-row{
+  display:flex;
+  gap:8px;
+  margin-top:12px;
+}
+.detail-share{
+  flex:1;
+  border:1px solid #ddd;
+  background:#fff;
+  padding:10px;
+  font-weight:800;
+  cursor:pointer;
+  border-radius:8px;
+  font-size:12px;
+}
+.detail-share:hover{border-color:#111;background:#f8f8f8}
+.detail-image-wrap{position:relative;height:100%}
+.detail-zoom-hint{
+  position:absolute;
+  left:16px;
+  bottom:16px;
+  background:rgba(0,0,0,.72);
+  color:#fff;
+  padding:7px 10px;
+  font-size:10px;
+  border-radius:6px;
+  z-index:4;
+  pointer-events:none;
+}
+.detail-image.zoomed img{
+  transform:scale(1.65);
+  cursor:zoom-out;
+}
+.detail-image img{cursor:zoom-in}
+.detail-mini-note{
+  color:#888;
+  font-size:11px;
+  margin-top:8px;
+}
+@media(max-width:699px){
+  .detail-trust{grid-template-columns:1fr 1fr 1fr}
+  .detail-trust-card{padding:9px 5px;font-size:9px}
+  .detail-pro-tools{margin-bottom:12px}
+  .detail-tool{width:38px;height:38px}
+}
+
 /* =========================
    RESPONSIVE
 ========================= */
@@ -1280,6 +1376,8 @@ footer{
     min-height:330px;
     height:330px;
   }
+  .detail-image.zoomed img{transform:scale(1.35)}
+  .detail-zoom-hint{font-size:9px;left:10px;bottom:10px}
   .detail-image img{
     min-height:330px;
     height:330px;
@@ -1828,7 +1926,7 @@ footer{
 
     <div class="detail-layout">
 
-      <div class="detail-image">
+      <div class="detail-image" id="detailImageBox">
 
         <span
           id="detailSale"
@@ -1838,15 +1936,23 @@ footer{
           SALE
         </span>
 
-        <img
-          id="detailImage"
-          src="https://placehold.co/700x800?text=JR+Shop"
-          alt="JR Shop"
-        >
+        <div class="detail-image-wrap">
+          <img
+            id="detailImage"
+            src="https://placehold.co/700x800?text=JR+Shop"
+            alt="JR Shop"
+          >
+          <span class="detail-zoom-hint">🔍 اضغط على الصورة للتكبير</span>
+        </div>
 
       </div>
 
       <div class="detail-content">
+
+        <div class="detail-pro-tools">
+          <button type="button" class="detail-tool" id="detailFavBtn" title="المفضلة" aria-label="إضافة للمفضلة">♡</button>
+          <button type="button" class="detail-tool" id="detailShareBtn" title="مشاركة المنتج" aria-label="مشاركة المنتج">↗</button>
+        </div>
 
         <div
           id="detailCategory"
@@ -1929,6 +2035,20 @@ footer{
             اطلب الآن
           </button>
 
+        </div>
+
+        <div class="detail-trust">
+          <div class="detail-trust-card"><strong>✓</strong>منتج موثوق</div>
+          <div class="detail-trust-card"><strong>📦</strong>توصيل للجزائر</div>
+          <div class="detail-trust-card"><strong>💬</strong>طلب سريع</div>
+        </div>
+
+        <div class="detail-share-row">
+          <button type="button" class="detail-share" id="detailCopyBtn">🔗 نسخ رابط المنتج</button>
+        </div>
+
+        <div class="detail-mini-note">
+          الكمية والسعر الإجمالي يتحدثان تلقائيًا حسب اختيارك.
         </div>
 
         <div class="detail-info-strip">
@@ -3004,6 +3124,9 @@ function openProductDetails(id){
 
   currentDetailQuantity = 1;
 
+  document.getElementById("detailImageBox")?.classList.remove("zoomed");
+  updateFavoriteButton();
+
   const category =
     categories.find(
       c =>
@@ -3133,6 +3256,93 @@ function closeProductDetails(){
 
   currentDetailQuantity = 1;
 }
+
+
+/* =====================================================
+   PRODUCT DETAILS — FAVORITE / SHARE / ZOOM
+===================================================== */
+function getFavoriteProducts(){
+  try{
+    return JSON.parse(localStorage.getItem("jr_favorites") || "[]");
+  }catch(e){
+    return [];
+  }
+}
+
+function isFavorite(id){
+  return getFavoriteProducts().some(x => String(x) === String(id));
+}
+
+function toggleFavorite(){
+  if(!currentDetailProduct) return;
+
+  let favorites = getFavoriteProducts();
+  const id = String(currentDetailProduct.id);
+
+  if(favorites.some(x => String(x) === id)){
+    favorites = favorites.filter(x => String(x) !== id);
+    showToast("تمت إزالة المنتج من المفضلة");
+  }else{
+    favorites.push(id);
+    showToast("تمت إضافة المنتج للمفضلة ❤️");
+  }
+
+  localStorage.setItem("jr_favorites", JSON.stringify(favorites));
+  updateFavoriteButton();
+}
+
+function updateFavoriteButton(){
+  const btn = document.getElementById("detailFavBtn");
+  if(!btn || !currentDetailProduct) return;
+
+  const active = isFavorite(currentDetailProduct.id);
+  btn.textContent = active ? "♥" : "♡";
+  btn.classList.toggle("active", active);
+}
+
+async function shareCurrentProduct(){
+  if(!currentDetailProduct) return;
+
+  const title = currentDetailProduct.name || "JR Shop";
+  const url = window.location.href.split("#")[0] + "#product-" + currentDetailProduct.id;
+
+  try{
+    if(navigator.share){
+      await navigator.share({
+        title: "JR Shop — " + title,
+        text: "شوف هذا المنتج من JR Shop",
+        url
+      });
+    }else if(navigator.clipboard){
+      await navigator.clipboard.writeText(url);
+      showToast("تم نسخ رابط المنتج ✅");
+    }else{
+      showToast("انسخ الرابط من شريط المتصفح");
+    }
+  }catch(e){}
+}
+
+async function copyProductLink(){
+  if(!currentDetailProduct) return;
+
+  const url = window.location.href.split("#")[0] + "#product-" + currentDetailProduct.id;
+
+  try{
+    await navigator.clipboard.writeText(url);
+    showToast("تم نسخ رابط المنتج ✅");
+  }catch(e){
+    showToast("تعذر النسخ تلقائيًا");
+  }
+}
+
+document.getElementById("detailFavBtn").addEventListener("click", toggleFavorite);
+document.getElementById("detailShareBtn").addEventListener("click", shareCurrentProduct);
+document.getElementById("detailCopyBtn").addEventListener("click", copyProductLink);
+
+document.getElementById("detailImage").addEventListener("click", ()=>{
+  document.getElementById("detailImageBox").classList.toggle("zoomed");
+});
+
 
 /* =====================================================
    FEATURE RAILS
