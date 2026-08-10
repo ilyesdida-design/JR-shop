@@ -441,6 +441,50 @@ footer{background:#111;color:#aaa;text-align:right;padding:42px 20px 25px}.foote
 @media(max-width:699px){.top{grid-template-columns:auto 1fr auto;padding:11px 10px}.logo{font-size:23px}.search-wrap input{height:40px;font-size:13px}.header-actions .icon-btn{display:none}.cart{min-width:auto;padding:10px 9px;font-size:12px}.nav-inner button{padding:12px 15px;font-size:12px}.hero{margin:10px 8px 0;min-height:360px;padding:35px 15px}.hero h1{font-size:48px;letter-spacing:-2px}.hero-kicker{font-size:10px;letter-spacing:3px}.hero p{font-size:14px}.container{padding:22px 10px 45px}.quick-strip{gap:6px}.quick-item{padding:13px 8px}.category-card{flex-basis:112px}.category-card-image-wrap{width:112px;height:145px}.products{grid-template-columns:repeat(2,1fr);gap:9px}.product-img{height:220px}.product-info{padding:10px}.product h3{font-size:13px}.price{font-size:16px}.editorial-card{min-height:230px}.benefits{grid-template-columns:repeat(2,1fr)}.benefit{padding:18px 8px}.footer-grid{grid-template-columns:1fr 1fr;gap:22px}.footer-brand{grid-column:1/-1}}
 @media(max-width:380px){.search-wrap{display:none}.top{grid-template-columns:1fr auto}.logo{justify-self:start}.products{grid-template-columns:repeat(2,1fr)}.product-img{height:185px}}
 
+
+/* =====================================================
+   JR SHOP - NEXT PREMIUM LAYER
+===================================================== */
+.collection-showcase{margin:0 0 38px}
+.collection-head{display:flex;align-items:end;justify-content:space-between;gap:15px;margin-bottom:16px}
+.collection-head h2{margin:0;font-size:27px;letter-spacing:-.5px}
+.collection-head p{margin:5px 0 0;color:#777;font-size:13px}
+.collection-link{border:0;background:transparent;font-weight:900;text-decoration:underline;cursor:pointer}
+.collection-grid{display:grid;grid-template-columns:1.2fr .8fr .8fr;gap:12px}
+.collection-tile{min-height:340px;position:relative;overflow:hidden;background:#111;color:#fff;cursor:pointer}
+.collection-tile.medium{min-height:340px}
+.collection-tile.small{min-height:340px}
+.collection-tile img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
+.collection-tile:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.72),rgba(0,0,0,.03) 65%)}
+.collection-tile:hover img{transform:scale(1.045)}
+.collection-tile-content{position:absolute;z-index:2;right:22px;left:22px;bottom:22px}
+.collection-tile-content small{font-size:11px;letter-spacing:3px;font-weight:800}
+.collection-tile-content h3{font-size:30px;margin:7px 0}
+.collection-tile-content span{font-size:12px;border-bottom:1px solid #fff;padding-bottom:3px}
+.feature-section{margin:0 0 40px}
+.feature-head{display:flex;align-items:end;justify-content:space-between;margin-bottom:15px}
+.feature-head h2{margin:0;font-size:27px}
+.feature-head span{font-size:12px;color:#777}
+.feature-rail{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.feature-card{background:#fff;position:relative;overflow:hidden;cursor:pointer}
+.feature-card-img{height:300px;background:#eee;overflow:hidden;position:relative}
+.feature-card-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s}
+.feature-card:hover .feature-card-img img{transform:scale(1.04)}
+.feature-badge{position:absolute;top:10px;right:10px;background:#111;color:#fff;padding:6px 9px;font-size:10px;font-weight:900;z-index:2}
+.feature-card-info{padding:12px 13px 15px}
+.feature-card-info small{color:#777;font-size:11px}
+.feature-card-info h3{font-size:14px;margin:5px 0 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.feature-price{font-weight:900;color:var(--jr-green);font-size:16px}
+.feature-old{color:#999;text-decoration:line-through;font-size:12px;margin-right:7px;font-weight:400}
+.feature-add{width:100%;border:0;background:#111;color:#fff;padding:11px;margin-top:10px;font-weight:900;cursor:pointer}
+.feature-add:hover{background:var(--jr-green)}
+.newsletter{background:#111;color:#fff;margin:0 0 38px;padding:32px 25px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.newsletter h2{margin:0 0 6px;font-size:27px}.newsletter p{margin:0;color:#bbb;font-size:13px}
+.newsletter-btn{border:0;background:var(--jr-green);color:#fff;padding:13px 22px;font-weight:900;cursor:pointer;white-space:nowrap}
+@media(max-width:900px){.collection-grid{grid-template-columns:1fr 1fr}.collection-tile:first-child{grid-column:1/-1}.feature-rail{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:699px){.collection-grid{grid-template-columns:1fr 1fr;gap:8px}.collection-tile,.collection-tile.medium,.collection-tile.small{min-height:240px}.collection-tile:first-child{grid-column:1/-1}.collection-tile-content{right:14px;left:14px;bottom:14px}.collection-tile-content h3{font-size:22px}.feature-rail{grid-template-columns:repeat(2,1fr);gap:9px}.feature-card-img{height:220px}.feature-card-info{padding:9px}.newsletter{display:block;text-align:center;padding:27px 16px}.newsletter-btn{margin-top:18px;width:100%}}
+@media(max-width:380px){.collection-tile,.collection-tile.medium,.collection-tile.small{min-height:210px}.feature-card-img{height:185px}}
+
 </style>
 </head>
 
@@ -516,6 +560,44 @@ footer{background:#111;color:#aaa;text-align:right;padding:42px 20px 25px}.foote
     </div>
   </section>
 
+
+
+  <!-- PREMIUM COLLECTION EDIT -->
+  <section class="collection-showcase">
+    <div class="collection-head">
+      <div>
+        <h2>THE JR EDIT</h2>
+        <p>اختيارات مستوحاة من أحدث الستايلات</p>
+      </div>
+      <button class="collection-link" type="button" onclick="document.querySelector('.products-area')?.scrollIntoView({behavior:'smooth'})">VIEW ALL</button>
+    </div>
+    <div class="collection-grid">
+      <div class="collection-tile" id="collectionTile1" data-key="women">
+        <img id="collectionImg1" src="https://placehold.co/900x700/111111/ffffff?text=JR+SHOP" alt="JR Shop Collection">
+        <div class="collection-tile-content"><small>NEW SEASON</small><h3>WOMEN</h3><span>SHOP THE EDIT →</span></div>
+      </div>
+      <div class="collection-tile medium" id="collectionTile2" data-key="men">
+        <img id="collectionImg2" src="https://placehold.co/600x700/222222/ffffff?text=JR+SHOP" alt="JR Shop Men">
+        <div class="collection-tile-content"><small>ESSENTIALS</small><h3>MEN</h3><span>SHOP NOW →</span></div>
+      </div>
+      <div class="collection-tile small" id="collectionTile3" data-key="sale">
+        <img id="collectionImg3" src="https://placehold.co/600x700/333333/ffffff?text=SALE" alt="JR Shop Sale">
+        <div class="collection-tile-content"><small>LIMITED</small><h3>SALE</h3><span>UP TO MORE →</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEW IN -->
+  <section class="feature-section" id="newInSection">
+    <div class="feature-head">
+      <h2>NEW IN</h2>
+      <span>آخر المنتجات المضافة</span>
+    </div>
+    <div id="newInProducts" class="feature-rail">
+      <div class="loading">جاري تحميل المنتجات...</div>
+    </div>
+  </section>
+
   <!-- PRODUCTS -->
   <main class="products-area">
     <div class="section-title">
@@ -526,6 +608,27 @@ footer{background:#111;color:#aaa;text-align:right;padding:42px 20px 25px}.foote
       <div class="loading">جاري تحميل المنتجات...</div>
     </div>
   </main>
+
+
+
+  <!-- SALE / TRENDING -->
+  <section class="feature-section" id="trendingSection">
+    <div class="feature-head">
+      <h2>TRENDING NOW</h2>
+      <span>اختيارات JR Shop</span>
+    </div>
+    <div id="trendingProducts" class="feature-rail">
+      <div class="loading">جاري تحميل المنتجات...</div>
+    </div>
+  </section>
+
+  <section class="newsletter">
+    <div>
+      <h2>READY FOR YOUR NEXT LOOK?</h2>
+      <p>تصفح مجموعتنا واختار القطعة اللي تناسبك.</p>
+    </div>
+    <button class="newsletter-btn" type="button" onclick="document.getElementById('searchInput')?.focus();window.scrollTo({top:0,behavior:'smooth'})">START SHOPPING</button>
+  </section>
 
   <section class="benefits">
     <div class="benefit"><div class="benefit-icon">🚚</div><b>توصيل للباب</b><span>خدمة توصيل للولايات</span></div>
@@ -1424,12 +1527,87 @@ if(searchInput){
   });
 }
 
+
+/* =====================================================
+   PREMIUM COLLECTIONS
+===================================================== */
+function featureProductCard(product,label="NEW IN"){
+  const image = getImage(product.image_url || product.image);
+  const price = Number(product.price || 0);
+  const oldPrice = Number(product.old_price || 0);
+  const category = categories.find(c => String(c.id) === String(product.category_id));
+  return `
+    <article class="feature-card">
+      <div class="feature-card-img">
+        ${oldPrice > price ? `<span class="feature-badge">SALE</span>` : `<span class="feature-badge">${escapeHtml(label)}</span>`}
+        <img src="${escapeHtml(image)}" alt="${escapeHtml(product.name || 'JR Shop')}" loading="lazy" onerror="this.src='https://placehold.co/500x600?text=JR+Shop'">
+      </div>
+      <div class="feature-card-info">
+        <small>${escapeHtml(category?.name || 'JR SHOP')}</small>
+        <h3>${escapeHtml(product.name || 'Produit')}</h3>
+        <div class="feature-price">
+          ${formatPrice(price)}
+          ${oldPrice > price ? `<span class="feature-old">${formatPrice(oldPrice)}</span>` : ''}
+        </div>
+        <button type="button" class="feature-add" data-feature-id="${escapeHtml(product.id)}">ADD TO BAG</button>
+      </div>
+    </article>
+  `;
+}
+
+function renderFeatureRail(containerId,products,label){
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  if(!products || !products.length){
+    container.innerHTML = `<div class="loading" style="grid-column:1/-1">لا توجد منتجات حاليًا.</div>`;
+    return;
+  }
+  container.innerHTML = products.slice(0,4).map(p=>featureProductCard(p,label)).join('');
+  container.querySelectorAll('[data-feature-id]').forEach(btn=>{
+    btn.addEventListener('click',()=>addToCart(btn.dataset.featureId));
+  });
+}
+
+function renderPremiumCollections(){
+  if(!allProducts.length) return;
+
+  const newest = [...allProducts].slice(0,4);
+  const sale = allProducts.filter(p=>Number(p.old_price||0) > Number(p.price||0));
+  const trending = sale.length ? sale.slice(0,4) : [...allProducts].slice(0,4);
+
+  renderFeatureRail('newInProducts',newest,'NEW IN');
+  renderFeatureRail('trendingProducts',trending,'TRENDING');
+
+  const imgProducts = [...allProducts].filter(p=>p.image_url || p.image);
+  if(imgProducts.length){
+    document.getElementById('collectionImg1').src=getImage(imgProducts[0].image_url || imgProducts[0].image,'https://placehold.co/900x700?text=JR+SHOP');
+    document.getElementById('collectionImg2').src=getImage(imgProducts[1 % imgProducts.length].image_url || imgProducts[1 % imgProducts.length].image,'https://placehold.co/600x700?text=JR+SHOP');
+    document.getElementById('collectionImg3').src=getImage(imgProducts[2 % imgProducts.length].image_url || imgProducts[2 % imgProducts.length].image,'https://placehold.co/600x700?text=SALE');
+  }
+}
+
+['collectionTile1','collectionTile2','collectionTile3'].forEach(id=>{
+  const tile=document.getElementById(id);
+  if(!tile) return;
+  tile.addEventListener('click',()=>{
+    const key=tile.dataset.key;
+    const found=categories.find(c=>{
+      const n=String(c.name||'').toLowerCase();
+      const s=String(c.slug||'').toLowerCase();
+      return n.includes(key) || s.includes(key);
+    });
+    if(found) selectCategory(found.id);
+    else document.querySelector('.products-area')?.scrollIntoView({behavior:'smooth'});
+  });
+});
+
+
 /* =====================================================
    START
 ===================================================== */
 loadCartFromStorage();
 loadCategories();
-loadProducts();
+loadProducts().then(()=>renderPremiumCollections());
 </script>
 
 </body>
