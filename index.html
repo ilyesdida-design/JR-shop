@@ -3,798 +3,557 @@
 <html lang="ar" dir="rtl">
 
 <head>
-
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>JR Shop</title>
-
-  <!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
-  <style>
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f6f7f8;
-      color: #111;
-    }
-
-
-    /* =========================
-       HEADER
-    ========================= */
-
-    header {
-      background: #111;
-      color: white;
-      padding: 18px 16px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      max-width: 1100px;
-      margin: auto;
-      gap: 15px;
-    }
-
-    .logo {
-      font-size: 25px;
-      font-weight: 900;
-      letter-spacing: 1px;
-    }
-
-    .logo span {
-      color: #16a34a;
-    }
-
-    .cart {
-      background: #16a34a;
-      border: 0;
-      color: white;
-      padding: 10px 14px;
-      border-radius: 12px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    .cart:hover {
-      background: #15803d;
-    }
-
-
-    /* =========================
-       HERO
-    ========================= */
-
-    .hero {
-      background: #111;
-      color: white;
-      padding: 35px 18px 45px;
-      text-align: center;
-    }
-
-    .hero h1 {
-      font-size: 32px;
-      margin: 0 0 10px;
-    }
-
-    .hero h1 span {
-      color: #22c55e;
-    }
-
-    .hero p {
-      color: #ccc;
-      font-size: 15px;
-      margin: 0;
-    }
-
-
-    /* =========================
-       CONTAINER
-    ========================= */
-
-    .container {
-      max-width: 1100px;
-      margin: auto;
-      padding: 22px 15px 50px;
-    }
-
-
-    /* =========================
-       SHOP LAYOUT
-    ========================= */
-
-    .shop-layout {
-      display: flex;
-      gap: 20px;
-      align-items: flex-start;
-    }
-
-
-    /* =========================
-       SIDEBAR
-    ========================= */
-
-    .sidebar {
-      width: 220px;
-      flex-shrink: 0;
-      background: white;
-      border-radius: 16px;
-      padding: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,.07);
-
-      position: sticky;
-      top: 90px;
-    }
-
-    .sidebar-title {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 14px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid #eee;
-    }
-
-    .categories-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .category-item {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-
-      padding: 8px;
-
-      border: 0;
-      border-radius: 12px;
-
-      background: white;
-
-      cursor: pointer;
-
-      text-align: right;
-
-      transition: .2s;
-    }
-
-    .category-item:hover {
-      background: #f0fdf4;
-    }
-
-    .category-item.active {
-      background: #dcfce7;
-      box-shadow: inset -3px 0 0 #16a34a;
-    }
-
-    .category-image {
-      width: 48px;
-      height: 48px;
-
-      border-radius: 10px;
-
-      object-fit: cover;
-
-      background: #eee;
-
-      flex-shrink: 0;
-    }
-
-    .category-name {
-      font-size: 14px;
-      font-weight: bold;
-      color: #222;
-    }
-
-    .all-category {
-      justify-content: center;
-      background: #111;
-      color: white;
-      padding: 12px;
-    }
-
-    .all-category:hover {
-      background: #16a34a;
-      color: white;
-    }
-
-    .all-category.active {
-      background: #16a34a;
-      color: white;
-      box-shadow: none;
-    }
-
-
-    /* =========================
-       PRODUCTS AREA
-    ========================= */
-
-    .products-area {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .section-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 18px;
-    }
-
-    .section-title h2 {
-      font-size: 22px;
-      margin: 0;
-    }
-
-
-    /* =========================
-       PRODUCTS
-    ========================= */
-
-    .products {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-    }
-
-    .product {
-      background: white;
-      border-radius: 16px;
-      overflow: hidden;
-
-      box-shadow:
-        0 4px 15px rgba(0,0,0,.07);
-    }
-
-    .product-img {
-      height: 180px;
-
-      background: #e5e7eb;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      color: #777;
-
-      font-size: 45px;
-    }
-
-    .product-img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .product-info {
-      padding: 13px;
-    }
-
-    .product h3 {
-      font-size: 16px;
-      margin: 0 0 8px;
-    }
-
-    .description {
-      color: #666;
-      font-size: 13px;
-      margin-bottom: 8px;
-      line-height: 1.5;
-    }
-
-    .price {
-      color: #16a34a;
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .old-price {
-      color: #999;
-      text-decoration: line-through;
-      font-size: 13px;
-      margin-right: 5px;
-    }
-
-    .stock {
-      color: #666;
-      font-size: 13px;
-      margin-bottom: 10px;
-    }
-
-    .buy {
-      width: 100%;
-      border: 0;
-
-      background: #111;
-      color: white;
-
-      padding: 11px;
-
-      border-radius: 10px;
-
-      font-weight: bold;
-
-      cursor: pointer;
-
-      transition: .2s;
-    }
-
-    .buy:hover {
-      background: #16a34a;
-    }
-
-    .buy:active {
-      transform: scale(.98);
-    }
-
-    .buy:disabled {
-      background: #999;
-      cursor: not-allowed;
-    }
-
-
-    /* =========================
-       LOADING / ERROR
-    ========================= */
-
-    .loading,
-    .error {
-      text-align: center;
-      padding: 30px;
-
-      font-size: 16px;
-
-      grid-column: 1 / -1;
-    }
-
-    .error {
-      color: #dc2626;
-    }
-
-
-    /* =========================
-       MODAL
-    ========================= */
-
-    .modal {
-      display: none;
-
-      position: fixed;
-
-      inset: 0;
-
-      background: rgba(0,0,0,.6);
-
-      z-index: 999;
-
-      padding: 20px;
-
-      overflow-y: auto;
-    }
-
-    .modal.show {
-      display: flex;
-
-      align-items: center;
-      justify-content: center;
-    }
-
-    .modal-box {
-      width: 100%;
-      max-width: 550px;
-
-      background: white;
-
-      border-radius: 18px;
-
-      padding: 20px;
-
-      max-height: 90vh;
-
-      overflow-y: auto;
-    }
-
-
-    /* =========================
-       CART
-    ========================= */
-
-    .cart-item {
-      display: flex;
-
-      gap: 10px;
-
-      padding: 12px;
-
-      margin-bottom: 10px;
-
-      background: #f6f7f8;
-
-      border-radius: 12px;
-
-      align-items: center;
-    }
-
-    .cart-item-img {
-      width: 65px;
-      height: 65px;
-
-      border-radius: 10px;
-
-      object-fit: cover;
-
-      background: #ddd;
-    }
-
-    .cart-item-info {
-      flex: 1;
-    }
-
-    .cart-item-name {
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-
-    .cart-item-price {
-      color: #16a34a;
-      font-weight: bold;
-    }
-
-    .quantity-controls {
-      display: flex;
-
-      align-items: center;
-
-      gap: 6px;
-
-      margin-top: 7px;
-    }
-
-    .quantity-btn {
-      width: 30px;
-      height: 30px;
-
-      border: 0;
-
-      border-radius: 8px;
-
-      background: #111;
-
-      color: white;
-
-      cursor: pointer;
-
-      font-weight: bold;
-    }
-
-    .remove-btn {
-      border: 0;
-
-      background: #dc2626;
-
-      color: white;
-
-      padding: 7px 9px;
-
-      border-radius: 8px;
-
-      cursor: pointer;
-    }
-
-
-    /* =========================
-       FORMS
-    ========================= */
-
-    .form-label {
-      display: block;
-
-      margin-bottom: 6px;
-
-      font-weight: bold;
-
-      font-size: 14px;
-    }
-
-    .form-group {
-      margin-bottom: 10px;
-    }
-
-    .form-select,
-    .form-input,
-    .form-textarea {
-      width: 100%;
-
-      padding: 12px;
-
-      border: 1px solid #ddd;
-
-      border-radius: 10px;
-
-      font-size: 15px;
-
-      font-family: Arial, sans-serif;
-
-      background: white;
-    }
-
-    .form-textarea {
-      min-height: 90px;
-
-      resize: vertical;
-    }
-
-    .form-select:focus,
-    .form-input:focus,
-    .form-textarea:focus {
-      outline: none;
-
-      border-color: #16a34a;
-    }
-
-    .form-select:disabled {
-      background: #f0f0f0;
-      color: #777;
-    }
-
-
-    /* =========================
-       BUTTONS
-    ========================= */
-
-    .main-green-btn {
-      width: 100%;
-
-      padding: 13px;
-
-      border: 0;
-
-      border-radius: 10px;
-
-      background: #16a34a;
-
-      color: white;
-
-      font-size: 16px;
-
-      font-weight: bold;
-
-      cursor: pointer;
-    }
-
-    .main-green-btn:hover {
-      background: #15803d;
-    }
-
-    .black-btn {
-      width: 100%;
-
-      margin-top: 10px;
-
-      padding: 12px;
-
-      border: 0;
-
-      border-radius: 10px;
-
-      background: #111;
-
-      color: white;
-
-      font-weight: bold;
-
-      cursor: pointer;
-    }
-
-    .whatsapp-button {
-      width: 100%;
-
-      margin-top: 10px;
-
-      padding: 13px;
-
-      border: 0;
-
-      border-radius: 10px;
-
-      background: #25D366;
-
-      color: white;
-
-      font-size: 16px;
-
-      font-weight: bold;
-
-      cursor: pointer;
-    }
-
-    .whatsapp-button:hover {
-      background: #20b957;
-    }
-
-
-    /* =========================
-       TOAST
-    ========================= */
-
-    .toast {
-      position: fixed;
-
-      bottom: 20px;
-
-      right: 20px;
-      left: 20px;
-
-      max-width: 400px;
-
-      margin: auto;
-
-      background: #111;
-
-      color: white;
-
-      padding: 14px 18px;
-
-      border-radius: 12px;
-
-      text-align: center;
-
-      font-weight: bold;
-
-      z-index: 9999;
-
-      display: none;
-
-      box-shadow:
-        0 8px 25px rgba(0,0,0,.25);
-    }
-
-
-    /* =========================
-       FOOTER
-    ========================= */
-
-    footer {
-      background: #111;
-
-      color: #aaa;
-
-      text-align: center;
-
-      padding: 25px 15px;
-    }
-
-    footer strong {
-      color: #22c55e;
-    }
-
-
-    /* =========================
-       MOBILE
-    ========================= */
-
-    @media (max-width: 699px) {
-
-      .top {
-        flex-wrap: wrap;
-      }
-
-      .logo {
-        font-size: 22px;
-      }
-
-      .cart {
-        font-size: 14px;
-      }
-
-      .hero h1 {
-        font-size: 27px;
-      }
-
-      .shop-layout {
-        display: block;
-      }
-
-      .sidebar {
-        width: 100%;
-
-        position: static;
-
-        margin-bottom: 20px;
-      }
-
-      .categories-list {
-        display: grid;
-
-        grid-template-columns:
-          repeat(2, 1fr);
-
-        gap: 8px;
-      }
-
-      .category-image {
-        width: 42px;
-        height: 42px;
-      }
-
-      .category-name {
-        font-size: 13px;
-      }
-
-      .products {
-        grid-template-columns:
-          repeat(2, 1fr);
-      }
-
-      .product-img {
-        height: 160px;
-      }
-
-      .modal {
-        padding: 10px;
-      }
-
-      .modal-box {
-        max-height: 95vh;
-      }
-
-    }
-
-
-    @media (min-width: 700px) {
-
-      .products {
-        grid-template-columns:
-          repeat(3, 1fr);
-      }
-
-      .product-img {
-        height: 220px;
-      }
-
-    }
-
-
-    @media (min-width: 1000px) {
-
-      .products {
-        grid-template-columns:
-          repeat(3, 1fr);
-      }
-
-    }
-
-  </style>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>JR Shop</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f6f7f8;
+  color: #111;
+}
+
+/* HEADER */
+
+header {
+  background: #111;
+  color: white;
+  padding: 18px 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.top {
+  max-width: 1100px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.logo {
+  font-size: 25px;
+  font-weight: 900;
+}
+
+.logo span {
+  color: #16a34a;
+}
+
+.cart {
+  border: 0;
+  background: #16a34a;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 12px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.cart:hover {
+  background: #15803d;
+}
+
+/* HERO */
+
+.hero {
+  background: #111;
+  color: white;
+  text-align: center;
+  padding: 35px 15px 45px;
+}
+
+.hero h1 {
+  margin: 0 0 10px;
+  font-size: 32px;
+}
+
+.hero h1 span {
+  color: #22c55e;
+}
+
+.hero p {
+  color: #ccc;
+  margin: 0;
+}
+
+/* CONTAINER */
+
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 22px 15px 50px;
+}
+
+/* SHOP */
+
+.shop-layout {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  background: white;
+  border-radius: 16px;
+  padding: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,.07);
+  position: sticky;
+  top: 90px;
+}
+
+.sidebar-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.categories-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.category-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border: 0;
+  border-radius: 12px;
+  background: white;
+  cursor: pointer;
+  text-align: right;
+  transition: .2s;
+}
+
+.category-item:hover {
+  background: #f0fdf4;
+}
+
+.category-item.active {
+  background: #dcfce7;
+  box-shadow: inset -3px 0 0 #16a34a;
+}
+
+.category-image {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  object-fit: cover;
+  background: #eee;
+  flex-shrink: 0;
+}
+
+.category-name {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.all-category {
+  justify-content: center;
+  background: #111;
+  color: white;
+  padding: 12px;
+}
+
+.all-category:hover,
+.all-category.active {
+  background: #16a34a;
+  color: white;
+  box-shadow: none;
+}
+
+/* PRODUCTS */
+
+.products-area {
+  flex: 1;
+  min-width: 0;
+}
+
+.section-title {
+  margin-bottom: 18px;
+}
+
+.section-title h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.product {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,.07);
+}
+
+.product-img {
+  height: 220px;
+  background: #e5e7eb;
+}
+
+.product-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-info {
+  padding: 13px;
+}
+
+.product h3 {
+  font-size: 16px;
+  margin: 0 0 8px;
+}
+
+.description {
+  color: #666;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.price {
+  color: #16a34a;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.old-price {
+  color: #999;
+  text-decoration: line-through;
+  font-size: 13px;
+  margin-right: 5px;
+}
+
+.stock {
+  color: #666;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.buy {
+  width: 100%;
+  border: 0;
+  background: #111;
+  color: white;
+  padding: 11px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.buy:hover {
+  background: #16a34a;
+}
+
+.buy:disabled {
+  background: #999;
+  cursor: not-allowed;
+}
+
+.loading,
+.error {
+  text-align: center;
+  padding: 30px;
+  grid-column: 1 / -1;
+}
+
+.error {
+  color: #dc2626;
+}
+
+/* MODAL */
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  z-index: 999;
+  padding: 15px;
+  overflow-y: auto;
+}
+
+.modal.show {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-box {
+  width: 100%;
+  max-width: 550px;
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
+  max-height: 92vh;
+  overflow-y: auto;
+}
+
+/* CART */
+
+.cart-item {
+  display: flex;
+  gap: 10px;
+  padding: 12px;
+  margin-bottom: 10px;
+  background: #f6f7f8;
+  border-radius: 12px;
+  align-items: center;
+}
+
+.cart-item-img {
+  width: 65px;
+  height: 65px;
+  border-radius: 10px;
+  object-fit: cover;
+  background: #ddd;
+}
+
+.cart-item-info {
+  flex: 1;
+}
+
+.cart-item-name {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.cart-item-price {
+  color: #16a34a;
+  font-weight: bold;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 7px;
+}
+
+.quantity-btn {
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 8px;
+  background: #111;
+  color: white;
+  cursor: pointer;
+}
+
+.remove-btn {
+  border: 0;
+  background: #dc2626;
+  color: white;
+  padding: 7px 9px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* FORM */
+
+.form-group {
+  margin-bottom: 11px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: Arial, sans-serif;
+}
+
+.form-textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: #16a34a;
+}
+
+/* BUTTONS */
+
+.green-btn {
+  width: 100%;
+  padding: 13px;
+  border: 0;
+  border-radius: 10px;
+  background: #16a34a;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.green-btn:hover {
+  background: #15803d;
+}
+
+.black-btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  border: 0;
+  border-radius: 10px;
+  background: #111;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.whatsapp-button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 13px;
+  border: 0;
+  border-radius: 10px;
+  background: #25D366;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* TOAST */
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  left: 20px;
+  max-width: 400px;
+  margin: auto;
+  background: #111;
+  color: white;
+  padding: 14px;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: bold;
+  z-index: 9999;
+  display: none;
+}
+
+/* FOOTER */
+
+footer {
+  background: #111;
+  color: #aaa;
+  text-align: center;
+  padding: 25px;
+}
+
+footer strong {
+  color: #22c55e;
+}
+
+/* MOBILE */
+
+@media (max-width: 699px) {
+
+  .shop-layout {
+    display: block;
+  }
+
+  .sidebar {
+    width: 100%;
+    position: static;
+    margin-bottom: 20px;
+  }
+
+  .categories-list {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+  }
+
+  .category-image {
+    width: 42px;
+    height: 42px;
+  }
+
+  .products {
+    grid-template-columns: repeat(2,1fr);
+  }
+
+  .product-img {
+    height: 160px;
+  }
+
+  .hero h1 {
+    font-size: 27px;
+  }
+
+}
+
+@media (max-width: 430px) {
+
+  .products {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .product-info {
+    padding: 10px;
+  }
+
+  .product h3 {
+    font-size: 14px;
+  }
+
+  .price {
+    font-size: 16px;
+  }
+
+}
+
+</style>
 </head>
 
 
 <body>
 
-
-<!-- =========================
-     HEADER
-========================= -->
 
 <header>
 
@@ -803,7 +562,6 @@
     <div class="logo">
       JR <span>Shop</span>
     </div>
-
 
     <button
       type="button"
@@ -819,10 +577,6 @@
 </header>
 
 
-<!-- =========================
-     HERO
-========================= -->
-
 <section class="hero">
 
   <h1>
@@ -836,10 +590,6 @@
 
 </section>
 
-
-<!-- =========================
-     MAIN
-========================= -->
 
 <div class="container">
 
@@ -888,7 +638,6 @@
 
       </div>
 
-
       <div
         id="products"
         class="products"
@@ -907,9 +656,7 @@
 </div>
 
 
-<!-- =========================
-     CART MODAL
-========================= -->
+<!-- CART -->
 
 <div
   class="modal"
@@ -922,11 +669,9 @@
       🛒 سلة المشتريات
     </h2>
 
-
     <div id="cartItems">
       السلة فارغة
     </div>
-
 
     <div
       id="cartTotal"
@@ -939,16 +684,14 @@
       المجموع: 0 دج
     </div>
 
-
     <button
       type="button"
       id="checkoutBtn"
-      class="main-green-btn"
+      class="green-btn"
       style="margin-top:15px;"
     >
       متابعة الطلب
     </button>
-
 
     <button
       type="button"
@@ -963,9 +706,7 @@
 </div>
 
 
-<!-- =========================
-     CHECKOUT MODAL
-========================= -->
+<!-- CHECKOUT -->
 
 <div
   class="modal"
@@ -978,19 +719,15 @@
       📦 معلومات الطلب
     </h2>
 
-
     <div class="form-group">
 
-      <label
-        class="form-label"
-        for="customerName"
-      >
+      <label class="form-label">
         الاسم واللقب
       </label>
 
       <input
-        class="form-input"
         id="customerName"
+        class="form-input"
         type="text"
         placeholder="أدخل الاسم واللقب"
       >
@@ -1000,18 +737,15 @@
 
     <div class="form-group">
 
-      <label
-        class="form-label"
-        for="customerPhone"
-      >
+      <label class="form-label">
         رقم الهاتف
       </label>
 
       <input
-        class="form-input"
         id="customerPhone"
+        class="form-input"
         type="tel"
-        placeholder="مثال: 0550000000"
+        placeholder="0550000000"
       >
 
     </div>
@@ -1019,16 +753,13 @@
 
     <div class="form-group">
 
-      <label
-        class="form-label"
-        for="customerWilaya"
-      >
+      <label class="form-label">
         الولاية
       </label>
 
       <select
-        class="form-select"
         id="customerWilaya"
+        class="form-select"
       >
 
         <option value="">
@@ -1042,16 +773,13 @@
 
     <div class="form-group">
 
-      <label
-        class="form-label"
-        for="customerCommune"
-      >
+      <label class="form-label">
         البلدية
       </label>
 
       <input
-        class="form-input"
         id="customerCommune"
+        class="form-input"
         type="text"
         placeholder="أدخل البلدية"
       >
@@ -1061,16 +789,13 @@
 
     <div class="form-group">
 
-      <label
-        class="form-label"
-        for="customerAddress"
-      >
+      <label class="form-label">
         العنوان
       </label>
 
       <textarea
-        class="form-textarea"
         id="customerAddress"
+        class="form-textarea"
         placeholder="أدخل العنوان بالتفصيل"
       ></textarea>
 
@@ -1094,7 +819,7 @@
     <button
       type="button"
       id="submitOrderBtn"
-      class="main-green-btn"
+      class="green-btn"
     >
       ✅ تأكيد الطلب
     </button>
@@ -1122,15 +847,11 @@
 </div>
 
 
-<!-- TOAST -->
-
 <div
-  class="toast"
   id="toast"
+  class="toast"
 ></div>
 
-
-<!-- FOOTER -->
 
 <footer>
 
@@ -1145,20 +866,15 @@
 
 <script>
 
-
 /* =====================================================
    SUPABASE
 ===================================================== */
 
-/*
-  ⚠️ ضع هنا نفس بيانات Supabase الموجودة عندك
-*/
-
 const SUPABASE_URL =
-  "YOUR_SUPABASE_URL";
+  "https://cstjgsuehmqcolajspqh.supabase.co";
 
 const SUPABASE_KEY =
-  "YOUR_SUPABASE_ANON_KEY";
+  "sb_publishable_e_wQxqCrx21Qq";
 
 
 const supabaseClient =
@@ -1177,7 +893,7 @@ const WHATSAPP_NUMBER =
 
 
 /* =====================================================
-   GLOBAL VARIABLES
+   VARIABLES
 ===================================================== */
 
 let allProducts = [];
@@ -1187,6 +903,44 @@ let categories = [];
 let selectedCategory = "all";
 
 let cart = [];
+
+
+/* =====================================================
+   HTML SAFE
+===================================================== */
+
+function escapeHtml(value) {
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+function showToast(message) {
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent = message;
+
+  toast.style.display = "block";
+
+  setTimeout(() => {
+
+    toast.style.display = "none";
+
+  },2500);
+
+}
 
 
 /* =====================================================
@@ -1217,7 +971,7 @@ function loadCartFromStorage() {
         ? JSON.parse(saved)
         : [];
 
-  } catch (error) {
+  } catch {
 
     cart = [];
 
@@ -1227,73 +981,7 @@ function loadCartFromStorage() {
 
 
 /* =====================================================
-   TOAST
-===================================================== */
-
-function showToast(message) {
-
-  const toast =
-    document.getElementById(
-      "toast"
-    );
-
-  toast.textContent =
-    message;
-
-  toast.style.display =
-    "block";
-
-
-  setTimeout(() => {
-
-    toast.style.display =
-      "none";
-
-  }, 2500);
-
-}
-
-
-/* =====================================================
-   ESCAPE HTML
-===================================================== */
-
-function escapeHtml(value) {
-
-  return String(
-    value ?? ""
-  )
-
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
-}
-
-
-/* =====================================================
-   CATEGORIES
+   LOAD CATEGORIES
 ===================================================== */
 
 async function loadCategories() {
@@ -1302,7 +990,6 @@ async function loadCategories() {
     document.getElementById(
       "categoriesList"
     );
-
 
   try {
 
@@ -1318,7 +1005,7 @@ async function loadCategories() {
         .order(
           "name",
           {
-            ascending: true
+            ascending:true
           }
         );
 
@@ -1326,13 +1013,17 @@ async function loadCategories() {
     if (error) {
 
       console.error(
-        "Categories error:",
+        "Categories:",
         error
       );
 
       container.innerHTML = `
         <div class="error">
-          حدث خطأ أثناء تحميل الفئات
+          فشل تحميل الفئات
+          <br><br>
+          ${escapeHtml(
+            error.message
+          )}
         </div>
       `;
 
@@ -1344,18 +1035,15 @@ async function loadCategories() {
     categories =
       data || [];
 
-
     renderCategories();
 
-  } catch (error) {
+  } catch(error) {
 
-    console.error(
-      error
-    );
+    console.error(error);
 
     container.innerHTML = `
       <div class="error">
-        حدث خطأ غير متوقع
+        حدث خطأ أثناء تحميل الفئات
       </div>
     `;
 
@@ -1382,8 +1070,8 @@ function renderCategories() {
       type="button"
       class="category-item all-category ${
         selectedCategory === "all"
-          ? "active"
-          : ""
+        ? "active"
+        : ""
       }"
       data-category="all"
     >
@@ -1393,79 +1081,58 @@ function renderCategories() {
   `;
 
 
-  if (categories.length === 0) {
+  categories.forEach(
+    category => {
 
-    html += `
-
-      <div
-        style="
-          text-align:center;
-          padding:15px;
-          color:#777;
-          font-size:14px;
-        "
-      >
-        لا توجد فئات
-      </div>
-
-    `;
-
-  } else {
-
-    categories.forEach(
-      category => {
-
-        const image =
-          category.image_url ||
-          "https://via.placeholder.com/100?text=JR";
+      const image =
+        category.image_url ||
+        "https://placehold.co/100x100?text=JR";
 
 
-        html += `
+      html += `
 
-          <button
-            type="button"
-            class="category-item ${
-              String(
-                selectedCategory
-              ) ===
-              String(
-                category.id
-              )
-                ? "active"
-                : ""
-            }"
-            data-category="${
-              escapeHtml(
-                category.id
-              )
-            }"
+        <button
+          type="button"
+          class="category-item ${
+            String(
+              selectedCategory
+            ) ===
+            String(
+              category.id
+            )
+            ? "active"
+            : ""
+          }"
+          data-category="${
+            escapeHtml(
+              category.id
+            )
+          }"
+        >
+
+          <img
+            class="category-image"
+            src="${escapeHtml(image)}"
+            alt="${escapeHtml(
+              category.name
+            )}"
+            onerror="
+              this.src='https://placehold.co/100x100?text=JR'
+            "
           >
 
-            <img
-              class="category-image"
-              src="${escapeHtml(image)}"
-              alt="${escapeHtml(
-                category.name
-              )}"
-              onerror="
-                this.src='https://via.placeholder.com/100?text=JR'
-              "
-            >
+          <span class="category-name">
+            ${escapeHtml(
+              category.name
+            )}
+          </span>
 
-            <span class="category-name">
-              ${escapeHtml(
-                category.name
-              )}
-            </span>
+        </button>
 
-          </button>
+      `;
 
-        `;
-
-      }
-    );
-
-  }
+    }
+  );
 
 
   container.innerHTML =
@@ -1533,9 +1200,8 @@ function selectCategory(
 
     title.textContent =
       category
-        ? "🛍️ " +
-          category.name
-        : "🛍️ المنتجات";
+      ? "🛍️ " + category.name
+      : "🛍️ المنتجات";
 
   }
 
@@ -1571,7 +1237,7 @@ async function loadProducts() {
         .order(
           "id",
           {
-            ascending: false
+            ascending:false
           }
         );
 
@@ -1579,25 +1245,18 @@ async function loadProducts() {
     if (error) {
 
       console.error(
-        "Products error:",
+        "Products:",
         error
       );
 
-
       container.innerHTML = `
-
         <div class="error">
-
-          حدث خطأ أثناء تحميل المنتجات
-
+          فشل تحميل المنتجات
           <br><br>
-
           ${escapeHtml(
             error.message
           )}
-
         </div>
-
       `;
 
       return;
@@ -1609,28 +1268,19 @@ async function loadProducts() {
       data || [];
 
 
-    window.allProducts =
-      allProducts;
-
-
     renderProducts(
       allProducts
     );
 
 
-  } catch (error) {
+  } catch(error) {
 
-    console.error(
-      error
-    );
-
+    console.error(error);
 
     container.innerHTML = `
-
       <div class="error">
-        حدث خطأ غير متوقع
+        حدث خطأ أثناء تحميل المنتجات
       </div>
-
     `;
 
   }
@@ -1694,13 +1344,9 @@ function renderProducts(
   ) {
 
     container.innerHTML = `
-
       <div class="loading">
-
         لا توجد منتجات في هذه الفئة.
-
       </div>
-
     `;
 
     return;
@@ -1717,7 +1363,7 @@ function renderProducts(
       const image =
         product.image_url ||
         product.image ||
-        "https://via.placeholder.com/500?text=JR+Shop";
+        "https://placehold.co/500x500?text=JR+Shop";
 
 
       const name =
@@ -1748,15 +1394,13 @@ function renderProducts(
         );
 
 
-      const outOfStock =
+      const unavailable =
         stock <= 0;
 
 
       html += `
 
-        <article
-          class="product"
-        >
+        <article class="product">
 
           <div class="product-img">
 
@@ -1765,7 +1409,7 @@ function renderProducts(
               alt="${escapeHtml(name)}"
               loading="lazy"
               onerror="
-                this.src='https://via.placeholder.com/500?text=JR+Shop'
+                this.src='https://placehold.co/500x500?text=JR+Shop'
               "
             >
 
@@ -1781,14 +1425,14 @@ function renderProducts(
 
             ${
               description
-                ? `
-                  <div class="description">
-                    ${escapeHtml(
-                      description
-                    )}
-                  </div>
-                `
-                : ""
+              ? `
+                <div class="description">
+                  ${escapeHtml(
+                    description
+                  )}
+                </div>
+              `
+              : ""
             }
 
 
@@ -1800,14 +1444,14 @@ function renderProducts(
 
               ${
                 oldPrice > price
-                  ? `
-                    <span class="old-price">
-                      ${oldPrice.toLocaleString(
-                        "fr-DZ"
-                      )} دج
-                    </span>
-                  `
-                  : ""
+                ? `
+                  <span class="old-price">
+                    ${oldPrice.toLocaleString(
+                      "fr-DZ"
+                    )} دج
+                  </span>
+                `
+                : ""
               }
 
             </div>
@@ -1816,9 +1460,9 @@ function renderProducts(
             <div class="stock">
 
               ${
-                outOfStock
-                  ? "❌ غير متوفر"
-                  : "✅ متوفر"
+                unavailable
+                ? "❌ غير متوفر"
+                : "✅ متوفر"
               }
 
             </div>
@@ -1828,21 +1472,19 @@ function renderProducts(
               type="button"
               class="buy"
               ${
-                outOfStock
-                  ? "disabled"
-                  : ""
+                unavailable
+                ? "disabled"
+                : ""
               }
-              onclick="
-                addToCart('${escapeHtml(
-                  product.id
-                )}')
-              "
+              data-id="${escapeHtml(
+                product.id
+              )}"
             >
 
               ${
-                outOfStock
-                  ? "غير متوفر"
-                  : "🛒 أضف إلى السلة"
+                unavailable
+                ? "غير متوفر"
+                : "🛒 أضف إلى السلة"
               }
 
             </button>
@@ -1859,6 +1501,28 @@ function renderProducts(
 
   container.innerHTML =
     html;
+
+
+  container
+    .querySelectorAll(
+      ".buy"
+    )
+    .forEach(
+      button => {
+
+        button.addEventListener(
+          "click",
+          () => {
+
+            addToCart(
+              button.dataset.id
+            );
+
+          }
+        );
+
+      }
+    );
 
 }
 
@@ -1901,7 +1565,7 @@ function addToCart(
   ) {
 
     showToast(
-      "هذا المنتج غير متوفر"
+      "المنتج غير متوفر"
     );
 
     return;
@@ -1932,7 +1596,6 @@ function addToCart(
 
     }
 
-
     existing.quantity++;
 
   } else {
@@ -1955,11 +1618,9 @@ function addToCart(
         product.image ||
         "",
 
-      quantity:
-        1,
+      quantity:1,
 
-      stock:
-        stock
+      stock:stock
 
     });
 
@@ -2043,16 +1704,8 @@ function renderCart() {
     );
 
 
-  const totalElement =
-    document.getElementById(
-      "cartTotal"
-    );
-
-
-  const checkoutTotal =
-    document.getElementById(
-      "checkoutTotal"
-    );
+  const total =
+    getCartTotal();
 
 
   if (
@@ -2060,7 +1713,6 @@ function renderCart() {
   ) {
 
     container.innerHTML = `
-
       <div
         style="
           text-align:center;
@@ -2070,7 +1722,6 @@ function renderCart() {
       >
         🛒 السلة فارغة
       </div>
-
     `;
 
   } else {
@@ -2098,14 +1749,11 @@ function renderCart() {
               class="cart-item-img"
               src="${escapeHtml(
                 item.image_url ||
-                "https://via.placeholder.com/100?text=JR"
+                "https://placehold.co/100x100?text=JR"
               )}"
               alt="${escapeHtml(
                 item.name
               )}"
-              onerror="
-                this.src='https://via.placeholder.com/100?text=JR'
-              "
             >
 
 
@@ -2119,11 +1767,9 @@ function renderCart() {
 
 
               <div class="cart-item-price">
-
                 ${subtotal.toLocaleString(
                   "fr-DZ"
                 )} دج
-
               </div>
 
 
@@ -2132,37 +1778,27 @@ function renderCart() {
                 <button
                   type="button"
                   class="quantity-btn"
-                  onclick="
-                    changeQuantity(
-                      '${escapeHtml(
-                        item.id
-                      )}',
-                      1
-                    )
-                  "
+                  data-action="plus"
+                  data-id="${escapeHtml(
+                    item.id
+                  )}"
                 >
                   +
                 </button>
-
 
                 <strong>
                   ${item.quantity}
                 </strong>
 
-
                 <button
                   type="button"
                   class="quantity-btn"
-                  onclick="
-                    changeQuantity(
-                      '${escapeHtml(
-                        item.id
-                      )}',
-                      -1
-                    )
-                  "
+                  data-action="minus"
+                  data-id="${escapeHtml(
+                    item.id
+                  )}"
                 >
-                  -
+                  −
                 </button>
 
               </div>
@@ -2173,13 +1809,9 @@ function renderCart() {
             <button
               type="button"
               class="remove-btn"
-              onclick="
-                removeFromCart(
-                  '${escapeHtml(
-                    item.id
-                  )}'
-                )
-              "
+              data-remove="${escapeHtml(
+                item.id
+              )}"
             >
               🗑️
             </button>
@@ -2195,14 +1827,60 @@ function renderCart() {
     container.innerHTML =
       html;
 
+
+    container
+      .querySelectorAll(
+        "[data-action]"
+      )
+      .forEach(
+        button => {
+
+          button.addEventListener(
+            "click",
+            () => {
+
+              changeQuantity(
+                button.dataset.id,
+                button.dataset.action ===
+                "plus"
+                ? 1
+                : -1
+              );
+
+            }
+          );
+
+        }
+      );
+
+
+    container
+      .querySelectorAll(
+        "[data-remove]"
+      )
+      .forEach(
+        button => {
+
+          button.addEventListener(
+            "click",
+            () => {
+
+              removeFromCart(
+                button.dataset.remove
+              );
+
+            }
+          );
+
+        }
+      );
+
   }
 
 
-  const total =
-    getCartTotal();
-
-
-  totalElement.textContent =
+  document.getElementById(
+    "cartTotal"
+  ).textContent =
     "المجموع: " +
     total.toLocaleString(
       "fr-DZ"
@@ -2210,7 +1888,9 @@ function renderCart() {
     " دج";
 
 
-  checkoutTotal.textContent =
+  document.getElementById(
+    "checkoutTotal"
+  ).textContent =
     "المجموع: " +
     total.toLocaleString(
       "fr-DZ"
@@ -2241,12 +1921,8 @@ function changeQuantity(
 
 
   const newQuantity =
-    Number(
-      item.quantity
-    ) +
-    Number(
-      change
-    );
+    item.quantity +
+    change;
 
 
   if (
@@ -2321,6 +1997,8 @@ function removeFromCart(
 
 function openCart() {
 
+  renderCart();
+
   document
     .getElementById(
       "cartModal"
@@ -2328,8 +2006,6 @@ function openCart() {
     .classList.add(
       "show"
     );
-
-  renderCart();
 
 }
 
@@ -2393,109 +2069,12 @@ function closeCheckout() {
 
 
 /* =====================================================
-   CUSTOMER DATA
-===================================================== */
-
-function getCustomerData() {
-
-  const name =
-    document
-      .getElementById(
-        "customerName"
-      )
-      .value
-      .trim();
-
-
-  const phone =
-    document
-      .getElementById(
-        "customerPhone"
-      )
-      .value
-      .trim();
-
-
-  const wilayaElement =
-    document.getElementById(
-      "customerWilaya"
-    );
-
-
-  const wilayaCode =
-    wilayaElement.value;
-
-
-  const wilayaName =
-    wilayaElement
-      .options[
-        wilayaElement
-          .selectedIndex
-      ]
-      ?.text || "";
-
-
-  const commune =
-    document
-      .getElementById(
-        "customerCommune"
-      )
-      .value
-      .trim();
-
-
-  const address =
-    document
-      .getElementById(
-        "customerAddress"
-      )
-      .value
-      .trim();
-
-
-  if (
-    !name ||
-    !phone ||
-    !wilayaCode ||
-    !commune ||
-    !address
-  ) {
-
-    alert(
-      "من فضلك أكمل جميع معلومات الطلب"
-    );
-
-    return null;
-
-  }
-
-
-  return {
-
-    name,
-
-    phone,
-
-    wilayaCode,
-
-    wilayaName,
-
-    commune,
-
-    address
-
-  };
-
-}
-
-
-/* =====================================================
    WILAYAS
 ===================================================== */
 
 function loadAlgeriaData() {
 
-  const wilayaSelect =
+  const select =
     document.getElementById(
       "customerWilaya"
     );
@@ -2566,7 +2145,7 @@ function loadAlgeriaData() {
 
 
   wilayas.forEach(
-    wilaya => {
+    item => {
 
       const option =
         document.createElement(
@@ -2574,17 +2153,108 @@ function loadAlgeriaData() {
         );
 
       option.value =
-        wilaya[0];
+        item[0];
 
       option.textContent =
-        wilaya[1];
+        item[1];
 
-      wilayaSelect.appendChild(
+      select.appendChild(
         option
       );
 
     }
   );
+
+}
+
+
+/* =====================================================
+   CUSTOMER
+===================================================== */
+
+function getCustomerData() {
+
+  const name =
+    document
+      .getElementById(
+        "customerName"
+      )
+      .value
+      .trim();
+
+
+  const phone =
+    document
+      .getElementById(
+        "customerPhone"
+      )
+      .value
+      .trim();
+
+
+  const wilaya =
+    document.getElementById(
+      "customerWilaya"
+    );
+
+
+  const wilayaCode =
+    wilaya.value;
+
+
+  const wilayaName =
+    wilaya
+      .options[
+        wilaya.selectedIndex
+      ]
+      ?.text || "";
+
+
+  const commune =
+    document
+      .getElementById(
+        "customerCommune"
+      )
+      .value
+      .trim();
+
+
+  const address =
+    document
+      .getElementById(
+        "customerAddress"
+      )
+      .value
+      .trim();
+
+
+  if (
+    !name ||
+    !phone ||
+    !wilayaCode ||
+    !commune ||
+    !address
+  ) {
+
+    alert(
+      "من فضلك أكمل جميع معلومات الطلب"
+    );
+
+    return null;
+
+  }
+
+
+  return {
+
+    name,
+    phone,
+    wilayaCode,
+    wilayaName,
+    commune,
+    address
+
+  };
 
 }
 
@@ -2612,9 +2282,7 @@ function sendOrderToWhatsApp() {
     getCustomerData();
 
 
-  if (!customer) {
-    return;
-  }
+  if (!customer) return;
 
 
   const total =
@@ -2660,19 +2328,14 @@ function sendOrderToWhatsApp() {
 
 
   cart.forEach(
-    (item, index) => {
+    (item,index) => {
 
       const subtotal =
-        Number(
-          item.price || 0
-        ) *
-        Number(
-          item.quantity || 0
-        );
+        item.price *
+        item.quantity;
 
 
       message +=
-
         (index + 1) +
         ". " +
         item.name +
@@ -2696,7 +2359,7 @@ function sendOrderToWhatsApp() {
     " دج";
 
 
-  const whatsappURL =
+  const url =
     "https://wa.me/" +
     WHATSAPP_NUMBER +
     "?text=" +
@@ -2706,7 +2369,7 @@ function sendOrderToWhatsApp() {
 
 
   window.open(
-    whatsappURL,
+    url,
     "_blank"
   );
 
@@ -2736,9 +2399,7 @@ async function submitOrder() {
     getCustomerData();
 
 
-  if (!customer) {
-    return;
-  }
+  if (!customer) return;
 
 
   const total =
@@ -2757,51 +2418,38 @@ async function submitOrder() {
 
         price:
           Number(
-            item.price || 0
+            item.price
           ),
 
         quantity:
           Number(
-            item.quantity || 0
+            item.quantity
           ),
 
         subtotal:
           Number(
-            item.price || 0
+            item.price
           ) *
           Number(
-            item.quantity || 0
+            item.quantity
           )
 
       })
     );
 
 
-  const submitButton =
+  const button =
     document.getElementById(
       "submitOrderBtn"
     );
 
 
-  submitButton.disabled =
+  button.disabled =
     true;
 
 
-  submitButton.textContent =
+  button.textContent =
     "⏳ جاري إرسال الطلب...";
-
-
-  const wilayaForOrder =
-    customer.wilayaName +
-    " - " +
-    customer.commune;
-
-
-  const addressForOrder =
-    "البلدية: " +
-    customer.commune +
-    "\n" +
-    customer.address;
 
 
   try {
@@ -2821,10 +2469,15 @@ async function submitOrder() {
             customer.phone,
 
           p_wilaya:
-            wilayaForOrder,
+            customer.wilayaName +
+            " - " +
+            customer.commune,
 
           p_address:
-            addressForOrder,
+            "البلدية: " +
+            customer.commune +
+            "\n" +
+            customer.address,
 
           p_items:
             orderItems,
@@ -2839,16 +2492,13 @@ async function submitOrder() {
     if (error) {
 
       console.error(
-        "Order error:",
         error
       );
-
 
       alert(
         "حدث خطأ أثناء إرسال الطلب:\n\n" +
         error.message
       );
-
 
       return;
 
@@ -2862,8 +2512,7 @@ async function submitOrder() {
 
 
     alert(
-      "✅ تم إرسال طلبك بنجاح!\n\n" +
-      "سنتواصل معك لتأكيد الطلب."
+      "✅ تم إرسال طلبك بنجاح!\n\nسنتواصل معك لتأكيد الطلب."
     );
 
 
@@ -2875,7 +2524,6 @@ async function submitOrder() {
     updateCartCount();
 
     renderCart();
-
 
     closeCheckout();
 
@@ -2905,25 +2553,22 @@ async function submitOrder() {
     ).value = "";
 
 
-  } catch (error) {
+  } catch(error) {
 
     console.error(
-      "Unexpected order error:",
       error
     );
-
 
     alert(
       "حدث خطأ غير متوقع أثناء إرسال الطلب."
     );
 
-
   } finally {
 
-    submitButton.disabled =
+    button.disabled =
       false;
 
-    submitButton.textContent =
+    button.textContent =
       "✅ تأكيد الطلب";
 
   }
