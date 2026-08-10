@@ -485,6 +485,83 @@ footer{background:#111;color:#aaa;text-align:right;padding:42px 20px 25px}.foote
 @media(max-width:699px){.collection-grid{grid-template-columns:1fr 1fr;gap:8px}.collection-tile,.collection-tile.medium,.collection-tile.small{min-height:240px}.collection-tile:first-child{grid-column:1/-1}.collection-tile-content{right:14px;left:14px;bottom:14px}.collection-tile-content h3{font-size:22px}.feature-rail{grid-template-columns:repeat(2,1fr);gap:9px}.feature-card-img{height:220px}.feature-card-info{padding:9px}.newsletter{display:block;text-align:center;padding:27px 16px}.newsletter-btn{margin-top:18px;width:100%}}
 @media(max-width:380px){.collection-tile,.collection-tile.medium,.collection-tile.small{min-height:210px}.feature-card-img{height:185px}}
 
+
+/* =====================================================
+   JR SHOP - MOBILE + PRODUCT DETAILS UPGRADE
+===================================================== */
+.mobile-bottom-nav{display:none}
+.product{cursor:pointer}
+.product-img{position:relative}
+.product-quick{position:absolute;left:10px;right:10px;bottom:10px;border:0;background:rgba(255,255,255,.94);color:#111;padding:10px;font-size:12px;font-weight:900;opacity:0;transform:translateY(8px);transition:.2s;z-index:3}
+.product:hover .product-quick{opacity:1;transform:translateY(0)}
+.product-badge{position:absolute;top:10px;right:10px;background:#111;color:#fff;padding:6px 9px;font-size:10px;font-weight:900;z-index:3}
+.product-badge.sale{background:#d91e18}
+.detail-box{max-width:900px;padding:0;overflow:hidden}
+.detail-layout{display:grid;grid-template-columns:1fr 1fr;min-height:520px}
+.detail-image{background:#f1f1f1;min-height:520px}
+.detail-image img{width:100%;height:100%;min-height:520px;object-fit:cover;display:block}
+.detail-content{padding:34px;display:flex;flex-direction:column;justify-content:center}
+.detail-close{position:absolute;top:14px;left:14px;width:38px;height:38px;border:0;border-radius:50%;background:#111;color:#fff;font-size:20px;z-index:5}
+.detail-category{font-size:11px;letter-spacing:2px;color:#777;font-weight:900;text-transform:uppercase}
+.detail-title{font-size:32px;line-height:1.05;margin:9px 0 12px}
+.detail-description{color:#666;line-height:1.8;font-size:14px;margin-bottom:18px}
+.detail-price{font-size:24px;font-weight:900;color:var(--jr-green);margin-bottom:5px}
+.detail-old{font-size:14px;color:#999;text-decoration:line-through;margin-right:8px;font-weight:400}
+.detail-stock{font-size:13px;margin:8px 0 20px;color:#555}
+.detail-actions{display:flex;gap:9px}
+.detail-actions button{flex:1;padding:14px;border:0;font-weight:900}
+.detail-add{background:#111;color:#fff}
+.detail-add:hover{background:var(--jr-green)}
+.detail-buy{background:var(--jr-green);color:#fff}
+.mobile-nav-spacer{height:0}
+@media(max-width:699px){
+  body{padding-bottom:68px}
+  .top{grid-template-columns:auto minmax(0,1fr) auto}
+  .search-wrap input{padding-right:38px}
+  .hero{margin-left:0;margin-right:0;border-radius:0;min-height:330px}
+  .hero h1{font-size:clamp(40px,13vw,58px);line-height:.9}
+  .hero-actions .hero-btn{min-width:135px;padding:13px 16px}
+  .quick-strip{grid-template-columns:repeat(2,1fr);margin-bottom:24px}
+  .quick-item b{font-size:12px}.quick-item span{font-size:10px}
+  .categories-scroll{margin-right:-2px;margin-left:-2px;padding-right:2px}
+  .category-card{flex-basis:104px}
+  .category-card-image-wrap{width:104px;height:138px}
+  .collection-grid{grid-template-columns:1fr 1fr}
+  .collection-tile:first-child{grid-column:1/-1}
+  .collection-tile,.collection-tile.medium,.collection-tile.small{min-height:235px}
+  .feature-card-img{height:205px}
+  .products{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .product-img{height:205px}
+  .product-quick{opacity:1;transform:none;bottom:8px;font-size:10px;padding:8px}
+  .product-info{padding:9px}
+  .product h3{font-size:13px;line-height:1.35}
+  .description{font-size:11px;line-height:1.35;max-height:30px;overflow:hidden}
+  .price{font-size:15px}.old-price{font-size:10px}
+  .buy{padding:10px;font-size:11px}
+  .detail-box{max-width:520px;margin:0 6px}
+  .detail-layout{grid-template-columns:1fr;min-height:0}
+  .detail-image{min-height:330px;height:330px}
+  .detail-image img{min-height:330px;height:330px}
+  .detail-content{padding:20px}
+  .detail-title{font-size:25px}
+  .detail-description{font-size:13px}
+  .detail-actions{flex-direction:column}
+  .mobile-bottom-nav{position:fixed;display:grid;grid-template-columns:repeat(4,1fr);bottom:0;left:0;right:0;height:64px;background:#fff;border-top:1px solid #ddd;z-index:998;box-shadow:0 -4px 18px rgba(0,0,0,.08)}
+  .mobile-bottom-nav button{border:0;background:#fff;font-size:10px;font-weight:800;color:#444;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+  .mobile-bottom-nav button span{font-size:19px;line-height:1}
+  .mobile-bottom-nav button.active{color:var(--jr-green)}
+  footer{padding-bottom:82px}
+}
+@media(max-width:380px){
+  .top{grid-template-columns:1fr auto}
+  .logo{justify-self:start}
+  .search-wrap{display:block;grid-column:1/-1;grid-row:2}
+  .search-wrap input{height:38px}
+  .product-img{height:175px}
+  .feature-card-img{height:180px}
+  .collection-tile,.collection-tile.medium,.collection-tile.small{min-height:205px}
+}
+
 </style>
 </head>
 
@@ -508,6 +585,13 @@ footer{background:#111;color:#aaa;text-align:right;padding:42px 20px 25px}.foote
     </div>
   </nav>
 </header>
+
+<nav class="mobile-bottom-nav" aria-label="التنقل السريع">
+  <button type="button" onclick="window.scrollTo({top:0,behavior:'smooth'})"><span>⌂</span>الرئيسية</button>
+  <button type="button" onclick="document.getElementById('categories')?.scrollIntoView({behavior:'smooth'})"><span>☰</span>الفئات</button>
+  <button type="button" onclick="document.querySelector('.products-area')?.scrollIntoView({behavior:'smooth'})"><span>🛍</span>المنتجات</button>
+  <button type="button" onclick="openCartBtn.click()"><span>🛒</span>السلة</button>
+</nav>
 
 <section class="hero">
   <div class="hero-content">
@@ -722,6 +806,27 @@ footer{background:#111;color:#aaa;text-align:right;padding:42px 20px 25px}.foote
   </div>
 </div>
 
+<!-- PRODUCT DETAILS -->
+<div class="modal" id="productDetailModal">
+  <div class="modal-box detail-box">
+    <button type="button" class="detail-close" id="detailCloseBtn" aria-label="إغلاق">×</button>
+    <div class="detail-layout">
+      <div class="detail-image"><img id="detailImage" src="https://placehold.co/700x800?text=JR+Shop" alt="JR Shop"></div>
+      <div class="detail-content">
+        <div id="detailCategory" class="detail-category">JR SHOP</div>
+        <h2 id="detailTitle" class="detail-title">Produit</h2>
+        <div id="detailDescription" class="detail-description">اكتشف تفاصيل المنتج.</div>
+        <div id="detailPrice" class="detail-price">0 دج</div>
+        <div id="detailStock" class="detail-stock">متوفر</div>
+        <div class="detail-actions">
+          <button type="button" class="detail-add" id="detailAddBtn">🛒 أضف للسلة</button>
+          <button type="button" class="detail-buy" id="detailBuyBtn">اطلب الآن</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="toast" class="toast"></div>
 
 <footer>
@@ -872,77 +977,35 @@ async function loadCategories(){
 }
 
 function renderCategories(){
-
   const container = document.getElementById("categoriesList");
-
   let html = `
-    <button
-      type="button"
-      class="category-card all-card ${
-        selectedCategory === "all" ? "active" : ""
-      }"
-      data-category="all"
-    >
-      <div class="category-card-image-wrap">
-        <span class="all-card-icon">🛍️</span>
-      </div>
-      <span class="category-card-name">جميع المنتجات</span>
+    <button type="button" class="category-card all-card ${selectedCategory === "all" ? "active" : ""}" data-category="all">
+      <div class="category-card-image-wrap"><div class="all-card-icon">🛍️</div></div>
+      <span class="category-card-name">SHOP ALL</span>
     </button>
   `;
 
   categories.forEach(category=>{
-
-    const image = "https://placehold.co/300x400?text=" + encodeURIComponent(category.name || "JR");
+    const categoryProduct = allProducts.find(product =>
+      String(product.category_id) === String(category.id) && (product.image_url || product.image)
+    );
+    const image = category.image_url || categoryProduct?.image_url || categoryProduct?.image || "https://placehold.co/300x400?text=" + encodeURIComponent(category.name || "JR");
 
     html += `
-      <button
-        type="button"
-        class="category-card ${
-          String(selectedCategory) === String(category.id)
-            ? "active"
-            : ""
-        }"
-        data-category="${escapeHtml(category.id)}"
-      >
+      <button type="button" class="category-card ${String(selectedCategory) === String(category.id) ? "active" : ""}" data-category="${escapeHtml(category.id)}">
         <div class="category-card-image-wrap">
-          <img
-            src="${escapeHtml(image)}"
-            alt="${escapeHtml(category.name)}"
-            loading="lazy"
-            onerror="this.src='https://placehold.co/300x400?text=JR'"
-          >
+          <img src="${escapeHtml(image)}" alt="${escapeHtml(category.name)}" loading="lazy" onerror="this.src='https://placehold.co/300x400?text=JR'">
         </div>
-
-        <span class="category-card-name">
-          ${escapeHtml(category.name)}
-        </span>
+        <span class="category-card-name">${escapeHtml(category.name)}</span>
       </button>
     `;
   });
 
   container.innerHTML = html;
-
   container.querySelectorAll(".category-card").forEach(button=>{
-    button.addEventListener("click",()=>{
-      selectCategory(button.dataset.category);
-    });
+    button.addEventListener("click",()=>selectCategory(button.dataset.category));
   });
 }
-
-function renderNavigation(){
-  const nav = document.getElementById("navCategories");
-  if(!nav) return;
-
-  let html = `<button type="button" class="${selectedCategory === "all" ? "active" : ""}" data-category="all">SHOP</button>`;
-  categories.forEach(category => {
-    html += `<button type="button" class="${String(selectedCategory) === String(category.id) ? "active" : ""}" data-category="${escapeHtml(category.id)}">${escapeHtml(category.name || "Category").toUpperCase()}</button>`;
-  });
-  nav.innerHTML = html;
-  nav.querySelectorAll("button").forEach(button => {
-    button.addEventListener("click", () => selectCategory(button.dataset.category));
-  });
-}
-
 function selectCategory(categoryId){
 
   selectedCategory = categoryId;
@@ -1012,7 +1075,6 @@ async function loadProducts(){
 }
 
 function filterProducts(){
-
   let products = [...allProducts];
 
   if(selectedCategory !== "all"){
@@ -1022,93 +1084,48 @@ function filterProducts(){
   }
 
   if(searchTerm){
-    products = products.filter(product => {
-      const haystack = [product.name, product.description].join(" ").toLowerCase();
+    products = products.filter(product=>{
+      const haystack = [
+        product.name,
+        product.description,
+        product.slug
+      ].map(v=>String(v || "").toLowerCase()).join(" ");
       return haystack.includes(searchTerm);
     });
   }
 
   renderProducts(products);
 }
-
 function renderProducts(products){
-
   const container = document.getElementById("products");
-
   if(!products || products.length === 0){
-    container.innerHTML = `
-      <div class="loading">
-        لا توجد منتجات في هذه الفئة.
-      </div>
-    `;
+    container.innerHTML = `<div class="loading" style="grid-column:1/-1">لا توجد منتجات مطابقة حاليًا.</div>`;
     return;
   }
 
   let html = "";
-
   products.forEach(product=>{
-
-    const image =
-      product.image_url ||
-      product.image ||
-      "https://placehold.co/500x500?text=JR+Shop";
-
-    const name = product.name || "منتج";
-    const description = product.description || "";
+    const image = getImage(product.image_url || product.image);
     const price = Number(product.price || 0);
     const oldPrice = Number(product.old_price || 0);
     const stock = Number(product.stock ?? 0);
-
-    const unavailable = stock <= 0;
+    const category = categories.find(c => String(c.id) === String(product.category_id));
+    const sale = oldPrice > price;
 
     html += `
-      <article class="product">
-
+      <article class="product" data-product-id="${escapeHtml(product.id)}">
         <div class="product-img">
-          <img
-            src="${escapeHtml(image)}"
-            alt="${escapeHtml(name)}"
-            loading="lazy"
-            onerror="this.src='https://placehold.co/500x500?text=JR+Shop'"
-          >
+          ${sale ? `<span class="product-badge sale">SALE</span>` : `<span class="product-badge">NEW</span>`}
+          <img src="${escapeHtml(image)}" alt="${escapeHtml(product.name || 'JR Shop')}" loading="lazy" onerror="this.src='https://placehold.co/500x600?text=JR+Shop'">
+          <button type="button" class="product-quick" data-detail-id="${escapeHtml(product.id)}">VIEW DETAILS</button>
         </div>
-
         <div class="product-info">
-
-          <h3>${escapeHtml(name)}</h3>
-
-          ${
-            description
-              ? `<div class="description">${escapeHtml(description)}</div>`
-              : ""
-          }
-
-          <div class="price">
-            ${formatPrice(price)}
-            ${
-              oldPrice > price
-                ? `<span class="old-price">${formatPrice(oldPrice)}</span>`
-                : ""
-            }
-          </div>
-
-          <div class="stock">
-            ${
-              unavailable
-                ? "غير متوفر حاليًا"
-                : "المخزون: " + stock
-            }
-          </div>
-
-          <button
-            type="button"
-            class="buy"
-            data-product-id="${escapeHtml(product.id)}"
-            ${unavailable ? "disabled" : ""}
-          >
-            ${unavailable ? "غير متوفر" : "🛒 أضف للسلة"}
-          </button>
-
+          <div style="font-size:10px;color:#777;font-weight:800;margin-bottom:5px;text-transform:uppercase">${escapeHtml(category?.name || 'JR SHOP')}</div>
+          <h3>${escapeHtml(product.name || 'Produit')}</h3>
+          <div class="description">${escapeHtml(product.description || 'تفاصيل المنتج متوفرة هنا.')}</div>
+          <div class="price">${formatPrice(price)} ${sale ? `<span class="old-price">${formatPrice(oldPrice)}</span>` : ''}</div>
+          <div class="stock">${stock > 0 ? `✓ متوفر (${stock})` : 'غير متوفر'}</div>
+          <button type="button" class="buy" data-buy-id="${escapeHtml(product.id)}" ${stock <= 0 ? 'disabled' : ''}>${stock > 0 ? '🛒 أضف للسلة' : 'غير متوفر'}</button>
         </div>
       </article>
     `;
@@ -1116,16 +1133,24 @@ function renderProducts(products){
 
   container.innerHTML = html;
 
-  container.querySelectorAll(".buy").forEach(button=>{
-    button.addEventListener("click",()=>{
-      addToCart(button.dataset.productId);
+  container.querySelectorAll('[data-detail-id]').forEach(button=>{
+    button.addEventListener('click',event=>{
+      event.stopPropagation();
+      openProductDetails(button.dataset.detailId);
     });
   });
-}
 
-/* =====================================================
-   CART
-===================================================== */
+  container.querySelectorAll('[data-buy-id]').forEach(button=>{
+    button.addEventListener('click',event=>{
+      event.stopPropagation();
+      addToCart(button.dataset.buyId);
+    });
+  });
+
+  container.querySelectorAll('.product').forEach(card=>{
+    card.addEventListener('click',()=>openProductDetails(card.dataset.productId));
+  });
+}
 function addToCart(productId){
 
   const product = allProducts.find(item =>
@@ -1325,6 +1350,44 @@ function changeCartQuantity(id,action){
 }
 
 /* =====================================================
+   PRODUCT DETAILS
+===================================================== */
+let currentDetailProduct = null;
+
+function openProductDetails(id){
+  const product = allProducts.find(p => String(p.id) === String(id));
+  if(!product) return;
+
+  currentDetailProduct = product;
+  const category = categories.find(c => String(c.id) === String(product.category_id));
+  const price = Number(product.price || 0);
+  const oldPrice = Number(product.old_price || 0);
+  const stock = Number(product.stock ?? 0);
+
+  document.getElementById("detailImage").src = getImage(product.image_url || product.image, "https://placehold.co/700x800?text=JR+Shop");
+  document.getElementById("detailImage").alt = product.name || "JR Shop";
+  document.getElementById("detailCategory").textContent = category?.name || "JR SHOP";
+  document.getElementById("detailTitle").textContent = product.name || "Produit";
+  document.getElementById("detailDescription").textContent = product.description || "اكتشف تفاصيل هذا المنتج واختره بسهولة من JR Shop.";
+  document.getElementById("detailPrice").innerHTML = `${formatPrice(price)} ${oldPrice > price ? `<span class="detail-old">${formatPrice(oldPrice)}</span>` : ''}`;
+  document.getElementById("detailStock").textContent = stock > 0 ? `✓ متوفر — ${stock} قطعة` : "غير متوفر حاليًا";
+
+  const addBtn = document.getElementById("detailAddBtn");
+  const buyBtn = document.getElementById("detailBuyBtn");
+  addBtn.disabled = stock <= 0;
+  buyBtn.disabled = stock <= 0;
+  addBtn.style.opacity = stock <= 0 ? ".5" : "1";
+  buyBtn.style.opacity = stock <= 0 ? ".5" : "1";
+
+  openModal("productDetailModal");
+}
+
+function closeProductDetails(){
+  closeModal("productDetailModal");
+  currentDetailProduct = null;
+}
+
+/* =====================================================
    MODALS
 ===================================================== */
 function openModal(id){
@@ -1358,6 +1421,22 @@ document.getElementById("checkoutBtn").addEventListener("click",()=>{
 
 document.getElementById("backToCartBtn").addEventListener("click",()=>{
   closeModal("checkoutModal");
+  openModal("cartModal");
+});
+
+document.getElementById("detailCloseBtn").addEventListener("click",closeProductDetails);
+
+document.getElementById("detailAddBtn").addEventListener("click",()=>{
+  if(!currentDetailProduct) return;
+  addToCart(currentDetailProduct.id);
+  closeProductDetails();
+});
+
+document.getElementById("detailBuyBtn").addEventListener("click",()=>{
+  if(!currentDetailProduct) return;
+  addToCart(currentDetailProduct.id);
+  closeProductDetails();
+  renderCart();
   openModal("cartModal");
 });
 
@@ -1537,7 +1616,7 @@ function featureProductCard(product,label="NEW IN"){
   const oldPrice = Number(product.old_price || 0);
   const category = categories.find(c => String(c.id) === String(product.category_id));
   return `
-    <article class="feature-card">
+    <article class="feature-card" data-feature-card-id="${escapeHtml(product.id)}">
       <div class="feature-card-img">
         ${oldPrice > price ? `<span class="feature-badge">SALE</span>` : `<span class="feature-badge">${escapeHtml(label)}</span>`}
         <img src="${escapeHtml(image)}" alt="${escapeHtml(product.name || 'JR Shop')}" loading="lazy" onerror="this.src='https://placehold.co/500x600?text=JR+Shop'">
@@ -1564,7 +1643,13 @@ function renderFeatureRail(containerId,products,label){
   }
   container.innerHTML = products.slice(0,4).map(p=>featureProductCard(p,label)).join('');
   container.querySelectorAll('[data-feature-id]').forEach(btn=>{
-    btn.addEventListener('click',()=>addToCart(btn.dataset.featureId));
+    btn.addEventListener('click',(event)=>{
+      event.stopPropagation();
+      addToCart(btn.dataset.featureId);
+    });
+  });
+  container.querySelectorAll('[data-feature-card-id]').forEach(card=>{
+    card.addEventListener('click',()=>openProductDetails(card.dataset.featureCardId));
   });
 }
 
@@ -1579,6 +1664,8 @@ function renderPremiumCollections(){
   renderFeatureRail('trendingProducts',trending,'TRENDING');
 
   const imgProducts = [...allProducts].filter(p=>p.image_url || p.image);
+  renderCategories();
+
   if(imgProducts.length){
     document.getElementById('collectionImg1').src=getImage(imgProducts[0].image_url || imgProducts[0].image,'https://placehold.co/900x700?text=JR+SHOP');
     document.getElementById('collectionImg2').src=getImage(imgProducts[1 % imgProducts.length].image_url || imgProducts[1 % imgProducts.length].image,'https://placehold.co/600x700?text=JR+SHOP');
