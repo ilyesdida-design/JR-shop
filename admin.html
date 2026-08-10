@@ -229,7 +229,8 @@ header{
 .tabs{
   display:flex;
   gap:8px;
-  margin-bottom:18px
+  margin-bottom:18px;
+  flex-wrap:wrap
 }
 
 .tab{
@@ -593,6 +594,14 @@ header{
         🛍️ المنتجات
       </button>
 
+      <button
+        type="button"
+        class="tab"
+        onclick="tab('categories',this)"
+      >
+        🗂️ التصنيفات
+      </button>
+
     </div>
 
     <!-- =====================
@@ -678,6 +687,44 @@ header{
 
     </section>
 
+    <!-- =====================
+         CATEGORIES SECTION
+    ====================== -->
+
+    <section
+      id="categories"
+      class="section"
+    >
+
+      <div class="row">
+
+        <h2>
+          🗂️ التصنيفات
+        </h2>
+
+        <button
+          type="button"
+          class="btn green"
+          onclick="openCategoryModal()"
+        >
+          ➕ إضافة
+        </button>
+
+      </div>
+
+      <div
+        id="categoryList"
+        class="orders"
+      >
+
+        <div class="empty">
+          جاري التحميل...
+        </div>
+
+      </div>
+
+    </section>
+
   </div>
 
 </div>
@@ -751,6 +798,14 @@ header{
       placeholder="الوصف"
     ></textarea>
 
+    <select id="pcategory">
+
+      <option value="">
+        بدون تصنيف
+      </option>
+
+    </select>
+
     <select id="pactive">
 
       <option value="true">
@@ -787,6 +842,83 @@ header{
   </div>
   </div>
 
+<!-- =========================
+     CATEGORY MODAL
+========================= -->
+
+<div
+  id="categoryModal"
+  class="modal"
+>
+
+  <div class="modalbox">
+
+    <h2 id="categoryModalTitle">
+      ➕ تصنيف جديد
+    </h2>
+
+    <input
+      id="cid"
+      type="hidden"
+    >
+
+    <input
+      id="cname"
+      type="text"
+      placeholder="اسم التصنيف مثل Women"
+    >
+
+    <input
+      id="cslug"
+      type="text"
+      placeholder="Slug مثل women"
+    >
+
+    <input
+      id="corder"
+      type="number"
+      inputmode="numeric"
+      placeholder="الترتيب"
+      value="0"
+    >
+
+    <select id="cactive">
+
+      <option value="true">
+        نشط
+      </option>
+
+      <option value="false">
+        غير نشط
+      </option>
+
+    </select>
+
+    <div class="actions">
+
+      <button
+        id="saveCategoryBtn"
+        type="button"
+        class="btn green"
+        onclick="saveCategory()"
+      >
+        💾 حفظ
+      </button>
+
+      <button
+        type="button"
+        class="btn gray"
+        onclick="closeCategoryModal()"
+      >
+        إلغاء
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
@@ -822,6 +954,7 @@ supabase.createClient(
 
 let orders = [];
 let products = [];
+let categories = [];
 let customers = [];
 let customerMap = {};
 
@@ -853,6 +986,33 @@ document.getElementById("orderList");
 
 const productList =
 document.getElementById("productList");
+
+const categoryList =
+document.getElementById("categoryList");
+
+const categoryModal =
+document.getElementById("categoryModal");
+
+const categoryModalTitle =
+document.getElementById("categoryModalTitle");
+
+const cid =
+document.getElementById("cid");
+
+const cname =
+document.getElementById("cname");
+
+const cslug =
+document.getElementById("cslug");
+
+const corder =
+document.getElementById("corder");
+
+const cactive =
+document.getElementById("cactive");
+
+const saveCategoryBtn =
+document.getElementById("saveCategoryBtn");
 
 const searchInput =
 document.getElementById("search");
@@ -886,6 +1046,9 @@ document.getElementById("pfile");
 
 const pdesc =
 document.getElementById("pdesc");
+
+const pcategory =
+document.getElementById("pcategory");
 
 const pactive =
 document.getElementById("pactive");
@@ -1002,6 +1165,7 @@ async function login(){
     adminBox.style.display = "block";
 
     await loadOrders();
+    await loadCategories();
     await loadProducts();
 
   }catch(error){
@@ -1058,7 +1222,7 @@ async function checkSession(){
 
 
       await loadOrders();
-
+      await loadCategories();
       await loadProducts();
 
     }else{
@@ -1549,6 +1713,128 @@ async function deleteOrder(id){
 
 
 /* =========================
+   LOAD CATEGORIES
+========================= */
+
+async function loadCategories(){
+
+  categoryList.innerHTML =
+    '<div class="empty">جاري تحميل التصنيفات...</div>';
+
+  const r =
+    await db
+      .from("categories")
+      .select("*")
+      .order("sort_order",{ascending:true});
+
+  if(r.error){
+
+    console.error(r.error);
+
+    categoryList.innerHTML =
+      '<div class="empty">❌ ' +
+      esc(r.error.message) +
+      '</div>';
+
+    categories = [];
+    fillCategorySelect();
+    return;
+  }
+
+  categories = r.data || [];
+
+  drawCategories();
+  fillCategorySelect();
+
+}
+
+
+/* =========================
+   DRAW CATEGORIES
+========================= */
+
+function drawCategories(){
+
+  if(!categories.length){
+    categoryList.innerHTML =
+      '<div class="empty">لا توجد تصنيفات</div>';
+    return;
+  }
+
+  categoryList.innerHTML =
+    categories.map(c => {
+
+      const productCount =
+        products.filter(p =>
+          String(p.category_id || "") === String(c.id)
+        ).length;
+
+      return `
+        <div class="card">
+          <div class="row">
+            <div>
+              <h3>🗂️ ${esc(c.name || "تصنيف")}</h3>
+              <div class="muted">
+                slug: ${esc(c.slug || "")}
+                <br>
+                الترتيب: ${esc(c.sort_order ?? 0)}
+                <br>
+                المنتجات: ${productCount}
+              </div>
+            </div>
+            <b>${c.active === false ? "غير نشط" : "نشط"}</b>
+          </div>
+          <div class="actions">
+            <button
+              type="button"
+              class="btn dark"
+              onclick="editCategoryById('${esc(c.id)}')"
+            >
+              ✏️ تعديل
+            </button>
+            <button
+              type="button"
+              class="btn red"
+              onclick="deleteCategory('${esc(c.id)}')"
+            >
+              🗑️ حذف
+            </button>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+}
+
+
+/* =========================
+   CATEGORY SELECT
+========================= */
+
+function fillCategorySelect(selectedId){
+
+  if(!pcategory) return;
+
+  const current =
+    selectedId !== undefined
+      ? String(selectedId || "")
+      : String(pcategory.value || "");
+
+  pcategory.innerHTML =
+    '<option value="">بدون تصنيف</option>' +
+    categories
+      .filter(c => c.active !== false)
+      .map(c => `
+        <option value="${esc(c.id)}" ${String(c.id) === current ? "selected" : ""}>
+          ${esc(c.name)}
+        </option>
+      `)
+      .join("");
+
+}
+
+
+/* =========================
    LOAD PRODUCTS
 ========================= */
 
@@ -1557,18 +1843,11 @@ async function loadProducts(){
   productList.innerHTML =
     '<div class="empty">جاري تحميل المنتجات...</div>';
 
-
   const r =
     await db
       .from("products")
       .select("*")
-      .order(
-        "created_at",
-        {
-          ascending:false
-        }
-      );
-
+      .order("created_at",{ascending:false});
 
   if(r.error){
 
@@ -1578,16 +1857,13 @@ async function loadProducts(){
       '<div class="empty">❌ ' +
       esc(r.error.message) +
       '</div>';
-
     return;
   }
 
-
-  products =
-    r.data || [];
-
+  products = r.data || [];
 
   drawProducts();
+  drawCategories();
 
 }
 
@@ -1681,6 +1957,13 @@ function drawProducts(){
                 p.stock ?? 0
               )}
 
+              <br>
+
+              التصنيف:
+              ${esc(
+                categories.find(c => String(c.id) === String(p.category_id || ""))?.name || "بدون تصنيف"
+              )}
+
             </div>
 
 
@@ -1751,6 +2034,8 @@ function drawProducts(){
     pstock.value = "";
     pimage.value = "";
     pdesc.value = "";
+    fillCategorySelect();
+    pcategory.value = "";
     pactive.value = "true";
     pfile.value = "";
 
@@ -1843,6 +2128,7 @@ function drawProducts(){
       p.description ||
       "";
 
+    fillCategorySelect(p.category_id || "");
 
     pactive.value =
       String(
@@ -1916,6 +2202,11 @@ function drawProducts(){
         document
           .getElementById("pactive")
           .value === "true";
+
+      const categoryId =
+        document
+          .getElementById("pcategory")
+          .value || null;
 
 
       const productId =
@@ -2080,7 +2371,9 @@ function drawProducts(){
 
         description:description,
 
-        active:active
+        active:active,
+
+        category_id:categoryId
 
       };
 
@@ -2187,6 +2480,177 @@ function drawProducts(){
         "💾 حفظ";
 
     }
+
+  }
+
+
+  /* =========================
+     CATEGORY MODAL
+  ========================= */
+
+  function openCategoryModal(){
+
+    categoryModal.style.display = "block";
+    document.body.style.overflow = "hidden";
+
+    categoryModalTitle.textContent =
+      "➕ تصنيف جديد";
+
+    cid.value = "";
+    cname.value = "";
+    cslug.value = "";
+    corder.value = "0";
+    cactive.value = "true";
+
+    setTimeout(function(){
+      cname.focus();
+    },100);
+
+  }
+
+
+  function closeCategoryModal(){
+
+    categoryModal.style.display = "none";
+    document.body.style.overflow = "";
+
+  }
+
+
+  function editCategoryById(id){
+
+    const c =
+      categories.find(function(x){
+        return String(x.id) === String(id);
+      });
+
+    if(!c){
+      alert("❌ لم يتم العثور على التصنيف");
+      return;
+    }
+
+    openCategoryModal();
+
+    categoryModalTitle.textContent =
+      "✏️ تعديل التصنيف";
+
+    cid.value = c.id || "";
+    cname.value = c.name || "";
+    cslug.value = c.slug || "";
+    corder.value = c.sort_order ?? 0;
+    cactive.value = String(c.active !== false);
+
+  }
+
+
+  async function saveCategory(){
+
+    const btn = saveCategoryBtn;
+
+    try{
+
+      btn.disabled = true;
+      btn.textContent = "⏳ جاري...";
+
+      const name = cname.value.trim();
+      let slug = cslug.value.trim().toLowerCase();
+      const sort_order = Number(corder.value || 0);
+      const active = cactive.value === "true";
+      const categoryId = cid.value;
+
+      if(!name){
+        alert("❌ اكتب اسم التصنيف");
+        return;
+      }
+
+      if(!slug){
+        slug = name
+          .toLowerCase()
+          .trim()
+          .replace(/\s+/g,"-")
+          .replace(/[^a-z0-9_-]/g,"");
+      }
+
+      if(!slug){
+        alert("❌ اكتب Slug للتصنيف، مثال: women");
+        return;
+      }
+
+      if(sort_order < 0){
+        alert("❌ الترتيب غير صحيح");
+        return;
+      }
+
+      const data = {
+        name:name,
+        slug:slug,
+        sort_order:sort_order,
+        active:active
+      };
+
+      const result = categoryId
+        ? await db.from("categories").update(data).eq("id",categoryId)
+        : await db.from("categories").insert([data]);
+
+      if(result.error){
+        console.error("CATEGORY DATABASE ERROR:",result.error);
+        alert("❌ مشكلة التصنيف:\n\n" + result.error.message);
+        return;
+      }
+
+      alert(categoryId ? "✅ تم تعديل التصنيف" : "✅ تمت إضافة التصنيف");
+
+      closeCategoryModal();
+      await loadCategories();
+      await loadProducts();
+
+    }catch(error){
+
+      console.error("CATEGORY SAVE ERROR:",error);
+      alert("❌ حدث خطأ:\n\n" + (error.message || String(error)));
+
+    }finally{
+
+      btn.disabled = false;
+      btn.textContent = "💾 حفظ";
+
+    }
+
+  }
+
+
+  async function deleteCategory(id){
+
+    const c = categories.find(function(x){
+      return String(x.id) === String(id);
+    });
+
+    if(!c) return;
+
+    if(!confirm(
+      "هل تريد حذف التصنيف \"" +
+      (c.name || "") +
+      "\"؟\n\nالمنتجات التابعة له لن تُحذف."
+    )){
+      return;
+    }
+
+    const r =
+      await db
+        .from("categories")
+        .delete()
+        .eq("id",id);
+
+    if(r.error){
+      console.error(r.error);
+      alert("❌ خطأ:\n\n" + r.error.message);
+      return;
+    }
+
+    await loadCategories();
+    await loadProducts();
+
+    alert("✅ تم حذف التصنيف");
 
   }
 
@@ -2304,6 +2768,20 @@ function drawProducts(){
   );
 
 
+  categoryModal.addEventListener(
+    "click",
+    function(e){
+
+      if(e.target === categoryModal){
+
+        closeCategoryModal();
+
+      }
+
+    }
+  );
+
+
   /* =========================
      ESC TO CLOSE MODAL
   ========================= */
@@ -2318,6 +2796,15 @@ function drawProducts(){
       ){
 
         closeModal();
+
+      }
+
+      if(
+        e.key === "Escape" &&
+        categoryModal.style.display === "block"
+      ){
+
+        closeCategoryModal();
 
       }
 
