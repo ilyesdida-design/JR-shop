@@ -997,9 +997,9 @@ async function loadCategories() {
     } =
       await supabaseClient
         .from("categories")
-        .select(
-          "id,name,slug,image_url"
-        )
+.select(
+  "id,name,slug,sort_order,active"
+)        )
         .order(
           "name",
           {
