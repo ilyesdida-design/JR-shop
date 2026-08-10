@@ -13,63 +13,222 @@ html{scroll-behavior:smooth}
 body{
   margin:0;
   font-family:Arial,sans-serif;
-  background:#f6f7f8;
+  background:#f7f7f7;
   color:#111;
+  overflow-x:hidden;
 }
 button,input,textarea,select{font:inherit}
 button{cursor:pointer}
+img{max-width:100%}
 
+/* =========================
+   VARIABLES
+========================= */
+:root{
+  --jr-green:#16a34a;
+  --jr-green2:#22c55e;
+  --jr-black:#111;
+  --jr-soft:#f4f5f6;
+  --jr-line:#e5e7eb;
+}
+
+/* =========================
+   HEADER
+========================= */
 header{
-  background:#111;
-  color:#fff;
-  padding:16px;
+  background:#fff;
+  color:#111;
   position:sticky;
   top:0;
   z-index:100;
+  box-shadow:0 1px 0 rgba(0,0,0,.08);
 }
 .top{
-  max-width:1100px;
+  max-width:1240px;
+  margin:auto;
+  padding:16px 18px;
+  display:grid;
+  grid-template-columns:auto minmax(280px,1fr) auto;
+  align-items:center;
+  gap:28px;
+}
+.logo{
+  font-size:30px;
+  font-weight:900;
+  letter-spacing:-1px;
+}
+.logo span{color:var(--jr-green)}
+.search-wrap{position:relative}
+.search-wrap input{
+  width:100%;
+  height:46px;
+  border:1px solid #d9dce0;
+  border-radius:4px;
+  padding:0 48px 0 16px;
+  background:#f8f8f8;
+  outline:none;
+}
+.search-wrap input:focus{
+  border-color:#999;
+  background:#fff;
+}
+.search-icon{
+  position:absolute;
+  right:16px;
+  top:10px;
+  font-size:21px;
+  color:#666;
+  pointer-events:none;
+}
+.header-actions{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+.icon-btn,.cart{
+  border:0;
+  background:#fff;
+  color:#111;
+  border-radius:4px;
+  padding:11px 12px;
+  font-weight:700;
+}
+.icon-btn{font-size:20px}
+.cart{
+  background:#111;
+  color:#fff;
+  min-width:112px;
+}
+.cart:hover{background:var(--jr-green)}
+
+.navbar{
+  border-top:1px solid #eee;
+  background:#fff;
+}
+.nav-inner{
+  max-width:1240px;
   margin:auto;
   display:flex;
   align-items:center;
-  justify-content:space-between;
-  gap:15px;
+  justify-content:center;
+  overflow-x:auto;
 }
-.logo{font-size:27px;font-weight:900}
-.logo span{color:#16a34a}
-.cart{
+.nav-inner button{
   border:0;
-  background:#16a34a;
-  color:#fff;
-  padding:11px 16px;
-  border-radius:12px;
-  font-weight:bold;
+  background:#fff;
+  padding:15px 22px;
+  font-size:14px;
+  font-weight:800;
+  white-space:nowrap;
+  border-bottom:3px solid transparent;
 }
-.cart:hover{background:#15803d}
+.nav-inner button.active{
+  color:var(--jr-green);
+  border-bottom-color:var(--jr-green);
+}
 
+/* =========================
+   MOBILE NAV
+========================= */
+.mobile-bottom-nav{display:none}
+
+/* =========================
+   HERO
+========================= */
 .hero{
-  background:#111;
+  max-width:1240px;
+  margin:18px auto 0;
+  min-height:420px;
+  background:
+    linear-gradient(90deg,rgba(0,0,0,.88),rgba(0,0,0,.18)),
+    url("https://placehold.co/1400x600/111111/ffffff?text=JR+SHOP")
+    center/cover;
   color:#fff;
-  text-align:center;
-  padding:34px 15px 42px;
+  display:flex;
+  align-items:center;
+  padding:50px;
 }
-.hero h1{margin:0 0 10px;font-size:32px}
-.hero h1 span{color:#22c55e}
-.hero p{color:#ccc;margin:0;font-size:15px}
+.hero-content{max-width:600px}
+.hero-kicker{
+  font-size:11px;
+  letter-spacing:4px;
+  font-weight:900;
+  margin-bottom:15px;
+  color:#ddd;
+}
+.hero h1{
+  font-size:72px;
+  line-height:.9;
+  letter-spacing:-4px;
+  margin:0 0 18px;
+  font-weight:900;
+}
+.hero h1 span{color:var(--jr-green2)}
+.hero p{
+  font-size:16px;
+  color:#ddd;
+  margin:0 0 25px;
+}
+.hero-actions{
+  display:flex;
+  gap:9px;
+}
+.hero-btn{
+  display:inline-block;
+  padding:13px 22px;
+  background:#fff;
+  color:#111;
+  text-decoration:none;
+  font-weight:900;
+  font-size:13px;
+}
+.hero-btn.green{
+  background:var(--jr-green);
+  color:#fff;
+}
 
+/* =========================
+   CONTAINER
+========================= */
 .container{
-  max-width:1100px;
+  max-width:1240px;
   margin:auto;
-  padding:20px 15px 50px;
+  padding:22px 18px 55px;
 }
 
-/* ASOS STYLE CATEGORIES */
+/* =========================
+   QUICK STRIP
+========================= */
+.quick-strip{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin-bottom:28px;
+}
+.quick-item{
+  background:#fff;
+  padding:17px 13px;
+  border:1px solid #eee;
+  text-align:center;
+}
+.quick-item b{
+  display:block;
+  font-size:13px;
+  margin-bottom:5px;
+}
+.quick-item span{
+  color:#777;
+  font-size:11px;
+}
+
+/* =========================
+   CATEGORIES
+========================= */
 .categories-section{
   background:#fff;
-  border-radius:18px;
-  padding:18px 16px 20px;
-  margin-bottom:24px;
-  box-shadow:0 4px 18px rgba(0,0,0,.06);
+  padding:20px 16px 18px;
+  margin-bottom:30px;
+  border:1px solid #eee;
 }
 .categories-head{
   display:flex;
@@ -80,7 +239,7 @@ header{
 }
 .categories-head h2{
   margin:0;
-  font-size:23px;
+  font-size:25px;
 }
 .categories-hint{
   color:#777;
@@ -95,11 +254,6 @@ header{
   scroll-snap-type:x proximity;
   scrollbar-width:thin;
 }
-.categories-scroll::-webkit-scrollbar{height:5px}
-.categories-scroll::-webkit-scrollbar-thumb{
-  background:#ccc;
-  border-radius:20px;
-}
 .category-card{
   flex:0 0 125px;
   border:0;
@@ -111,7 +265,6 @@ header{
 .category-card-image-wrap{
   width:125px;
   height:150px;
-  border-radius:12px;
   overflow:hidden;
   background:#eee;
   position:relative;
@@ -131,13 +284,12 @@ header{
   margin-top:9px;
   font-size:14px;
   font-weight:bold;
-  line-height:1.3;
 }
 .category-card.active .category-card-image-wrap{
-  border-color:#16a34a;
+  border-color:var(--jr-green);
   box-shadow:0 0 0 2px #dcfce7;
 }
-.category-card.active .category-card-name{color:#16a34a}
+.category-card.active .category-card-name{color:var(--jr-green)}
 .all-card .category-card-image-wrap{
   background:#111;
   display:flex;
@@ -148,42 +300,272 @@ header{
   color:#fff;
   font-size:42px;
 }
-.category-loading{
+.category-loading,.category-error{
   width:100%;
   text-align:center;
   padding:25px 10px;
   color:#777;
 }
-.category-error{
+.category-error{color:#dc2626}
+
+/* =========================
+   EDITORIAL
+========================= */
+.editorial-grid{
+  display:grid;
+  grid-template-columns:1.4fr .6fr;
+  gap:12px;
+  margin-bottom:38px;
+}
+.editorial-card{
+  min-height:250px;
+  background:linear-gradient(135deg,#111,#222);
+  color:#fff;
+  position:relative;
+  overflow:hidden;
+}
+.editorial-card:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(0deg,rgba(0,0,0,.65),transparent 70%);
+}
+.editorial-content{
+  position:absolute;
+  z-index:2;
+  right:25px;
+  bottom:24px;
+}
+.editorial-content .eyebrow{
+  color:var(--jr-green2);
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:2px;
+}
+.editorial-content h3{
+  font-size:30px;
+  margin:7px 0;
+}
+.editorial-content p{
+  margin:0;
+  color:#ddd;
+  font-size:13px;
+}
+.editorial-stack{
+  display:grid;
+  gap:12px;
+}
+.editorial-card.small{min-height:119px}
+.editorial-card.tone-light{
+  background:#e9ecef;
+  color:#111;
+}
+.editorial-card.tone-light:after{
+  background:linear-gradient(0deg,rgba(255,255,255,.5),transparent);
+}
+.editorial-card.tone-light .editorial-content p{color:#555}
+
+/* =========================
+   COLLECTION
+========================= */
+.collection-showcase{margin:0 0 38px}
+.collection-head{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:16px;
+}
+.collection-head h2{
+  margin:0;
+  font-size:27px;
+}
+.collection-head p{
+  margin:5px 0 0;
+  color:#777;
+  font-size:13px;
+}
+.collection-link{
+  border:0;
+  background:transparent;
+  font-weight:900;
+  text-decoration:underline;
+}
+.collection-grid{
+  display:grid;
+  grid-template-columns:1.2fr .8fr .8fr;
+  gap:12px;
+}
+.collection-tile{
+  min-height:340px;
+  position:relative;
+  overflow:hidden;
+  background:#111;
+  color:#fff;
+  cursor:pointer;
+}
+.collection-tile img{
   width:100%;
-  text-align:center;
-  padding:20px 10px;
-  color:#dc2626;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  transition:transform .5s;
+}
+.collection-tile:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(0deg,rgba(0,0,0,.72),rgba(0,0,0,.03) 65%);
+}
+.collection-tile:hover img{transform:scale(1.045)}
+.collection-tile-content{
+  position:absolute;
+  z-index:2;
+  right:22px;
+  left:22px;
+  bottom:22px;
+}
+.collection-tile-content small{
+  font-size:10px;
+  letter-spacing:2px;
+  font-weight:900;
+}
+.collection-tile-content h3{
+  font-size:30px;
+  margin:7px 0;
+}
+.collection-tile-content span{
+  font-size:12px;
+  border-bottom:1px solid #fff;
+  padding-bottom:3px;
 }
 
-/* PRODUCTS */
-.products-area{min-width:0}
+/* =========================
+   FEATURE RAIL
+========================= */
+.feature-section{margin:0 0 40px}
+.feature-head{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  margin-bottom:15px;
+}
+.feature-head h2{
+  margin:0;
+  font-size:27px;
+}
+.feature-head span{
+  font-size:12px;
+  color:#777;
+}
+.feature-rail{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+}
+.feature-card{
+  background:#fff;
+  position:relative;
+  overflow:hidden;
+  cursor:pointer;
+  border:1px solid #eee;
+}
+.feature-card-img{
+  height:300px;
+  background:#eee;
+  overflow:hidden;
+  position:relative;
+}
+.feature-card-img img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  transition:transform .35s;
+}
+.feature-card:hover .feature-card-img img{transform:scale(1.04)}
+.feature-badge{
+  position:absolute;
+  top:10px;
+  right:10px;
+  background:#111;
+  color:#fff;
+  padding:6px 9px;
+  font-size:10px;
+  font-weight:900;
+  z-index:2;
+}
+.feature-card-info{padding:12px 13px 15px}
+.feature-card-info small{color:#777;font-size:11px}
+.feature-card-info h3{
+  font-size:14px;
+  margin:5px 0 8px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.feature-price{
+  font-weight:900;
+  color:var(--jr-green);
+  font-size:16px;
+}
+.feature-old{
+  color:#999;
+  text-decoration:line-through;
+  font-size:12px;
+  margin-right:7px;
+  font-weight:400;
+}
+.feature-add{
+  width:100%;
+  border:0;
+  background:#111;
+  color:#fff;
+  padding:11px;
+  margin-top:10px;
+  font-weight:900;
+}
+.feature-add:hover{background:var(--jr-green)}
+
+/* =========================
+   PRODUCTS
+========================= */
+.products-area{
+  scroll-margin-top:100px;
+  min-width:0;
+  margin-bottom:40px;
+}
 .section-title{
   display:flex;
   align-items:center;
   justify-content:space-between;
   margin-bottom:15px;
 }
-.section-title h2{margin:0;font-size:24px}
+.section-title h2{
+  margin:0;
+  font-size:27px;
+}
 .products{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
+  grid-template-columns:repeat(4,minmax(0,1fr));
   gap:14px;
+  align-items:stretch;
 }
 .product{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  cursor:pointer;
   background:#fff;
-  border-radius:16px;
+  border:1px solid #eee;
   overflow:hidden;
-  box-shadow:0 4px 15px rgba(0,0,0,.07);
 }
 .product-img{
-  height:220px;
-  background:#e5e7eb;
+  position:relative;
+  aspect-ratio:4/5;
+  min-height:220px;
+  background:#f2f2f2;
   overflow:hidden;
 }
 .product-img img{
@@ -191,20 +573,70 @@ header{
   height:100%;
   object-fit:cover;
   display:block;
+  transition:transform .35s;
 }
-.product-info{padding:13px}
-.product h3{font-size:16px;margin:0 0 8px}
+.product:hover .product-img img{transform:scale(1.025)}
+.product-badge{
+  position:absolute;
+  top:10px;
+  right:10px;
+  background:#111;
+  color:#fff;
+  padding:6px 9px;
+  font-size:10px;
+  font-weight:900;
+  z-index:3;
+}
+.product-badge.sale{background:#d91e18}
+.product-quick{
+  position:absolute;
+  left:10px;
+  right:10px;
+  bottom:10px;
+  border:0;
+  background:rgba(255,255,255,.95);
+  color:#111;
+  padding:10px;
+  font-size:12px;
+  font-weight:900;
+  opacity:0;
+  transform:translateY(8px);
+  transition:.2s;
+  z-index:3;
+}
+.product:hover .product-quick{
+  opacity:1;
+  transform:translateY(0);
+}
+.product-info{
+  padding:13px;
+  display:flex;
+  flex-direction:column;
+  flex:1;
+}
+.product-category{
+  font-size:10px;
+  color:#777;
+  font-weight:800;
+  margin-bottom:5px;
+  text-transform:uppercase;
+}
+.product h3{
+  font-size:16px;
+  margin:0 0 8px;
+}
 .description{
   color:#666;
   font-size:13px;
   line-height:1.5;
   margin-bottom:8px;
+  min-height:20px;
 }
 .price{
-  color:#16a34a;
+  color:var(--jr-green);
   font-size:18px;
   font-weight:bold;
-  margin-bottom:10px;
+  margin-bottom:7px;
 }
 .old-price{
   color:#999;
@@ -212,32 +644,89 @@ header{
   font-size:13px;
   margin-right:5px;
 }
-.stock{color:#666;font-size:13px;margin-bottom:10px}
+.stock{
+  color:#666;
+  font-size:13px;
+  margin-bottom:10px;
+}
 .buy{
   width:100%;
   border:0;
   background:#111;
   color:#fff;
   padding:11px;
-  border-radius:10px;
   font-weight:bold;
+  margin-top:auto;
 }
-.buy:hover{background:#16a34a}
-.buy:disabled{background:#999;cursor:not-allowed}
+.buy:hover{background:var(--jr-green)}
+.buy:disabled{
+  background:#999;
+  cursor:not-allowed;
+}
 
-.loading,.error{
+/* =========================
+   NEWSLETTER + BENEFITS
+========================= */
+.newsletter{
+  background:#111;
+  color:#fff;
+  margin:0 0 38px;
+  padding:32px 25px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+.newsletter h2{
+  margin:0 0 6px;
+  font-size:27px;
+}
+.newsletter p{
+  margin:0;
+  color:#bbb;
+  font-size:13px;
+}
+.newsletter-btn{
+  border:0;
+  background:var(--jr-green);
+  color:#fff;
+  padding:13px 22px;
+  font-weight:900;
+  white-space:nowrap;
+}
+.benefits{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin-bottom:40px;
+}
+.benefit{
+  background:#fff;
+  border:1px solid #eee;
+  padding:22px 10px;
   text-align:center;
-  padding:30px;
-  grid-column:1/-1;
 }
-.error{color:#dc2626}
+.benefit-icon{
+  font-size:25px;
+  margin-bottom:8px;
+}
+.benefit b{
+  display:block;
+  margin-bottom:4px;
+}
+.benefit span{
+  color:#777;
+  font-size:11px;
+}
 
-/* MODALS */
+/* =========================
+   MODALS
+========================= */
 .modal{
   display:none;
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.6);
+  background:rgba(0,0,0,.68);
   z-index:999;
   padding:15px;
   overflow-y:auto;
@@ -251,7 +740,6 @@ header{
   width:100%;
   max-width:550px;
   background:#fff;
-  border-radius:18px;
   padding:20px;
   max-height:92vh;
   overflow-y:auto;
@@ -265,20 +753,27 @@ header{
   padding:12px;
   margin-bottom:10px;
   background:#f6f7f8;
-  border-radius:12px;
   align-items:center;
 }
 .cart-item-img{
   width:65px;
   height:65px;
-  border-radius:10px;
   object-fit:cover;
   background:#ddd;
   flex-shrink:0;
 }
-.cart-item-info{flex:1;min-width:0}
-.cart-item-name{font-weight:bold;margin-bottom:5px}
-.cart-item-price{color:#16a34a;font-weight:bold}
+.cart-item-info{
+  flex:1;
+  min-width:0;
+}
+.cart-item-name{
+  font-weight:bold;
+  margin-bottom:5px;
+}
+.cart-item-price{
+  color:var(--jr-green);
+  font-weight:bold;
+}
 .quantity-controls{
   display:flex;
   align-items:center;
@@ -289,7 +784,6 @@ header{
   width:30px;
   height:30px;
   border:0;
-  border-radius:8px;
   background:#111;
   color:#fff;
 }
@@ -298,11 +792,14 @@ header{
   background:#dc2626;
   color:#fff;
   padding:7px 9px;
-  border-radius:8px;
 }
-.empty-cart{text-align:center;color:#777;padding:30px 10px}
+.empty-cart{
+  text-align:center;
+  color:#777;
+  padding:30px 10px;
+}
 
-/* FORM */
+/* FORMS */
 .form-group{margin-bottom:11px}
 .form-label{
   display:block;
@@ -314,14 +811,18 @@ header{
   width:100%;
   padding:12px;
   border:1px solid #ddd;
-  border-radius:10px;
   font-size:15px;
-  font-family:Arial,sans-serif;
+  background:#fff;
 }
-.form-textarea{min-height:90px;resize:vertical}
-.form-input:focus,.form-select:focus,.form-textarea:focus{
+.form-textarea{
+  min-height:90px;
+  resize:vertical;
+}
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus{
   outline:none;
-  border-color:#16a34a;
+  border-color:var(--jr-green);
 }
 
 /* BUTTONS */
@@ -329,8 +830,7 @@ header{
   width:100%;
   padding:13px;
   border:0;
-  border-radius:10px;
-  background:#16a34a;
+  background:var(--jr-green);
   color:#fff;
   font-size:16px;
   font-weight:bold;
@@ -341,7 +841,6 @@ header{
   margin-top:10px;
   padding:12px;
   border:0;
-  border-radius:10px;
   background:#111;
   color:#fff;
   font-weight:bold;
@@ -351,14 +850,203 @@ header{
   margin-top:10px;
   padding:13px;
   border:0;
-  border-radius:10px;
   background:#25D366;
   color:#fff;
   font-size:16px;
   font-weight:bold;
 }
 
-/* TOAST */
+/* =========================
+   PREMIUM PRODUCT DETAILS
+========================= */
+.detail-box{
+  max-width:1000px;
+  padding:0;
+  overflow:hidden;
+}
+.detail-layout{
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  min-height:590px;
+}
+.detail-image{
+  position:relative;
+  min-height:590px;
+  background:#f2f2f2;
+  overflow:hidden;
+}
+.detail-image img{
+  width:100%;
+  height:100%;
+  min-height:590px;
+  object-fit:cover;
+  display:block;
+  transition:transform .5s;
+}
+.detail-image:hover img{transform:scale(1.025)}
+.detail-close{
+  position:absolute;
+  top:14px;
+  left:14px;
+  width:40px;
+  height:40px;
+  border:0;
+  border-radius:50%;
+  background:#111;
+  color:#fff;
+  font-size:23px;
+  z-index:20;
+}
+.detail-sale{
+  position:absolute;
+  top:18px;
+  right:18px;
+  background:#dc2626;
+  color:#fff;
+  padding:8px 12px;
+  font-size:11px;
+  font-weight:900;
+  z-index:10;
+}
+.detail-content{
+  padding:45px 38px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  background:#fff;
+}
+.detail-category{
+  font-size:11px;
+  letter-spacing:2px;
+  color:#777;
+  font-weight:900;
+  text-transform:uppercase;
+  margin-bottom:10px;
+}
+.detail-title{
+  font-size:36px;
+  line-height:1.05;
+  margin:0 0 15px;
+  font-weight:900;
+}
+.detail-description{
+  color:#666;
+  line-height:1.8;
+  font-size:14px;
+  margin-bottom:20px;
+}
+.detail-price{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:var(--jr-green);
+  font-size:28px;
+  font-weight:900;
+  margin-bottom:6px;
+}
+.detail-old{
+  color:#999;
+  text-decoration:line-through;
+  font-size:15px;
+  font-weight:400;
+}
+.detail-stock{
+  font-size:13px;
+  margin:8px 0 20px;
+}
+.detail-stock.available{
+  color:#15803d;
+  font-weight:700;
+}
+.detail-stock.unavailable{
+  color:#dc2626;
+  font-weight:700;
+}
+.detail-quantity-title{
+  font-size:12px;
+  font-weight:900;
+  margin-bottom:8px;
+}
+.detail-quantity{
+  display:flex;
+  align-items:center;
+  width:145px;
+  height:44px;
+  border:1px solid #ddd;
+  margin-bottom:20px;
+}
+.detail-quantity button{
+  width:44px;
+  height:100%;
+  border:0;
+  background:#f5f5f5;
+  font-size:20px;
+  font-weight:900;
+}
+.detail-quantity strong{
+  flex:1;
+  text-align:center;
+  font-size:15px;
+}
+.detail-total{
+  background:#f7f7f7;
+  padding:13px 15px;
+  margin-bottom:15px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-weight:800;
+}
+.detail-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+.detail-actions button{
+  border:0;
+  padding:15px;
+  font-weight:900;
+  font-size:14px;
+}
+.detail-add{
+  background:#111;
+  color:#fff;
+}
+.detail-add:hover{background:var(--jr-green)}
+.detail-buy{
+  background:var(--jr-green);
+  color:#fff;
+}
+.detail-buy:hover{background:#15803d}
+.detail-add:disabled,
+.detail-buy:disabled{
+  background:#aaa;
+  cursor:not-allowed;
+}
+.detail-info-strip{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-top:20px;
+  padding-top:18px;
+  border-top:1px solid #eee;
+}
+.detail-info-item{
+  text-align:center;
+  font-size:10px;
+  color:#666;
+  font-weight:700;
+}
+.detail-info-item strong{
+  display:block;
+  color:#111;
+  font-size:16px;
+  margin-bottom:4px;
+}
+
+/* =========================
+   TOAST + FOOTER
+========================= */
 .toast{
   position:fixed;
   bottom:20px;
@@ -369,311 +1057,289 @@ header{
   background:#111;
   color:#fff;
   padding:14px;
-  border-radius:12px;
   text-align:center;
   font-weight:bold;
   z-index:9999;
   display:none;
 }
-
-/* FOOTER */
 footer{
   background:#111;
   color:#aaa;
-  text-align:center;
-  padding:25px;
+  padding:35px 18px 20px;
 }
-footer strong{color:#22c55e}
+.footer-grid{
+  max-width:1240px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:1.5fr repeat(3,1fr);
+  gap:25px;
+}
+.footer-brand strong{
+  font-size:24px;
+  color:#fff;
+}
+.footer-brand strong span{color:var(--jr-green2)}
+.footer-brand p{
+  max-width:380px;
+  line-height:1.7;
+  font-size:12px;
+}
+.footer-col h4{
+  color:#fff;
+  margin:0 0 12px;
+  font-size:12px;
+}
+.footer-col div{
+  margin:8px 0;
+  font-size:12px;
+}
+.footer-bottom{
+  max-width:1240px;
+  margin:25px auto 0;
+  padding-top:15px;
+  border-top:1px solid #333;
+  text-align:center;
+  font-size:11px;
+}
 
-/* MOBILE */
+/* =========================
+   RESPONSIVE
+========================= */
+@media(max-width:1000px){
+  .products{grid-template-columns:repeat(3,1fr)}
+  .feature-rail{grid-template-columns:repeat(3,1fr)}
+  .quick-strip{grid-template-columns:repeat(2,1fr)}
+  .editorial-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
 @media(max-width:699px){
-  .top{gap:10px}
-  .logo{font-size:24px}
-  .cart{padding:10px 12px;font-size:14px}
-  .hero{padding:28px 15px 34px}
-  .hero h1{font-size:27px}
+
+  body{padding-bottom:68px}
+
+  .top{
+    grid-template-columns:auto minmax(0,1fr) auto;
+    padding:11px 10px;
+    gap:10px;
+  }
+  .logo{font-size:23px}
+  .search-wrap input{
+    height:40px;
+    font-size:13px;
+    padding-right:38px;
+  }
+  .header-actions .icon-btn{display:none}
+  .cart{
+    min-width:auto;
+    padding:10px 9px;
+    font-size:12px;
+  }
+  .nav-inner{
+    justify-content:flex-start;
+  }
+  .nav-inner button{
+    padding:12px 15px;
+    font-size:12px;
+  }
+
+  .hero{
+    margin:10px 8px 0;
+    min-height:360px;
+    padding:35px 15px;
+  }
+  .hero h1{
+    font-size:clamp(42px,13vw,58px);
+    letter-spacing:-3px;
+  }
+  .hero-kicker{
+    font-size:10px;
+    letter-spacing:3px;
+  }
+  .hero p{font-size:14px}
+  .hero-actions .hero-btn{
+    min-width:135px;
+    padding:13px 16px;
+    text-align:center;
+  }
+
+  .container{
+    padding:22px 10px 45px;
+  }
+
+  .quick-strip{
+    grid-template-columns:repeat(2,1fr);
+    gap:6px;
+    margin-bottom:24px;
+  }
+  .quick-item{padding:13px 8px}
+
   .categories-section{
-    border-radius:16px;
     padding:15px 10px 16px;
   }
   .categories-head h2{font-size:21px}
   .categories-hint{display:none}
-  .category-card{flex-basis:105px}
+  .category-card{flex-basis:112px}
   .category-card-image-wrap{
-    width:105px;
-    height:125px;
-    border-radius:10px;
+    width:112px;
+    height:145px;
   }
-  .category-card-name{font-size:13px}
-  .products{grid-template-columns:repeat(2,1fr);gap:10px}
-  .product-img{height:165px}
-  .product-info{padding:10px}
-  .product h3{font-size:14px}
-  .price{font-size:16px}
-}
 
-@media(max-width:380px){
-  .category-card{flex-basis:92px}
-  .category-card-image-wrap{width:92px;height:112px}
-  .product-img{height:145px}
-}
+  .editorial-card{min-height:230px}
+  .editorial-card.small{min-height:110px}
+  .editorial-content{right:15px;bottom:15px}
+  .editorial-content h3{font-size:22px}
 
-/* =========================
-   JR SHOP PREMIUM / ASOS-LIKE UI
-========================= */
-:root{--jr-green:#16a34a;--jr-green2:#22c55e;--jr-black:#111;--jr-soft:#f4f5f6;--jr-line:#e5e7eb}
-body{background:#f7f7f7;overflow-x:hidden}
-header{background:#fff;color:#111;padding:0;box-shadow:0 1px 0 rgba(0,0,0,.08)}
-.top{max-width:1240px;padding:16px 18px;display:grid;grid-template-columns:auto minmax(280px,1fr) auto;align-items:center;gap:28px}
-.logo{font-size:30px;letter-spacing:-1px}.logo span{color:var(--jr-green)}
-.search-wrap{position:relative}.search-wrap input{width:100%;height:46px;border:1px solid #d9dce0;border-radius:4px;padding:0 48px 0 16px;background:#f8f8f8;outline:none}.search-wrap input:focus{border-color:#999;background:#fff}.search-icon{position:absolute;right:16px;top:11px;font-size:20px;color:#666;pointer-events:none}
-.header-actions{display:flex;align-items:center;gap:9px}.icon-btn,.cart{border:0;background:#fff;color:#111;border-radius:4px;padding:11px 12px;font-weight:700}.icon-btn{font-size:20px}.cart{background:#111;color:#fff;min-width:112px}.cart:hover{background:var(--jr-green)}
-.navbar{border-top:1px solid #eee;background:#fff}.nav-inner{max-width:1240px;margin:auto;display:flex;align-items:center;justify-content:center;gap:0;overflow-x:auto}.nav-inner button{border:0;background:#fff;padding:15px 22px;font-size:14px;font-weight:800;letter-spacing:.3px;white-space:nowrap;border-bottom:3px solid transparent}.nav-inner button:hover,.nav-inner button.active{color:var(--jr-green);border-bottom-color:var(--jr-green)}
-.hero{max-width:1240px;margin:18px auto 0;min-height:420px;position:relative;overflow:hidden;background:linear-gradient(120deg,#0b0b0b 0%,#171717 52%,#252525 100%);display:flex;align-items:center;justify-content:center;padding:50px 28px}.hero:before{content:"";position:absolute;width:430px;height:430px;border-radius:50%;background:rgba(34,197,94,.12);left:-120px;top:-170px}.hero:after{content:"JR";position:absolute;right:-35px;bottom:-90px;font-size:280px;font-weight:900;color:rgba(255,255,255,.035)}.hero-content{position:relative;z-index:2;text-align:center;max-width:900px}.hero-kicker{font-size:13px;letter-spacing:5px;color:#ddd;margin-bottom:18px}.hero h1{font-size:clamp(42px,7vw,88px);line-height:.95;margin:0 0 20px;font-weight:900;letter-spacing:-3px}.hero h1 span{color:var(--jr-green2)}.hero p{color:#ddd;font-size:17px;margin:0 auto 28px}.hero-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.hero-btn{display:inline-flex;align-items:center;justify-content:center;min-width:150px;padding:14px 22px;background:#fff;color:#111;text-decoration:none;font-weight:900}.hero-btn.green{background:var(--jr-green);color:#fff}.hero-btn:hover{transform:translateY(-1px)}
-.container{max-width:1240px;padding:28px 18px 60px}.quick-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 30px}.quick-item{background:#fff;border:1px solid #eee;padding:18px;text-align:center}.quick-item b{display:block;font-size:14px;margin-bottom:5px}.quick-item span{font-size:12px;color:#777}
-.categories-section{border-radius:0;box-shadow:none;border:0;padding:0;background:transparent;margin-bottom:34px}.categories-head{margin-bottom:18px}.categories-head h2{font-size:27px}.categories-hint{font-size:13px}.categories-scroll{gap:12px;padding-bottom:8px}.category-card{flex-basis:150px}.category-card-image-wrap{width:150px;height:190px;border-radius:0;border:0;background:#e8e8e8}.category-card-name{font-size:14px;text-transform:uppercase;margin-top:10px}.category-card.active .category-card-image-wrap{border:3px solid var(--jr-green);box-shadow:none}.all-card .category-card-image-wrap{background:#111}
-.editorial-grid{display:grid;grid-template-columns:1.35fr .65fr;gap:14px;margin:0 0 36px}.editorial-card{min-height:280px;position:relative;overflow:hidden;background:#111;color:#fff;display:flex;align-items:flex-end;padding:28px}.editorial-card.small{min-height:133px}.editorial-card:before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.78),rgba(0,0,0,.05))}.editorial-content{position:relative;z-index:2}.editorial-card .eyebrow{font-size:11px;letter-spacing:3px;color:#ddd}.editorial-card h3{font-size:30px;margin:8px 0}.editorial-card.small h3{font-size:22px}.editorial-card p{margin:0;color:#ddd;font-size:13px}.editorial-stack{display:grid;grid-template-rows:1fr 1fr;gap:14px}.tone-green{background:linear-gradient(135deg,#073b1d,#16a34a)}.tone-light{background:linear-gradient(135deg,#e5e7eb,#cfd2d5);color:#111}.tone-light:before{background:linear-gradient(0deg,rgba(255,255,255,.75),rgba(255,255,255,.05))}.tone-light p,.tone-light .eyebrow{color:#444}
-.section-title{margin:0 0 18px}.section-title h2{font-size:27px}.products{grid-template-columns:repeat(4,1fr);gap:16px}.product{border-radius:0;box-shadow:0 1px 0 rgba(0,0,0,.05);transition:transform .2s,box-shadow .2s}.product:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(0,0,0,.10)}.product-img{height:300px;position:relative}.product-img img{transition:transform .35s}.product:hover .product-img img{transform:scale(1.04)}.product-info{padding:15px}.product h3{font-size:15px;min-height:20px}.description{min-height:20px}.price{font-size:18px}.stock{font-size:12px}.buy{border-radius:0;padding:13px;text-transform:uppercase;letter-spacing:.2px}
-.benefits{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #ddd;border-bottom:1px solid #ddd;background:#fff;margin:10px 0 38px}.benefit{padding:24px 16px;text-align:center;border-left:1px solid #eee}.benefit:last-child{border-left:0}.benefit-icon{font-size:24px;margin-bottom:8px}.benefit b{display:block;font-size:13px}.benefit span{font-size:11px;color:#777}
-footer{background:#111;color:#aaa;text-align:right;padding:42px 20px 25px}.footer-grid{max-width:1240px;margin:auto;display:grid;grid-template-columns:1.5fr repeat(3,1fr);gap:35px}.footer-brand strong{font-size:27px;color:#fff}.footer-brand strong span{color:var(--jr-green2)}.footer-brand p{line-height:1.8;font-size:13px}.footer-col h4{color:#fff;margin:0 0 15px}.footer-col div{font-size:13px;margin:8px 0}.footer-bottom{max-width:1240px;margin:28px auto 0;padding-top:18px;border-top:1px solid #333;text-align:center;font-size:12px}
-.toast{bottom:24px}
-@media(max-width:900px){.top{grid-template-columns:auto 1fr auto;gap:12px}.nav-inner{justify-content:flex-start}.products{grid-template-columns:repeat(3,1fr)}.quick-strip,.benefits{grid-template-columns:repeat(2,1fr)}.editorial-grid{grid-template-columns:1fr}.footer-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:699px){.top{grid-template-columns:auto 1fr auto;padding:11px 10px}.logo{font-size:23px}.search-wrap input{height:40px;font-size:13px}.header-actions .icon-btn{display:none}.cart{min-width:auto;padding:10px 9px;font-size:12px}.nav-inner button{padding:12px 15px;font-size:12px}.hero{margin:10px 8px 0;min-height:360px;padding:35px 15px}.hero h1{font-size:48px;letter-spacing:-2px}.hero-kicker{font-size:10px;letter-spacing:3px}.hero p{font-size:14px}.container{padding:22px 10px 45px}.quick-strip{gap:6px}.quick-item{padding:13px 8px}.category-card{flex-basis:112px}.category-card-image-wrap{width:112px;height:145px}.products{grid-template-columns:repeat(2,1fr);gap:9px}.product-img{height:220px}.product-info{padding:10px}.product h3{font-size:13px}.price{font-size:16px}.editorial-card{min-height:230px}.benefits{grid-template-columns:repeat(2,1fr)}.benefit{padding:18px 8px}.footer-grid{grid-template-columns:1fr 1fr;gap:22px}.footer-brand{grid-column:1/-1}}
-@media(max-width:380px){.search-wrap{display:none}.top{grid-template-columns:1fr auto}.logo{justify-self:start}.products{grid-template-columns:repeat(2,1fr)}.product-img{height:185px}}
+  .collection-grid{
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+  .collection-tile:first-child{
+    grid-column:1/-1;
+  }
+  .collection-tile,
+  .collection-tile.medium,
+  .collection-tile.small{
+    min-height:240px;
+  }
+  .collection-tile-content{
+    right:14px;
+    left:14px;
+    bottom:14px;
+  }
+  .collection-tile-content h3{font-size:22px}
 
+  .feature-rail{
+    grid-template-columns:repeat(2,1fr);
+    gap:9px;
+  }
+  .feature-card-img{height:220px}
+  .feature-card-info{padding:9px}
 
-/* =====================================================
-   JR SHOP - NEXT PREMIUM LAYER
-===================================================== */
-.collection-showcase{margin:0 0 38px}
-.collection-head{display:flex;align-items:end;justify-content:space-between;gap:15px;margin-bottom:16px}
-.collection-head h2{margin:0;font-size:27px;letter-spacing:-.5px}
-.collection-head p{margin:5px 0 0;color:#777;font-size:13px}
-.collection-link{border:0;background:transparent;font-weight:900;text-decoration:underline;cursor:pointer}
-.collection-grid{display:grid;grid-template-columns:1.2fr .8fr .8fr;gap:12px}
-.collection-tile{min-height:340px;position:relative;overflow:hidden;background:#111;color:#fff;cursor:pointer}
-.collection-tile.medium{min-height:340px}
-.collection-tile.small{min-height:340px}
-.collection-tile img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
-.collection-tile:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.72),rgba(0,0,0,.03) 65%)}
-.collection-tile:hover img{transform:scale(1.045)}
-.collection-tile-content{position:absolute;z-index:2;right:22px;left:22px;bottom:22px}
-.collection-tile-content small{font-size:11px;letter-spacing:3px;font-weight:800}
-.collection-tile-content h3{font-size:30px;margin:7px 0}
-.collection-tile-content span{font-size:12px;border-bottom:1px solid #fff;padding-bottom:3px}
-.feature-section{margin:0 0 40px}
-.feature-head{display:flex;align-items:end;justify-content:space-between;margin-bottom:15px}
-.feature-head h2{margin:0;font-size:27px}
-.feature-head span{font-size:12px;color:#777}
-.feature-rail{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.feature-card{background:#fff;position:relative;overflow:hidden;cursor:pointer}
-.feature-card-img{height:300px;background:#eee;overflow:hidden;position:relative}
-.feature-card-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s}
-.feature-card:hover .feature-card-img img{transform:scale(1.04)}
-.feature-badge{position:absolute;top:10px;right:10px;background:#111;color:#fff;padding:6px 9px;font-size:10px;font-weight:900;z-index:2}
-.feature-card-info{padding:12px 13px 15px}
-.feature-card-info small{color:#777;font-size:11px}
-.feature-card-info h3{font-size:14px;margin:5px 0 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.feature-price{font-weight:900;color:var(--jr-green);font-size:16px}
-.feature-old{color:#999;text-decoration:line-through;font-size:12px;margin-right:7px;font-weight:400}
-.feature-add{width:100%;border:0;background:#111;color:#fff;padding:11px;margin-top:10px;font-weight:900;cursor:pointer}
-.feature-add:hover{background:var(--jr-green)}
-.newsletter{background:#111;color:#fff;margin:0 0 38px;padding:32px 25px;display:flex;align-items:center;justify-content:space-between;gap:20px}
-.newsletter h2{margin:0 0 6px;font-size:27px}.newsletter p{margin:0;color:#bbb;font-size:13px}
-.newsletter-btn{border:0;background:var(--jr-green);color:#fff;padding:13px 22px;font-weight:900;cursor:pointer;white-space:nowrap}
-@media(max-width:900px){.collection-grid{grid-template-columns:1fr 1fr}.collection-tile:first-child{grid-column:1/-1}.feature-rail{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:699px){.collection-grid{grid-template-columns:1fr 1fr;gap:8px}.collection-tile,.collection-tile.medium,.collection-tile.small{min-height:240px}.collection-tile:first-child{grid-column:1/-1}.collection-tile-content{right:14px;left:14px;bottom:14px}.collection-tile-content h3{font-size:22px}.feature-rail{grid-template-columns:repeat(2,1fr);gap:9px}.feature-card-img{height:220px}.feature-card-info{padding:9px}.newsletter{display:block;text-align:center;padding:27px 16px}.newsletter-btn{margin-top:18px;width:100%}}
-@media(max-width:380px){.collection-tile,.collection-tile.medium,.collection-tile.small{min-height:210px}.feature-card-img{height:185px}}
-
-
-/* =====================================================
-   JR SHOP - MOBILE + PRODUCT DETAILS UPGRADE
-===================================================== */
-.mobile-bottom-nav{display:none}
-.product{cursor:pointer}
-.product-img{position:relative}
-.product-quick{position:absolute;left:10px;right:10px;bottom:10px;border:0;background:rgba(255,255,255,.94);color:#111;padding:10px;font-size:12px;font-weight:900;opacity:0;transform:translateY(8px);transition:.2s;z-index:3}
-.product:hover .product-quick{opacity:1;transform:translateY(0)}
-.product-badge{position:absolute;top:10px;right:10px;background:#111;color:#fff;padding:6px 9px;font-size:10px;font-weight:900;z-index:3}
-.product-badge.sale{background:#d91e18}
-.detail-box{max-width:900px;padding:0;overflow:hidden}
-.detail-layout{display:grid;grid-template-columns:1fr 1fr;min-height:520px}
-.detail-image{background:#f1f1f1;min-height:520px}
-.detail-image img{width:100%;height:100%;min-height:520px;object-fit:cover;display:block}
-.detail-content{padding:34px;display:flex;flex-direction:column;justify-content:center}
-.detail-close{position:absolute;top:14px;left:14px;width:38px;height:38px;border:0;border-radius:50%;background:#111;color:#fff;font-size:20px;z-index:5}
-.detail-category{font-size:11px;letter-spacing:2px;color:#777;font-weight:900;text-transform:uppercase}
-.detail-title{font-size:32px;line-height:1.05;margin:9px 0 12px}
-.detail-description{color:#666;line-height:1.8;font-size:14px;margin-bottom:18px}
-.detail-price{font-size:24px;font-weight:900;color:var(--jr-green);margin-bottom:5px}
-.detail-old{font-size:14px;color:#999;text-decoration:line-through;margin-right:8px;font-weight:400}
-.detail-stock{font-size:13px;margin:8px 0 20px;color:#555}
-.detail-actions{display:flex;gap:9px}
-.detail-actions button{flex:1;padding:14px;border:0;font-weight:900}
-.detail-add{background:#111;color:#fff}
-.detail-add:hover{background:var(--jr-green)}
-.detail-buy{background:var(--jr-green);color:#fff}
-.mobile-nav-spacer{height:0}
-@media(max-width:699px){
-  body{padding-bottom:68px}
-  .top{grid-template-columns:auto minmax(0,1fr) auto}
-  .search-wrap input{padding-right:38px}
-  .hero{margin-left:0;margin-right:0;border-radius:0;min-height:330px}
-  .hero h1{font-size:clamp(40px,13vw,58px);line-height:.9}
-  .hero-actions .hero-btn{min-width:135px;padding:13px 16px}
-  .quick-strip{grid-template-columns:repeat(2,1fr);margin-bottom:24px}
-  .quick-item b{font-size:12px}.quick-item span{font-size:10px}
-  .categories-scroll{margin-right:-2px;margin-left:-2px;padding-right:2px}
-  .category-card{flex-basis:104px}
-  .category-card-image-wrap{width:104px;height:138px}
-  .collection-grid{grid-template-columns:1fr 1fr}
-  .collection-tile:first-child{grid-column:1/-1}
-  .collection-tile,.collection-tile.medium,.collection-tile.small{min-height:235px}
-  .feature-card-img{height:205px}
-  .products{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-  .product-img{height:205px}
-  .product-quick{opacity:1;transform:none;bottom:8px;font-size:10px;padding:8px}
-  .product-info{padding:9px}
-  .product h3{font-size:13px;line-height:1.35}
-  .description{font-size:11px;line-height:1.35;max-height:30px;overflow:hidden}
-  .price{font-size:15px}.old-price{font-size:10px}
-  .buy{padding:10px;font-size:11px}
-  .detail-box{max-width:520px;margin:0 6px}
-  .detail-layout{grid-template-columns:1fr;min-height:0}
-  .detail-image{min-height:330px;height:330px}
-  .detail-image img{min-height:330px;height:330px}
-  .detail-content{padding:20px}
-  .detail-title{font-size:25px}
-  .detail-description{font-size:13px}
-  .detail-actions{flex-direction:column}
-  .mobile-bottom-nav{position:fixed;display:grid;grid-template-columns:repeat(4,1fr);bottom:0;left:0;right:0;height:64px;background:#fff;border-top:1px solid #ddd;z-index:998;box-shadow:0 -4px 18px rgba(0,0,0,.08)}
-  .mobile-bottom-nav button{border:0;background:#fff;font-size:10px;font-weight:800;color:#444;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
-  .mobile-bottom-nav button span{font-size:19px;line-height:1}
-  .mobile-bottom-nav button.active{color:var(--jr-green)}
-  footer{padding-bottom:82px}
-}
-@media(max-width:380px){
-  .top{grid-template-columns:1fr auto}
-  .logo{justify-self:start}
-  .search-wrap{display:block;grid-column:1/-1;grid-row:2}
-  .search-wrap input{height:38px}
-  .product-img{height:175px}
-  .feature-card-img{height:180px}
-  .collection-tile,.collection-tile.medium,.collection-tile.small{min-height:205px}
-}
-
-
-/* =====================================================
-   JR SHOP V2 - PRODUCTS ONLY
-===================================================== */
-.products-area{
-  scroll-margin-top:90px;
-}
-.products{
-  align-items:stretch;
-}
-.product{
-  position:relative;
-  display:flex;
-  flex-direction:column;
-  min-width:0;
-  cursor:pointer;
-  border:1px solid #eeeeee;
-}
-.product-img{
-  aspect-ratio: 4 / 5;
-  height:auto !important;
-  min-height:220px;
-  background:#f2f2f2;
-}
-.product-img img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-.product-info{
-  display:flex;
-  flex-direction:column;
-  flex:1;
-}
-.product h3{
-  margin-bottom:7px;
-  line-height:1.35;
-  display:-webkit-box;
-  -webkit-line-clamp:2;
-  -webkit-box-orient:vertical;
-  overflow:hidden;
-}
-.description{
-  display:-webkit-box;
-  -webkit-line-clamp:2;
-  -webkit-box-orient:vertical;
-  overflow:hidden;
-  min-height:38px;
-}
-.price{
-  display:flex;
-  align-items:center;
-  flex-wrap:wrap;
-  gap:6px;
-  margin-top:auto;
-}
-.old-price{margin-right:0}
-.stock{
-  min-height:19px;
-}
-.buy{
-  margin-top:auto;
-  transition:.2s;
-}
-.buy:not(:disabled):active{
-  transform:scale(.98);
-}
-.product-badge{
-  border-radius:2px;
-}
-.product-badge.sale{
-  background:#dc2626;
-}
-.detail-box{
-  position:relative;
-}
-.detail-image{
-  position:relative;
-}
-.detail-image img{
-  background:#f3f3f3;
-}
-.detail-content{
-  background:#fff;
-}
-.detail-actions button{
-  border-radius:2px;
-}
-@media(max-width:699px){
-  .product{
-    border-radius:0;
+  .products{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
   }
   .product-img{
-    aspect-ratio:4 / 5;
     min-height:0;
+    aspect-ratio:4/5;
   }
-  .product-info{
-    min-height:205px;
+  .product-quick{
+    opacity:1;
+    transform:none;
+    bottom:8px;
+    font-size:10px;
+    padding:8px;
+  }
+  .product-info{padding:9px}
+  .product h3{
+    font-size:13px;
+    line-height:1.35;
   }
   .description{
-    min-height:30px;
+    font-size:11px;
+    line-height:1.35;
+    max-height:30px;
+    overflow:hidden;
   }
+  .price{font-size:15px}
+  .old-price{font-size:10px}
   .buy{
-    min-height:40px;
+    padding:10px;
+    font-size:11px;
   }
-}
-@media(max-width:380px){
-  .product-info{
-    min-height:195px;
+
+  .newsletter{
+    display:block;
+    text-align:center;
+    padding:27px 16px;
+  }
+  .newsletter-btn{
+    margin-top:18px;
+    width:100%;
+  }
+
+  .benefits{
+    grid-template-columns:repeat(2,1fr);
+  }
+  .benefit{padding:18px 8px}
+
+  .footer-grid{
+    grid-template-columns:1fr 1fr;
+    gap:22px;
+  }
+  .footer-brand{grid-column:1/-1}
+
+  .detail-box{
+    max-width:520px;
+    margin:0 6px;
+  }
+  .detail-layout{
+    grid-template-columns:1fr;
+    min-height:0;
+  }
+  .detail-image{
+    min-height:330px;
+    height:330px;
+  }
+  .detail-image img{
+    min-height:330px;
+    height:330px;
+  }
+  .detail-content{padding:24px 20px 25px}
+  .detail-title{font-size:26px}
+  .detail-description{
+    font-size:13px;
+    line-height:1.7;
+  }
+  .detail-price{font-size:23px}
+  .detail-actions{
+    grid-template-columns:1fr;
+  }
+
+  .mobile-bottom-nav{
+    position:fixed;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    bottom:0;
+    left:0;
+    right:0;
+    height:64px;
+    background:#fff;
+    border-top:1px solid #ddd;
+    z-index:998;
+    box-shadow:0 -4px 18px rgba(0,0,0,.08);
+  }
+  .mobile-bottom-nav button{
+    border:0;
+    background:#fff;
+    font-size:10px;
+    font-weight:800;
+    color:#444;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:4px;
+  }
+  .mobile-bottom-nav button span{
+    font-size:19px;
+    line-height:1;
   }
 }
 
+@media(max-width:380px){
+  .search-wrap{display:none}
+  .top{
+    grid-template-columns:1fr auto;
+  }
+  .logo{justify-self:start}
+  .product-img{min-height:0}
+  .feature-card-img{height:185px}
+  .collection-tile,
+  .collection-tile.medium,
+  .collection-tile.small{
+    min-height:210px;
+  }
+}
 </style>
 </head>
 
@@ -681,28 +1347,53 @@ footer{background:#111;color:#aaa;text-align:right;padding:42px 20px 25px}.foote
 
 <header>
   <div class="top">
+
     <div class="logo">JR <span>Shop</span></div>
+
     <div class="search-wrap">
       <span class="search-icon">⌕</span>
-      <input id="searchInput" type="search" placeholder="ابحث عن منتج...">
+      <input
+        id="searchInput"
+        type="search"
+        placeholder="ابحث عن منتج..."
+      >
     </div>
+
     <div class="header-actions">
       <button type="button" class="icon-btn" aria-label="المفضلة">♡</button>
-      <button type="button" class="cart" id="openCartBtn">🛒 السلة (<span id="cartCount">0</span>)</button>
+
+      <button type="button" class="cart" id="openCartBtn">
+        🛒 السلة (<span id="cartCount">0</span>)
+      </button>
     </div>
+
   </div>
+
   <nav class="navbar">
     <div class="nav-inner" id="navCategories">
-      <button type="button" class="active" data-category="all">SHOP</button>
+      <button type="button" class="active" data-category="all">
+        SHOP
+      </button>
     </div>
   </nav>
 </header>
 
 <nav class="mobile-bottom-nav" aria-label="التنقل السريع">
-  <button type="button" onclick="window.scrollTo({top:0,behavior:'smooth'})"><span>⌂</span>الرئيسية</button>
-  <button type="button" onclick="document.getElementById('categories')?.scrollIntoView({behavior:'smooth'})"><span>☰</span>الفئات</button>
-  <button type="button" onclick="document.querySelector('.products-area')?.scrollIntoView({behavior:'smooth'})"><span>🛍</span>المنتجات</button>
-  <button type="button" onclick="openCartBtn.click()"><span>🛒</span>السلة</button>
+  <button type="button" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <span>⌂</span>الرئيسية
+  </button>
+
+  <button type="button" onclick="document.getElementById('categories')?.scrollIntoView({behavior:'smooth'})">
+    <span>☰</span>الفئات
+  </button>
+
+  <button type="button" onclick="document.querySelector('.products-area')?.scrollIntoView({behavior:'smooth'})">
+    <span>🛍</span>المنتجات
+  </button>
+
+  <button type="button" id="mobileCartBtn">
+    <span>🛒</span>السلة
+  </button>
 </nav>
 
 <section class="hero">
@@ -710,6 +1401,7 @@ footer{background:#111;color:#aaa;text-align:right;padding:42px 20px 25px}.foote
     <div class="hero-kicker">JR SHOP • NEW COLLECTION</div>
     <h1>STYLE <span>STARTS</span> HERE</h1>
     <p>اكتشف آخر المنتجات والستايلات في JR Shop</p>
+
     <div class="hero-actions">
       <a href="#shop" class="hero-btn green">SHOP NOW</a>
       <a href="#categories" class="hero-btn">EXPLORE</a>
@@ -720,14 +1412,29 @@ footer{background:#111;color:#aaa;text-align:right;padding:42px 20px 25px}.foote
 <div class="container" id="shop">
 
   <div class="quick-strip">
-    <div class="quick-item"><b>🚚 توصيل سريع</b><span>إلى مختلف الولايات</span></div>
-    <div class="quick-item"><b>🔒 دفع عند الاستلام</b><span>اطلب بكل راحة</span></div>
-    <div class="quick-item"><b>✨ منتجات جديدة</b><span>اختيارات تتجدد باستمرار</span></div>
-    <div class="quick-item"><b>💬 دعم العملاء</b><span>نحن هنا لمساعدتك</span></div>
+    <div class="quick-item">
+      <b>🚚 توصيل سريع</b>
+      <span>إلى مختلف الولايات</span>
+    </div>
+
+    <div class="quick-item">
+      <b>🔒 دفع عند الاستلام</b>
+      <span>اطلب بكل راحة</span>
+    </div>
+
+    <div class="quick-item">
+      <b>✨ منتجات جديدة</b>
+      <span>اختيارات تتجدد باستمرار</span>
+    </div>
+
+    <div class="quick-item">
+      <b>💬 دعم العملاء</b>
+      <span>نحن هنا لمساعدتك</span>
+    </div>
   </div>
 
-  <!-- CATEGORIES -->
   <section class="categories-section" id="categories">
+
     <div class="categories-head">
       <h2>🗂️ الفئات</h2>
       <div class="categories-hint">اسحب لرؤية المزيد ←</div>
@@ -736,9 +1443,11 @@ footer{background:#111;color:#aaa;text-align:right;padding:42px 20px 25px}.foote
     <div id="categoriesList" class="categories-scroll">
       <div class="category-loading">جاري تحميل الفئات...</div>
     </div>
+
   </section>
 
   <section class="editorial-grid">
+
     <div class="editorial-card tone-green">
       <div class="editorial-content">
         <div class="eyebrow">JR SHOP</div>
@@ -746,56 +1455,106 @@ footer{background:#111;color:#aaa;text-align:right;padding:42px 20px 25px}.foote
         <p>اختيارات جديدة للرجال والنساء والأطفال.</p>
       </div>
     </div>
+
     <div class="editorial-stack">
+
       <div class="editorial-card small">
-        <div class="editorial-content"><div class="eyebrow">TRENDING</div><h3>اختيارات هذا الأسبوع</h3><p>ستايلات بسيطة وعصرية.</p></div>
+        <div class="editorial-content">
+          <div class="eyebrow">TRENDING</div>
+          <h3>اختيارات هذا الأسبوع</h3>
+          <p>ستايلات بسيطة وعصرية.</p>
+        </div>
       </div>
+
       <div class="editorial-card small tone-light">
-        <div class="editorial-content"><div class="eyebrow">SALE</div><h3>أسعار مميزة</h3><p>شوف المنتجات المخفضة.</p></div>
+        <div class="editorial-content">
+          <div class="eyebrow">SALE</div>
+          <h3>أسعار مميزة</h3>
+          <p>شوف المنتجات المخفضة.</p>
+        </div>
       </div>
+
     </div>
+
   </section>
 
-
-
-  <!-- PREMIUM COLLECTION EDIT -->
   <section class="collection-showcase">
+
     <div class="collection-head">
       <div>
         <h2>THE JR EDIT</h2>
         <p>اختيارات مستوحاة من أحدث الستايلات</p>
       </div>
-      <button class="collection-link" type="button" onclick="document.querySelector('.products-area')?.scrollIntoView({behavior:'smooth'})">VIEW ALL</button>
+
+      <button
+        class="collection-link"
+        type="button"
+        onclick="document.querySelector('.products-area')?.scrollIntoView({behavior:'smooth'})"
+      >
+        VIEW ALL
+      </button>
     </div>
+
     <div class="collection-grid">
+
       <div class="collection-tile" id="collectionTile1" data-key="women">
-        <img id="collectionImg1" src="https://placehold.co/900x700/111111/ffffff?text=JR+SHOP" alt="JR Shop Collection">
-        <div class="collection-tile-content"><small>NEW SEASON</small><h3>WOMEN</h3><span>SHOP THE EDIT →</span></div>
+        <img
+          id="collectionImg1"
+          src="https://placehold.co/900x700/111111/ffffff?text=JR+SHOP"
+          alt="JR Shop Collection"
+        >
+        <div class="collection-tile-content">
+          <small>NEW SEASON</small>
+          <h3>WOMEN</h3>
+          <span>SHOP THE EDIT →</span>
+        </div>
       </div>
+
       <div class="collection-tile medium" id="collectionTile2" data-key="men">
-        <img id="collectionImg2" src="https://placehold.co/600x700/222222/ffffff?text=JR+SHOP" alt="JR Shop Men">
-        <div class="collection-tile-content"><small>ESSENTIALS</small><h3>MEN</h3><span>SHOP NOW →</span></div>
+        <img
+          id="collectionImg2"
+          src="https://placehold.co/600x700/222222/ffffff?text=JR+SHOP"
+          alt="JR Shop Men"
+        >
+        <div class="collection-tile-content">
+          <small>ESSENTIALS</small>
+          <h3>MEN</h3>
+          <span>SHOP NOW →</span>
+        </div>
       </div>
+
       <div class="collection-tile small" id="collectionTile3" data-key="sale">
-        <img id="collectionImg3" src="https://placehold.co/600x700/333333/ffffff?text=SALE" alt="JR Shop Sale">
-        <div class="collection-tile-content"><small>LIMITED</small><h3>SALE</h3><span>UP TO MORE →</span></div>
+        <img
+          id="collectionImg3"
+          src="https://placehold.co/600x700/333333/ffffff?text=SALE"
+          alt="JR Shop Sale"
+        >
+        <div class="collection-tile-content">
+          <small>LIMITED</small>
+          <h3>SALE</h3>
+          <span>UP TO MORE →</span>
+        </div>
       </div>
+
     </div>
+
   </section>
 
-  <!-- NEW IN -->
   <section class="feature-section" id="newInSection">
+
     <div class="feature-head">
       <h2>NEW IN</h2>
       <span>آخر المنتجات المضافة</span>
     </div>
+
     <div id="newInProducts" class="feature-rail">
       <div class="loading">جاري تحميل المنتجات...</div>
     </div>
+
   </section>
 
-  <!-- PRODUCTS -->
   <main class="products-area">
+
     <div class="section-title">
       <h2 id="productsTitle">🛍️ جميع المنتجات</h2>
     </div>
@@ -803,19 +1562,20 @@ footer{background:#111;color:#aaa;text-align:right;padding:42px 20px 25px}.foote
     <div id="products" class="products">
       <div class="loading">جاري تحميل المنتجات...</div>
     </div>
+
   </main>
 
-
-
-  <!-- SALE / TRENDING -->
   <section class="feature-section" id="trendingSection">
+
     <div class="feature-head">
       <h2>TRENDING NOW</h2>
       <span>اختيارات JR Shop</span>
     </div>
+
     <div id="trendingProducts" class="feature-rail">
       <div class="loading">جاري تحميل المنتجات...</div>
     </div>
+
   </section>
 
   <section class="newsletter">
@@ -823,153 +1583,434 @@ footer{background:#111;color:#aaa;text-align:right;padding:42px 20px 25px}.foote
       <h2>READY FOR YOUR NEXT LOOK?</h2>
       <p>تصفح مجموعتنا واختار القطعة اللي تناسبك.</p>
     </div>
-    <button class="newsletter-btn" type="button" onclick="document.getElementById('searchInput')?.focus();window.scrollTo({top:0,behavior:'smooth'})">START SHOPPING</button>
+
+    <button
+      class="newsletter-btn"
+      type="button"
+      onclick="document.getElementById('searchInput')?.focus();window.scrollTo({top:0,behavior:'smooth'})"
+    >
+      START SHOPPING
+    </button>
   </section>
 
   <section class="benefits">
-    <div class="benefit"><div class="benefit-icon">🚚</div><b>توصيل للباب</b><span>خدمة توصيل للولايات</span></div>
-    <div class="benefit"><div class="benefit-icon">↩️</div><b>طلب سهل</b><span>بدون تعقيد</span></div>
-    <div class="benefit"><div class="benefit-icon">💳</div><b>الدفع عند الاستلام</b><span>ادفع عند وصول طلبك</span></div>
-    <div class="benefit"><div class="benefit-icon">💚</div><b>JR Shop</b><span>اختيارات تناسبك</span></div>
+
+    <div class="benefit">
+      <div class="benefit-icon">🚚</div>
+      <b>توصيل للباب</b>
+      <span>خدمة توصيل للولايات</span>
+    </div>
+
+    <div class="benefit">
+      <div class="benefit-icon">↩️</div>
+      <b>طلب سهل</b>
+      <span>بدون تعقيد</span>
+    </div>
+
+    <div class="benefit">
+      <div class="benefit-icon">💳</div>
+      <b>الدفع عند الاستلام</b>
+      <span>ادفع عند وصول طلبك</span>
+    </div>
+
+    <div class="benefit">
+      <div class="benefit-icon">💚</div>
+      <b>JR Shop</b>
+      <span>اختيارات تناسبك</span>
+    </div>
+
   </section>
 
 </div>
 
-<!-- CART -->
+<!-- =========================
+     CART
+========================= -->
 <div class="modal" id="cartModal">
+
   <div class="modal-box">
+
     <h2>🛒 سلة المشتريات</h2>
 
     <div id="cartItems"></div>
 
-    <div id="cartTotal" style="font-size:20px;font-weight:bold;margin-top:15px">
+    <div
+      id="cartTotal"
+      style="font-size:20px;font-weight:bold;margin-top:15px"
+    >
       المجموع: 0 دج
     </div>
 
-    <button type="button" id="checkoutBtn" class="green-btn" style="margin-top:15px">
+    <button
+      type="button"
+      id="checkoutBtn"
+      class="green-btn"
+      style="margin-top:15px"
+    >
       متابعة الطلب
     </button>
 
-    <button type="button" id="closeCartBtn" class="black-btn">
+    <button
+      type="button"
+      id="closeCartBtn"
+      class="black-btn"
+    >
       إغلاق
     </button>
+
   </div>
+
 </div>
 
-<!-- CHECKOUT -->
+<!-- =========================
+     CHECKOUT
+========================= -->
 <div class="modal" id="checkoutModal">
+
   <div class="modal-box">
+
     <h2>📦 معلومات الطلب</h2>
 
     <div class="form-group">
       <label class="form-label">الاسم واللقب</label>
-      <input id="customerName" class="form-input" type="text" placeholder="أدخل الاسم واللقب">
+      <input
+        id="customerName"
+        class="form-input"
+        type="text"
+        placeholder="أدخل الاسم واللقب"
+      >
     </div>
 
     <div class="form-group">
       <label class="form-label">رقم الهاتف</label>
-      <input id="customerPhone" class="form-input" type="tel" placeholder="0550000000">
+      <input
+        id="customerPhone"
+        class="form-input"
+        type="tel"
+        placeholder="0550000000"
+      >
     </div>
 
     <div class="form-group">
       <label class="form-label">الولاية</label>
+
       <select id="customerWilaya" class="form-select">
         <option value="">اختر الولاية</option>
-        <option>أدرار</option><option>الشلف</option><option>الأغواط</option>
-        <option>أم البواقي</option><option>باتنة</option><option>بجاية</option>
-        <option>بسكرة</option><option>بشار</option><option>البليدة</option>
-        <option>البويرة</option><option>تمنراست</option><option>تبسة</option>
-        <option>تلمسان</option><option>تيارت</option><option>تيزي وزو</option>
-        <option>الجزائر</option><option>الجلفة</option><option>جيجل</option>
-        <option>سطيف</option><option>سعيدة</option><option>سكيكدة</option>
-        <option>سيدي بلعباس</option><option>عنابة</option><option>قالمة</option>
-        <option>قسنطينة</option><option>المدية</option><option>مستغانم</option>
-        <option>المسيلة</option><option>معسكر</option><option>ورقلة</option>
-        <option>وهران</option><option>البيض</option><option>إليزي</option>
-        <option>برج بوعريريج</option><option>بومرداس</option><option>الطارف</option>
-        <option>تندوف</option><option>تيسمسيلت</option><option>الوادي</option>
-        <option>خنشلة</option><option>سوق أهراس</option><option>تيبازة</option>
-        <option>ميلة</option><option>عين الدفلى</option><option>النعامة</option>
-        <option>عين تموشنت</option><option>غرداية</option><option>غليزان</option>
-        <option>تيميمون</option><option>برج باجي مختار</option><option>أولاد جلال</option>
-        <option>بني عباس</option><option>إن صالح</option><option>إن قزام</option>
-        <option>تقرت</option><option>جانت</option><option>المغير</option>
+        <option>أدرار</option>
+        <option>الشلف</option>
+        <option>الأغواط</option>
+        <option>أم البواقي</option>
+        <option>باتنة</option>
+        <option>بجاية</option>
+        <option>بسكرة</option>
+        <option>بشار</option>
+        <option>البليدة</option>
+        <option>البويرة</option>
+        <option>تمنراست</option>
+        <option>تبسة</option>
+        <option>تلمسان</option>
+        <option>تيارت</option>
+        <option>تيزي وزو</option>
+        <option>الجزائر</option>
+        <option>الجلفة</option>
+        <option>جيجل</option>
+        <option>سطيف</option>
+        <option>سعيدة</option>
+        <option>سكيكدة</option>
+        <option>سيدي بلعباس</option>
+        <option>عنابة</option>
+        <option>قالمة</option>
+        <option>قسنطينة</option>
+        <option>المدية</option>
+        <option>مستغانم</option>
+        <option>المسيلة</option>
+        <option>معسكر</option>
+        <option>ورقلة</option>
+        <option>وهران</option>
+        <option>البيض</option>
+        <option>إليزي</option>
+        <option>برج بوعريريج</option>
+        <option>بومرداس</option>
+        <option>الطارف</option>
+        <option>تندوف</option>
+        <option>تيسمسيلت</option>
+        <option>الوادي</option>
+        <option>خنشلة</option>
+        <option>سوق أهراس</option>
+        <option>تيبازة</option>
+        <option>ميلة</option>
+        <option>عين الدفلى</option>
+        <option>النعامة</option>
+        <option>عين تموشنت</option>
+        <option>غرداية</option>
+        <option>غليزان</option>
+        <option>تيميمون</option>
+        <option>برج باجي مختار</option>
+        <option>أولاد جلال</option>
+        <option>بني عباس</option>
+        <option>إن صالح</option>
+        <option>إن قزام</option>
+        <option>تقرت</option>
+        <option>جانت</option>
+        <option>المغير</option>
         <option>المنيعة</option>
       </select>
+
     </div>
 
     <div class="form-group">
       <label class="form-label">البلدية</label>
-      <input id="customerCommune" class="form-input" type="text" placeholder="أدخل البلدية">
+      <input
+        id="customerCommune"
+        class="form-input"
+        type="text"
+        placeholder="أدخل البلدية"
+      >
     </div>
 
     <div class="form-group">
       <label class="form-label">العنوان</label>
-      <textarea id="customerAddress" class="form-textarea" placeholder="أدخل العنوان بالتفصيل"></textarea>
+      <textarea
+        id="customerAddress"
+        class="form-textarea"
+        placeholder="أدخل العنوان بالتفصيل"
+      ></textarea>
     </div>
 
-    <div id="checkoutTotal" style="background:#f6f7f8;padding:12px;border-radius:10px;margin-bottom:10px;font-weight:bold">
+    <div
+      id="checkoutTotal"
+      style="background:#f6f7f8;padding:12px;margin-bottom:10px;font-weight:bold"
+    >
       المجموع: 0 دج
     </div>
 
-    <button type="button" id="submitOrderBtn" class="green-btn">✅ تأكيد الطلب</button>
-    <button type="button" id="whatsappOrderBtn" class="whatsapp-button">📱 إرسال الطلب عبر WhatsApp</button>
-    <button type="button" id="backToCartBtn" class="black-btn">↩️ الرجوع للسلة</button>
+    <button
+      type="button"
+      id="submitOrderBtn"
+      class="green-btn"
+    >
+      ✅ تأكيد الطلب
+    </button>
+
+    <button
+      type="button"
+      id="whatsappOrderBtn"
+      class="whatsapp-button"
+    >
+      📱 إرسال الطلب عبر WhatsApp
+    </button>
+
+    <button
+      type="button"
+      id="backToCartBtn"
+      class="black-btn"
+    >
+      ↩️ الرجوع للسلة
+    </button>
+
   </div>
+
 </div>
 
-<!-- PRODUCT DETAILS -->
+<!-- =========================
+     PREMIUM PRODUCT DETAILS
+========================= -->
 <div class="modal" id="productDetailModal">
+
   <div class="modal-box detail-box">
-    <button type="button" class="detail-close" id="detailCloseBtn" aria-label="إغلاق">×</button>
+
+    <button
+      type="button"
+      class="detail-close"
+      id="detailCloseBtn"
+      aria-label="إغلاق"
+    >×</button>
+
     <div class="detail-layout">
-      <div class="detail-image"><img id="detailImage" src="https://placehold.co/700x800?text=JR+Shop" alt="JR Shop"></div>
-      <div class="detail-content">
-        <div id="detailCategory" class="detail-category">JR SHOP</div>
-        <h2 id="detailTitle" class="detail-title">Produit</h2>
-        <div id="detailDescription" class="detail-description">اكتشف تفاصيل المنتج.</div>
-        <div id="detailPrice" class="detail-price">0 دج</div>
-        <div id="detailStock" class="detail-stock">متوفر</div>
-        <div class="detail-actions">
-          <button type="button" class="detail-add" id="detailAddBtn">🛒 أضف للسلة</button>
-          <button type="button" class="detail-buy" id="detailBuyBtn">اطلب الآن</button>
-        </div>
+
+      <div class="detail-image">
+
+        <span
+          id="detailSale"
+          class="detail-sale"
+          style="display:none"
+        >
+          SALE
+        </span>
+
+        <img
+          id="detailImage"
+          src="https://placehold.co/700x800?text=JR+Shop"
+          alt="JR Shop"
+        >
+
       </div>
+
+      <div class="detail-content">
+
+        <div
+          id="detailCategory"
+          class="detail-category"
+        >
+          JR SHOP
+        </div>
+
+        <h2
+          id="detailTitle"
+          class="detail-title"
+        >
+          Produit
+        </h2>
+
+        <div
+          id="detailDescription"
+          class="detail-description"
+        >
+          اكتشف تفاصيل هذا المنتج واختره بسهولة من JR Shop.
+        </div>
+
+        <div
+          id="detailPrice"
+          class="detail-price"
+        >
+          0 دج
+        </div>
+
+        <div
+          id="detailStock"
+          class="detail-stock"
+        >
+          متوفر
+        </div>
+
+        <div class="detail-quantity-title">
+          الكمية
+        </div>
+
+        <div class="detail-quantity">
+
+          <button
+            type="button"
+            id="detailQtyPlus"
+          >+</button>
+
+          <strong id="detailQty">1</strong>
+
+          <button
+            type="button"
+            id="detailQtyMinus"
+          >−</button>
+
+        </div>
+
+        <div class="detail-total">
+
+          <span>المجموع</span>
+
+          <strong id="detailTotal">0 دج</strong>
+
+        </div>
+
+        <div class="detail-actions">
+
+          <button
+            type="button"
+            class="detail-add"
+            id="detailAddBtn"
+          >
+            🛒 أضف للسلة
+          </button>
+
+          <button
+            type="button"
+            class="detail-buy"
+            id="detailBuyBtn"
+          >
+            اطلب الآن
+          </button>
+
+        </div>
+
+        <div class="detail-info-strip">
+
+          <div class="detail-info-item">
+            <strong>✓</strong>
+            منتج أصلي
+          </div>
+
+          <div class="detail-info-item">
+            <strong>📦</strong>
+            توصيل للجزائر
+          </div>
+
+          <div class="detail-info-item">
+            <strong>🔒</strong>
+            طلب آمن
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
+
   </div>
+
 </div>
 
 <div id="toast" class="toast"></div>
 
 <footer>
+
   <div class="footer-grid">
+
     <div class="footer-brand">
       <strong>JR <span>Shop</span></strong>
-      <p>متجر أزياء عصري يجمع لك اختيارات للنساء والرجال والأطفال في مكان واحد.</p>
+      <p>
+        متجر أزياء عصري يجمع لك اختيارات للنساء والرجال والأطفال في مكان واحد.
+      </p>
     </div>
-    <div class="footer-col"><h4>SHOP</h4><div>Women</div><div>Men</div><div>Kids</div><div>Shoes</div></div>
-    <div class="footer-col"><h4>HELP</h4><div>الطلبات</div><div>التوصيل</div><div>تواصل معنا</div></div>
-    <div class="footer-col"><h4>JR SHOP</h4><div>New In</div><div>Sale</div><div>Beauty</div></div>
+
+    <div class="footer-col">
+      <h4>SHOP</h4>
+      <div>Women</div>
+      <div>Men</div>
+      <div>Kids</div>
+      <div>Shoes</div>
+    </div>
+
+    <div class="footer-col">
+      <h4>HELP</h4>
+      <div>الطلبات</div>
+      <div>التوصيل</div>
+      <div>تواصل معنا</div>
+    </div>
+
+    <div class="footer-col">
+      <h4>JR SHOP</h4>
+      <div>New In</div>
+      <div>Sale</div>
+      <div>Beauty</div>
+    </div>
+
   </div>
-  <div class="footer-bottom">© 2026 JR Shop — جميع الحقوق محفوظة</div>
+
+  <div class="footer-bottom">
+    © 2026 JR Shop — جميع الحقوق محفوظة
+  </div>
+
 </footer>
 
 <script>
 /* =====================================================
    SUPABASE
-   IMPORTANT:
-   Put your REAL Supabase Publishable/Anon key below.
-   The key in the old file was incomplete, which causes
-   "Invalid API key".
 ===================================================== */
-const SUPABASE_URL = "https://cstjgsuehmqcolajspqh.supabase.co";
 
-/*
-  IMPORTANT:
-  Replace this value with the complete key from:
-  Supabase Dashboard > Project Settings > API
-*/
-const SUPABASE_KEY = "sb_publishable_e_wQxqCrx21Qq1kRYKjFMg_yR6TQfKX";
+const SUPABASE_URL =
+  "https://cstjgsuehmqcolajspqh.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_e_wQxqCrx21Qq1kRYKjFMg_yR6TQfKX";
 
 let supabaseClient = null;
 
@@ -977,29 +2018,37 @@ if(
   SUPABASE_KEY &&
   SUPABASE_KEY !== "PASTE_YOUR_REAL_SUPABASE_KEY_HERE"
 ){
-  supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
+  supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
 }
 
 /* =====================================================
    WHATSAPP
 ===================================================== */
-const WHATSAPP_NUMBER = "213697005313";
+
+const WHATSAPP_NUMBER =
+  "213697005313";
 
 /* =====================================================
    VARIABLES
 ===================================================== */
+
 let allProducts = [];
 let categories = [];
 let selectedCategory = "all";
 let searchTerm = "";
 let cart = [];
 
+let currentDetailProduct = null;
+let currentDetailQuantity = 1;
+
 /* =====================================================
    HELPERS
 ===================================================== */
+
 function escapeHtml(value){
   return String(value ?? "")
     .replace(/&/g,"&amp;")
@@ -1010,383 +2059,80 @@ function escapeHtml(value){
 }
 
 function showToast(message){
-  const toast = document.getElementById("toast");
+
+  const toast =
+    document.getElementById("toast");
+
   toast.textContent = message;
   toast.style.display = "block";
+
   clearTimeout(window.jrToastTimer);
-  window.jrToastTimer = setTimeout(()=>{
-    toast.style.display = "none";
-  },2500);
+
+  window.jrToastTimer =
+    setTimeout(()=>{
+      toast.style.display = "none";
+    },2500);
 }
 
 function formatPrice(value){
-  return Number(value || 0).toLocaleString("fr-FR") + " دج";
+  return Number(value || 0)
+    .toLocaleString("fr-FR") + " دج";
 }
 
-function getImage(value,fallback="https://placehold.co/500x500?text=JR+Shop"){
+function getImage(
+  value,
+  fallback="https://placehold.co/500x500?text=JR+Shop"
+){
   return value || fallback;
 }
 
 /* =====================================================
-   CART STORAGE
+   CART
 ===================================================== */
+
 function saveCart(){
-  localStorage.setItem("jr_shop_cart",JSON.stringify(cart));
+  localStorage.setItem(
+    "jr_shop_cart",
+    JSON.stringify(cart)
+  );
 }
 
 function loadCartFromStorage(){
-  try{
-    const saved = localStorage.getItem("jr_shop_cart");
-    cart = saved ? JSON.parse(saved) : [];
-    if(!Array.isArray(cart)) cart=[];
-  }catch{
-    cart=[];
-  }
-  updateCartCount();
-  renderCart();
-}
-
-/* =====================================================
-   CATEGORIES
-===================================================== */
-async function loadCategories(){
-
-  const container = document.getElementById("categoriesList");
-
-  if(!supabaseClient){
-    container.innerHTML = `
-      <div class="category-error">
-        مفتاح Supabase غير موجود.<br><br>
-        ضع المفتاح الكامل في SUPABASE_KEY داخل الكود.
-      </div>
-    `;
-    return;
-  }
 
   try{
-    const {data,error} = await supabaseClient
-      .from("categories")
-      .select("id,name,slug,sort_order,active")
-      .order("name",{ascending:true});
 
-    if(error) throw error;
+    const saved =
+      localStorage.getItem("jr_shop_cart");
 
-    categories = data || [];
-    renderCategories();
-    renderNavigation();
+    cart =
+      saved ? JSON.parse(saved) : [];
 
-  }catch(error){
-    console.error("Categories:",error);
-
-    container.innerHTML = `
-      <div class="category-error">
-        فشل تحميل الفئات
-        <br><br>
-        ${escapeHtml(error.message)}
-      </div>
-    `;
-  }
-}
-
-function renderCategories(){
-  const container = document.getElementById("categoriesList");
-  let html = `
-    <button type="button" class="category-card all-card ${selectedCategory === "all" ? "active" : ""}" data-category="all">
-      <div class="category-card-image-wrap"><div class="all-card-icon">🛍️</div></div>
-      <span class="category-card-name">SHOP ALL</span>
-    </button>
-  `;
-
-  categories.forEach(category=>{
-    const categoryProduct = allProducts.find(product =>
-      String(product.category_id) === String(category.id) && (product.image_url || product.image)
-    );
-    const image = category.image_url || categoryProduct?.image_url || categoryProduct?.image || "https://placehold.co/300x400?text=" + encodeURIComponent(category.name || "JR");
-
-    html += `
-      <button type="button" class="category-card ${String(selectedCategory) === String(category.id) ? "active" : ""}" data-category="${escapeHtml(category.id)}">
-        <div class="category-card-image-wrap">
-          <img src="${escapeHtml(image)}" alt="${escapeHtml(category.name)}" loading="lazy" onerror="this.src='https://placehold.co/300x400?text=JR'">
-        </div>
-        <span class="category-card-name">${escapeHtml(category.name)}</span>
-      </button>
-    `;
-  });
-
-  container.innerHTML = html;
-  container.querySelectorAll(".category-card").forEach(button=>{
-    button.addEventListener("click",()=>selectCategory(button.dataset.category));
-  });
-}
-function selectCategory(categoryId){
-
-  selectedCategory = categoryId;
-
-  const title = document.getElementById("productsTitle");
-
-  if(categoryId === "all"){
-    title.textContent = "🛍️ جميع المنتجات";
-  }else{
-    const category = categories.find(item =>
-      String(item.id) === String(categoryId)
-    );
-
-    title.textContent =
-      category
-        ? "🛍️ " + category.name
-        : "🛍️ المنتجات";
-  }
-
-  renderCategories();
-  renderNavigation();
-  filterProducts();
-
-  document.querySelector(".products-area")
-    ?.scrollIntoView({behavior:"smooth",block:"start"});
-}
-
-/* =====================================================
-   PRODUCTS
-===================================================== */
-async function loadProducts(){
-
-  const container = document.getElementById("products");
-
-  if(!supabaseClient){
-    container.innerHTML = `
-      <div class="error">
-        مفتاح Supabase غير موجود.<br><br>
-        ضع المفتاح الكامل في SUPABASE_KEY داخل الكود.
-      </div>
-    `;
-    return;
-  }
-
-  try{
-    const {data,error} = await supabaseClient
-      .from("products")
-      .select("*")
-      .order("id",{ascending:false});
-
-    if(error) throw error;
-
-    allProducts = data || [];
-    filterProducts();
-
-  }catch(error){
-    console.error("Products:",error);
-
-    container.innerHTML = `
-      <div class="error">
-        فشل تحميل المنتجات
-        <br><br>
-        ${escapeHtml(error.message)}
-      </div>
-    `;
-  }
-}
-
-function filterProducts(){
-  let products = [...allProducts];
-
-  if(selectedCategory !== "all"){
-    products = products.filter(product =>
-      String(product.category_id) === String(selectedCategory)
-    );
-  }
-
-  if(searchTerm){
-    products = products.filter(product=>{
-      const haystack = [
-        product.name,
-        product.description,
-        product.slug
-      ].map(v=>String(v || "").toLowerCase()).join(" ");
-      return haystack.includes(searchTerm);
-    });
-  }
-
-  renderProducts(products);
-}
-function renderProducts(products){
-  const container = document.getElementById("products");
-
-  if(!products || products.length === 0){
-    container.innerHTML = `
-      <div class="loading" style="grid-column:1/-1">
-        لا توجد منتجات مطابقة حاليًا.
-      </div>
-    `;
-    return;
-  }
-
-  let html = "";
-
-  products.forEach(product=>{
-    const image = getImage(
-      product.image_url || product.image,
-      "https://placehold.co/500x600?text=JR+Shop"
-    );
-    const price = Number(product.price || 0);
-    const oldPrice = Number(product.old_price || 0);
-    const stock = Number(product.stock ?? 0);
-    const category = categories.find(
-      c => String(c.id) === String(product.category_id)
-    );
-    const sale = oldPrice > price;
-
-    html += `
-      <article
-        class="product"
-        data-product-id="${escapeHtml(product.id)}"
-        tabindex="0"
-        aria-label="عرض تفاصيل ${escapeHtml(product.name || 'المنتج')}"
-      >
-        <div class="product-img">
-          ${
-            sale
-              ? `<span class="product-badge sale">SALE</span>`
-              : `<span class="product-badge">NEW</span>`
-          }
-
-          <img
-            src="${escapeHtml(image)}"
-            alt="${escapeHtml(product.name || 'JR Shop')}"
-            loading="lazy"
-            onerror="this.src='https://placehold.co/500x600?text=JR+Shop'"
-          >
-
-          <button
-            type="button"
-            class="product-quick"
-            data-detail-id="${escapeHtml(product.id)}"
-          >VIEW DETAILS</button>
-        </div>
-
-        <div class="product-info">
-          <div style="font-size:10px;color:#777;font-weight:800;margin-bottom:5px;text-transform:uppercase">
-            ${escapeHtml(category?.name || "JR SHOP")}
-          </div>
-
-          <h3>${escapeHtml(product.name || "Produit")}</h3>
-
-          <div class="description">
-            ${escapeHtml(product.description || "تفاصيل المنتج متوفرة هنا.")}
-          </div>
-
-          <div class="price">
-            ${formatPrice(price)}
-            ${
-              sale
-                ? `<span class="old-price">${formatPrice(oldPrice)}</span>`
-                : ""
-            }
-          </div>
-
-          <div class="stock">
-            ${
-              stock > 0
-                ? `✓ متوفر (${stock})`
-                : "غير متوفر"
-            }
-          </div>
-
-          <button
-            type="button"
-            class="buy"
-            data-buy-id="${escapeHtml(product.id)}"
-            ${stock <= 0 ? "disabled" : ""}
-          >
-            ${stock > 0 ? "🛒 أضف للسلة" : "غير متوفر"}
-          </button>
-        </div>
-      </article>
-    `;
-  });
-
-  container.innerHTML = html;
-
-  container.querySelectorAll("[data-detail-id]").forEach(button=>{
-    button.addEventListener("click",event=>{
-      event.stopPropagation();
-      openProductDetails(button.dataset.detailId);
-    });
-  });
-
-  container.querySelectorAll("[data-buy-id]").forEach(button=>{
-    button.addEventListener("click",event=>{
-      event.stopPropagation();
-      addToCart(button.dataset.buyId);
-    });
-  });
-
-  container.querySelectorAll(".product").forEach(card=>{
-    card.addEventListener("click",event=>{
-      if(event.target.closest("button")) return;
-      openProductDetails(card.dataset.productId);
-    });
-
-    card.addEventListener("keydown",event=>{
-      if(event.key === "Enter" || event.key === " "){
-        event.preventDefault();
-        openProductDetails(card.dataset.productId);
-      }
-    });
-  });
-}
-function addToCart(productId){
-
-  const product = allProducts.find(item =>
-    String(item.id) === String(productId)
-  );
-
-  if(!product){
-    showToast("المنتج غير موجود");
-    return;
-  }
-
-  const stock = Number(product.stock ?? 0);
-
-  if(stock <= 0){
-    showToast("هذا المنتج غير متوفر");
-    return;
-  }
-
-  const existing = cart.find(item =>
-    String(item.id) === String(product.id)
-  );
-
-  if(existing){
-    if(existing.quantity >= stock){
-      showToast("وصلت للكمية المتوفرة");
-      return;
+    if(!Array.isArray(cart)){
+      cart = [];
     }
-    existing.quantity += 1;
-  }else{
-    cart.push({
-      id:product.id,
-      name:product.name || "منتج",
-      price:Number(product.price || 0),
-      image:product.image_url || product.image || "",
-      quantity:1
-    });
+
+  }catch{
+    cart = [];
   }
 
-  saveCart();
   updateCartCount();
   renderCart();
-
-  showToast("تمت إضافة المنتج للسلة ✅");
 }
 
 function updateCartCount(){
 
-  const count = cart.reduce(
-    (sum,item)=>sum + Number(item.quantity || 0),
-    0
-  );
+  const count =
+    cart.reduce(
+      (sum,item)=>sum + Number(item.quantity || 0),
+      0
+    );
 
-  document.getElementById("cartCount").textContent = count;
+  const element =
+    document.getElementById("cartCount");
+
+  if(element){
+    element.textContent = count;
+  }
 }
 
 function getCartTotal(){
@@ -1400,131 +2146,256 @@ function getCartTotal(){
   );
 }
 
-function renderCart(){
+function addToCart(id,quantity=1){
 
-  const container = document.getElementById("cartItems");
-  const total = getCartTotal();
+  const product =
+    allProducts.find(
+      p => String(p.id) === String(id)
+    );
 
-  document.getElementById("cartTotal").textContent =
-    "المجموع: " + formatPrice(total);
-
-  document.getElementById("checkoutTotal").textContent =
-    "المجموع: " + formatPrice(total);
-
-  if(cart.length === 0){
-    container.innerHTML = `
-      <div class="empty-cart">
-        🛒 السلة فارغة
-      </div>
-    `;
-    return;
+  if(!product){
+    showToast("المنتج غير موجود");
+    return false;
   }
 
-  let html = "";
+  const stock =
+    Number(product.stock ?? 0);
 
-  cart.forEach(item=>{
+  if(stock <= 0){
+    showToast("هذا المنتج غير متوفر");
+    return false;
+  }
 
-    html += `
-      <div class="cart-item">
+  const requested =
+    Math.max(1,Number(quantity || 1));
 
-        <img
-          class="cart-item-img"
-          src="${escapeHtml(
-            getImage(item.image,"https://placehold.co/100x100?text=JR")
-          )}"
-          alt="${escapeHtml(item.name)}"
-          onerror="this.src='https://placehold.co/100x100?text=JR'"
-        >
+  const existing =
+    cart.find(
+      item =>
+        String(item.id) ===
+        String(id)
+    );
 
-        <div class="cart-item-info">
+  const currentQty =
+    existing
+      ? Number(existing.quantity || 0)
+      : 0;
 
-          <div class="cart-item-name">
-            ${escapeHtml(item.name)}
-          </div>
+  if(currentQty + requested > stock){
+    showToast("الكمية المطلوبة غير متوفرة");
+    return false;
+  }
 
-          <div class="cart-item-price">
-            ${formatPrice(item.price)}
-          </div>
+  if(existing){
 
-          <div class="quantity-controls">
+    existing.quantity =
+      currentQty + requested;
 
-            <button
-              type="button"
-              class="quantity-btn"
-              data-action="plus"
-              data-id="${escapeHtml(item.id)}"
-            >+</button>
+    existing.stock = stock;
+    existing.price =
+      Number(product.price || 0);
+    existing.name =
+      product.name;
+    existing.image =
+      product.image_url ||
+      product.image;
 
-            <strong>${item.quantity}</strong>
+  }else{
 
-            <button
-              type="button"
-              class="quantity-btn"
-              data-action="minus"
-              data-id="${escapeHtml(item.id)}"
-            >−</button>
+    cart.push({
+      id:product.id,
+      name:product.name,
+      price:Number(product.price || 0),
+      image:
+        product.image_url ||
+        product.image ||
+        "",
+      quantity:requested,
+      stock:stock
+    });
 
-            <button
-              type="button"
-              class="remove-btn"
-              data-action="remove"
-              data-id="${escapeHtml(item.id)}"
-            >حذف</button>
+  }
+
+  saveCart();
+  updateCartCount();
+  renderCart();
+
+  showToast("تمت إضافة المنتج للسلة ✅");
+
+  return true;
+}
+
+function renderCart(){
+
+  const container =
+    document.getElementById("cartItems");
+
+  const totalElement =
+    document.getElementById("cartTotal");
+
+  const checkoutTotal =
+    document.getElementById("checkoutTotal");
+
+  if(!container) return;
+
+  if(cart.length === 0){
+
+    container.innerHTML =
+      `<div class="empty-cart">السلة فارغة حاليًا.</div>`;
+
+  }else{
+
+    let html = "";
+
+    cart.forEach(item=>{
+
+      html += `
+        <div class="cart-item">
+
+          <img
+            class="cart-item-img"
+            src="${escapeHtml(
+              getImage(
+                item.image,
+                "https://placehold.co/100x100?text=JR"
+              )
+            )}"
+            alt="${escapeHtml(item.name)}"
+            onerror="this.src='https://placehold.co/100x100?text=JR'"
+          >
+
+          <div class="cart-item-info">
+
+            <div class="cart-item-name">
+              ${escapeHtml(item.name)}
+            </div>
+
+            <div class="cart-item-price">
+              ${formatPrice(item.price)}
+            </div>
+
+            <div class="quantity-controls">
+
+              <button
+                type="button"
+                class="quantity-btn"
+                data-action="plus"
+                data-id="${escapeHtml(item.id)}"
+              >+</button>
+
+              <strong>${item.quantity}</strong>
+
+              <button
+                type="button"
+                class="quantity-btn"
+                data-action="minus"
+                data-id="${escapeHtml(item.id)}"
+              >−</button>
+
+              <button
+                type="button"
+                class="remove-btn"
+                data-action="remove"
+                data-id="${escapeHtml(item.id)}"
+              >حذف</button>
+
+            </div>
 
           </div>
 
         </div>
-      </div>
-    `;
-  });
-
-  container.innerHTML = html;
-
-  container.querySelectorAll("[data-action]").forEach(button=>{
-    button.addEventListener("click",()=>{
-      changeCartQuantity(
-        button.dataset.id,
-        button.dataset.action
-      );
+      `;
     });
-  });
+
+    container.innerHTML = html;
+  }
+
+  const total =
+    formatPrice(getCartTotal());
+
+  if(totalElement){
+    totalElement.textContent =
+      "المجموع: " + total;
+  }
+
+  if(checkoutTotal){
+    checkoutTotal.textContent =
+      "المجموع: " + total;
+  }
+
+  container
+    .querySelectorAll("[data-action]")
+    .forEach(button=>{
+
+      button.addEventListener(
+        "click",
+        ()=>{
+          changeCartQuantity(
+            button.dataset.id,
+            button.dataset.action
+          );
+        }
+      );
+
+    });
 }
 
 function changeCartQuantity(id,action){
 
-  const item = cart.find(
-    product => String(product.id) === String(id)
-  );
+  const item =
+    cart.find(
+      product =>
+        String(product.id) ===
+        String(id)
+    );
 
   if(!item) return;
 
   if(action === "plus"){
-    const product = allProducts.find(
-      p => String(p.id) === String(id)
-    );
 
-    const stock = Number(product?.stock ?? 999999);
+    const product =
+      allProducts.find(
+        p =>
+          String(p.id) ===
+          String(id)
+      );
+
+    const stock =
+      Number(product?.stock ?? item.stock ?? 0);
 
     if(item.quantity < stock){
+
       item.quantity += 1;
+
     }else{
+
       showToast("لا توجد كمية إضافية");
     }
   }
 
   if(action === "minus"){
+
     item.quantity -= 1;
+
     if(item.quantity <= 0){
-      cart = cart.filter(
-        product => String(product.id) !== String(id)
-      );
+
+      cart =
+        cart.filter(
+          product =>
+            String(product.id) !==
+            String(id)
+        );
     }
   }
 
   if(action === "remove"){
-    cart = cart.filter(
-      product => String(product.id) !== String(id)
-    );
+
+    cart =
+      cart.filter(
+        product =>
+          String(product.id) !==
+          String(id)
+      );
   }
 
   saveCart();
@@ -1533,351 +2404,1723 @@ function changeCartQuantity(id,action){
 }
 
 /* =====================================================
-   PRODUCT DETAILS
+   CATEGORIES
 ===================================================== */
-let currentDetailProduct = null;
+
+async function loadCategories(){
+
+  const container =
+    document.getElementById("categoriesList");
+
+  if(!supabaseClient){
+
+    container.innerHTML =
+      `<div class="category-error">
+        Supabase غير مهيأ.
+      </div>`;
+
+    return;
+  }
+
+  try{
+
+    const {data,error} =
+      await supabaseClient
+        .from("categories")
+        .select(
+          "id,name,slug,image_url,sort_order,active"
+        )
+        .eq("active",true)
+        .order("sort_order",{ascending:true})
+        .order("name",{ascending:true});
+
+    if(error) throw error;
+
+    categories = data || [];
+
+    renderCategories();
+    renderNavigation();
+
+  }catch(error){
+
+    console.error("Categories:",error);
+
+    container.innerHTML =
+      `<div class="category-error">
+        فشل تحميل الفئات
+        <br><br>
+        ${escapeHtml(error.message)}
+      </div>`;
+  }
+}
+
+function renderCategories(){
+
+  const container =
+    document.getElementById("categoriesList");
+
+  if(!container) return;
+
+  let html = `
+    <button
+      type="button"
+      class="category-card all-card ${
+        selectedCategory === "all"
+          ? "active"
+          : ""
+      }"
+      data-category="all"
+    >
+      <div class="category-card-image-wrap">
+        <span class="all-card-icon">🛍️</span>
+      </div>
+
+      <span class="category-card-name">
+        SHOP ALL
+      </span>
+    </button>
+  `;
+
+  categories.forEach(category=>{
+
+    const categoryProduct =
+      allProducts.find(
+        product =>
+          String(product.category_id) ===
+          String(category.id) &&
+          (product.image_url || product.image)
+      );
+
+    const image =
+      category.image_url ||
+      categoryProduct?.image_url ||
+      categoryProduct?.image ||
+      "https://placehold.co/300x400?text=" +
+      encodeURIComponent(
+        category.name || "JR"
+      );
+
+    html += `
+      <button
+        type="button"
+        class="category-card ${
+          String(selectedCategory) ===
+          String(category.id)
+            ? "active"
+            : ""
+        }"
+        data-category="${escapeHtml(category.id)}"
+      >
+
+        <div class="category-card-image-wrap">
+
+          <img
+            src="${escapeHtml(image)}"
+            alt="${escapeHtml(category.name)}"
+            loading="lazy"
+            onerror="this.src='https://placehold.co/300x400?text=JR'"
+          >
+
+        </div>
+
+        <span class="category-card-name">
+          ${escapeHtml(category.name)}
+        </span>
+
+      </button>
+    `;
+  });
+
+  container.innerHTML = html;
+
+  container
+    .querySelectorAll(".category-card")
+    .forEach(button=>{
+
+      button.addEventListener(
+        "click",
+        ()=>{
+          selectCategory(
+            button.dataset.category
+          );
+        }
+      );
+
+    });
+}
+
+function renderNavigation(){
+
+  const nav =
+    document.getElementById(
+      "navCategories"
+    );
+
+  if(!nav) return;
+
+  let html = `
+    <button
+      type="button"
+      class="${selectedCategory === "all" ? "active" : ""}"
+      data-category="all"
+    >
+      SHOP
+    </button>
+  `;
+
+  categories.forEach(category=>{
+
+    html += `
+      <button
+        type="button"
+        class="${
+          String(selectedCategory) ===
+          String(category.id)
+            ? "active"
+            : ""
+        }"
+        data-category="${escapeHtml(category.id)}"
+      >
+        ${escapeHtml(category.name)}
+      </button>
+    `;
+  });
+
+  nav.innerHTML = html;
+
+  nav
+    .querySelectorAll("button")
+    .forEach(button=>{
+
+      button.addEventListener(
+        "click",
+        ()=>{
+          selectCategory(
+            button.dataset.category
+          );
+        }
+      );
+
+    });
+}
+
+function selectCategory(categoryId){
+
+  selectedCategory = categoryId;
+
+  const title =
+    document.getElementById(
+      "productsTitle"
+    );
+
+  if(categoryId === "all"){
+
+    title.textContent =
+      "🛍️ جميع المنتجات";
+
+  }else{
+
+    const category =
+      categories.find(
+        item =>
+          String(item.id) ===
+          String(categoryId)
+      );
+
+    title.textContent =
+      category
+        ? "🛍️ " + category.name
+        : "🛍️ المنتجات";
+  }
+
+  renderCategories();
+  renderNavigation();
+  filterProducts();
+
+  document
+    .querySelector(".products-area")
+    ?.scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
+}
+
+/* =====================================================
+   PRODUCTS
+===================================================== */
+
+async function loadProducts(){
+
+  const container =
+    document.getElementById("products");
+
+  if(!supabaseClient){
+
+    container.innerHTML =
+      `<div class="error">
+        Supabase غير مهيأ.
+      </div>`;
+
+    return;
+  }
+
+  try{
+
+    const {data,error} =
+      await supabaseClient
+        .from("products")
+        .select("*")
+        .order("created_at",{ascending:false});
+
+    if(error) throw error;
+
+    allProducts = data || [];
+
+    filterProducts();
+    renderPremiumCollections();
+    renderCategories();
+
+  }catch(error){
+
+    console.error("Products:",error);
+
+    container.innerHTML =
+      `<div class="error">
+        فشل تحميل المنتجات
+        <br><br>
+        ${escapeHtml(error.message)}
+      </div>`;
+  }
+}
+
+function filterProducts(){
+
+  let products =
+    [...allProducts];
+
+  if(selectedCategory !== "all"){
+
+    products =
+      products.filter(
+        product =>
+          String(product.category_id) ===
+          String(selectedCategory)
+      );
+  }
+
+  if(searchTerm){
+
+    products =
+      products.filter(product=>{
+
+        const haystack = [
+          product.name,
+          product.description,
+          product.slug
+        ]
+          .map(
+            v =>
+              String(v || "")
+                .toLowerCase()
+          )
+          .join(" ");
+
+        return haystack.includes(
+          searchTerm
+        );
+      });
+  }
+
+  renderProducts(products);
+}
+
+function renderProducts(products){
+
+  const container =
+    document.getElementById("products");
+
+  if(!products || products.length === 0){
+
+    container.innerHTML =
+      `<div
+        class="loading"
+        style="grid-column:1/-1"
+      >
+        لا توجد منتجات مطابقة حاليًا.
+      </div>`;
+
+    return;
+  }
+
+  let html = "";
+
+  products.forEach(product=>{
+
+    const image =
+      getImage(
+        product.image_url ||
+        product.image,
+        "https://placehold.co/500x600?text=JR+Shop"
+      );
+
+    const price =
+      Number(product.price || 0);
+
+    const oldPrice =
+      Number(product.old_price || 0);
+
+    const stock =
+      Number(product.stock ?? 0);
+
+    const category =
+      categories.find(
+        c =>
+          String(c.id) ===
+          String(product.category_id)
+      );
+
+    const sale =
+      oldPrice > price;
+
+    html += `
+      <article
+        class="product"
+        data-product-id="${escapeHtml(product.id)}"
+        tabindex="0"
+        aria-label="عرض تفاصيل ${escapeHtml(product.name || "المنتج")}"
+      >
+
+        <div class="product-img">
+
+          ${
+            sale
+              ? `<span class="product-badge sale">SALE</span>`
+              : `<span class="product-badge">NEW IN</span>`
+          }
+
+          <img
+            src="${escapeHtml(image)}"
+            alt="${escapeHtml(product.name || "JR Shop")}"
+            loading="lazy"
+            onerror="this.src='https://placehold.co/500x600?text=JR+Shop'"
+          >
+
+          <button
+            type="button"
+            class="product-quick"
+            data-detail-id="${escapeHtml(product.id)}"
+          >
+            VIEW DETAILS
+          </button>
+
+        </div>
+
+        <div class="product-info">
+
+          <div class="product-category">
+            ${escapeHtml(
+              category?.name ||
+              "JR SHOP"
+            )}
+          </div>
+
+          <h3>
+            ${escapeHtml(
+              product.name ||
+              "Produit"
+            )}
+          </h3>
+
+          <div class="description">
+            ${escapeHtml(
+              product.description ||
+              "تفاصيل المنتج متوفرة هنا."
+            )}
+          </div>
+
+          <div class="price">
+
+            ${formatPrice(price)}
+
+            ${
+              sale
+                ? `<span class="old-price">
+                    ${formatPrice(oldPrice)}
+                   </span>`
+                : ""
+            }
+
+          </div>
+
+          <div class="stock">
+
+            ${
+              stock > 0
+                ? `✓ متوفر (${stock})`
+                : "غير متوفر"
+            }
+
+          </div>
+
+          <button
+            type="button"
+            class="buy"
+            data-buy-id="${escapeHtml(product.id)}"
+            ${stock <= 0 ? "disabled" : ""}
+          >
+            ${
+              stock > 0
+                ? "🛒 أضف للسلة"
+                : "غير متوفر"
+            }
+          </button>
+
+        </div>
+
+      </article>
+    `;
+  });
+
+  container.innerHTML = html;
+
+  container
+    .querySelectorAll("[data-detail-id]")
+    .forEach(button=>{
+
+      button.addEventListener(
+        "click",
+        event=>{
+          event.stopPropagation();
+
+          openProductDetails(
+            button.dataset.detailId
+          );
+        }
+      );
+
+    });
+
+  container
+    .querySelectorAll("[data-buy-id]")
+    .forEach(button=>{
+
+      button.addEventListener(
+        "click",
+        event=>{
+          event.stopPropagation();
+
+          addToCart(
+            button.dataset.buyId
+          );
+        }
+      );
+
+    });
+
+  container
+    .querySelectorAll(".product")
+    .forEach(card=>{
+
+      card.addEventListener(
+        "click",
+        event=>{
+
+          if(
+            event.target.closest("button")
+          ){
+            return;
+          }
+
+          openProductDetails(
+            card.dataset.productId
+          );
+        }
+      );
+
+      card.addEventListener(
+        "keydown",
+        event=>{
+
+          if(
+            event.key === "Enter" ||
+            event.key === " "
+          ){
+
+            event.preventDefault();
+
+            openProductDetails(
+              card.dataset.productId
+            );
+          }
+
+        }
+      );
+
+    });
+}
+
+/* =====================================================
+   PREMIUM PRODUCT DETAILS
+===================================================== */
+
+function updateDetailTotal(){
+
+  if(!currentDetailProduct){
+    return;
+  }
+
+  const price =
+    Number(
+      currentDetailProduct.price || 0
+    );
+
+  document.getElementById(
+    "detailQty"
+  ).textContent =
+    currentDetailQuantity;
+
+  document.getElementById(
+    "detailTotal"
+  ).textContent =
+    formatPrice(
+      price *
+      currentDetailQuantity
+    );
+}
 
 function openProductDetails(id){
-  const product = allProducts.find(p => String(p.id) === String(id));
+
+  const product =
+    allProducts.find(
+      p =>
+        String(p.id) ===
+        String(id)
+    );
+
   if(!product) return;
 
-  currentDetailProduct = product;
-  const category = categories.find(c => String(c.id) === String(product.category_id));
-  const price = Number(product.price || 0);
-  const oldPrice = Number(product.old_price || 0);
-  const stock = Number(product.stock ?? 0);
+  currentDetailProduct =
+    product;
 
-  document.getElementById("detailImage").src = getImage(product.image_url || product.image, "https://placehold.co/700x800?text=JR+Shop");
-  document.getElementById("detailImage").alt = product.name || "JR Shop";
-  document.getElementById("detailCategory").textContent = category?.name || "JR SHOP";
-  document.getElementById("detailTitle").textContent = product.name || "Produit";
-  document.getElementById("detailDescription").textContent = product.description || "اكتشف تفاصيل هذا المنتج واختره بسهولة من JR Shop.";
-  document.getElementById("detailPrice").innerHTML = `${formatPrice(price)} ${oldPrice > price ? `<span class="detail-old">${formatPrice(oldPrice)}</span>` : ''}`;
-  document.getElementById("detailStock").textContent = stock > 0 ? `✓ متوفر — ${stock} قطعة` : "غير متوفر حاليًا";
+  currentDetailQuantity = 1;
 
-  const addBtn = document.getElementById("detailAddBtn");
-  const buyBtn = document.getElementById("detailBuyBtn");
-  addBtn.disabled = stock <= 0;
-  buyBtn.disabled = stock <= 0;
-  addBtn.style.opacity = stock <= 0 ? ".5" : "1";
-  buyBtn.style.opacity = stock <= 0 ? ".5" : "1";
+  const category =
+    categories.find(
+      c =>
+        String(c.id) ===
+        String(product.category_id)
+    );
 
-  openModal("productDetailModal");
+  const price =
+    Number(product.price || 0);
+
+  const oldPrice =
+    Number(product.old_price || 0);
+
+  const stock =
+    Number(product.stock ?? 0);
+
+  const image =
+    getImage(
+      product.image_url ||
+      product.image,
+      "https://placehold.co/700x800?text=JR+Shop"
+    );
+
+  document.getElementById(
+    "detailImage"
+  ).src = image;
+
+  document.getElementById(
+    "detailImage"
+  ).alt =
+    product.name ||
+    "JR Shop";
+
+  document.getElementById(
+    "detailCategory"
+  ).textContent =
+    category?.name ||
+    "JR SHOP";
+
+  document.getElementById(
+    "detailTitle"
+  ).textContent =
+    product.name ||
+    "Produit";
+
+  document.getElementById(
+    "detailDescription"
+  ).textContent =
+    product.description ||
+    "اكتشف تفاصيل هذا المنتج واختره بسهولة من JR Shop.";
+
+  document.getElementById(
+    "detailPrice"
+  ).innerHTML =
+    `${formatPrice(price)}
+     ${
+       oldPrice > price
+         ? `<span class="detail-old">
+              ${formatPrice(oldPrice)}
+            </span>`
+         : ""
+     }`;
+
+  const saleBadge =
+    document.getElementById(
+      "detailSale"
+    );
+
+  saleBadge.style.display =
+    oldPrice > price
+      ? "block"
+      : "none";
+
+  const stockElement =
+    document.getElementById(
+      "detailStock"
+    );
+
+  if(stock > 0){
+
+    stockElement.textContent =
+      `✓ متوفر — ${stock} قطعة`;
+
+    stockElement.className =
+      "detail-stock available";
+
+  }else{
+
+    stockElement.textContent =
+      "✕ غير متوفر حاليًا";
+
+    stockElement.className =
+      "detail-stock unavailable";
+  }
+
+  const addBtn =
+    document.getElementById(
+      "detailAddBtn"
+    );
+
+  const buyBtn =
+    document.getElementById(
+      "detailBuyBtn"
+    );
+
+  addBtn.disabled =
+    stock <= 0;
+
+  buyBtn.disabled =
+    stock <= 0;
+
+  updateDetailTotal();
+
+  openModal(
+    "productDetailModal"
+  );
 }
 
 function closeProductDetails(){
-  closeModal("productDetailModal");
-  currentDetailProduct = null;
+
+  closeModal(
+    "productDetailModal"
+  );
+
+  currentDetailProduct =
+    null;
+
+  currentDetailQuantity = 1;
+}
+
+/* =====================================================
+   FEATURE RAILS
+===================================================== */
+
+function featureProductCard(
+  product,
+  label="NEW IN"
+){
+
+  const image =
+    getImage(
+      product.image_url ||
+      product.image
+    );
+
+  const price =
+    Number(product.price || 0);
+
+  const oldPrice =
+    Number(product.old_price || 0);
+
+  const category =
+    categories.find(
+      c =>
+        String(c.id) ===
+        String(product.category_id)
+    );
+
+  const stock =
+    Number(product.stock ?? 0);
+
+  return `
+    <article
+      class="feature-card"
+      data-feature-card-id="${escapeHtml(product.id)}"
+    >
+
+      <div class="feature-card-img">
+
+        ${
+          oldPrice > price
+            ? `<span class="feature-badge">SALE</span>`
+            : `<span class="feature-badge">
+                ${escapeHtml(label)}
+               </span>`
+        }
+
+        <img
+          src="${escapeHtml(image)}"
+          alt="${escapeHtml(product.name || "JR Shop")}"
+          loading="lazy"
+          onerror="this.src='https://placehold.co/500x600?text=JR+Shop'"
+        >
+
+      </div>
+
+      <div class="feature-card-info">
+
+        <small>
+          ${escapeHtml(
+            category?.name ||
+            "JR SHOP"
+          )}
+        </small>
+
+        <h3>
+          ${escapeHtml(
+            product.name ||
+            "Produit"
+          )}
+        </h3>
+
+        <div class="feature-price">
+
+          ${formatPrice(price)}
+
+          ${
+            oldPrice > price
+              ? `<span class="feature-old">
+                  ${formatPrice(oldPrice)}
+                 </span>`
+              : ""
+          }
+
+        </div>
+
+        <button
+          type="button"
+          class="feature-add"
+          data-feature-id="${escapeHtml(product.id)}"
+          ${stock <= 0 ? "disabled" : ""}
+        >
+          ${
+            stock > 0
+              ? "ADD TO BAG"
+              : "OUT OF STOCK"
+          }
+        </button>
+
+      </div>
+
+    </article>
+  `;
+}
+
+function renderFeatureRail(
+  containerId,
+  products,
+  label
+){
+
+  const container =
+    document.getElementById(
+      containerId
+    );
+
+  if(!container) return;
+
+  if(
+    !products ||
+    !products.length
+  ){
+
+    container.innerHTML =
+      `<div
+        class="loading"
+        style="grid-column:1/-1"
+      >
+        لا توجد منتجات حاليًا.
+      </div>`;
+
+    return;
+  }
+
+  container.innerHTML =
+    products
+      .slice(0,4)
+      .map(
+        p =>
+          featureProductCard(
+            p,
+            label
+          )
+      )
+      .join("");
+
+  container
+    .querySelectorAll(
+      "[data-feature-id]"
+    )
+    .forEach(button=>{
+
+      button.addEventListener(
+        "click",
+        event=>{
+
+          event.stopPropagation();
+
+          addToCart(
+            button.dataset.featureId
+          );
+        }
+      );
+
+    });
+
+  container
+    .querySelectorAll(
+      "[data-feature-card-id]"
+    )
+    .forEach(card=>{
+
+      card.addEventListener(
+        "click",
+        event=>{
+
+          if(
+            event.target.closest("button")
+          ){
+            return;
+          }
+
+          openProductDetails(
+            card.dataset.featureCardId
+          );
+        }
+      );
+
+    });
+}
+
+function renderPremiumCollections(){
+
+  if(!allProducts.length){
+    return;
+  }
+
+  const newest =
+    [...allProducts]
+      .sort(
+        (a,b)=>
+          new Date(b.created_at || 0) -
+          new Date(a.created_at || 0)
+      )
+      .slice(0,4);
+
+  const sale =
+    allProducts.filter(
+      p =>
+        Number(p.old_price || 0) >
+        Number(p.price || 0)
+    );
+
+  const trending =
+    sale.length
+      ? sale.slice(0,4)
+      : [...allProducts].slice(0,4);
+
+  renderFeatureRail(
+    "newInProducts",
+    newest,
+    "NEW IN"
+  );
+
+  renderFeatureRail(
+    "trendingProducts",
+    trending,
+    "TRENDING"
+  );
+
+  const imageProducts =
+    [...allProducts]
+      .filter(
+        p =>
+          p.image_url ||
+          p.image
+      );
+
+  if(imageProducts.length){
+
+    const p1 =
+      imageProducts[0];
+
+    const p2 =
+      imageProducts[
+        1 % imageProducts.length
+      ];
+
+    const p3 =
+      imageProducts[
+        2 % imageProducts.length
+      ];
+
+    document.getElementById(
+      "collectionImg1"
+    ).src =
+      getImage(
+        p1.image_url || p1.image,
+        "https://placehold.co/900x700?text=JR+SHOP"
+      );
+
+    document.getElementById(
+      "collectionImg2"
+    ).src =
+      getImage(
+        p2.image_url || p2.image,
+        "https://placehold.co/600x700?text=JR+SHOP"
+      );
+
+    document.getElementById(
+      "collectionImg3"
+    ).src =
+      getImage(
+        p3.image_url || p3.image,
+        "https://placehold.co/600x700?text=SALE"
+      );
+  }
 }
 
 /* =====================================================
    MODALS
 ===================================================== */
+
 function openModal(id){
-  document.getElementById(id).classList.add("show");
+
+  const modal =
+    document.getElementById(id);
+
+  if(modal){
+    modal.classList.add("show");
+  }
 }
 
 function closeModal(id){
-  document.getElementById(id).classList.remove("show");
+
+  const modal =
+    document.getElementById(id);
+
+  if(modal){
+    modal.classList.remove("show");
+  }
 }
 
-document.getElementById("openCartBtn").addEventListener("click",()=>{
-  renderCart();
-  openModal("cartModal");
-});
+/* =====================================================
+   CART / MODAL EVENTS
+===================================================== */
 
-document.getElementById("closeCartBtn").addEventListener("click",()=>{
-  closeModal("cartModal");
-});
-
-document.getElementById("checkoutBtn").addEventListener("click",()=>{
-
-  if(cart.length === 0){
-    showToast("السلة فارغة");
-    return;
-  }
-
-  closeModal("cartModal");
-  renderCart();
-  openModal("checkoutModal");
-});
-
-document.getElementById("backToCartBtn").addEventListener("click",()=>{
-  closeModal("checkoutModal");
-  openModal("cartModal");
-});
-
-document.getElementById("detailCloseBtn").addEventListener("click",closeProductDetails);
-
-document.getElementById("detailAddBtn").addEventListener("click",()=>{
-  if(!currentDetailProduct) return;
-  addToCart(currentDetailProduct.id);
-  closeProductDetails();
-});
-
-document.getElementById("detailBuyBtn").addEventListener("click",()=>{
-  if(!currentDetailProduct) return;
-  addToCart(currentDetailProduct.id);
-  closeProductDetails();
-  renderCart();
-  openModal("cartModal");
-});
-
-document.querySelectorAll(".modal").forEach(modal=>{
-  modal.addEventListener("click",event=>{
-    if(event.target === modal){
-      modal.classList.remove("show");
+document
+  .getElementById("openCartBtn")
+  .addEventListener(
+    "click",
+    ()=>{
+      renderCart();
+      openModal("cartModal");
     }
+  );
+
+document
+  .getElementById("mobileCartBtn")
+  .addEventListener(
+    "click",
+    ()=>{
+      renderCart();
+      openModal("cartModal");
+    }
+  );
+
+document
+  .getElementById("closeCartBtn")
+  .addEventListener(
+    "click",
+    ()=>{
+      closeModal("cartModal");
+    }
+  );
+
+document
+  .getElementById("checkoutBtn")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      if(cart.length === 0){
+
+        showToast(
+          "السلة فارغة"
+        );
+
+        return;
+      }
+
+      closeModal("cartModal");
+
+      renderCart();
+
+      openModal(
+        "checkoutModal"
+      );
+    }
+  );
+
+document
+  .getElementById("backToCartBtn")
+  .addEventListener(
+    "click",
+    ()=>{
+      closeModal("checkoutModal");
+      openModal("cartModal");
+    }
+  );
+
+document
+  .getElementById("detailCloseBtn")
+  .addEventListener(
+    "click",
+    closeProductDetails
+  );
+
+document
+  .getElementById("detailQtyPlus")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      if(!currentDetailProduct){
+        return;
+      }
+
+      const stock =
+        Number(
+          currentDetailProduct.stock ?? 0
+        );
+
+      if(
+        currentDetailQuantity <
+        stock
+      ){
+
+        currentDetailQuantity++;
+
+        updateDetailTotal();
+
+      }else{
+
+        showToast(
+          "وصلت للكمية المتوفرة"
+        );
+      }
+    }
+  );
+
+document
+  .getElementById("detailQtyMinus")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      if(
+        currentDetailQuantity >
+        1
+      ){
+
+        currentDetailQuantity--;
+
+        updateDetailTotal();
+      }
+    }
+  );
+
+document
+  .getElementById("detailAddBtn")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      if(!currentDetailProduct){
+        return;
+      }
+
+      const added =
+        addToCart(
+          currentDetailProduct.id,
+          currentDetailQuantity
+        );
+
+      if(added){
+        closeProductDetails();
+      }
+    }
+  );
+
+document
+  .getElementById("detailBuyBtn")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      if(!currentDetailProduct){
+        return;
+      }
+
+      const added =
+        addToCart(
+          currentDetailProduct.id,
+          currentDetailQuantity
+        );
+
+      if(added){
+
+        closeProductDetails();
+
+        renderCart();
+
+        openModal(
+          "cartModal"
+        );
+      }
+    }
+  );
+
+document
+  .querySelectorAll(".modal")
+  .forEach(modal=>{
+
+    modal.addEventListener(
+      "click",
+      event=>{
+
+        if(
+          event.target === modal
+        ){
+          modal.classList.remove(
+            "show"
+          );
+        }
+      }
+    );
+
   });
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+const searchInput =
+  document.getElementById(
+    "searchInput"
+  );
+
+if(searchInput){
+
+  searchInput.addEventListener(
+    "input",
+    ()=>{
+      searchTerm =
+        searchInput.value
+          .trim()
+          .toLowerCase();
+
+      filterProducts();
+    }
+  );
+}
+
+/* =====================================================
+   COLLECTION TILES
+===================================================== */
+
+[
+  "collectionTile1",
+  "collectionTile2",
+  "collectionTile3"
+].forEach(id=>{
+
+  const tile =
+    document.getElementById(id);
+
+  if(!tile) return;
+
+  tile.addEventListener(
+    "click",
+    ()=>{
+
+      const key =
+        String(
+          tile.dataset.key || ""
+        ).toLowerCase();
+
+      const found =
+        categories.find(
+          category=>{
+
+            const name =
+              String(
+                category.name || ""
+              ).toLowerCase();
+
+            const slug =
+              String(
+                category.slug || ""
+              ).toLowerCase();
+
+            return(
+              name.includes(key) ||
+              slug.includes(key)
+            );
+          }
+        );
+
+      if(found){
+
+        selectCategory(
+          found.id
+        );
+
+      }else{
+
+        document
+          .querySelector(".products-area")
+          ?.scrollIntoView({
+            behavior:"smooth"
+          });
+      }
+    }
+  );
 });
 
 /* =====================================================
    WHATSAPP ORDER
 ===================================================== */
+
 function buildWhatsAppMessage(){
 
-  const name = document.getElementById("customerName").value.trim();
-  const phone = document.getElementById("customerPhone").value.trim();
-  const wilaya = document.getElementById("customerWilaya").value;
-  const commune = document.getElementById("customerCommune").value.trim();
-  const address = document.getElementById("customerAddress").value.trim();
+  const name =
+    document
+      .getElementById(
+        "customerName"
+      )
+      .value
+      .trim();
 
-  let message = "🛍️ *طلب جديد - JR Shop*%0A%0A";
+  const phone =
+    document
+      .getElementById(
+        "customerPhone"
+      )
+      .value
+      .trim();
 
-  message += "👤 الاسم: " + encodeURIComponent(name) + "%0A";
-  message += "📞 الهاتف: " + encodeURIComponent(phone) + "%0A";
-  message += "📍 الولاية: " + encodeURIComponent(wilaya) + "%0A";
-  message += "🏘️ البلدية: " + encodeURIComponent(commune) + "%0A";
-  message += "🏠 العنوان: " + encodeURIComponent(address) + "%0A%0A";
+  const wilaya =
+    document
+      .getElementById(
+        "customerWilaya"
+      )
+      .value;
 
-  message += "🛒 *المنتجات:*%0A";
+  const commune =
+    document
+      .getElementById(
+        "customerCommune"
+      )
+      .value
+      .trim();
+
+  const address =
+    document
+      .getElementById(
+        "customerAddress"
+      )
+      .value
+      .trim();
+
+  let message =
+    "🛍️ *طلب جديد - JR Shop*%0A%0A";
+
+  message +=
+    "👤 الاسم: " +
+    encodeURIComponent(name) +
+    "%0A";
+
+  message +=
+    "📞 الهاتف: " +
+    encodeURIComponent(phone) +
+    "%0A";
+
+  message +=
+    "📍 الولاية: " +
+    encodeURIComponent(wilaya) +
+    "%0A";
+
+  message +=
+    "🏘️ البلدية: " +
+    encodeURIComponent(commune) +
+    "%0A";
+
+  message +=
+    "🏠 العنوان: " +
+    encodeURIComponent(address) +
+    "%0A%0A";
+
+  message +=
+    "🛒 *المنتجات:*%0A";
 
   cart.forEach(item=>{
+
     message +=
       "• " +
-      encodeURIComponent(item.name) +
+      encodeURIComponent(
+        item.name
+      ) +
       " × " +
       item.quantity +
       " = " +
-      encodeURIComponent(formatPrice(item.price * item.quantity)) +
+      encodeURIComponent(
+        formatPrice(
+          item.price *
+          item.quantity
+        )
+      ) +
       "%0A";
   });
 
   message +=
     "%0A💰 المجموع: " +
-    encodeURIComponent(formatPrice(getCartTotal()));
+    encodeURIComponent(
+      formatPrice(
+        getCartTotal()
+      )
+    );
 
   return message;
 }
 
-document.getElementById("whatsappOrderBtn").addEventListener("click",()=>{
+document
+  .getElementById(
+    "whatsappOrderBtn"
+  )
+  .addEventListener(
+    "click",
+    ()=>{
 
-  if(cart.length === 0){
-    showToast("السلة فارغة");
-    return;
-  }
+      if(cart.length === 0){
 
-  const name = document.getElementById("customerName").value.trim();
-  const phone = document.getElementById("customerPhone").value.trim();
-  const wilaya = document.getElementById("customerWilaya").value;
-  const commune = document.getElementById("customerCommune").value.trim();
-  const address = document.getElementById("customerAddress").value.trim();
+        showToast(
+          "السلة فارغة"
+        );
 
-  if(!name || !phone || !wilaya || !commune || !address){
-    showToast("أكمل معلومات الطلب أولًا");
-    return;
-  }
+        return;
+      }
 
-  const url =
-    "https://wa.me/" +
-    WHATSAPP_NUMBER +
-    "?text=" +
-    buildWhatsAppMessage();
+      const name =
+        document
+          .getElementById(
+            "customerName"
+          )
+          .value
+          .trim();
 
-  window.open(url,"_blank");
-});
+      const phone =
+        document
+          .getElementById(
+            "customerPhone"
+          )
+          .value
+          .trim();
+
+      const wilaya =
+        document
+          .getElementById(
+            "customerWilaya"
+          )
+          .value;
+
+      const commune =
+        document
+          .getElementById(
+            "customerCommune"
+          )
+          .value
+          .trim();
+
+      const address =
+        document
+          .getElementById(
+            "customerAddress"
+          )
+          .value
+          .trim();
+
+      if(
+        !name ||
+        !phone ||
+        !wilaya ||
+        !commune ||
+        !address
+      ){
+
+        showToast(
+          "أكمل معلومات الطلب أولًا"
+        );
+
+        return;
+      }
+
+      const url =
+        "https://wa.me/" +
+        WHATSAPP_NUMBER +
+        "?text=" +
+        buildWhatsAppMessage();
+
+      window.open(
+        url,
+        "_blank"
+      );
+    }
+  );
 
 /* =====================================================
    SUBMIT ORDER
-   NOTE:
-   This expects a table named "orders" with the common
-   columns used by the JR Shop project.
+   Uses the actual JR Shop orders columns:
+   customer_name, phone, wilaya, address, total,
+   status, items, notes
 ===================================================== */
-document.getElementById("submitOrderBtn").addEventListener("click",async()=>{
 
-  if(cart.length === 0){
-    showToast("السلة فارغة");
-    return;
-  }
+document
+  .getElementById(
+    "submitOrderBtn"
+  )
+  .addEventListener(
+    "click",
+    async()=>{
 
-  const name = document.getElementById("customerName").value.trim();
-  const phone = document.getElementById("customerPhone").value.trim();
-  const wilaya = document.getElementById("customerWilaya").value;
-  const commune = document.getElementById("customerCommune").value.trim();
-  const address = document.getElementById("customerAddress").value.trim();
+      if(cart.length === 0){
 
-  if(!name || !phone || !wilaya || !commune || !address){
-    showToast("أكمل جميع معلومات الطلب");
-    return;
-  }
+        showToast(
+          "السلة فارغة"
+        );
 
-  if(!supabaseClient){
-    showToast("Supabase غير مهيأ");
-    return;
-  }
+        return;
+      }
 
-  const button = document.getElementById("submitOrderBtn");
-  const oldText = button.textContent;
+      const name =
+        document
+          .getElementById(
+            "customerName"
+          )
+          .value
+          .trim();
 
-  button.disabled = true;
-  button.textContent = "جاري إرسال الطلب...";
+      const phone =
+        document
+          .getElementById(
+            "customerPhone"
+          )
+          .value
+          .trim();
 
-  try{
+      const wilaya =
+        document
+          .getElementById(
+            "customerWilaya"
+          )
+          .value;
 
-    const orderData = {
-      customer_name:name,
-      customer_phone:phone,
-      wilaya:wilaya,
-      commune:commune,
-      address:address,
-      total:getCartTotal(),
-      status:"pending",
-      items:cart
-    };
+      const commune =
+        document
+          .getElementById(
+            "customerCommune"
+          )
+          .value
+          .trim();
 
-    const {error} = await supabaseClient
-      .from("orders")
-      .insert([orderData]);
+      const address =
+        document
+          .getElementById(
+            "customerAddress"
+          )
+          .value
+          .trim();
 
-    if(error) throw error;
+      if(
+        !name ||
+        !phone ||
+        !wilaya ||
+        !commune ||
+        !address
+      ){
 
-    cart = [];
-    saveCart();
-    updateCartCount();
-    renderCart();
+        showToast(
+          "أكمل جميع معلومات الطلب"
+        );
 
-    document.getElementById("customerName").value = "";
-    document.getElementById("customerPhone").value = "";
-    document.getElementById("customerWilaya").value = "";
-    document.getElementById("customerCommune").value = "";
-    document.getElementById("customerAddress").value = "";
+        return;
+      }
 
-    closeModal("checkoutModal");
+      if(!supabaseClient){
 
-    showToast("تم إرسال الطلب بنجاح ✅");
+        showToast(
+          "Supabase غير مهيأ"
+        );
 
-  }catch(error){
+        return;
+      }
 
-    console.error("Order:",error);
+      const button =
+        document.getElementById(
+          "submitOrderBtn"
+        );
 
-    showToast(
-      "تعذر إرسال الطلب: " +
-      error.message
-    );
+      const oldText =
+        button.textContent;
 
-  }finally{
-    button.disabled = false;
-    button.textContent = oldText;
-  }
-});
+      button.disabled = true;
+      button.textContent =
+        "جاري إرسال الطلب...";
 
-const searchInput = document.getElementById("searchInput");
-if(searchInput){
-  searchInput.addEventListener("input", () => {
-    searchTerm = searchInput.value.trim().toLowerCase();
-    filterProducts();
-  });
-}
+      try{
 
+        const orderData = {
 
-/* =====================================================
-   PREMIUM COLLECTIONS
-===================================================== */
-function featureProductCard(product,label="NEW IN"){
-  const image = getImage(product.image_url || product.image);
-  const price = Number(product.price || 0);
-  const oldPrice = Number(product.old_price || 0);
-  const category = categories.find(c => String(c.id) === String(product.category_id));
-  return `
-    <article class="feature-card" data-feature-card-id="${escapeHtml(product.id)}">
-      <div class="feature-card-img">
-        ${oldPrice > price ? `<span class="feature-badge">SALE</span>` : `<span class="feature-badge">${escapeHtml(label)}</span>`}
-        <img src="${escapeHtml(image)}" alt="${escapeHtml(product.name || 'JR Shop')}" loading="lazy" onerror="this.src='https://placehold.co/500x600?text=JR+Shop'">
-      </div>
-      <div class="feature-card-info">
-        <small>${escapeHtml(category?.name || 'JR SHOP')}</small>
-        <h3>${escapeHtml(product.name || 'Produit')}</h3>
-        <div class="feature-price">
-          ${formatPrice(price)}
-          ${oldPrice > price ? `<span class="feature-old">${formatPrice(oldPrice)}</span>` : ''}
-        </div>
-        <button type="button" class="feature-add" data-feature-id="${escapeHtml(product.id)}">ADD TO BAG</button>
-      </div>
-    </article>
-  `;
-}
+          customer_name:name,
 
-function renderFeatureRail(containerId,products,label){
-  const container = document.getElementById(containerId);
-  if(!container) return;
-  if(!products || !products.length){
-    container.innerHTML = `<div class="loading" style="grid-column:1/-1">لا توجد منتجات حاليًا.</div>`;
-    return;
-  }
-  container.innerHTML = products.slice(0,4).map(p=>featureProductCard(p,label)).join('');
-  container.querySelectorAll('[data-feature-id]').forEach(btn=>{
-    btn.addEventListener('click',(event)=>{
-      event.stopPropagation();
-      addToCart(btn.dataset.featureId);
-    });
-  });
-  container.querySelectorAll('[data-feature-card-id]').forEach(card=>{
-    card.addEventListener('click',()=>openProductDetails(card.dataset.featureCardId));
-  });
-}
+          phone:phone,
 
-function renderPremiumCollections(){
-  if(!allProducts.length) return;
+          wilaya:wilaya,
 
-  const newest = [...allProducts].slice(0,4);
-  const sale = allProducts.filter(p=>Number(p.old_price||0) > Number(p.price||0));
-  const trending = sale.length ? sale.slice(0,4) : [...allProducts].slice(0,4);
+          address:address,
 
-  renderFeatureRail('newInProducts',newest,'NEW IN');
-  renderFeatureRail('trendingProducts',trending,'TRENDING');
+          total:getCartTotal(),
 
-  const imgProducts = [...allProducts].filter(p=>p.image_url || p.image);
-  renderCategories();
+          status:"pending",
 
-  if(imgProducts.length){
-    document.getElementById('collectionImg1').src=getImage(imgProducts[0].image_url || imgProducts[0].image,'https://placehold.co/900x700?text=JR+SHOP');
-    document.getElementById('collectionImg2').src=getImage(imgProducts[1 % imgProducts.length].image_url || imgProducts[1 % imgProducts.length].image,'https://placehold.co/600x700?text=JR+SHOP');
-    document.getElementById('collectionImg3').src=getImage(imgProducts[2 % imgProducts.length].image_url || imgProducts[2 % imgProducts.length].image,'https://placehold.co/600x700?text=SALE');
-  }
-}
+          items:cart,
 
-['collectionTile1','collectionTile2','collectionTile3'].forEach(id=>{
-  const tile=document.getElementById(id);
-  if(!tile) return;
-  tile.addEventListener('click',()=>{
-    const key=tile.dataset.key;
-    const found=categories.find(c=>{
-      const n=String(c.name||'').toLowerCase();
-      const s=String(c.slug||'').toLowerCase();
-      return n.includes(key) || s.includes(key);
-    });
-    if(found) selectCategory(found.id);
-    else document.querySelector('.products-area')?.scrollIntoView({behavior:'smooth'});
-  });
-});
+          notes:
+            "البلدية: " +
+            commune
 
+        };
+
+        const {error} =
+          await supabaseClient
+            .from("orders")
+            .insert([
+              orderData
+            ]);
+
+        if(error){
+          throw error;
+        }
+
+        cart = [];
+
+        saveCart();
+        updateCartCount();
+        renderCart();
+
+        document
+          .getElementById(
+            "customerName"
+          )
+          .value = "";
+
+        document
+          .getElementById(
+            "customerPhone"
+          )
+          .value = "";
+
+        document
+          .getElementById(
+            "customerWilaya"
+          )
+          .value = "";
+
+        document
+          .getElementById(
+            "customerCommune"
+          )
+          .value = "";
+
+        document
+          .getElementById(
+            "customerAddress"
+          )
+          .value = "";
+
+        closeModal(
+          "checkoutModal"
+        );
+
+        showToast(
+          "تم إرسال الطلب بنجاح ✅"
+        );
+
+      }catch(error){
+
+        console.error(
+          "Order:",
+          error
+        );
+
+        showToast(
+          "تعذر إرسال الطلب: " +
+          error.message
+        );
+
+      }finally{
+
+        button.disabled = false;
+        button.textContent =
+          oldText;
+      }
+
+    }
+  );
 
 /* =====================================================
    START
 ===================================================== */
+
 loadCartFromStorage();
+
 loadCategories();
-loadProducts().then(()=>renderPremiumCollections());
+
+loadProducts();
+
 </script>
 
 </body>
