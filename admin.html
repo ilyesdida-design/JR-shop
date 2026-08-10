@@ -83,7 +83,12 @@ label{display:block;font-weight:bold;font-size:14px;margin:0 0 6px}
 <div class="field"><label>السعر القديم</label><input id="pOldPrice" type="number" min="0"></div>
 <div class="field"><label>المخزون</label><input id="pStock" type="number" min="0" value="0"></div>
 <div class="field"><label>الفئة</label><select id="pCategory"><option value="">بدون فئة</option></select></div>
-<div class="field"><label>رابط الصورة</label><input id="pImage" placeholder="https://..."></div>
+<div class="field">
+<label>صورة المنتج</label>
+<input id="pImageFile" type="file" accept="image/*">
+<small style="color:#777">اختار صورة من الكمبيوتر، أو استعمل رابط الصورة بالأسفل.</small>
+</div>
+<div class="field"><label>رابط الصورة (اختياري)</label><input id="pImage" placeholder="https://..."></div>
 <div class="field"><label><input id="pActive" type="checkbox" checked style="width:auto"> المنتج نشط</label></div>
 <button id="saveProduct" class="btn green">حفظ المنتج</button>
 <button id="cancelProduct" class="btn gray">إلغاء</button>
@@ -202,23 +207,69 @@ function renderProducts(){
 $("productSearch").oninput=renderProducts;
 
 function resetProduct(){
- $("productId").value="";$("pName").value="";$("pDescription").value="";$("pPrice").value="";$("pOldPrice").value="";$("pStock").value=0;$("pCategory").value="";$("pImage").value="";$("pActive").checked=true;$("productFormTitle").textContent="➕ إضافة منتج";
+ $("productId").value="";$("pName").value="";$("pDescription").value="";$("pPrice").value="";$("pOldPrice").value="";$("pStock").value=0;$("pCategory").value="";$("pImage").value="";$("pImageFile").value="";$("pActive").checked=true;$("productFormTitle").textContent="➕ إضافة منتج";
 }
 $("cancelProduct").onclick=resetProduct;
 $("saveProduct").onclick=async()=>{
  const id=$("productId").value;
- const obj={name:$("pName").value.trim(),description:$("pDescription").value.trim(),price:Number($("pPrice").value||0),old_price:Number($("pOldPrice").value||0),stock:Number($("pStock").value||0),category_id:$("pCategory").value||null,image_url:$("pImage").value.trim()||null,active:$("pActive").checked,is_active:$("pActive").checked,updated_at:new Date().toISOString()};
- if(!obj.name){toast("اكتب اسم المنتج");return}
- let res=id?await supabaseClient.from("products").update(obj).eq("id",id):await supabaseClient.from("products").insert(obj);
- if(res.error){toast(res.error.message);return}
- toast(id?"تم تعديل المنتج ✅":"تمت إضافة المنتج ✅");resetProduct();loadProducts();
-};
-window.editProduct=id=>{
- const p=products.find(x=>x.id===id);if(!p)return;
- $("productId").value=p.id;$("pName").value=p.name||"";$("pDescription").value=p.description||"";$("pPrice").value=p.price||0;$("pOldPrice").value=p.old_price||0;$("pStock").value=p.stock||0;$("pCategory").value=p.category_id||"";$("pImage").value=p.image_url||p.image||"";$("pActive").checked=p.active!==false&&p.is_active!==false;$("productFormTitle").textContent="✏️ تعديل المنتج";window.scrollTo({top:0,behavior:"smooth"});
-};
-window.deleteProduct=async id=>{if(!confirm("حذف هذا المنتج؟"))return;const {error}=await supabaseClient.from("products").delete().eq("id",id);if(error)toast(error.message);else{toast("تم الحذف");loadProducts()}};
+ const file=$("pImageFile").files[0];
 
+ if(!$("pName").value.trim()){toast("اكتب اسم المنتج");return}
+
+ let imageUrl=$("pImage").value.trim()||null;
+
+ if(file){
+   if(file.size>5*1024*1024){toast("الصورة لازم تكون أقل من 5MB");return}
+   if(!file.type.startsWith("image/")){toast("اختار ملف صورة فقط");return}
+
+   const ext=(file.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/gi,"")||"jpg";
+   const fileName=`${crypto.randomUUID()}.${ext}`;
+
+   $("saveProduct").disabled=true;
+   $("saveProduct").textContent="جاري رفع الصورة...";
+
+   const upload=await supabaseClient.storage.from("product-images").upload(fileName,file,{
+     cacheControl:"3600",
+     upsert:false,
+     contentType:file.type
+   });
+
+   if(upload.error){
+     $("saveProduct").disabled=false;
+     $("saveProduct").textContent="حفظ المنتج";
+     toast("فشل رفع الصورة: "+upload.error.message);
+     return;
+   }
+
+   imageUrl=supabaseClient.storage.from("product-images").getPublicUrl(fileName).data.publicUrl;
+ }
+
+ const obj={
+   name:$("pName").value.trim(),
+   description:$("pDescription").value.trim(),
+   price:Number($("pPrice").value||0),
+   old_price:Number($("pOldPrice").value||0),
+   stock:Number($("pStock").value||0),
+   category_id:$("pCategory").value||null,
+   image_url:imageUrl,
+   active:$("pActive").checked,
+   is_active:$("pActive").checked,
+   updated_at:new Date().toISOString()
+ };
+
+ const res=id
+   ?await supabaseClient.from("products").update(obj).eq("id",id)
+   :await supabaseClient.from("products").insert(obj);
+
+ $("saveProduct").disabled=false;
+ $("saveProduct").textContent="حفظ المنتج";
+
+ if(res.error){toast(res.error.message);return}
+
+ toast(id?"تم تعديل المنتج مع الصورة ✅":"تمت إضافة المنتج مع الصورة ✅");
+ resetProduct();
+ loadProducts();
+};
 function resetCategory(){$("categoryId").value="";$("cName").value="";$("cSlug").value="";$("cImage").value="";$("cOrder").value=0;$("cActive").checked=true;$("categoryFormTitle").textContent="➕ إضافة فئة"}
 $("cancelCategory").onclick=resetCategory;
 $("saveCategory").onclick=async()=>{
