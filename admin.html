@@ -134,10 +134,23 @@ function toast(msg){$("toast").textContent=msg;$("toast").style.display="block";
 function esc(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
 function price(v){return Number(v||0).toLocaleString("fr-FR")+" دج"}
 
+const ADMIN_EMAIL="ilyesdida@hotmail.fr";
+
 async function boot(){
  const {data:{session}}=await supabaseClient.auth.getSession();
- if(session) showApp(); else showLogin();
- supabaseClient.auth.onAuthStateChange((_e,s)=>s?showApp():showLogin());
+ if(session) await handleAdminSession(session); else showLogin();
+ supabaseClient.auth.onAuthStateChange(async (_e,s)=>s?await handleAdminSession(s):showLogin());
+}
+
+async function handleAdminSession(session){
+ const email=(session.user?.email||"").toLowerCase();
+ if(email!==ADMIN_EMAIL.toLowerCase()){
+   await supabaseClient.auth.signOut();
+   showLogin();
+   $("loginError").textContent="هذا الحساب غير مصرح له بالدخول إلى لوحة الإدارة.";
+   return;
+ }
+ showApp();
 }
 function showLogin(){$("loginBox").classList.remove("hidden");$("app").classList.add("hidden");$("header").classList.add("hidden")}
 function showApp(){$("loginBox").classList.add("hidden");$("app").classList.remove("hidden");$("header").classList.remove("hidden");loadAll()}
