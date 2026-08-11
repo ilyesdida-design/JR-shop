@@ -1,3 +1,4 @@
+```js
 let allProducts = [];
 let selectedCategory = null;
 
@@ -32,6 +33,7 @@ function getCart() {
       localStorage.getItem("jr_cart") || "[]"
     );
   } catch (error) {
+    console.error("Cart error:", error);
     return [];
   }
 }
@@ -102,7 +104,7 @@ function addToCart(product) {
       id: product.id,
       name: product.name,
       price: Number(product.price || 0),
-      image_url: product.image_url || "",
+      image_url: product.image_url || product.image || "",
       qty: 1,
       stock: stock
     });
@@ -156,6 +158,7 @@ function productCard(product) {
 
   const image =
     product.image_url ||
+    product.image ||
     "https://placehold.co/600x700?text=JR+Shop";
 
   const stock =
@@ -169,8 +172,6 @@ function productCard(product) {
 
   return `
     <article class="product card">
-
-      <!-- PRODUCT DETAILS LINK -->
 
       <a
         href="product-details.html?id=${encodeURIComponent(product.id)}"
@@ -206,8 +207,6 @@ function productCard(product) {
 
       </a>
 
-
-      <!-- ADD TO CART -->
 
       <div class="product-body">
 
@@ -249,11 +248,15 @@ async function loadCategories() {
 
   try {
 
-    const { data, error } =
+    const {
+      data,
+      error
+    } =
       await supabaseClient
         .from("categories")
         .select("*")
-        .order("name", {
+        .eq("active", true)
+        .order("sort_order", {
           ascending: true
         });
 
@@ -261,7 +264,7 @@ async function loadCategories() {
     if (error) {
 
       console.error(
-        "Categories error:",
+        "Categories Supabase error:",
         error
       );
 
@@ -283,6 +286,7 @@ async function loadCategories() {
       <button
         class="cat active"
         data-cat=""
+        type="button"
       >
 
         <span>
@@ -304,23 +308,18 @@ async function loadCategories() {
 
             <button
               class="cat"
-              data-cat="${escapeHtml(
-                category.id
-              )}"
+              data-cat="${escapeHtml(category.id)}"
+              type="button"
             >
 
               <img
                 src="${escapeHtml(image)}"
-                alt="${escapeHtml(
-                  category.name
-                )}"
+                alt="${escapeHtml(category.name)}"
                 loading="lazy"
               >
 
               <span>
-                ${escapeHtml(
-                  category.name
-                )}
+                ${escapeHtml(category.name)}
               </span>
 
             </button>
@@ -379,8 +378,7 @@ async function loadCategories() {
 
     categoriesBox.innerHTML = `
       <p>
-        Erreur lors du chargement
-        des catégories.
+        Erreur lors du chargement des catégories.
       </p>
     `;
 
@@ -410,7 +408,10 @@ async function loadProducts() {
 
   try {
 
-    const { data, error } =
+    const {
+      data,
+      error
+    } =
       await supabaseClient
         .from("products")
         .select("*")
@@ -423,7 +424,7 @@ async function loadProducts() {
     if (error) {
 
       console.error(
-        "Products error:",
+        "Products Supabase error:",
         error
       );
 
@@ -454,8 +455,7 @@ async function loadProducts() {
 
     productsBox.innerHTML = `
       <p>
-        Erreur lors du chargement
-        des produits.
+        Erreur lors du chargement des produits.
       </p>
     `;
 
@@ -490,12 +490,8 @@ function renderProducts() {
     products =
       products.filter(
         (product) =>
-          String(
-            product.category_id
-          ) ===
-          String(
-            selectedCategory
-          )
+          String(product.category_id) ===
+          String(selectedCategory)
       );
 
   }
@@ -506,9 +502,7 @@ function renderProducts() {
   ========================= */
 
   const sort =
-    document.querySelector(
-      "#sort"
-    )?.value;
+    document.querySelector("#sort")?.value;
 
 
   if (sort === "priceAsc") {
@@ -582,12 +576,6 @@ function renderProducts() {
         "click",
         (event) => {
 
-          /*
-           * Empêche le clic sur
-           * le bouton d'ouvrir
-           * Product Details.
-           */
-
           event.preventDefault();
           event.stopPropagation();
 
@@ -596,9 +584,7 @@ function renderProducts() {
             allProducts.find(
               (item) =>
                 String(item.id) ===
-                String(
-                  button.dataset.id
-                )
+                String(button.dataset.id)
             );
 
 
@@ -639,3 +625,4 @@ updateCartCount();
 loadCategories();
 
 loadProducts();
+```
