@@ -1,3 +1,4 @@
+```javascript
 let allProducts = [];
 let selectedCategory = null;
 
@@ -39,7 +40,6 @@ function getCart() {
 
 
 function saveCart(cart) {
-
   localStorage.setItem(
     "jr_cart",
     JSON.stringify(cart)
@@ -50,9 +50,7 @@ function saveCart(cart) {
 
 
 function updateCartCount() {
-
-  const cartCount =
-    document.querySelector("#cartCount");
+  const cartCount = document.querySelector("#cartCount");
 
   if (!cartCount) return;
 
@@ -73,57 +71,40 @@ function updateCartCount() {
 ========================= */
 
 function addToCart(product) {
-
   if (!product) return;
 
-  const stock =
-    Number(product.stock || 0);
+  const stock = Number(product.stock || 0);
 
   if (stock <= 0) {
-
-    toast(
-      "Produit en rupture de stock"
-    );
-
+    toast("Produit en rupture de stock");
     return;
   }
 
-
   const cart = getCart();
 
-
-  const existingProduct =
-    cart.find(
-      (item) =>
-        String(item.id) ===
-        String(product.id)
-    );
-
+  const existingProduct = cart.find(
+    (item) =>
+      String(item.id) ===
+      String(product.id)
+  );
 
   if (existingProduct) {
-
     if (
       Number(existingProduct.qty) >=
       stock
     ) {
-
       toast("Stock insuffisant");
-
       return;
     }
 
     existingProduct.qty++;
-
   } else {
-
     cart.push({
-
       id: product.id,
 
       name: product.name,
 
-      price:
-        Number(product.price || 0),
+      price: Number(product.price || 0),
 
       image_url:
         product.image_url ||
@@ -133,17 +114,12 @@ function addToCart(product) {
       qty: 1,
 
       stock: stock
-
     });
-
   }
-
 
   saveCart(cart);
 
-  toast(
-    "Produit ajouté au panier"
-  );
+  toast("Produit ajouté au panier");
 }
 
 
@@ -152,27 +128,18 @@ function addToCart(product) {
 ========================= */
 
 function escapeHtml(value) {
-
   return String(value ?? "").replace(
     /[&<>"']/g,
     (character) => {
-
       const map = {
-
         "&": "&amp;",
-
         "<": "&lt;",
-
         ">": "&gt;",
-
         '"': "&quot;",
-
         "'": "&#039;"
-
       };
 
       return map[character];
-
     }
   );
 }
@@ -183,14 +150,11 @@ function escapeHtml(value) {
 ========================= */
 
 function money(value) {
-
-  const number =
-    Number(value || 0);
+  const number = Number(value || 0);
 
   return (
     new Intl.NumberFormat("fr-DZ")
-      .format(number)
-    + " DA"
+      .format(number) + " DA"
   );
 }
 
@@ -200,22 +164,18 @@ function money(value) {
 ========================= */
 
 function productCard(product) {
-
   const image =
     product.image_url ||
     product.image ||
     "https://placehold.co/600x700?text=JR+Shop";
 
-
   const stock =
     Number(product.stock || 0);
-
 
   const stockText =
     stock > 0
       ? "Stock: " + stock
       : "Rupture de stock";
-
 
   return `
     <article class="product card">
@@ -283,19 +243,15 @@ function productCard(product) {
 ========================= */
 
 async function loadCategories() {
-
   const categoriesBox =
     document.querySelector("#categories");
 
   if (!categoriesBox) return;
 
-
   categoriesBox.innerHTML =
     "<p>Chargement des catégories...</p>";
 
-
   try {
-
     const result =
       await supabaseClient
         .from("categories")
@@ -305,18 +261,14 @@ async function loadCategories() {
           ascending: true
         });
 
-
     const data = result.data;
     const error = result.error;
 
-
     if (error) {
-
       console.error(
         "Categories Supabase error:",
         error
       );
-
 
       categoriesBox.innerHTML =
         "<p>Impossible de charger les catégories.</p>";
@@ -324,10 +276,7 @@ async function loadCategories() {
       return;
     }
 
-
-    const categories =
-      data || [];
-
+    const categories = data || [];
 
     categoriesBox.innerHTML = `
 
@@ -346,11 +295,9 @@ async function loadCategories() {
       ${
         categories
           .map((category) => {
-
             const image =
               category.image_url ||
               "https://placehold.co/120x100?text=Cat";
-
 
             return `
 
@@ -373,58 +320,44 @@ async function loadCategories() {
               </button>
 
             `;
-
           })
           .join("")
       }
 
     `;
 
-
     document
       .querySelectorAll(".cat")
       .forEach((button) => {
-
         button.addEventListener(
           "click",
           function () {
-
             selectedCategory =
               button.dataset.cat ||
               null;
 
-
             document
               .querySelectorAll(".cat")
               .forEach((item) => {
-
                 item.classList.remove(
                   "active"
                 );
-
               });
-
 
             button.classList.add(
               "active"
             );
 
-
             renderProducts();
-
           }
         );
-
       });
 
-
   } catch (error) {
-
     console.error(
       "Categories JavaScript error:",
       error
     );
-
 
     categoriesBox.innerHTML =
       "<p>Erreur lors du chargement des catégories.</p>";
@@ -437,19 +370,15 @@ async function loadCategories() {
 ========================= */
 
 async function loadProducts() {
-
   const productsBox =
     document.querySelector("#products");
 
   if (!productsBox) return;
 
-
   productsBox.innerHTML =
     "<p>Chargement des produits...</p>";
 
-
   try {
-
     const result =
       await supabaseClient
         .from("products")
@@ -459,18 +388,14 @@ async function loadProducts() {
           ascending: false
         });
 
-
     const data = result.data;
     const error = result.error;
 
-
     if (error) {
-
       console.error(
         "Products Supabase error:",
         error
       );
-
 
       productsBox.innerHTML =
         "<p>Impossible de charger les produits.</p>";
@@ -478,21 +403,16 @@ async function loadProducts() {
       return;
     }
 
-
     allProducts =
       data || [];
 
-
     renderProducts();
 
-
   } catch (error) {
-
     console.error(
       "Products JavaScript error:",
       error
     );
-
 
     productsBox.innerHTML =
       "<p>Erreur lors du chargement des produits.</p>";
@@ -505,12 +425,10 @@ async function loadProducts() {
 ========================= */
 
 function renderProducts() {
-
   const productsBox =
     document.querySelector("#products");
 
   if (!productsBox) return;
-
 
   let products =
     [...allProducts];
@@ -519,7 +437,6 @@ function renderProducts() {
   /* CATEGORY */
 
   if (selectedCategory) {
-
     products =
       products.filter(
         (product) =>
@@ -534,9 +451,7 @@ function renderProducts() {
   const sort =
     document.querySelector("#sort")?.value;
 
-
   if (sort === "priceAsc") {
-
     products.sort(
       (a, b) =>
         Number(a.price || 0) -
@@ -544,9 +459,7 @@ function renderProducts() {
     );
   }
 
-
   if (sort === "priceDesc") {
-
     products.sort(
       (a, b) =>
         Number(b.price || 0) -
@@ -558,7 +471,6 @@ function renderProducts() {
   /* EMPTY */
 
   if (!products.length) {
-
     productsBox.innerHTML = `
 
       <div class="card empty">
@@ -593,15 +505,11 @@ function renderProducts() {
   document
     .querySelectorAll(".add")
     .forEach((button) => {
-
       button.addEventListener(
         "click",
         function (event) {
-
           event.preventDefault();
-
           event.stopPropagation();
-
 
           const product =
             allProducts.find(
@@ -610,12 +518,9 @@ function renderProducts() {
                 String(button.dataset.id)
             );
 
-
           addToCart(product);
-
         }
       );
-
     });
 }
 
@@ -627,20 +532,15 @@ function renderProducts() {
 document.addEventListener(
   "DOMContentLoaded",
   function () {
-
     const sortSelect =
       document.querySelector("#sort");
 
-
     if (sortSelect) {
-
       sortSelect.addEventListener(
         "change",
         renderProducts
       );
-
     }
-
   }
 );
 
@@ -652,12 +552,10 @@ document.addEventListener(
 document.addEventListener(
   "DOMContentLoaded",
   function () {
-
     updateCartCount();
 
     loadCategories();
 
     loadProducts();
-
   }
 );
