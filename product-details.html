@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="fr">
 
 <head>
@@ -10,10 +11,6 @@
   <link rel="stylesheet" href="style.css">
 
   <style>
-    /* =========================================================
-       JR SHOP — PREMIUM PRODUCT DETAILS
-    ========================================================= */
-
     * {
       box-sizing: border-box;
     }
@@ -30,7 +27,8 @@
     }
 
     button,
-    input {
+    input,
+    textarea {
       font: inherit;
     }
 
@@ -573,6 +571,7 @@
       padding: 18px;
       border-radius: 15px;
       background: #f8f8f5;
+      margin-bottom: 22px;
     }
 
     .review-number {
@@ -583,12 +582,200 @@
     .review-stars {
       color: #f4b400;
       font-size: 18px;
+      letter-spacing: 1px;
     }
 
     .review-note {
       color: #777;
       font-size: 12px;
       margin-top: 4px;
+    }
+
+    .reviews-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .review-card {
+      border: 1px solid #ecece8;
+      border-radius: 15px;
+      padding: 17px;
+      background: #fff;
+    }
+
+    .review-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .review-author {
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .review-date {
+      color: #999;
+      font-size: 11px;
+      margin-top: 3px;
+    }
+
+    .review-card-stars {
+      color: #f4b400;
+      font-size: 14px;
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
+
+    .review-comment {
+      color: #555;
+      font-size: 14px;
+      line-height: 1.7;
+      white-space: pre-line;
+      word-break: break-word;
+    }
+
+    .reviews-empty {
+      padding: 28px 18px;
+      text-align: center;
+      border: 1px dashed #ddd;
+      border-radius: 15px;
+      color: #888;
+      font-size: 14px;
+    }
+
+    /* =========================================================
+       REVIEW FORM
+    ========================================================= */
+
+    .review-form-box {
+      margin-top: 22px;
+      padding: 20px;
+      border-radius: 17px;
+      background: #f8f8f5;
+      border: 1px solid #ecece8;
+    }
+
+    .review-form-title {
+      margin: 0 0 6px;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .review-form-subtitle {
+      color: #888;
+      font-size: 12px;
+      margin-bottom: 17px;
+    }
+
+    .review-login-message,
+    .review-form-message {
+      padding: 13px 14px;
+      border-radius: 11px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .review-login-message {
+      background: #fff;
+      border: 1px solid #e5e5df;
+      color: #666;
+    }
+
+    .review-form-message {
+      display: none;
+      margin-bottom: 13px;
+    }
+
+    .review-form-message.success {
+      display: block;
+      color: #126b3a;
+      background: #edf9f2;
+    }
+
+    .review-form-message.error {
+      display: block;
+      color: #a61b1b;
+      background: #fff0f0;
+    }
+
+    .review-form-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .review-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 7px;
+    }
+
+    .review-select,
+    .review-textarea {
+      width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 11px;
+      background: #fff;
+      outline: none;
+    }
+
+    .review-select {
+      height: 45px;
+      padding: 0 12px;
+    }
+
+    .review-textarea {
+      min-height: 110px;
+      padding: 12px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    .review-select:focus,
+    .review-textarea:focus {
+      border-color: #111;
+    }
+
+    .review-submit {
+      width: 100%;
+      min-height: 48px;
+      border: 0;
+      border-radius: 11px;
+      background: #111;
+      color: #fff;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .review-submit:disabled {
+      background: #aaa;
+      cursor: not-allowed;
+    }
+
+    .review-verified-note {
+      margin-top: 11px;
+      color: #777;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .review-order-box {
+      display: none;
+      margin-bottom: 14px;
+    }
+
+    .review-order-select {
+      width: 100%;
+      height: 45px;
+      border: 1px solid #ddd;
+      border-radius: 11px;
+      background: #fff;
+      padding: 0 12px;
+      outline: none;
     }
 
     /* =========================================================
@@ -866,470 +1053,530 @@
       .zoom-label {
         display: none;
       }
+
+      .review-top {
+        flex-direction: column;
+        gap: 5px;
+      }
     }
   </style>
+
 </head>
 
 <body>
 
   <main class="details-page">
 
-    <!-- TOP -->
-    <div class="top-bar">
+```
+<!-- TOP -->
+<div class="top-bar">
 
-      <a href="index.html" class="back-btn">
-        ← Retour
-      </a>
+  <a href="index.html" class="back-btn">
+    ← Retour
+  </a>
 
-      <div class="brand-mini">
-        JR SHOP
-      </div>
+  <div class="brand-mini">
+    JR SHOP
+  </div>
 
-    </div>
+</div>
 
+<!-- LOADING -->
+<div id="loadingState" class="state-box">
+  <div class="loading">
+    Chargement du produit...
+  </div>
+</div>
 
-    <!-- LOADING -->
-    <div id="loadingState" class="state-box">
+<!-- ERROR -->
+<div
+  id="errorState"
+  class="state-box error-box"
+  style="display:none;"
+>
+  <h2>Impossible de charger le produit</h2>
 
-      <div class="loading">
-        Chargement du produit...
-      </div>
+  <p id="errorMessage">
+    Une erreur est survenue.
+  </p>
 
-    </div>
+  <div
+    id="errorDetails"
+    class="error-details"
+    style="display:none;"
+  ></div>
 
+  <button
+    class="retry-btn"
+    onclick="loadProduct()"
+  >
+    Réessayer
+  </button>
+</div>
 
-    <!-- ERROR -->
-    <div
-      id="errorState"
-      class="state-box error-box"
-      style="display:none;"
-    >
+<!-- PRODUCT -->
+<section
+  id="productCard"
+  class="product-details-card"
+  style="display:none;"
+>
 
-      <h2>Impossible de charger le produit</h2>
+  <div class="product-layout">
 
-      <p id="errorMessage">
-        Une erreur est survenue.
-      </p>
+    <!-- GALLERY -->
+
+    <div class="gallery">
 
       <div
-        id="errorDetails"
-        class="error-details"
-        style="display:none;"
-      ></div>
-
-      <button
-        class="retry-btn"
-        onclick="loadProduct()"
+        class="main-image-box"
+        onclick="openLightbox()"
       >
-        Réessayer
-      </button>
+
+        <img
+          id="mainImage"
+          class="main-image"
+          src=""
+          alt="Produit"
+        >
+
+        <div
+          id="imageCounter"
+          class="image-counter"
+        >
+          1 / 1
+        </div>
+
+        <div class="zoom-label">
+          🔍 Cliquer pour agrandir
+        </div>
+
+        <div class="gallery-nav">
+
+          <button
+            type="button"
+            class="gallery-arrow gallery-prev"
+            onclick="event.stopPropagation(); previousImage()"
+            aria-label="Image précédente"
+          >
+            ‹
+          </button>
+
+          <button
+            type="button"
+            class="gallery-arrow gallery-next"
+            onclick="event.stopPropagation(); nextImage()"
+            aria-label="Image suivante"
+          >
+            ›
+          </button>
+
+        </div>
+
+      </div>
+
+      <div
+        id="thumbnails"
+        class="thumbnails"
+      ></div>
 
     </div>
 
+    <!-- INFO -->
 
-    <!-- PRODUCT -->
-    <section
-      id="productCard"
-      class="product-details-card"
-      style="display:none;"
-    >
+    <div class="product-info">
 
-      <div class="product-layout">
+      <div class="category-row">
 
-        <!-- =========================
-             GALLERY
-        ========================== -->
+        <div
+          id="productCategory"
+          class="product-category"
+          style="display:none;"
+        ></div>
 
-        <div class="gallery">
+        <div
+          id="stockPill"
+          class="stock-pill stock-ok"
+          style="display:none;"
+        ></div>
 
-          <div
-            class="main-image-box"
-            onclick="openLightbox()"
-          >
+      </div>
 
-            <img
-              id="mainImage"
-              class="main-image"
-              src=""
-              alt="Produit"
-            >
+      <h1
+        id="productTitle"
+        class="product-title"
+      ></h1>
 
-            <div
-              id="imageCounter"
-              class="image-counter"
-            >
-              1 / 1
-            </div>
+      <!-- REAL RATING -->
+      <div class="rating-row">
 
-            <div class="zoom-label">
-              🔍 Cliquer pour agrandir
-            </div>
-
-            <div class="gallery-nav">
-
-              <button
-                type="button"
-                class="gallery-arrow gallery-prev"
-                onclick="event.stopPropagation(); previousImage()"
-                aria-label="Image précédente"
-              >
-                ‹
-              </button>
-
-              <button
-                type="button"
-                class="gallery-arrow gallery-next"
-                onclick="event.stopPropagation(); nextImage()"
-                aria-label="Image suivante"
-              >
-                ›
-              </button>
-
-            </div>
-
-          </div>
-
-
-          <div
-            id="thumbnails"
-            class="thumbnails"
-          ></div>
-
+        <div
+          id="topStars"
+          class="stars"
+        >
+          ☆☆☆☆☆
         </div>
 
-
-        <!-- =========================
-             INFO
-        ========================== -->
-
-        <div class="product-info">
-
-          <div class="category-row">
-
-            <div
-              id="productCategory"
-              class="product-category"
-              style="display:none;"
-            ></div>
-
-            <div
-              id="stockPill"
-              class="stock-pill stock-ok"
-              style="display:none;"
-            ></div>
-
-          </div>
-
-
-          <h1
-            id="productTitle"
-            class="product-title"
-          ></h1>
-
-
-          <div class="rating-row">
-
-            <div class="stars">
-              ★★★★★
-            </div>
-
-            <div class="rating-text">
-              Excellent produit
-            </div>
-
-          </div>
-
-
-          <div class="price-row">
-
-            <div
-              id="productPrice"
-              class="product-price"
-            ></div>
-
-            <div
-              id="oldPrice"
-              class="old-price"
-              style="display:none;"
-            ></div>
-
-            <div
-              id="discountBadge"
-              class="discount-badge"
-            ></div>
-
-          </div>
-
-
-          <div
-            id="productDescription"
-            class="product-description"
-          ></div>
-
-
-          <div class="purchase-box">
-
-            <div class="quantity-title">
-              Quantité
-            </div>
-
-            <div class="quantity-box">
-
-              <button
-                type="button"
-                class="quantity-btn"
-                onclick="changeQuantity(-1)"
-              >
-                −
-              </button>
-
-              <input
-                id="quantityInput"
-                class="quantity-input"
-                type="number"
-                min="1"
-                value="1"
-                inputmode="numeric"
-              >
-
-              <button
-                type="button"
-                class="quantity-btn"
-                onclick="changeQuantity(1)"
-              >
-                +
-              </button>
-
-            </div>
-
-
-            <button
-              id="addCartBtn"
-              class="add-cart-btn"
-              onclick="addToCart()"
-            >
-              Ajouter au panier
-            </button>
-
-
-            <div
-              id="cartMessage"
-              class="cart-info"
-            ></div>
-
-          </div>
-
-
-          <!-- TRUST -->
-          <div class="trust-grid">
-
-            <div class="trust-item">
-
-              <div class="trust-icon">
-                🚚
-              </div>
-
-              <div class="trust-title">
-                Livraison rapide
-              </div>
-
-              <div class="trust-text">
-                Expédition locale
-              </div>
-
-            </div>
-
-
-            <div class="trust-item">
-
-              <div class="trust-icon">
-                🔒
-              </div>
-
-              <div class="trust-title">
-                Paiement sécurisé
-              </div>
-
-              <div class="trust-text">
-                Commande protégée
-              </div>
-
-            </div>
-
-
-            <div class="trust-item">
-
-              <div class="trust-icon">
-                ↩
-              </div>
-
-              <div class="trust-title">
-                Retour facile
-              </div>
-
-              <div class="trust-text">
-                Service client
-              </div>
-
-            </div>
-
-          </div>
-
+        <div
+          id="topRatingText"
+          class="rating-text"
+        >
+          Aucun avis pour le moment
         </div>
 
       </div>
 
+      <div class="price-row">
 
-      <!-- =========================
-           DETAILS ACCORDION
-      ========================== -->
+        <div
+          id="productPrice"
+          class="product-price"
+        ></div>
 
-      <div class="lower-section">
+        <div
+          id="oldPrice"
+          class="old-price"
+          style="display:none;"
+        ></div>
 
-        <div class="accordion open">
+        <div
+          id="discountBadge"
+          class="discount-badge"
+        ></div>
+
+      </div>
+
+      <div
+        id="productDescription"
+        class="product-description"
+      ></div>
+
+      <div class="purchase-box">
+
+        <div class="quantity-title">
+          Quantité
+        </div>
+
+        <div class="quantity-box">
 
           <button
             type="button"
-            class="accordion-btn"
-            onclick="toggleAccordion(this)"
+            class="quantity-btn"
+            onclick="changeQuantity(-1)"
           >
-
-            <span>
-              Description
-            </span>
-
-            <span class="accordion-icon">
-              +
-            </span>
-
+            −
           </button>
 
-          <div
-            id="descriptionAccordion"
-            class="accordion-content"
-          ></div>
+          <input
+            id="quantityInput"
+            class="quantity-input"
+            type="number"
+            min="1"
+            value="1"
+            inputmode="numeric"
+          >
+
+          <button
+            type="button"
+            class="quantity-btn"
+            onclick="changeQuantity(1)"
+          >
+            +
+          </button>
 
         </div>
 
+        <button
+          id="addCartBtn"
+          class="add-cart-btn"
+          onclick="addToCart()"
+        >
+          Ajouter au panier
+        </button>
 
-        <div class="accordion">
+        <div
+          id="cartMessage"
+          class="cart-info"
+        ></div>
 
-          <button
-            type="button"
-            class="accordion-btn"
-            onclick="toggleAccordion(this)"
-          >
+      </div>
 
-            <span>
-              Livraison
-            </span>
+      <!-- TRUST -->
 
-            <span class="accordion-icon">
-              +
-            </span>
+      <div class="trust-grid">
 
-          </button>
-
-          <div class="accordion-content">
-
-            Livraison disponible selon les zones
-            couvertes par JR Shop.
-
-            <br><br>
-
-            Les informations de livraison peuvent
-            être confirmées lors de la commande.
-
-          </div>
-
+        <div class="trust-item">
+          <div class="trust-icon">🚚</div>
+          <div class="trust-title">Livraison rapide</div>
+          <div class="trust-text">Expédition locale</div>
         </div>
 
+        <div class="trust-item">
+          <div class="trust-icon">🔒</div>
+          <div class="trust-title">Paiement sécurisé</div>
+          <div class="trust-text">Commande protégée</div>
+        </div>
 
-        <div class="accordion">
-
-          <button
-            type="button"
-            class="accordion-btn"
-            onclick="toggleAccordion(this)"
-          >
-
-            <span>
-              Informations produit
-            </span>
-
-            <span class="accordion-icon">
-              +
-            </span>
-
-          </button>
-
-          <div
-            id="productMeta"
-            class="accordion-content"
-          ></div>
-
+        <div class="trust-item">
+          <div class="trust-icon">↩</div>
+          <div class="trust-title">Retour facile</div>
+          <div class="trust-text">Service client</div>
         </div>
 
       </div>
 
+    </div>
 
-      <!-- =========================
-           REVIEWS
-      ========================== -->
+  </div>
 
-      <div class="reviews-section">
+  <!-- DETAILS -->
 
-        <h2 class="section-heading">
-          Avis clients
-        </h2>
+  <div class="lower-section">
 
-        <div class="section-subtitle">
-          Découvrez l'expérience de nos clients.
+    <div class="accordion open">
+
+      <button
+        type="button"
+        class="accordion-btn"
+        onclick="toggleAccordion(this)"
+      >
+        <span>Description</span>
+        <span class="accordion-icon">+</span>
+      </button>
+
+      <div
+        id="descriptionAccordion"
+        class="accordion-content"
+      ></div>
+
+    </div>
+
+    <div class="accordion">
+
+      <button
+        type="button"
+        class="accordion-btn"
+        onclick="toggleAccordion(this)"
+      >
+        <span>Livraison</span>
+        <span class="accordion-icon">+</span>
+      </button>
+
+      <div class="accordion-content">
+
+        Livraison disponible selon les zones
+        couvertes par JR Shop.
+
+        <br><br>
+
+        Les informations de livraison peuvent
+        être confirmées lors de la commande.
+
+      </div>
+
+    </div>
+
+    <div class="accordion">
+
+      <button
+        type="button"
+        class="accordion-btn"
+        onclick="toggleAccordion(this)"
+      >
+        <span>Informations produit</span>
+        <span class="accordion-icon">+</span>
+      </button>
+
+      <div
+        id="productMeta"
+        class="accordion-content"
+      ></div>
+
+    </div>
+
+  </div>
+
+  <!-- =====================================================
+       REAL REVIEWS
+  ====================================================== -->
+
+  <div class="reviews-section">
+
+    <h2 class="section-heading">
+      Avis clients
+    </h2>
+
+    <div class="section-subtitle">
+      Découvrez l'expérience réelle de nos clients.
+    </div>
+
+    <div class="review-summary">
+
+      <div
+        id="reviewAverage"
+        class="review-number"
+      >
+        —
+      </div>
+
+      <div>
+
+        <div
+          id="reviewStars"
+          class="review-stars"
+        >
+          ☆☆☆☆☆
         </div>
 
-        <div class="review-summary">
+        <div
+          id="reviewCount"
+          class="review-note"
+        >
+          Aucun avis pour le moment
+        </div>
 
-          <div class="review-number">
-            4.9
+      </div>
+
+    </div>
+
+    <!-- REVIEWS LIST -->
+
+    <div
+      id="reviewsList"
+      class="reviews-list"
+    ></div>
+
+    <!-- REVIEW FORM -->
+
+    <div class="review-form-box">
+
+      <h3 class="review-form-title">
+        Donner votre avis
+      </h3>
+
+      <div class="review-form-subtitle">
+        Les avis sont réservés aux clients ayant acheté ce produit.
+      </div>
+
+      <div
+        id="reviewLoginMessage"
+        class="review-login-message"
+      >
+        Vérification de votre compte...
+      </div>
+
+      <div
+        id="reviewFormMessage"
+        class="review-form-message"
+      ></div>
+
+      <form
+        id="reviewForm"
+        style="display:none;"
+        onsubmit="submitReview(event)"
+      >
+
+        <div class="review-form-grid">
+
+          <div
+            id="reviewOrderBox"
+            class="review-order-box"
+          >
+
+            <label
+              class="review-label"
+              for="reviewOrderSelect"
+            >
+              Commande
+            </label>
+
+            <select
+              id="reviewOrderSelect"
+              class="review-order-select"
+              required
+            ></select>
+
           </div>
 
           <div>
 
-            <div class="review-stars">
-              ★★★★★
-            </div>
+            <label
+              class="review-label"
+              for="reviewRating"
+            >
+              Votre note
+            </label>
 
-            <div class="review-note">
-              Excellente satisfaction
-            </div>
+            <select
+              id="reviewRating"
+              class="review-select"
+              required
+            >
+              <option value="">Choisir une note</option>
+              <option value="5">★★★★★ — Excellent</option>
+              <option value="4">★★★★☆ — Très bien</option>
+              <option value="3">★★★☆☆ — Bien</option>
+              <option value="2">★★☆☆☆ — Moyen</option>
+              <option value="1">★☆☆☆☆ — Mauvais</option>
+            </select>
 
           </div>
 
+          <div>
+
+            <label
+              class="review-label"
+              for="reviewComment"
+            >
+              Votre commentaire
+            </label>
+
+            <textarea
+              id="reviewComment"
+              class="review-textarea"
+              maxlength="1000"
+              placeholder="Partagez votre expérience..."
+            ></textarea>
+
+          </div>
+
+          <button
+            id="reviewSubmitBtn"
+            type="submit"
+            class="review-submit"
+          >
+            Publier mon avis
+          </button>
+
         </div>
 
-      </div>
-
-
-      <!-- =========================
-           RELATED
-      ========================== -->
-
-      <div class="related-section">
-
-        <h2 class="related-title">
-          Vous aimerez peut-être aussi
-        </h2>
-
-        <div class="related-placeholder">
-          Découvrez bientôt nos produits recommandés.
+        <div class="review-verified-note">
+          🔐 Votre avis sera lié à votre commande et vérifié par JR Shop.
         </div>
 
-      </div>
+      </form>
 
-    </section>
+    </div>
+
+  </div>
+
+  <!-- RELATED -->
+
+  <div class="related-section">
+
+    <h2 class="related-title">
+      Vous aimerez peut-être aussi
+    </h2>
+
+    <div class="related-placeholder">
+      Découvrez bientôt nos produits recommandés.
+    </div>
+
+  </div>
+
+</section>
+```
 
   </main>
-
 
   <!-- MOBILE STICKY CART -->
 
@@ -1339,20 +1586,21 @@
     style="display:none;"
   >
 
-    <div
-      id="mobilePrice"
-      class="mobile-price"
-    ></div>
+```
+<div
+  id="mobilePrice"
+  class="mobile-price"
+></div>
 
-    <button
-      class="mobile-cart-btn"
-      onclick="addToCart()"
-    >
-      Ajouter
-    </button>
+<button
+  class="mobile-cart-btn"
+  onclick="addToCart()"
+>
+  Ajouter
+</button>
+```
 
   </div>
-
 
   <!-- LIGHTBOX -->
 
@@ -1362,33 +1610,34 @@
     onclick="closeLightbox()"
   >
 
-    <button
-      type="button"
-      class="lightbox-close"
-      onclick="closeLightbox()"
-      aria-label="Fermer"
-    >
-      ×
-    </button>
+```
+<button
+  type="button"
+  class="lightbox-close"
+  onclick="closeLightbox()"
+  aria-label="Fermer"
+>
+  ×
+</button>
 
-    <img
-      id="lightboxImage"
-      class="lightbox-image"
-      src=""
-      alt="Produit"
-      onclick="event.stopPropagation()"
-    >
+<img
+  id="lightboxImage"
+  class="lightbox-image"
+  src=""
+  alt="Produit"
+  onclick="event.stopPropagation()"
+>
+```
 
   </div>
-
 
   <!-- SUPABASE -->
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <!-- TON CONFIG -->
-  <script src="config.js"></script>
 
+  <script src="config.js"></script>
 
   <script>
 
@@ -1397,10 +1646,11 @@
     ===================================================== */
 
     let currentProduct = null;
-
     let productImages = [];
-
     let currentImageIndex = 0;
+
+    let currentUser = null;
+    let eligibleReviewOrders = [];
 
 
     /* =====================================================
@@ -1505,7 +1755,6 @@
           /* Continue */
         }
 
-
         if (text.includes(",")) {
 
           return text
@@ -1515,7 +1764,6 @@
 
         }
 
-
         if (text.includes("\n")) {
 
           return text
@@ -1524,7 +1772,6 @@
             .filter(Boolean);
 
         }
-
 
         return [text];
 
@@ -1539,26 +1786,21 @@
 
       let images = [];
 
-
       images = images.concat(
         parseImages(product.image_urls)
       );
-
 
       images = images.concat(
         parseImages(product.images)
       );
 
-
       images = images.concat(
         parseImages(product.gallery)
       );
 
-
       if (product.image_url) {
         images.push(product.image_url);
       }
-
 
       images = images
         .filter(Boolean)
@@ -1567,11 +1809,9 @@
         )
         .filter(Boolean);
 
-
       images = [
         ...new Set(images)
       ];
-
 
       return images;
 
@@ -1599,17 +1839,14 @@
         "errorState"
       ).style.display = "block";
 
-
       document.getElementById(
         "errorMessage"
       ).textContent = message;
-
 
       const detailsBox =
         document.getElementById(
           "errorDetails"
         );
-
 
       if (details) {
 
@@ -1637,20 +1874,15 @@
 
       currentProduct = product;
 
-
-      /* TITLE */
-
       const title =
         product.name ||
         product.title ||
         product.product_name ||
         "Produit";
 
-
       document.getElementById(
         "productTitle"
       ).textContent = title;
-
 
       document.title =
         title + " - JR Shop";
@@ -1663,12 +1895,10 @@
         product.sale_price ??
         product.product_price;
 
-
       document.getElementById(
         "productPrice"
       ).textContent =
         formatPrice(price);
-
 
       document.getElementById(
         "mobilePrice"
@@ -1676,7 +1906,7 @@
         formatPrice(price);
 
 
-      /* OLD PRICE / DISCOUNT */
+      /* OLD PRICE */
 
       const oldPrice =
         product.old_price ??
@@ -1684,18 +1914,15 @@
         product.original_price ??
         product.previous_price;
 
-
       const oldPriceElement =
         document.getElementById(
           "oldPrice"
         );
 
-
       const discountElement =
         document.getElementById(
           "discountBadge"
         );
-
 
       if (
         oldPrice &&
@@ -1711,13 +1938,11 @@
             ) * 100
           );
 
-
         oldPriceElement.style.display =
           "inline";
 
         oldPriceElement.textContent =
           formatPrice(oldPrice);
-
 
         discountElement.style.display =
           "inline-block";
@@ -1744,13 +1969,11 @@
         product.content ||
         "";
 
-
       document.getElementById(
         "productDescription"
       ).textContent =
         description ||
         "Aucune description disponible.";
-
 
       document.getElementById(
         "descriptionAccordion"
@@ -1769,12 +1992,10 @@
         product.categories?.title ||
         "";
 
-
       const categoryElement =
         document.getElementById(
           "productCategory"
         );
-
 
       if (category) {
 
@@ -1799,18 +2020,15 @@
         product.quantity ??
         product.inventory;
 
-
       const stockPill =
         document.getElementById(
           "stockPill"
         );
 
-
       const cartButton =
         document.getElementById(
           "addCartBtn"
         );
-
 
       if (
         stock !== null &&
@@ -1820,7 +2038,6 @@
 
         const stockNumber =
           Number(stock);
-
 
         if (
           !Number.isNaN(stockNumber) &&
@@ -1836,7 +2053,6 @@
           stockPill.textContent =
             "Rupture de stock";
 
-
           cartButton.disabled =
             true;
 
@@ -1850,7 +2066,6 @@
 
           stockPill.textContent =
             "En stock";
-
 
           cartButton.disabled =
             false;
@@ -1873,7 +2088,6 @@
       productImages =
         getProductImages(product);
 
-
       if (!productImages.length) {
 
         productImages = [
@@ -1882,16 +2096,14 @@
 
       }
 
-
       currentImageIndex = 0;
 
       renderGallery();
 
 
-      /* PRODUCT META */
+      /* META */
 
       const meta = [];
-
 
       if (product.brand) {
         meta.push(
@@ -1900,7 +2112,6 @@
         );
       }
 
-
       if (product.sku) {
         meta.push(
           "Référence : " +
@@ -1908,14 +2119,12 @@
         );
       }
 
-
       if (category) {
         meta.push(
           "Catégorie : " +
           category
         );
       }
-
 
       document.getElementById(
         "productMeta"
@@ -1957,35 +2166,29 @@
           "mainImage"
         );
 
-
       const thumbnails =
         document.getElementById(
           "thumbnails"
         );
-
 
       const counter =
         document.getElementById(
           "imageCounter"
         );
 
-
       if (!productImages.length) {
         return;
       }
-
 
       mainImage.src =
         productImages[
           currentImageIndex
         ];
 
-
       mainImage.alt =
         currentProduct?.name ||
         currentProduct?.title ||
         "Produit";
-
 
       counter.textContent =
         (
@@ -1994,9 +2197,7 @@
         " / " +
         productImages.length;
 
-
       thumbnails.innerHTML = "";
-
 
       productImages.forEach(
         (image, index) => {
@@ -2006,9 +2207,7 @@
               "button"
             );
 
-
           button.type = "button";
-
 
           button.className =
             "thumbnail" +
@@ -2017,7 +2216,6 @@
                 ? " active"
                 : ""
             );
-
 
           button.onclick =
             function () {
@@ -2029,19 +2227,16 @@
 
             };
 
-
           const img =
             document.createElement(
               "img"
             );
-
 
           img.src = image;
 
           img.alt =
             "Image " +
             (index + 1);
-
 
           img.onerror =
             function () {
@@ -2050,7 +2245,6 @@
                 "none";
 
             };
-
 
           button.appendChild(img);
 
@@ -2070,13 +2264,11 @@
         return;
       }
 
-
       currentImageIndex =
         (
           currentImageIndex + 1
         ) %
         productImages.length;
-
 
       renderGallery();
 
@@ -2089,7 +2281,6 @@
         return;
       }
 
-
       currentImageIndex =
         (
           currentImageIndex -
@@ -2097,7 +2288,6 @@
           productImages.length
         ) %
         productImages.length;
-
 
       renderGallery();
 
@@ -2114,7 +2304,6 @@
         return;
       }
 
-
       document.getElementById(
         "lightboxImage"
       ).src =
@@ -2122,11 +2311,9 @@
           currentImageIndex
         ];
 
-
       document.getElementById(
         "lightbox"
       ).classList.add("open");
-
 
       document.body.style.overflow =
         "hidden";
@@ -2139,7 +2326,6 @@
       document.getElementById(
         "lightbox"
       ).classList.remove("open");
-
 
       document.body.style.overflow =
         "";
@@ -2178,7 +2364,6 @@
           ".accordion"
         );
 
-
       if (accordion) {
         accordion.classList.toggle(
           "open"
@@ -2199,21 +2384,17 @@
           "quantityInput"
         );
 
-
       let quantity =
         parseInt(
           input.value,
           10
         ) || 1;
 
-
       quantity += amount;
-
 
       if (quantity < 1) {
         quantity = 1;
       }
-
 
       if (currentProduct) {
 
@@ -2221,7 +2402,6 @@
           currentProduct.stock ??
           currentProduct.quantity ??
           currentProduct.inventory;
-
 
         if (
           stock !== null &&
@@ -2231,7 +2411,6 @@
 
           const stockNumber =
             Number(stock);
-
 
           if (
             !Number.isNaN(stockNumber) &&
@@ -2247,7 +2426,6 @@
         }
 
       }
-
 
       input.value =
         quantity;
@@ -2268,15 +2446,12 @@
             "jr_cart"
           );
 
-
         if (!saved) {
           return [];
         }
 
-
         const parsed =
           JSON.parse(saved);
-
 
         return Array.isArray(parsed)
           ? parsed
@@ -2312,12 +2487,10 @@
         return;
       }
 
-
       const input =
         document.getElementById(
           "quantityInput"
         );
-
 
       let quantity =
         parseInt(
@@ -2325,17 +2498,14 @@
           10
         ) || 1;
 
-
       if (quantity < 1) {
         quantity = 1;
       }
-
 
       const stock =
         currentProduct.stock ??
         currentProduct.quantity ??
         currentProduct.inventory;
-
 
       if (
         stock !== null &&
@@ -2345,7 +2515,6 @@
 
         const stockNumber =
           Number(stock);
-
 
         if (
           !Number.isNaN(stockNumber) &&
@@ -2359,7 +2528,6 @@
           return;
 
         }
-
 
         if (
           !Number.isNaN(stockNumber) &&
@@ -2376,10 +2544,8 @@
 
       }
 
-
       const productId =
         currentProduct.id;
-
 
       if (!productId) {
 
@@ -2391,10 +2557,8 @@
 
       }
 
-
       const cart =
         getCart();
-
 
       const existingIndex =
         cart.findIndex(
@@ -2402,7 +2566,6 @@
             String(item.id) ===
             String(productId)
         );
-
 
       const cartProduct = {
 
@@ -2441,7 +2604,6 @@
 
       };
 
-
       if (existingIndex !== -1) {
 
         cart[
@@ -2463,11 +2625,9 @@
 
       }
 
-
       saveCart(cart);
 
       updateCartCount();
-
 
       showCartMessage(
         "Produit ajouté au panier ✓"
@@ -2485,10 +2645,8 @@
           "cartMessage"
         );
 
-
       element.textContent =
         message;
-
 
       setTimeout(
         function() {
@@ -2519,7 +2677,6 @@
       const cart =
         getCart();
 
-
       const count =
         cart.reduce(
           (total, item) =>
@@ -2532,7 +2689,6 @@
           0
         );
 
-
       const ids = [
 
         "cartCount",
@@ -2542,7 +2698,6 @@
 
       ];
 
-
       ids.forEach(
         id => {
 
@@ -2550,7 +2705,6 @@
             document.getElementById(
               id
             );
-
 
           if (element) {
 
@@ -2566,7 +2720,6 @@
 
         }
       );
-
 
       document
         .querySelectorAll(
@@ -2585,6 +2738,803 @@
 
 
     /* =====================================================
+       REVIEWS — HELPERS
+    ===================================================== */
+
+    function createStars(rating) {
+
+      const value =
+        Math.max(
+          0,
+          Math.min(
+            5,
+            Number(rating) || 0
+          )
+        );
+
+      let result = "";
+
+      for (let i = 1; i <= 5; i++) {
+        result +=
+          i <= Math.round(value)
+            ? "★"
+            : "☆";
+      }
+
+      return result;
+
+    }
+
+
+    function formatReviewDate(dateValue) {
+
+      if (!dateValue) {
+        return "";
+      }
+
+      const date =
+        new Date(dateValue);
+
+      if (Number.isNaN(date.getTime())) {
+        return "";
+      }
+
+      return date.toLocaleDateString(
+        "fr-FR",
+        {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric"
+        }
+      );
+
+    }
+
+
+    function setReviewMessage(
+      message,
+      type = "error"
+    ) {
+
+      const element =
+        document.getElementById(
+          "reviewFormMessage"
+        );
+
+      element.textContent =
+        message;
+
+      element.className =
+        "review-form-message " +
+        type;
+
+    }
+
+
+    /* =====================================================
+       LOAD REVIEWS
+    ===================================================== */
+
+    async function loadReviews() {
+
+      const productId =
+        getProductId();
+
+      const list =
+        document.getElementById(
+          "reviewsList"
+        );
+
+      if (!productId) {
+        return;
+      }
+
+      list.innerHTML =
+        '<div class="reviews-empty">Chargement des avis...</div>';
+
+      try {
+
+        const result =
+          await supabaseClient
+            .from("reviews")
+            .select(
+              "id, product_id, customer_name, rating, comment, created_at"
+            )
+            .eq(
+              "product_id",
+              productId
+            )
+            .order(
+              "created_at",
+              {
+                ascending: false
+              }
+            );
+
+        if (result.error) {
+          throw result.error;
+        }
+
+        const reviews =
+          result.data || [];
+
+        updateReviewSummary(
+          reviews
+        );
+
+        renderReviews(
+          reviews
+        );
+
+      } catch (error) {
+
+        console.error(
+          "Reviews load error:",
+          error
+        );
+
+        list.innerHTML =
+          '<div class="reviews-empty">Impossible de charger les avis pour le moment.</div>';
+
+        document.getElementById(
+          "reviewAverage"
+        ).textContent = "—";
+
+        document.getElementById(
+          "reviewCount"
+        ).textContent =
+          "Avis indisponibles";
+
+      }
+
+    }
+
+
+    /* =====================================================
+       REVIEW SUMMARY
+    ===================================================== */
+
+    function updateReviewSummary(
+      reviews
+    ) {
+
+      const averageElement =
+        document.getElementById(
+          "reviewAverage"
+        );
+
+      const starsElement =
+        document.getElementById(
+          "reviewStars"
+        );
+
+      const countElement =
+        document.getElementById(
+          "reviewCount"
+        );
+
+      const topStars =
+        document.getElementById(
+          "topStars"
+        );
+
+      const topText =
+        document.getElementById(
+          "topRatingText"
+        );
+
+      if (!reviews.length) {
+
+        averageElement.textContent =
+          "—";
+
+        starsElement.textContent =
+          "☆☆☆☆☆";
+
+        countElement.textContent =
+          "Aucun avis pour le moment";
+
+        topStars.textContent =
+          "☆☆☆☆☆";
+
+        topText.textContent =
+          "Aucun avis pour le moment";
+
+        return;
+
+      }
+
+      const total =
+        reviews.reduce(
+          (sum, review) =>
+            sum +
+            Number(review.rating || 0),
+          0
+        );
+
+      const average =
+        total /
+        reviews.length;
+
+      const rounded =
+        Math.round(
+          average * 10
+        ) / 10;
+
+      averageElement.textContent =
+        rounded.toFixed(1);
+
+      starsElement.textContent =
+        createStars(average);
+
+      countElement.textContent =
+        reviews.length === 1
+          ? "1 avis client"
+          : reviews.length +
+            " avis clients";
+
+      topStars.textContent =
+        createStars(average);
+
+      topText.textContent =
+        rounded.toFixed(1) +
+        " / 5 · " +
+        (
+          reviews.length === 1
+            ? "1 avis"
+            : reviews.length + " avis"
+        );
+
+    }
+
+
+    /* =====================================================
+       RENDER REVIEWS
+    ===================================================== */
+
+    function renderReviews(
+      reviews
+    ) {
+
+      const list =
+        document.getElementById(
+          "reviewsList"
+        );
+
+      if (!reviews.length) {
+
+        list.innerHTML =
+          `
+          <div class="reviews-empty">
+            Aucun avis pour ce produit pour le moment.
+            <br>
+            Soyez le premier client à partager votre expérience.
+          </div>
+          `;
+
+        return;
+
+      }
+
+      list.innerHTML =
+        reviews
+          .map(
+            review => {
+
+              const name =
+                escapeHtml(
+                  review.customer_name ||
+                  "Client JR Shop"
+                );
+
+              const comment =
+                escapeHtml(
+                  review.comment ||
+                  ""
+                );
+
+              const date =
+                escapeHtml(
+                  formatReviewDate(
+                    review.created_at
+                  )
+                );
+
+              const stars =
+                createStars(
+                  review.rating
+                );
+
+              return `
+                <article class="review-card">
+
+                  <div class="review-top">
+
+                    <div>
+
+                      <div class="review-author">
+                        ${name}
+                      </div>
+
+                      <div class="review-date">
+                        ${date}
+                      </div>
+
+                    </div>
+
+                    <div class="review-card-stars">
+                      ${stars}
+                    </div>
+
+                  </div>
+
+                  ${
+                    comment
+                      ? `
+                        <div class="review-comment">
+                          ${comment}
+                        </div>
+                      `
+                      : ""
+                  }
+
+                </article>
+              `;
+
+            }
+          )
+          .join("");
+
+    }
+
+
+    /* =====================================================
+       AUTH + ELIGIBLE ORDERS
+    ===================================================== */
+
+    async function prepareReviewForm() {
+
+      const loginMessage =
+        document.getElementById(
+          "reviewLoginMessage"
+        );
+
+      const form =
+        document.getElementById(
+          "reviewForm"
+        );
+
+      if (
+        typeof supabaseClient ===
+          "undefined" ||
+        !supabaseClient
+      ) {
+
+        loginMessage.textContent =
+          "Supabase n'est pas disponible.";
+
+        return;
+
+      }
+
+      try {
+
+        const sessionResult =
+          await supabaseClient.auth.getSession();
+
+        if (
+          sessionResult.error
+        ) {
+
+          throw sessionResult.error;
+
+        }
+
+        currentUser =
+          sessionResult.data?.session?.user ||
+          null;
+
+        if (!currentUser) {
+
+          loginMessage.textContent =
+            "Connectez-vous à votre compte pour pouvoir laisser un avis.";
+
+          form.style.display =
+            "none";
+
+          return;
+
+        }
+
+        await loadEligibleReviewOrders();
+
+      } catch (error) {
+
+        console.error(
+          "Review auth error:",
+          error
+        );
+
+        loginMessage.textContent =
+          "Impossible de vérifier votre compte pour le moment.";
+
+        form.style.display =
+          "none";
+
+      }
+
+    }
+
+
+    async function loadEligibleReviewOrders() {
+
+      const loginMessage =
+        document.getElementById(
+          "reviewLoginMessage"
+        );
+
+      const form =
+        document.getElementById(
+          "reviewForm"
+        );
+
+      const orderBox =
+        document.getElementById(
+          "reviewOrderBox"
+        );
+
+      const orderSelect =
+        document.getElementById(
+          "reviewOrderSelect"
+        );
+
+      const productId =
+        getProductId();
+
+      if (!currentUser || !productId) {
+        return;
+      }
+
+      loginMessage.textContent =
+        "Vérification de vos commandes...";
+
+      try {
+
+        const result =
+          await supabaseClient
+            .from("order_items")
+            .select(
+              `
+              id,
+              order_id,
+              product_id,
+              orders!inner(
+                id,
+                status,
+                customer_id,
+                customer_name
+              )
+              `
+            )
+            .eq(
+              "product_id",
+              productId
+            )
+            .eq(
+              "orders.customer_id",
+              currentUser.id
+            )
+            .eq(
+              "orders.status",
+              "confirmed"
+            );
+
+        if (result.error) {
+          throw result.error;
+        }
+
+        const rows =
+          result.data || [];
+
+        eligibleReviewOrders =
+          rows;
+
+        if (!rows.length) {
+
+          loginMessage.innerHTML =
+            "🔒 Vous devez avoir une commande <strong>confirmée</strong> contenant ce produit pour pouvoir laisser un avis.";
+
+          form.style.display =
+            "none";
+
+          return;
+
+        }
+
+        orderSelect.innerHTML =
+          rows
+            .map(
+              row => {
+
+                const orderId =
+                  row.order_id ||
+                  row.orders?.id ||
+                  "";
+
+                const shortId =
+                  String(orderId)
+                    .slice(0, 8)
+                    .toUpperCase();
+
+                return `
+                  <option value="${escapeHtml(row.id)}">
+                    Commande #${escapeHtml(shortId)}
+                  </option>
+                `;
+
+              }
+            )
+            .join("");
+
+        if (rows.length > 1) {
+
+          orderBox.style.display =
+            "block";
+
+        } else {
+
+          orderBox.style.display =
+            "none";
+
+        }
+
+        loginMessage.textContent =
+          "✓ Votre commande confirmée a été trouvée. Vous pouvez laisser un avis.";
+
+        form.style.display =
+          "block";
+
+      } catch (error) {
+
+        console.error(
+          "Eligible orders error:",
+          error
+        );
+
+        loginMessage.innerHTML =
+          "Impossible de vérifier vos commandes automatiquement. Vérifiez que les règles RLS de vos tables <strong>orders</strong> et <strong>order_items</strong> autorisent votre compte à consulter sa propre commande.";
+
+        form.style.display =
+          "none";
+
+      }
+
+    }
+
+
+    /* =====================================================
+       SUBMIT REVIEW
+    ===================================================== */
+
+    async function submitReview(
+      event
+    ) {
+
+      event.preventDefault();
+
+      const productId =
+        getProductId();
+
+      const rating =
+        Number(
+          document.getElementById(
+            "reviewRating"
+          ).value
+        );
+
+      const comment =
+        document.getElementById(
+          "reviewComment"
+        ).value.trim();
+
+      const orderItemId =
+        document.getElementById(
+          "reviewOrderSelect"
+        ).value;
+
+      const button =
+        document.getElementById(
+          "reviewSubmitBtn"
+        );
+
+      if (!currentUser) {
+
+        setReviewMessage(
+          "Vous devez être connecté pour publier un avis.",
+          "error"
+        );
+
+        return;
+
+      }
+
+      if (!productId) {
+
+        setReviewMessage(
+          "Produit introuvable.",
+          "error"
+        );
+
+        return;
+
+      }
+
+      if (!orderItemId) {
+
+        setReviewMessage(
+          "Aucune commande éligible sélectionnée.",
+          "error"
+        );
+
+        return;
+
+      }
+
+      if (
+        !Number.isInteger(rating) ||
+        rating < 1 ||
+        rating > 5
+      ) {
+
+        setReviewMessage(
+          "Veuillez choisir une note entre 1 et 5.",
+          "error"
+        );
+
+        return;
+
+      }
+
+      if (comment.length > 1000) {
+
+        setReviewMessage(
+          "Votre commentaire ne doit pas dépasser 1000 caractères.",
+          "error"
+        );
+
+        return;
+
+      }
+
+      const selectedOrder =
+        eligibleReviewOrders.find(
+          row =>
+            String(row.id) ===
+            String(orderItemId)
+        );
+
+      if (!selectedOrder) {
+
+        setReviewMessage(
+          "Cette commande n'est pas autorisée pour ce produit.",
+          "error"
+        );
+
+        return;
+
+      }
+
+      const orderId =
+        selectedOrder.order_id;
+
+      button.disabled =
+        true;
+
+      button.textContent =
+        "Publication...";
+
+      setReviewMessage(
+        "",
+        "success"
+      );
+
+      try {
+
+        const result =
+          await supabaseClient
+            .from("reviews")
+            .insert({
+              product_id:
+                productId,
+
+              order_id:
+                orderId,
+
+              order_item_id:
+                orderItemId,
+
+              customer_id:
+                currentUser.id,
+
+              customer_name:
+                "Client"
+              ,
+
+              rating:
+                rating,
+
+              comment:
+                comment || null
+
+            });
+
+        if (result.error) {
+          throw result.error;
+        }
+
+        document.getElementById(
+          "reviewRating"
+        ).value = "";
+
+        document.getElementById(
+          "reviewComment"
+        ).value = "";
+
+        setReviewMessage(
+          "Votre avis a été publié avec succès ✓",
+          "success"
+        );
+
+        await loadReviews();
+
+        await loadEligibleReviewOrders();
+
+      } catch (error) {
+
+        console.error(
+          "Submit review error:",
+          error
+        );
+
+        let message =
+          "Impossible de publier votre avis.";
+
+        if (
+          error?.code ===
+          "23505"
+        ) {
+
+          message =
+            "Vous avez déjà évalué ce produit avec cette commande.";
+
+        } else if (
+          error?.message
+        ) {
+
+          message =
+            error.message;
+
+        }
+
+        setReviewMessage(
+          message,
+          "error"
+        );
+
+      } finally {
+
+        button.disabled =
+          false;
+
+        button.textContent =
+          "Publier mon avis";
+
+      }
+
+    }
+
+
+    /* =====================================================
        LOAD PRODUCT
     ===================================================== */
 
@@ -2594,21 +3544,17 @@
         "loadingState"
       ).style.display = "block";
 
-
       document.getElementById(
         "errorState"
       ).style.display = "none";
-
 
       document.getElementById(
         "productCard"
       ).style.display = "none";
 
-
       document.getElementById(
         "mobileCartBar"
       ).style.display = "none";
-
 
       if (
         typeof supabaseClient ===
@@ -2625,28 +3571,24 @@
 
       }
 
-
       const productId =
         getProductId();
-
 
       if (!productId) {
 
         showError(
           "ID du produit manquant.",
-          "L'URL doit contenir l'ID du produit, par exemple : product-details.html?id=123"
+          "L'URL doit contenir l'ID du produit."
         );
 
         return;
 
       }
 
-
       console.log(
         "JR Shop - Product ID:",
         productId
       );
-
 
       try {
 
@@ -2657,14 +3599,11 @@
             .eq("id", productId)
             .maybeSingle();
 
-
         const data =
           result.data;
 
-
         const error =
           result.error;
-
 
         if (error) {
 
@@ -2672,7 +3611,6 @@
             "Supabase product error:",
             error
           );
-
 
           showError(
             "Erreur lors du chargement du produit.",
@@ -2687,7 +3625,6 @@
 
         }
 
-
         if (!data) {
 
           showError(
@@ -2700,14 +3637,23 @@
 
         }
 
-
         console.log(
           "JR Shop - Product loaded:",
           data
         );
 
-
         showProduct(data);
+
+        /*
+          Reviews لا تعتمد على وجود المنتج في الواجهة.
+          يتم تحميلها مباشرة من Supabase.
+        */
+        await loadReviews();
+
+        /*
+          تجهيز فورم التقييم.
+        */
+        await prepareReviewForm();
 
       } catch (error) {
 
@@ -2715,7 +3661,6 @@
           "Unexpected product error:",
           error
         );
-
 
         showError(
           "Une erreur inattendue est survenue.",
@@ -2763,6 +3708,40 @@
 
       }
     );
+
+
+    /* =====================================================
+       AUTH STATE
+    ===================================================== */
+
+    if (
+      typeof supabaseClient !==
+        "undefined" &&
+      supabaseClient
+    ) {
+
+      supabaseClient.auth.onAuthStateChange(
+        async function(
+          event,
+          session
+        ) {
+
+          currentUser =
+            session?.user ||
+            null;
+
+          if (
+            currentProduct
+          ) {
+
+            await prepareReviewForm();
+
+          }
+
+        }
+      );
+
+    }
 
   </script>
 
