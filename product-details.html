@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="icon" href="data:,">
+
 <title>Produit - JR Shop</title>
 
 <link rel="stylesheet" href="style.css">
 
+<script src="config.js"></script>
+
 <style>
+
 *{
   box-sizing:border-box;
 }
@@ -21,17 +26,21 @@ body{
   font-family:Arial,Helvetica,sans-serif;
 }
 
+/* =========================
+   PRODUCT PAGE
+========================= */
+
 .product-page{
   max-width:1200px;
-  margin:auto;
-  padding:50px 20px;
+  margin:0 auto;
+  padding:40px 20px 70px;
 }
 
 .back-btn{
   display:inline-flex;
   align-items:center;
   gap:8px;
-  margin-bottom:30px;
+  margin-bottom:25px;
   color:#111;
   text-decoration:none;
   font-size:14px;
@@ -41,7 +50,7 @@ body{
 .product-container{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:60px;
+  gap:55px;
   background:#fff;
   padding:30px;
   border-radius:20px;
@@ -59,6 +68,7 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
+  position:relative;
 }
 
 .product-image{
@@ -69,10 +79,34 @@ body{
   display:block;
 }
 
+.favorite-btn{
+  position:absolute;
+  top:18px;
+  right:18px;
+  width:48px;
+  height:48px;
+  border:0;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 5px 20px rgba(0,0,0,.12);
+  font-size:23px;
+  cursor:pointer;
+  z-index:5;
+  transition:.2s;
+}
+
+.favorite-btn:hover{
+  transform:scale(1.06);
+}
+
+.favorite-btn.active{
+  color:#e53935;
+}
+
 /* INFO */
 
 .product-info{
-  padding:20px 10px;
+  padding:15px 5px;
 }
 
 .product-category{
@@ -80,11 +114,11 @@ body{
   text-transform:uppercase;
   letter-spacing:1.5px;
   color:#777;
-  margin-bottom:14px;
+  margin-bottom:12px;
 }
 
 .product-title{
-  margin:0 0 20px;
+  margin:0 0 18px;
   font-size:38px;
   line-height:1.15;
 }
@@ -92,8 +126,8 @@ body{
 .price-area{
   display:flex;
   align-items:center;
-  gap:15px;
-  margin-bottom:25px;
+  gap:14px;
+  margin-bottom:22px;
 }
 
 .current-price{
@@ -111,20 +145,20 @@ body{
   color:#666;
   line-height:1.7;
   font-size:15px;
-  margin-bottom:30px;
+  margin-bottom:28px;
 }
 
 /* OPTIONS */
 
 .option-block{
-  margin-bottom:25px;
+  margin-bottom:22px;
 }
 
 .option-header{
   display:flex;
-  align-items:center;
   justify-content:space-between;
-  margin-bottom:11px;
+  align-items:center;
+  margin-bottom:10px;
 }
 
 .option-title{
@@ -132,31 +166,26 @@ body{
   font-weight:700;
 }
 
-.selected-value{
-  color:#777;
-  font-weight:400;
-}
-
 .size-guide-btn{
   border:0;
   background:none;
   text-decoration:underline;
   cursor:pointer;
+  color:#555;
   font-size:13px;
-  color:#444;
 }
 
-.options-list{
+.option-list{
   display:flex;
   flex-wrap:wrap;
-  gap:10px;
+  gap:9px;
 }
 
 .option-btn{
-  min-width:55px;
-  padding:12px 16px;
-  border:1px solid #ddd;
+  min-width:48px;
+  padding:11px 16px;
   background:#fff;
+  border:1px solid #d8d8d8;
   border-radius:9px;
   cursor:pointer;
   font-size:14px;
@@ -174,31 +203,9 @@ body{
 }
 
 .option-btn.disabled{
-  opacity:.35;
+  opacity:.4;
   cursor:not-allowed;
   text-decoration:line-through;
-}
-
-/* COLOR */
-
-.color-btn{
-  min-width:80px;
-}
-
-/* STOCK */
-
-.variant-stock{
-  margin-top:10px;
-  font-size:13px;
-  color:#777;
-}
-
-.variant-stock.available{
-  color:#16803c;
-}
-
-.variant-stock.unavailable{
-  color:#c62828;
 }
 
 /* QUANTITY */
@@ -216,7 +223,7 @@ body{
   border:1px solid #ddd;
   border-radius:10px;
   overflow:hidden;
-  margin-bottom:25px;
+  margin-bottom:18px;
 }
 
 .quantity-control button{
@@ -228,6 +235,10 @@ body{
   cursor:pointer;
 }
 
+.quantity-control button:hover{
+  background:#eee;
+}
+
 .quantity-control input{
   width:55px;
   height:42px;
@@ -237,36 +248,79 @@ body{
   outline:none;
 }
 
-/* BUY */
-
-.buy-btn{
-  width:100%;
-  border:0;
-  background:#111;
-  color:#fff;
-  padding:17px 20px;
-  border-radius:10px;
-  font-size:16px;
-  font-weight:700;
-  cursor:pointer;
-}
-
-.buy-btn:hover{
-  background:#292929;
-}
-
-.buy-btn:disabled{
-  opacity:.45;
-  cursor:not-allowed;
-}
+/* STOCK */
 
 .stock-info{
-  margin-top:15px;
+  margin:0 0 18px;
   font-size:13px;
   color:#777;
 }
 
-/* MODAL */
+.stock-info.low{
+  color:#d97706;
+}
+
+.stock-info.out{
+  color:#c62828;
+}
+
+/* BUTTONS */
+
+.button-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.buy-btn,
+.cart-btn{
+  width:100%;
+  border:0;
+  padding:16px 15px;
+  border-radius:10px;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.buy-btn{
+  background:#111;
+  color:#fff;
+}
+
+.buy-btn:hover{
+  background:#292929;
+  transform:translateY(-1px);
+}
+
+.cart-btn{
+  background:#fff;
+  color:#111;
+  border:1px solid #111;
+}
+
+.cart-btn:hover{
+  background:#f4f4f4;
+}
+
+.buy-btn:disabled,
+.cart-btn:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+  transform:none;
+}
+
+.cart-message{
+  min-height:20px;
+  margin-top:12px;
+  font-size:13px;
+  color:#16803c;
+}
+
+/* =========================
+   MODALS
+========================= */
 
 .modal-overlay{
   position:fixed;
@@ -284,7 +338,7 @@ body{
   display:flex;
 }
 
-.confirm-modal{
+.modal-box{
   width:100%;
   max-width:520px;
   background:#fff;
@@ -309,7 +363,7 @@ body{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:22px 24px;
+  padding:20px 24px;
   border-bottom:1px solid #eee;
 }
 
@@ -323,7 +377,7 @@ body{
   height:35px;
   border:0;
   border-radius:50%;
-  background:#f4f4f4;
+  background:#f3f3f3;
   cursor:pointer;
   font-size:20px;
 }
@@ -338,13 +392,15 @@ body{
   margin:0 0 20px;
 }
 
+/* CONFIRM PRODUCT */
+
 .order-product{
   display:flex;
   gap:15px;
   padding:15px;
   background:#f7f7f5;
   border-radius:14px;
-  margin-bottom:20px;
+  margin-bottom:18px;
 }
 
 .order-product-image{
@@ -352,6 +408,7 @@ body{
   height:75px;
   border-radius:10px;
   object-fit:cover;
+  background:#eee;
 }
 
 .order-product-info{
@@ -361,7 +418,7 @@ body{
 .order-product-name{
   font-size:16px;
   font-weight:700;
-  margin:0 0 8px;
+  margin:0 0 7px;
 }
 
 .order-product-price{
@@ -372,13 +429,13 @@ body{
 .order-details{
   border-top:1px solid #eee;
   border-bottom:1px solid #eee;
-  padding:15px 0;
+  padding:12px 0;
 }
 
 .detail-row{
   display:flex;
   justify-content:space-between;
-  padding:8px 0;
+  padding:7px 0;
   font-size:14px;
 }
 
@@ -405,7 +462,7 @@ body{
 .modal-actions{
   display:flex;
   gap:10px;
-  margin-top:25px;
+  margin-top:24px;
 }
 
 .cancel-btn,
@@ -430,72 +487,35 @@ body{
 }
 
 .confirm-btn.loading{
-  pointer-events:none;
   opacity:.6;
+  pointer-events:none;
 }
 
 /* SIZE GUIDE */
 
-.size-guide-overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.55);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  z-index:10000;
-}
-
-.size-guide-overlay.active{
-  display:flex;
-}
-
-.size-guide{
-  width:100%;
-  max-width:600px;
-  background:#fff;
-  border-radius:18px;
-  padding:25px;
-  box-shadow:0 20px 70px rgba(0,0,0,.25);
-}
-
-.size-guide-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:20px;
-}
-
-.size-guide-header h2{
-  margin:0;
-}
-
-.size-guide-close{
-  border:0;
-  background:#f3f3f3;
-  border-radius:50%;
-  width:35px;
-  height:35px;
-  cursor:pointer;
-  font-size:20px;
-}
-
 .size-table{
   width:100%;
   border-collapse:collapse;
+  margin-top:10px;
 }
 
 .size-table th,
 .size-table td{
-  border:1px solid #eee;
-  padding:12px;
+  border:1px solid #e5e5e5;
+  padding:11px 8px;
   text-align:center;
-  font-size:14px;
+  font-size:13px;
 }
 
 .size-table th{
-  background:#f6f6f4;
+  background:#f7f7f5;
+}
+
+.guide-note{
+  color:#777;
+  font-size:13px;
+  line-height:1.6;
+  margin-top:15px;
 }
 
 /* MOBILE */
@@ -503,7 +523,7 @@ body{
 @media(max-width:800px){
 
   .product-page{
-    padding:25px 15px;
+    padding:25px 15px 50px;
   }
 
   .product-container{
@@ -521,12 +541,35 @@ body{
     font-size:30px;
   }
 
-  .product-info{
-    padding:10px 5px 20px;
+  .current-price{
+    font-size:24px;
   }
+
 }
 
 @media(max-width:500px){
+
+  .product-image-box,
+  .product-image{
+    min-height:330px;
+  }
+
+  .button-row{
+    grid-template-columns:1fr;
+  }
+
+  .modal-overlay{
+    padding:12px;
+  }
+
+  .modal-box{
+    border-radius:16px;
+  }
+
+  .modal-header,
+  .modal-body{
+    padding:18px;
+  }
 
   .modal-actions{
     flex-direction:column-reverse;
@@ -536,7 +579,9 @@ body{
   .confirm-btn{
     width:100%;
   }
+
 }
+
 </style>
 </head>
 
@@ -544,286 +589,369 @@ body{
 
 <main class="product-page">
 
-<a href="index.html" class="back-btn">
-  ← Retour aux produits
-</a>
+  <a href="index.html" class="back-btn">
+    ← Retour aux produits
+  </a>
 
-<section class="product-container">
+  <section class="product-container">
 
-  <div class="product-image-box">
-    <img
-      id="productImage"
-      class="product-image"
-      src=""
-      alt="Produit"
-    >
-  </div>
+    <!-- IMAGE -->
 
-  <div class="product-info">
-
-    <div id="productCategory" class="product-category">
-      Produit
-    </div>
-
-    <h1 id="productName" class="product-title">
-      Chargement...
-    </h1>
-
-    <div class="price-area">
-
-      <span id="productPrice" class="current-price">
-        0.00 DA
-      </span>
-
-      <span
-        id="productOldPrice"
-        class="old-price"
-        style="display:none"
-      ></span>
-
-    </div>
-
-    <p id="productDescription" class="description">
-      Découvrez ce produit de JR Shop.
-    </p>
-
-    <!-- COLOR -->
-
-    <div class="option-block">
-
-      <div class="option-header">
-
-        <div class="option-title">
-          Couleur :
-          <span id="selectedColor" class="selected-value">
-            Sélectionner
-          </span>
-        </div>
-
-      </div>
-
-      <div
-        id="colorOptions"
-        class="options-list"
-      ></div>
-
-    </div>
-
-    <!-- SIZE -->
-
-    <div class="option-block">
-
-      <div class="option-header">
-
-        <div class="option-title">
-          Taille :
-          <span id="selectedSize" class="selected-value">
-            Sélectionner
-          </span>
-        </div>
-
-        <button
-          type="button"
-          class="size-guide-btn"
-          id="sizeGuideBtn"
-        >
-          Guide des tailles
-        </button>
-
-      </div>
-
-      <div
-        id="sizeOptions"
-        class="options-list"
-      ></div>
-
-    </div>
-
-    <!-- STOCK VARIANT -->
-
-    <div
-      id="variantStock"
-      class="variant-stock"
-    >
-      Sélectionnez une couleur et une taille.
-    </div>
-
-    <!-- QUANTITY -->
-
-    <div class="quantity-title">
-      Quantité
-    </div>
-
-    <div class="quantity-control">
-
-      <button
-        type="button"
-        id="minusBtn"
-      >
-        −
-      </button>
-
-      <input
-        type="number"
-        id="quantityInput"
-        value="1"
-        min="1"
-        max="99"
-      >
-
-      <button
-        type="button"
-        id="plusBtn"
-      >
-        +
-      </button>
-
-    </div>
-
-    <!-- BUY -->
-
-    <button
-      type="button"
-      class="buy-btn"
-      id="buyBtn"
-      disabled
-    >
-      Acheter
-    </button>
-
-    <div
-      id="stockInfo"
-      class="stock-info"
-    >
-      Sélectionnez vos options.
-    </div>
-
-  </div>
-
-</section>
-
-</main>
-
-
-<!-- CONFIRMATION MODAL -->
-
-<div
-  class="modal-overlay"
-  id="confirmationModal"
-  aria-hidden="true"
->
-
-<div
-  class="confirm-modal"
-  role="dialog"
-  aria-modal="true"
->
-
-  <div class="modal-header">
-
-    <h2>
-      Confirmer votre commande
-    </h2>
-
-    <button
-      type="button"
-      class="close-modal"
-      id="closeModal"
-    >
-      ×
-    </button>
-
-  </div>
-
-  <div class="modal-body">
-
-    <p class="modal-intro">
-      Vérifiez les détails de votre commande avant de continuer.
-    </p>
-
-    <div class="order-product">
+    <div class="product-image-box">
 
       <img
-        id="modalProductImage"
-        class="order-product-image"
+        id="productImage"
+        class="product-image"
         src=""
         alt="Produit"
       >
 
-      <div class="order-product-info">
+      <button
+        type="button"
+        id="favoriteBtn"
+        class="favorite-btn"
+        aria-label="Ajouter aux favoris"
+      >
+        ♡
+      </button>
 
-        <p
-          id="modalProductName"
-          class="order-product-name"
-        >
-          Produit
-        </p>
+    </div>
 
-        <div
-          id="modalProductPrice"
-          class="order-product-price"
+
+    <!-- INFO -->
+
+    <div class="product-info">
+
+      <div
+        id="productCategory"
+        class="product-category"
+      >
+        Produit
+      </div>
+
+      <h1
+        id="productName"
+        class="product-title"
+      >
+        Chargement...
+      </h1>
+
+
+      <div class="price-area">
+
+        <span
+          id="productPrice"
+          class="current-price"
         >
           0.00 DA
+        </span>
+
+        <span
+          id="productOldPrice"
+          class="old-price"
+          style="display:none;"
+        ></span>
+
+      </div>
+
+
+      <p
+        id="productDescription"
+        class="description"
+      >
+        Découvrez ce produit de JR Shop.
+      </p>
+
+
+      <!-- COLOR -->
+
+      <div
+        id="colorBlock"
+        class="option-block"
+        style="display:none;"
+      >
+
+        <div class="option-header">
+
+          <div class="option-title">
+            Couleur :
+            <span id="selectedColor">—</span>
+          </div>
+
+        </div>
+
+        <div
+          id="colorList"
+          class="option-list"
+        ></div>
+
+      </div>
+
+
+      <!-- SIZE -->
+
+      <div
+        id="sizeBlock"
+        class="option-block"
+        style="display:none;"
+      >
+
+        <div class="option-header">
+
+          <div class="option-title">
+            Taille :
+            <span id="selectedSize">—</span>
+          </div>
+
+          <button
+            type="button"
+            id="sizeGuideBtn"
+            class="size-guide-btn"
+          >
+            Guide des tailles
+          </button>
+
+        </div>
+
+        <div
+          id="sizeList"
+          class="option-list"
+        ></div>
+
+      </div>
+
+
+      <!-- QUANTITY -->
+
+      <div class="quantity-title">
+        Quantité
+      </div>
+
+      <div class="quantity-control">
+
+        <button
+          type="button"
+          id="minusBtn"
+        >
+          −
+        </button>
+
+        <input
+          type="number"
+          id="quantityInput"
+          value="1"
+          min="1"
+          max="99"
+        >
+
+        <button
+          type="button"
+          id="plusBtn"
+        >
+          +
+        </button>
+
+      </div>
+
+
+      <!-- STOCK -->
+
+      <div
+        id="stockInfo"
+        class="stock-info"
+      >
+        Sélectionnez une option
+      </div>
+
+
+      <!-- BUTTONS -->
+
+      <div class="button-row">
+
+        <button
+          type="button"
+          id="cartBtn"
+          class="cart-btn"
+        >
+          🛒 Ajouter au panier
+        </button>
+
+        <button
+          type="button"
+          id="buyBtn"
+          class="buy-btn"
+        >
+          Acheter
+        </button>
+
+      </div>
+
+
+      <div
+        id="cartMessage"
+        class="cart-message"
+      ></div>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<!-- ==================================================
+     CONFIRMATION MODAL
+================================================== -->
+
+<div
+  id="confirmationModal"
+  class="modal-overlay"
+  aria-hidden="true"
+>
+
+  <div
+    class="modal-box"
+    role="dialog"
+    aria-modal="true"
+  >
+
+    <div class="modal-header">
+
+      <h2>
+        Confirmer votre commande
+      </h2>
+
+      <button
+        type="button"
+        id="closeConfirmModal"
+        class="close-modal"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div class="modal-body">
+
+      <p class="modal-intro">
+        Vérifiez les détails de votre commande avant de continuer.
+      </p>
+
+
+      <div class="order-product">
+
+        <img
+          id="modalProductImage"
+          class="order-product-image"
+          src=""
+          alt="Produit"
+        >
+
+        <div class="order-product-info">
+
+          <p
+            id="modalProductName"
+            class="order-product-name"
+          >
+            Produit
+          </p>
+
+          <div
+            id="modalProductPrice"
+            class="order-product-price"
+          >
+            0.00 DA
+          </div>
+
         </div>
 
       </div>
 
-    </div>
 
-    <div class="order-details">
+      <div class="order-details">
 
-      <div class="detail-row">
-        <span>Couleur</span>
-        <span id="modalColor">-</span>
+        <div class="detail-row">
+
+          <span>Couleur</span>
+
+          <span id="modalColor">
+            —
+          </span>
+
+        </div>
+
+
+        <div class="detail-row">
+
+          <span>Taille</span>
+
+          <span id="modalSize">
+            —
+          </span>
+
+        </div>
+
+
+        <div class="detail-row">
+
+          <span>Prix unitaire</span>
+
+          <span id="modalUnitPrice">
+            0.00 DA
+          </span>
+
+        </div>
+
+
+        <div class="detail-row">
+
+          <span>Quantité</span>
+
+          <span id="modalQuantity">
+            1
+          </span>
+
+        </div>
+
       </div>
 
-      <div class="detail-row">
-        <span>Taille</span>
-        <span id="modalSize">-</span>
+
+      <div class="total-row">
+
+        <span>
+          Total
+        </span>
+
+        <span
+          id="modalTotal"
+          class="total-price"
+        >
+          0.00 DA
+        </span>
+
       </div>
 
-      <div class="detail-row">
-        <span>Prix unitaire</span>
-        <span id="modalUnitPrice">0.00 DA</span>
+
+      <div class="modal-actions">
+
+        <button
+          type="button"
+          id="cancelConfirmModal"
+          class="cancel-btn"
+        >
+          Annuler
+        </button>
+
+        <button
+          type="button"
+          id="confirmPurchase"
+          class="confirm-btn"
+        >
+          Confirmer et continuer
+        </button>
+
       </div>
-
-      <div class="detail-row">
-        <span>Quantité</span>
-        <span id="modalQuantity">1</span>
-      </div>
-
-    </div>
-
-    <div class="total-row">
-
-      <span>Total</span>
-
-      <span
-        id="modalTotal"
-        class="total-price"
-      >
-        0.00 DA
-      </span>
-
-    </div>
-
-    <div class="modal-actions">
-
-      <button
-        type="button"
-        class="cancel-btn"
-        id="cancelModal"
-      >
-        Annuler
-      </button>
-
-      <button
-        type="button"
-        class="confirm-btn"
-        id="confirmPurchase"
-      >
-        Confirmer et continuer
-      </button>
 
     </div>
 
@@ -831,86 +959,107 @@ body{
 
 </div>
 
-</div>
 
-
-<!-- SIZE GUIDE -->
+<!-- ==================================================
+     SIZE GUIDE MODAL
+================================================== -->
 
 <div
-  class="size-guide-overlay"
   id="sizeGuideModal"
+  class="modal-overlay"
+  aria-hidden="true"
 >
 
-<div class="size-guide">
+  <div
+    class="modal-box"
+    role="dialog"
+    aria-modal="true"
+  >
 
-  <div class="size-guide-header">
+    <div class="modal-header">
 
-    <h2>Guide des tailles</h2>
+      <h2>
+        Guide des tailles
+      </h2>
 
-    <button
-      type="button"
-      class="size-guide-close"
-      id="sizeGuideClose"
-    >
-      ×
-    </button>
+      <button
+        type="button"
+        id="closeSizeGuide"
+        class="close-modal"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div class="modal-body">
+
+      <table class="size-table">
+
+        <thead>
+
+          <tr>
+            <th>Taille</th>
+            <th>Poitrine</th>
+            <th>Taille</th>
+            <th>Hanches</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          <tr>
+            <td>S</td>
+            <td>88-92 cm</td>
+            <td>68-72 cm</td>
+            <td>92-96 cm</td>
+          </tr>
+
+          <tr>
+            <td>M</td>
+            <td>92-96 cm</td>
+            <td>72-76 cm</td>
+            <td>96-100 cm</td>
+          </tr>
+
+          <tr>
+            <td>L</td>
+            <td>96-100 cm</td>
+            <td>76-80 cm</td>
+            <td>100-104 cm</td>
+          </tr>
+
+          <tr>
+            <td>XL</td>
+            <td>100-106 cm</td>
+            <td>80-86 cm</td>
+            <td>104-110 cm</td>
+          </tr>
+
+          <tr>
+            <td>XXL</td>
+            <td>106-112 cm</td>
+            <td>86-92 cm</td>
+            <td>110-116 cm</td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+
+      <p class="guide-note">
+        Les mesures sont indicatives. Pour choisir votre taille,
+        comparez-les avec un vêtement qui vous convient déjà.
+      </p>
+
+    </div>
 
   </div>
 
-  <table class="size-table">
-
-    <thead>
-      <tr>
-        <th>Taille</th>
-        <th>Poitrine</th>
-        <th>Longueur</th>
-      </tr>
-    </thead>
-
-    <tbody>
-
-      <tr>
-        <td>XS</td>
-        <td>86 - 90 cm</td>
-        <td>64 cm</td>
-      </tr>
-
-      <tr>
-        <td>S</td>
-        <td>90 - 94 cm</td>
-        <td>66 cm</td>
-      </tr>
-
-      <tr>
-        <td>M</td>
-        <td>94 - 100 cm</td>
-        <td>68 cm</td>
-      </tr>
-
-      <tr>
-        <td>L</td>
-        <td>100 - 106 cm</td>
-        <td>70 cm</td>
-      </tr>
-
-      <tr>
-        <td>XL</td>
-        <td>106 - 112 cm</td>
-        <td>72 cm</td>
-      </tr>
-
-    </tbody>
-
-  </table>
-
 </div>
-
-</div>
-
-
-<!-- CONFIG -->
-
-<script src="config.js"></script>
 
 
 <script>
@@ -922,8 +1071,8 @@ body{
 let product = null;
 let variants = [];
 
-let selectedColor = "";
-let selectedSize = "";
+let selectedColor = null;
+let selectedSize = null;
 let selectedVariant = null;
 
 
@@ -935,7 +1084,7 @@ function formatPrice(value){
 
   const number = Number(value) || 0;
 
-  return number.toLocaleString("fr-FR",{
+  return number.toLocaleString("fr-FR", {
     minimumFractionDigits:2,
     maximumFractionDigits:2
   }) + " DA";
@@ -956,6 +1105,35 @@ function getProductId(){
 }
 
 
+function getProductImage(){
+
+  if(selectedVariant && selectedVariant.image_url){
+    return selectedVariant.image_url;
+  }
+
+  if(product && product.image_url){
+    return product.image_url;
+  }
+
+  return "https://via.placeholder.com/800x800?text=JR+Shop";
+}
+
+
+function getSelectedPrice(){
+
+  if(
+    selectedVariant &&
+    selectedVariant.price !== null &&
+    selectedVariant.price !== undefined
+  ){
+
+    return Number(selectedVariant.price) || 0;
+  }
+
+  return Number(product?.price) || 0;
+}
+
+
 /* ==================================================
    LOAD PRODUCT
 ================================================== */
@@ -967,8 +1145,25 @@ async function loadProduct(){
   if(!productId){
 
     showError();
+
     return;
   }
+
+
+  if(
+    typeof SUPABASE_URL === "undefined" ||
+    typeof SUPABASE_ANON_KEY === "undefined"
+  ){
+
+    console.error(
+      "SUPABASE_URL / SUPABASE_ANON_KEY manquants."
+    );
+
+    showError();
+
+    return;
+  }
+
 
   try{
 
@@ -980,60 +1175,75 @@ async function loadProduct(){
         "&select=*",
         {
           headers:{
-            apikey:SUPABASE_ANON_KEY,
-            Authorization:
+            "apikey":SUPABASE_ANON_KEY,
+            "Authorization":
               "Bearer " + SUPABASE_ANON_KEY
           }
         }
       );
 
+
     if(!productResponse.ok){
-      throw new Error("Erreur produit");
+      throw new Error(
+        "Erreur produit : " +
+        productResponse.status
+      );
     }
 
-    const productData =
+
+    const products =
       await productResponse.json();
 
-    if(!productData.length){
+
+    if(
+      !products ||
+      !products.length
+    ){
 
       showError();
+
       return;
     }
 
-    product =
-      productData[0];
+
+    product = products[0];
 
 
-    /* LOAD VARIANTS */
+    /* =========================
+       LOAD VARIANTS
+    ========================= */
 
     const variantResponse =
       await fetch(
         SUPABASE_URL +
-        "/rest/v1/product_variants?product_id=eq." +
+        "/rest/v1/product_variants" +
+        "?product_id=eq." +
         encodeURIComponent(productId) +
+        "&is_active=eq.true" +
         "&select=*",
         {
           headers:{
-            apikey:SUPABASE_ANON_KEY,
-            Authorization:
+            "apikey":SUPABASE_ANON_KEY,
+            "Authorization":
               "Bearer " + SUPABASE_ANON_KEY
           }
         }
       );
 
-    if(!variantResponse.ok){
-      throw new Error("Erreur variants");
-    }
 
-    variants =
-      await variantResponse.json();
+    if(variantResponse.ok){
+
+      variants =
+        await variantResponse.json();
+
+    }else{
+
+      variants = [];
+
+    }
 
 
     renderProduct();
-
-    renderColors();
-
-    renderSizes();
 
   }catch(error){
 
@@ -1053,29 +1263,32 @@ async function loadProduct(){
 function renderProduct(){
 
   const name =
-    product.name || "Produit JR Shop";
+    product.name ||
+    "Produit JR Shop";
+
 
   const price =
     Number(product.price) || 0;
 
+
   const oldPrice =
     Number(product.old_price) || 0;
 
-  const image =
-    product.image_url ||
-    "https://via.placeholder.com/800x800?text=JR+Shop";
 
   document.title =
     name + " - JR Shop";
+
 
   document.getElementById(
     "productName"
   ).textContent = name;
 
+
   document.getElementById(
     "productPrice"
   ).textContent =
     formatPrice(price);
+
 
   document.getElementById(
     "productDescription"
@@ -1083,33 +1296,17 @@ function renderProduct(){
     product.description ||
     "Découvrez ce produit de JR Shop.";
 
+
   document.getElementById(
     "productImage"
-  ).src = image;
+  ).src =
+    getProductImage();
+
 
   document.getElementById(
     "productImage"
   ).alt = name;
 
-  const old =
-    document.getElementById(
-      "productOldPrice"
-    );
-
-  if(oldPrice > price){
-
-    old.textContent =
-      formatPrice(oldPrice);
-
-    old.style.display =
-      "inline";
-
-  }else{
-
-    old.style.display =
-      "none";
-
-  }
 
   document.getElementById(
     "productCategory"
@@ -1118,21 +1315,62 @@ function renderProduct(){
     product.category ||
     "Produit";
 
+
+  /* OLD PRICE */
+
+  const oldPriceElement =
+    document.getElementById(
+      "productOldPrice"
+    );
+
+
+  if(oldPrice > price){
+
+    oldPriceElement.textContent =
+      formatPrice(oldPrice);
+
+    oldPriceElement.style.display =
+      "inline";
+
+  }else{
+
+    oldPriceElement.style.display =
+      "none";
+
+  }
+
+
+  renderOptions();
+
+
+  updateFavoriteButton();
+
+
+  updateAvailability();
+
 }
 
 
 /* ==================================================
-   COLORS
+   RENDER OPTIONS
 ================================================== */
 
-function renderColors(){
+function renderOptions(){
 
-  const container =
+  const colorList =
     document.getElementById(
-      "colorOptions"
+      "colorList"
     );
 
-  container.innerHTML = "";
+  const sizeList =
+    document.getElementById(
+      "sizeList"
+    );
+
+
+  colorList.innerHTML = "";
+  sizeList.innerHTML = "";
+
 
   const colors = [
     ...new Set(
@@ -1142,167 +1380,170 @@ function renderColors(){
     )
   ];
 
-  if(!colors.length){
-
-    container.innerHTML =
-      "<span>Aucune couleur disponible</span>";
-
-    return;
-  }
-
-  colors.forEach(color => {
-
-    const button =
-      document.createElement("button");
-
-    button.type = "button";
-
-    button.className =
-      "option-btn color-btn";
-
-    button.textContent =
-      color;
-
-    button.addEventListener(
-      "click",
-      () => {
-
-        selectedColor = color;
-
-        selectedSize = "";
-
-        selectedVariant = null;
-
-        document.getElementById(
-          "selectedColor"
-        ).textContent = color;
-
-        document.getElementById(
-          "selectedSize"
-        ).textContent =
-          "Sélectionner";
-
-        document.querySelectorAll(
-          "#colorOptions .option-btn"
-        ).forEach(btn =>
-          btn.classList.remove("active")
-        );
-
-        button.classList.add("active");
-
-        renderSizes();
-
-        updateVariant();
-
-      }
-    );
-
-    container.appendChild(button);
-
-  });
-
-}
-
-
-/* ==================================================
-   SIZES
-================================================== */
-
-function renderSizes(){
-
-  const container =
-    document.getElementById(
-      "sizeOptions"
-    );
-
-  container.innerHTML = "";
-
-  let availableVariants =
-    variants;
-
-  if(selectedColor){
-
-    availableVariants =
-      variants.filter(
-        v => String(v.color) ===
-             String(selectedColor)
-      );
-
-  }
 
   const sizes = [
     ...new Set(
-      availableVariants
+      variants
         .map(v => v.size)
         .filter(Boolean)
     )
   ];
 
-  if(!sizes.length){
 
-    container.innerHTML =
-      "<span>Aucune taille disponible</span>";
+  /* COLORS */
 
-    return;
-  }
+  if(colors.length){
 
-  sizes.forEach(size => {
+    document.getElementById(
+      "colorBlock"
+    ).style.display =
+      "block";
 
-    const variant =
-      availableVariants.find(
-        v =>
-          String(v.size) ===
-          String(size)
-      );
 
-    const stock =
-      Number(variant?.stock) || 0;
+    colors.forEach(color => {
 
-    const button =
-      document.createElement("button");
-
-    button.type = "button";
-
-    button.className =
-      "option-btn";
-
-    button.textContent =
-      size;
-
-    if(stock <= 0){
-
-      button.classList.add(
-        "disabled"
-      );
-
-      button.disabled = true;
-
-    }
-
-    button.addEventListener(
-      "click",
-      () => {
-
-        selectedSize = size;
-
-        document.getElementById(
-          "selectedSize"
-        ).textContent = size;
-
-        document.querySelectorAll(
-          "#sizeOptions .option-btn"
-        ).forEach(btn =>
-          btn.classList.remove("active")
+      const button =
+        document.createElement(
+          "button"
         );
 
-        button.classList.add("active");
+      button.type =
+        "button";
 
-        updateVariant();
+      button.className =
+        "option-btn";
 
-      }
+      button.textContent =
+        color;
+
+
+      button.addEventListener(
+        "click",
+        function(){
+
+          selectedColor =
+            color;
+
+          document.getElementById(
+            "selectedColor"
+          ).textContent =
+            color;
+
+
+          updateColorButtons();
+
+          updateSizeButtons();
+
+          findVariant();
+
+        }
+      );
+
+
+      colorList.appendChild(
+        button
+      );
+
+    });
+
+  }else{
+
+    document.getElementById(
+      "colorBlock"
+    ).style.display =
+      "none";
+
+  }
+
+
+  /* SIZES */
+
+  if(sizes.length){
+
+    document.getElementById(
+      "sizeBlock"
+    ).style.display =
+      "block";
+
+
+    sizes.forEach(size => {
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+      button.type =
+        "button";
+
+      button.className =
+        "option-btn";
+
+      button.textContent =
+        size;
+
+
+      button.addEventListener(
+        "click",
+        function(){
+
+          selectedSize =
+            size;
+
+          document.getElementById(
+            "selectedSize"
+          ).textContent =
+            size;
+
+
+          updateSizeButtons();
+
+          findVariant();
+
+        }
+      );
+
+
+      sizeList.appendChild(
+        button
+      );
+
+    });
+
+  }else{
+
+    document.getElementById(
+      "sizeBlock"
+    ).style.display =
+      "none";
+
+  }
+
+
+  updateColorButtons();
+  updateSizeButtons();
+
+}
+
+
+/* ==================================================
+   UPDATE COLOR BUTTONS
+================================================== */
+
+function updateColorButtons(){
+
+  const buttons =
+    document.querySelectorAll(
+      "#colorList .option-btn"
     );
 
-    container.appendChild(button);
+
+  buttons.forEach(button => {
+
+    button.classList.toggle(
+      "active",
+      button.textContent === selectedColor
+    );
 
   });
 
@@ -1310,111 +1551,361 @@ function renderSizes(){
 
 
 /* ==================================================
-   UPDATE VARIANT
+   UPDATE SIZE BUTTONS
 ================================================== */
 
-function updateVariant(){
+function updateSizeButtons(){
 
-  selectedVariant =
-    variants.find(v =>
-
-      String(v.color) ===
-      String(selectedColor) &&
-
-      String(v.size) ===
-      String(selectedSize)
-
-    ) || null;
-
-
-  const stockElement =
-    document.getElementById(
-      "variantStock"
+  const buttons =
+    document.querySelectorAll(
+      "#sizeList .option-btn"
     );
 
-  const buyButton =
+
+  buttons.forEach(button => {
+
+    const size =
+      button.textContent;
+
+
+    let available = true;
+
+
+    if(selectedColor){
+
+      const variant =
+        variants.find(v =>
+          v.color === selectedColor &&
+          v.size === size
+        );
+
+
+      available =
+        !!variant &&
+        Number(variant.stock) > 0;
+
+    }
+
+
+    button.classList.toggle(
+      "disabled",
+      !available
+    );
+
+
+    button.classList.toggle(
+      "active",
+      size === selectedSize
+    );
+
+
+    button.disabled =
+      !available;
+
+
+    if(
+      selectedSize === size &&
+      !available
+    ){
+
+      selectedSize =
+        null;
+
+      document.getElementById(
+        "selectedSize"
+      ).textContent =
+        "—";
+
+    }
+
+  });
+
+}
+
+
+/* ==================================================
+   FIND VARIANT
+================================================== */
+
+function findVariant(){
+
+  selectedVariant = null;
+
+
+  if(!variants.length){
+
+    updateAvailability();
+
+    return;
+
+  }
+
+
+  const hasColors =
+    variants.some(v => v.color);
+
+
+  const hasSizes =
+    variants.some(v => v.size);
+
+
+  if(hasColors && !selectedColor){
+
+    updateAvailability();
+
+    return;
+
+  }
+
+
+  if(hasSizes && !selectedSize){
+
+    updateAvailability();
+
+    return;
+
+  }
+
+
+  selectedVariant =
+    variants.find(v => {
+
+      const colorOK =
+        !hasColors ||
+        v.color === selectedColor;
+
+
+      const sizeOK =
+        !hasSizes ||
+        v.size === selectedSize;
+
+
+      return colorOK && sizeOK;
+
+    }) || null;
+
+
+  if(selectedVariant){
+
+    const price =
+      getSelectedPrice();
+
+
+    document.getElementById(
+      "productPrice"
+    ).textContent =
+      formatPrice(price);
+
+
+    const image =
+      getProductImage();
+
+
+    document.getElementById(
+      "productImage"
+    ).src =
+      image;
+
+  }
+
+
+  updateAvailability();
+
+}
+
+
+/* ==================================================
+   AVAILABILITY
+================================================== */
+
+function updateAvailability(){
+
+  const stockInfo =
+    document.getElementById(
+      "stockInfo"
+    );
+
+
+  const buyBtn =
     document.getElementById(
       "buyBtn"
     );
 
-  const quantity =
+
+  const cartBtn =
+    document.getElementById(
+      "cartBtn"
+    );
+
+
+  const quantityInput =
     document.getElementById(
       "quantityInput"
     );
 
 
-  if(!selectedVariant){
+  let stock = 0;
 
-    stockElement.textContent =
-      "Sélectionnez une couleur et une taille.";
 
-    stockElement.className =
-      "variant-stock";
+  if(variants.length){
 
-    buyButton.disabled =
-      true;
+    if(selectedVariant){
 
-    quantity.max =
-      1;
+      stock =
+        Number(
+          selectedVariant.stock
+        ) || 0;
 
-    document.getElementById(
-      "stockInfo"
-    ).textContent =
-      "Sélectionnez vos options.";
+    }else{
 
-    return;
+      stock = 0;
+
+    }
+
+  }else{
+
+    stock =
+      Number(product?.stock) || 0;
+
   }
 
 
-  const stock =
-    Number(selectedVariant.stock) || 0;
+  quantityInput.max =
+    Math.max(stock,1);
+
+
+  if(
+    variants.length &&
+    !selectedVariant
+  ){
+
+    stockInfo.textContent =
+      "Sélectionnez la couleur et la taille";
+
+    stockInfo.className =
+      "stock-info";
+
+
+    buyBtn.disabled =
+      true;
+
+    cartBtn.disabled =
+      true;
+
+    return;
+
+  }
 
 
   if(stock <= 0){
 
-    stockElement.textContent =
-      "Rupture de stock pour cette combinaison.";
+    stockInfo.textContent =
+      "Rupture de stock";
 
-    stockElement.className =
-      "variant-stock unavailable";
+    stockInfo.className =
+      "stock-info out";
 
-    buyButton.disabled =
+
+    buyBtn.disabled =
       true;
 
-    quantity.max =
-      1;
+    cartBtn.disabled =
+      true;
+
+    return;
+
+  }
+
+
+  if(stock <= 5){
+
+    stockInfo.textContent =
+      "Plus que " +
+      stock +
+      " disponible(s)";
+
+    stockInfo.className =
+      "stock-info low";
 
   }else{
 
-    stockElement.textContent =
+    stockInfo.textContent =
       stock +
-      " disponible(s) pour cette couleur / taille.";
+      " disponible(s)";
 
-    stockElement.className =
-      "variant-stock available";
-
-    buyButton.disabled =
-      false;
-
-    quantity.max =
-      stock;
-
-    document.getElementById(
-      "stockInfo"
-    ).textContent =
-      stock + " disponible(s)";
-
-    if(
-      Number(quantity.value) >
-      stock
-    ){
-
-      quantity.value =
-        stock;
-
-    }
+    stockInfo.className =
+      "stock-info";
 
   }
+
+
+  buyBtn.disabled =
+    false;
+
+  cartBtn.disabled =
+    false;
+
+
+  let quantity =
+    Number(quantityInput.value) || 1;
+
+
+  if(quantity > stock){
+    quantity = stock;
+  }
+
+
+  if(quantity < 1){
+    quantity = 1;
+  }
+
+
+  quantityInput.value =
+    quantity;
+
+}
+
+
+/* ==================================================
+   FALLBACK
+================================================== */
+
+function showError(){
+
+  document.getElementById(
+    "productName"
+  ).textContent =
+    "Produit introuvable";
+
+
+  document.getElementById(
+    "productPrice"
+  ).textContent =
+    "0.00 DA";
+
+
+  document.getElementById(
+    "productDescription"
+  ).textContent =
+    "Impossible de charger ce produit.";
+
+
+  document.getElementById(
+    "stockInfo"
+  ).textContent =
+    "Produit indisponible";
+
+
+  document.getElementById(
+    "buyBtn"
+  ).disabled =
+    true;
+
+
+  document.getElementById(
+    "cartBtn"
+  ).disabled =
+    true;
 
 }
 
@@ -1433,19 +1924,24 @@ document.getElementById(
   "minusBtn"
 ).addEventListener(
   "click",
-  () => {
+  function(){
 
-    let q =
-      Number(quantityInput.value) || 1;
+    let quantity =
+      Number(
+        quantityInput.value
+      ) || 1;
 
-    q--;
 
-    if(q < 1){
-      q = 1;
+    quantity--;
+
+
+    if(quantity < 1){
+      quantity = 1;
     }
 
+
     quantityInput.value =
-      q;
+      quantity;
 
   }
 );
@@ -1455,22 +1951,30 @@ document.getElementById(
   "plusBtn"
 ).addEventListener(
   "click",
-  () => {
+  function(){
 
-    let q =
-      Number(quantityInput.value) || 1;
+    let quantity =
+      Number(
+        quantityInput.value
+      ) || 1;
 
-    const max =
-      Number(quantityInput.max) || 99;
 
-    q++;
+    let max =
+      Number(
+        quantityInput.max
+      ) || 99;
 
-    if(q > max){
-      q = max;
+
+    quantity++;
+
+
+    if(quantity > max){
+      quantity = max;
     }
 
+
     quantityInput.value =
-      q;
+      quantity;
 
   }
 );
@@ -1480,66 +1984,385 @@ quantityInput.addEventListener(
   "input",
   function(){
 
-    let q =
+    let quantity =
       Number(this.value) || 1;
 
-    const max =
+
+    let max =
       Number(this.max) || 99;
 
-    if(q < 1){
-      q = 1;
+
+    if(quantity < 1){
+      quantity = 1;
     }
 
-    if(q > max){
-      q = max;
+
+    if(quantity > max){
+      quantity = max;
     }
+
 
     this.value =
-      q;
+      quantity;
 
   }
 );
 
 
 /* ==================================================
-   MODAL
+   CART
 ================================================== */
 
-const modal =
+function getCart(){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem(
+        "jr_cart"
+      )
+    ) || [];
+
+  }catch(error){
+
+    return [];
+
+  }
+
+}
+
+
+function saveCart(cart){
+
+  localStorage.setItem(
+    "jr_cart",
+    JSON.stringify(cart)
+  );
+
+}
+
+
+function buildCartItem(){
+
+  if(!product){
+    return null;
+  }
+
+
+  const quantity =
+    Number(
+      quantityInput.value
+    ) || 1;
+
+
+  const price =
+    getSelectedPrice();
+
+
+  return {
+
+    product_id:
+      product.id,
+
+
+    variant_id:
+      selectedVariant?.id ||
+      null,
+
+
+    name:
+      product.name ||
+      "Produit",
+
+
+    price:
+      price,
+
+
+    old_price:
+      Number(
+        product.old_price
+      ) || 0,
+
+
+    image_url:
+      getProductImage(),
+
+
+    color:
+      selectedColor ||
+      null,
+
+
+    size:
+      selectedSize ||
+      null,
+
+
+    quantity:
+      quantity
+
+  };
+
+}
+
+
+function addToCart(){
+
+  const item =
+    buildCartItem();
+
+
+  if(!item){
+    return;
+  }
+
+
+  const cart =
+    getCart();
+
+
+  const existingIndex =
+    cart.findIndex(
+      cartItem =>
+        cartItem.product_id ===
+          item.product_id &&
+        cartItem.variant_id ===
+          item.variant_id
+    );
+
+
+  if(existingIndex !== -1){
+
+    cart[existingIndex].quantity +=
+      item.quantity;
+
+  }else{
+
+    cart.push(item);
+
+  }
+
+
+  saveCart(cart);
+
+
+  const message =
+    document.getElementById(
+      "cartMessage"
+    );
+
+
+  message.textContent =
+    "✓ Produit ajouté au panier";
+
+
+  setTimeout(
+    function(){
+
+      message.textContent =
+        "";
+
+    },
+    2500
+  );
+
+}
+
+
+document.getElementById(
+  "cartBtn"
+).addEventListener(
+  "click",
+  addToCart
+);
+
+
+/* ==================================================
+   FAVORITES
+================================================== */
+
+function getFavorites(){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem(
+        "jr_favorites"
+      )
+    ) || [];
+
+  }catch(error){
+
+    return [];
+
+  }
+
+}
+
+
+function saveFavorites(favorites){
+
+  localStorage.setItem(
+    "jr_favorites",
+    JSON.stringify(
+      favorites
+    )
+  );
+
+}
+
+
+function updateFavoriteButton(){
+
+  if(!product){
+    return;
+  }
+
+
+  const favorites =
+    getFavorites();
+
+
+  const exists =
+    favorites.includes(
+      product.id
+    );
+
+
+  const button =
+    document.getElementById(
+      "favoriteBtn"
+    );
+
+
+  if(exists){
+
+    button.textContent =
+      "♥";
+
+    button.classList.add(
+      "active"
+    );
+
+  }else{
+
+    button.textContent =
+      "♡";
+
+    button.classList.remove(
+      "active"
+    );
+
+  }
+
+}
+
+
+document.getElementById(
+  "favoriteBtn"
+).addEventListener(
+  "click",
+  function(){
+
+    if(!product){
+      return;
+    }
+
+
+    let favorites =
+      getFavorites();
+
+
+    const index =
+      favorites.indexOf(
+        product.id
+      );
+
+
+    if(index === -1){
+
+      favorites.push(
+        product.id
+      );
+
+    }else{
+
+      favorites.splice(
+        index,
+        1
+      );
+
+    }
+
+
+    saveFavorites(
+      favorites
+    );
+
+
+    updateFavoriteButton();
+
+  }
+);
+
+
+/* ==================================================
+   CONFIRMATION MODAL
+================================================== */
+
+const confirmationModal =
   document.getElementById(
     "confirmationModal"
   );
 
 
-function openModal(){
+function openConfirmationModal(){
 
-  if(!product || !selectedVariant){
+  if(!product){
     return;
   }
 
+
+  if(
+    variants.length &&
+    !selectedVariant
+  ){
+
+    alert(
+      "Veuillez sélectionner la couleur et la taille."
+    );
+
+    return;
+
+  }
+
+
   const quantity =
-    Number(quantityInput.value) || 1;
+    Number(
+      quantityInput.value
+    ) || 1;
+
 
   const price =
-    Number(product.price) || 0;
+    getSelectedPrice();
+
 
   const total =
     price * quantity;
 
-  const image =
-    product.image_url ||
-    "https://via.placeholder.com/800x800?text=JR+Shop";
-
 
   document.getElementById(
     "modalProductImage"
-  ).src = image;
+  ).src =
+    getProductImage();
 
 
   document.getElementById(
     "modalProductName"
   ).textContent =
-    product.name || "Produit";
+    product.name ||
+    "Produit";
 
 
   document.getElementById(
@@ -1551,13 +2374,15 @@ function openModal(){
   document.getElementById(
     "modalColor"
   ).textContent =
-    selectedColor;
+    selectedColor ||
+    "—";
 
 
   document.getElementById(
     "modalSize"
   ).textContent =
-    selectedSize;
+    selectedSize ||
+    "—";
 
 
   document.getElementById(
@@ -1578,32 +2403,19 @@ function openModal(){
     formatPrice(total);
 
 
-  modal.classList.add("active");
+  confirmationModal.classList.add(
+    "active"
+  );
 
-  modal.setAttribute(
+
+  confirmationModal.setAttribute(
     "aria-hidden",
     "false"
   );
 
+
   document.body.style.overflow =
     "hidden";
-
-}
-
-
-function closeModal(){
-
-  modal.classList.remove(
-    "active"
-  );
-
-  modal.setAttribute(
-    "aria-hidden",
-    "true"
-  );
-
-  document.body.style.overflow =
-    "";
 
 }
 
@@ -1612,33 +2424,52 @@ document.getElementById(
   "buyBtn"
 ).addEventListener(
   "click",
-  openModal
+  openConfirmationModal
+);
+
+
+function closeConfirmation(){
+
+  confirmationModal.classList.remove(
+    "active"
+  );
+
+
+  confirmationModal.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+
+  document.body.style.overflow =
+    "";
+
+}
+
+
+document.getElementById(
+  "closeConfirmModal"
+).addEventListener(
+  "click",
+  closeConfirmation
 );
 
 
 document.getElementById(
-  "closeModal"
+  "cancelConfirmModal"
 ).addEventListener(
   "click",
-  closeModal
+  closeConfirmation
 );
 
 
-document.getElementById(
-  "cancelModal"
-).addEventListener(
+confirmationModal.addEventListener(
   "click",
-  closeModal
-);
+  function(event){
 
+    if(event.target === confirmationModal){
 
-modal.addEventListener(
-  "click",
-  event => {
-
-    if(event.target === modal){
-
-      closeModal();
+      closeConfirmation();
 
     }
 
@@ -1654,20 +2485,21 @@ document.getElementById(
   "confirmPurchase"
 ).addEventListener(
   "click",
-  () => {
+  function(){
 
-    if(
-      !product ||
-      !selectedVariant
-    ){
+    if(!product){
       return;
     }
 
+
     const quantity =
-      Number(quantityInput.value) || 1;
+      Number(
+        quantityInput.value
+      ) || 1;
+
 
     const price =
-      Number(product.price) || 0;
+      getSelectedPrice();
 
 
     const checkoutProduct = {
@@ -1675,29 +2507,44 @@ document.getElementById(
       id:
         product.id || null,
 
+
       variant_id:
-        selectedVariant.id || null,
+        selectedVariant?.id ||
+        null,
+
 
       name:
-        product.name || "",
+        product.name ||
+        "",
+
 
       price:
         price,
 
+
       old_price:
-        Number(product.old_price) || 0,
+        Number(
+          product.old_price
+        ) || 0,
+
 
       image_url:
-        product.image_url || "",
+        getProductImage(),
+
 
       color:
-        selectedColor,
+        selectedColor ||
+        null,
+
 
       size:
-        selectedSize,
+        selectedSize ||
+        null,
+
 
       quantity:
         quantity,
+
 
       total:
         price * quantity
@@ -1718,22 +2565,24 @@ document.getElementById(
         "confirmPurchase"
       );
 
+
     button.classList.add(
       "loading"
     );
+
 
     button.textContent =
       "Préparation...";
 
 
     setTimeout(
-      () => {
+      function(){
 
         window.location.href =
           "checkout.html";
 
       },
-      250
+      300
     );
 
   }
@@ -1754,42 +2603,60 @@ document.getElementById(
   "sizeGuideBtn"
 ).addEventListener(
   "click",
-  () => {
+  function(){
 
     sizeGuideModal.classList.add(
       "active"
     );
 
+
+    sizeGuideModal.setAttribute(
+      "aria-hidden",
+      "false"
+    );
+
+
+    document.body.style.overflow =
+      "hidden";
+
   }
 );
 
 
+function closeSizeGuide(){
+
+  sizeGuideModal.classList.remove(
+    "active"
+  );
+
+
+  sizeGuideModal.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+
+  document.body.style.overflow =
+    "";
+
+}
+
+
 document.getElementById(
-  "sizeGuideClose"
+  "closeSizeGuide"
 ).addEventListener(
   "click",
-  () => {
-
-    sizeGuideModal.classList.remove(
-      "active"
-    );
-
-  }
+  closeSizeGuide
 );
 
 
 sizeGuideModal.addEventListener(
   "click",
-  event => {
+  function(event){
 
-    if(
-      event.target ===
-      sizeGuideModal
-    ){
+    if(event.target === sizeGuideModal){
 
-      sizeGuideModal.classList.remove(
-        "active"
-      );
+      closeSizeGuide();
 
     }
 
@@ -1798,44 +2665,36 @@ sizeGuideModal.addEventListener(
 
 
 /* ==================================================
-   ERROR
-================================================== */
-
-function showError(){
-
-  document.getElementById(
-    "productName"
-  ).textContent =
-    "Produit introuvable.";
-
-  document.getElementById(
-    "productDescription"
-  ).textContent =
-    "Impossible de charger ce produit.";
-
-  document.getElementById(
-    "buyBtn"
-  ).disabled =
-    true;
-
-}
-
-
-/* ==================================================
    ESC
 ================================================== */
 
 document.addEventListener(
   "keydown",
-  event => {
+  function(event){
 
-    if(event.key === "Escape"){
+    if(event.key !== "Escape"){
+      return;
+    }
 
-      closeModal();
 
-      sizeGuideModal.classList.remove(
+    if(
+      confirmationModal.classList.contains(
         "active"
-      );
+      )
+    ){
+
+      closeConfirmation();
+
+    }
+
+
+    if(
+      sizeGuideModal.classList.contains(
+        "active"
+      )
+    ){
+
+      closeSizeGuide();
 
     }
 
