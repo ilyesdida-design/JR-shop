@@ -717,6 +717,11 @@ font-size:17px
 .delivery-summary .grand-total strong{
 color:var(--jr-green)
 }
+#checkoutOrderRef{
+font-size:12px;
+letter-spacing:.5px
+}
+
 
 .checkout{padding:22px}
 
@@ -1210,6 +1215,7 @@ inputmode="tel"
   <div><span>🛍️ المنتجات</span><strong id="checkoutProductsTotal">0 دج</strong></div>
   <div><span>🚚 التوصيل</span><strong id="checkoutDeliveryTotal">0 دج</strong></div>
   <div class="grand-total"><span>💰 المجموع النهائي</span><strong id="checkoutGrandTotal">0 دج</strong></div>
+  <div><span>🔖 رقم الطلب</span><strong id="checkoutOrderRef">—</strong></div>
 </div>
 
 <textarea
@@ -1489,6 +1495,9 @@ const g=document.getElementById("checkoutGrandTotal");
 if(p)p.textContent=formatPrice(productTotal);
 if(d)d.textContent=formatPrice(deliveryFee);
 if(g)g.textContent=formatPrice(productTotal+deliveryFee);
+
+const ref=document.getElementById("checkoutOrderRef");
+if(ref)ref.textContent=getCustomerOrderReference();
 
 }
 
@@ -3375,10 +3384,31 @@ populateCommunes
    WHATSAPP
 ========================= */
 
+function generateOrderReference(){
+  const d=new Date();
+  const stamp=[
+    d.getFullYear(),
+    String(d.getMonth()+1).padStart(2,"0"),
+    String(d.getDate()).padStart(2,"0")
+  ].join("");
+  const rand=Math.floor(1000+Math.random()*9000);
+  return "JR-"+stamp+"-"+rand;
+}
+
+function getCustomerOrderReference(){
+  if(!window.jrCurrentOrderRef){
+    window.jrCurrentOrderRef=generateOrderReference();
+  }
+  return window.jrCurrentOrderRef;
+}
+
 function buildWhatsAppMessage(){
 
+const orderRef=getCustomerOrderReference();
+
 let m=
-"🛍️ *طلب جديد - JR Shop*%0A%0A";
+"🛍️ *طلب جديد - JR Shop*%0A"+
+"🔖 رقم الطلب: "+encodeURIComponent(orderRef)+"%0A%0A";
 
 m+=
 "👤 الاسم: "+
@@ -3504,6 +3534,11 @@ return showToast(
 
 }
 
+const phone=document.getElementById("customerPhone").value.replace(/\s+/g,"");
+if(!/^(05|06|07)\d{8}$/.test(phone)){
+  return showToast("رقم الهاتف غير صحيح");
+}
+
 updateCheckoutTotals();
 
 if(!deliveryFee){
@@ -3557,6 +3592,10 @@ document
 )
 .value
 .trim();
+
+if(!/^(05|06|07)\d{8}$/.test(phone.replace(/\s+/g,""))){
+return showToast("رقم الهاتف غير صحيح");
+}
 
 const wilaya=
 document
@@ -3641,10 +3680,12 @@ commune:commune,
 address:address,
 
 notes:
-"طريقة التوصيل: "+
+"رقم الطلب: "+getCustomerOrderReference()+
+" | طريقة التوصيل: "+
 (selectedDeliveryType==="domicile"?"Domicile":"Stop Desk")+
-" | مصاريف التوصيل: "+
-formatPrice(deliveryFee),
+" | مصاريف التوصيل: "+formatPrice(deliveryFee)+
+" | مجموع المنتجات: "+formatPrice(getCartTotal())+
+" | المجموع النهائي: "+formatPrice(getCheckoutGrandTotal()),
 
 total:getCheckoutGrandTotal(),
 
@@ -3709,8 +3750,11 @@ closeModal(
 "checkoutModal"
 );
 
+const sentRef=getCustomerOrderReference();
+window.jrCurrentOrderRef=null;
+
 showToast(
-"تم إرسال الطلب بنجاح ✅"
+"تم إرسال الطلب بنجاح ✅ رقم الطلب: "+sentRef
 );
 
 }catch(e){
