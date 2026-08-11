@@ -1,506 +1,520 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>JR Shop — Admin V7</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
-*{
-  box-sizing:border-box;
-}
-
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#f5f7f8;
-  color:#111;
-}
-
-button,
-input,
-textarea,
-select{
-  font:inherit;
-}
-
-button{
-  cursor:pointer;
-}
-
-.hidden{
-  display:none!important;
-}
-
-/* HEADER */
-
-header{
-  background:#111;
-  color:#fff;
-  padding:15px;
-  position:sticky;
-  top:0;
-  z-index:50;
-}
-
-.top{
-  max-width:1200px;
-  margin:auto;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:15px;
-}
-
-.logo{
-  font-size:25px;
-  font-weight:900;
-}
-
-.logo span{
-  color:#22c55e;
-}
-
-.logout{
-  border:0;
-  background:#dc2626;
-  color:#fff;
-  padding:10px 16px;
-  border-radius:10px;
-  font-weight:bold;
-}
-
-/* CONTAINER */
-
-.container{
-  max-width:1200px;
-  margin:auto;
-  padding:20px 15px 60px;
-}
-
-/* LOGIN */
-
-.login{
-  max-width:420px;
-  margin:70px auto;
-  background:#fff;
-  padding:25px;
-  border-radius:18px;
-  box-shadow:0 5px 25px #00000012;
-}
-
-.login h1{
-  text-align:center;
-  margin-top:0;
-}
-
-.field{
-  margin-bottom:13px;
-}
-
-label{
-  display:block;
-  font-weight:bold;
-  font-size:14px;
-  margin-bottom:6px;
-}
-
-input,
-textarea,
-select{
-  width:100%;
-  padding:11px;
-  border:1px solid #ddd;
-  border-radius:9px;
-  background:#fff;
-  outline:none;
-}
-
-input:focus,
-textarea:focus,
-select:focus{
-  border-color:#16a34a;
-}
-
-textarea{
-  min-height:90px;
-  resize:vertical;
-}
-
-/* BUTTONS */
-
-.btn{
-  border:0;
-  border-radius:9px;
-  padding:11px 14px;
-  font-weight:bold;
-}
-
-.green{
-  background:#16a34a;
-  color:#fff;
-}
-
-.dark{
-  background:#111;
-  color:#fff;
-}
-
-.red{
-  background:#dc2626;
-  color:#fff;
-}
-
-.gray{
-  background:#e5e7eb;
-  color:#111;
-}
-
-.blue{
-  background:#2563eb;
-  color:#fff;
-}
-
-/* STATS */
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:12px;
-  margin-bottom:18px;
-}
-
-.stat{
-  background:#fff;
-  padding:18px;
-  border-radius:15px;
-  box-shadow:0 4px 18px #0000000b;
-  text-align:right;
-}
-
-.stat-title{
-  color:#444;
-  font-size:14px;
-}
-
-.stat b{
-  display:block;
-  font-size:25px;
-  margin-top:7px;
-  color:#16a34a;
-}
-
-/* TABS */
-
-.tabs{
-  display:flex;
-  gap:8px;
-  overflow:auto;
-  margin-bottom:18px;
-}
-
-.tab{
-  border:0;
-  background:#fff;
-  padding:12px 18px;
-  border-radius:10px;
-  font-weight:bold;
-  white-space:nowrap;
-}
-
-.tab.active{
-  background:#16a34a;
-  color:#fff;
-}
-
-/* PANELS */
-
-.panel{
-  display:none;
-}
-
-.panel.active{
-  display:block;
-}
-
-/* CARDS */
-
-.card{
-  background:#fff;
-  border-radius:16px;
-  padding:18px;
-  box-shadow:0 4px 18px #0000000b;
-  margin-bottom:18px;
-}
-
-.card h2{
-  margin-top:0;
-}
-
-/* GRID */
-
-.grid{
-  display:grid;
-  grid-template-columns:1fr 1.6fr;
-  gap:18px;
-}
-
-/* ITEMS */
-
-.products,
-.orders{
-  display:grid;
-  gap:12px;
-}
-
-.item{
-  background:#fff;
-  border-radius:14px;
-  padding:12px;
-  display:flex;
-  gap:12px;
-  align-items:center;
-  box-shadow:0 3px 12px #0000000a;
-}
-
-.item img{
-  width:75px;
-  height:75px;
-  object-fit:cover;
-  border-radius:10px;
-  background:#eee;
-  flex-shrink:0;
-}
-
-.item-main{
-  flex:1;
-  min-width:0;
-}
-
-.item-main h3{
-  margin:0 0 6px;
-  font-size:16px;
-}
-
-.muted{
-  color:#777;
-  font-size:13px;
-}
-
-.actions{
-  display:flex;
-  gap:7px;
-  flex-wrap:wrap;
-}
-
-/* BADGES */
-
-.badge{
-  display:inline-block;
-  padding:4px 8px;
-  border-radius:20px;
-  font-size:12px;
-  font-weight:bold;
-  background:#dcfce7;
-  color:#166534;
-  margin-top:5px;
-}
-
-.badge.off{
-  background:#fee2e2;
-  color:#991b1b;
-}
-
-.badge.stock-low{
-  background:#ffedd5;
-  color:#9a3412;
-}
-
-.badge.stock-zero{
-  background:#fee2e2;
-  color:#991b1b;
-}
-
-/* ORDERS */
-
-.order{
-  background:#fff;
-  border-radius:14px;
-  padding:15px;
-  box-shadow:0 3px 12px #0000000a;
-}
-
-.order-head{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  flex-wrap:wrap;
-  align-items:center;
-}
-
-.order-head select{
-  width:auto;
-  min-width:150px;
-}
-
-.order-meta{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:8px;
-  margin:10px 0;
-}
-
-.order-meta div{
-  background:#f8fafc;
-  padding:9px;
-  border-radius:9px;
-}
-
-.order-items{
-  background:#f6f7f8;
-  border-radius:10px;
-  padding:10px;
-  margin:10px 0;
-  line-height:1.8;
-}
-
-.status-badge{
-  display:inline-block;
-  padding:5px 10px;
-  border-radius:20px;
-  font-size:12px;
-  font-weight:bold;
-}
-
-/* FILTERS */
-
-.filters{
-  display:grid;
-  grid-template-columns:1.5fr 1fr 1fr;
-  gap:10px;
-  margin-top:14px;
-}
-
-/* EMPTY */
-
-.empty{
-  background:#fff;
-  padding:25px;
-  border-radius:14px;
-  text-align:center;
-  color:#777;
-}
-
-/* TOAST */
-
-.toast{
-  position:fixed;
-  bottom:20px;
-  left:20px;
-  right:20px;
-  max-width:420px;
-  margin:auto;
-  background:#111;
-  color:#fff;
-  padding:13px;
-  border-radius:10px;
-  text-align:center;
-  display:none;
-  z-index:100;
-}
-
-/* DASHBOARD */
-
-.dashboard-box{
-  background:#fff;
-  border-radius:16px;
-  padding:22px;
-  box-shadow:0 4px 18px #0000000b;
-}
-
-.dashboard-list{
-  line-height:2.2;
-  font-size:16px;
-}
-
-.dashboard-list strong{
-  font-size:18px;
-}
-
-/* MOBILE */
-
-@media(max-width:950px){
-
-  .stats{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .grid{
-    grid-template-columns:1fr;
-  }
-}
-
-@media(max-width:600px){
-
-  .container{
-    padding:15px 10px 50px;
-  }
-
-  .stats{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .stat{
-    padding:14px;
-  }
-
-  .stat b{
-    font-size:22px;
-  }
-
-  .item{
-    align-items:flex-start;
-  }
-
-  .item img{
-    width:65px;
-    height:65px;
-  }
-
-  .order-meta{
-    grid-template-columns:1fr;
-  }
-
-  .filters{
-    grid-template-columns:1fr;
-  }
-
-  .order-head select{
-    width:100%;
-  }
-
-  .top{
-    flex-direction:row;
-  }
-
-  .logo{
-    font-size:20px;
-  }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>JR Shop — Admin V7.1</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7f8;
+      color: #111;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    header {
+      background: #111;
+      color: #fff;
+      padding: 15px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .top {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .logo {
+      font-size: 25px;
+      font-weight: 900;
+    }
+
+    .logo span {
+      color: #22c55e;
+    }
+
+    .logout {
+      border: 0;
+      background: #dc2626;
+      color: #fff;
+      padding: 10px 15px;
+      border-radius: 10px;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px 15px 50px;
+    }
+
+    .login {
+      max-width: 420px;
+      margin: 70px auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 18px;
+      box-shadow: 0 5px 25px #00000012;
+    }
+
+    .login h1 {
+      text-align: center;
+      margin-top: 0;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid #ddd;
+      border-radius: 9px;
+      background: #fff;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      font-size: 14px;
+      margin: 0 0 6px;
+    }
+
+    .field {
+      margin-bottom: 12px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 9px;
+      padding: 11px 14px;
+      font-weight: bold;
+    }
+
+    .green {
+      background: #16a34a;
+      color: #fff;
+    }
+
+    .dark {
+      background: #111;
+      color: #fff;
+    }
+
+    .red {
+      background: #dc2626;
+      color: #fff;
+    }
+
+    .gray {
+      background: #e5e7eb;
+      color: #111;
+    }
+
+    .blue {
+      background: #2563eb;
+      color: #fff;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      overflow: auto;
+      margin-bottom: 18px;
+    }
+
+    .tab {
+      border: 0;
+      background: #fff;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .tab.active {
+      background: #16a34a;
+      color: #fff;
+    }
+
+    .panel {
+      display: none;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 18px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 4px 18px #0000000b;
+      margin-bottom: 18px;
+    }
+
+    .card h2 {
+      margin-top: 0;
+    }
+
+    .products,
+    .orders {
+      display: grid;
+      gap: 12px;
+    }
+
+    .item {
+      background: #fff;
+      border-radius: 14px;
+      padding: 12px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      box-shadow: 0 3px 12px #0000000a;
+    }
+
+    .item img {
+      width: 75px;
+      height: 75px;
+      object-fit: cover;
+      border-radius: 10px;
+      background: #eee;
+    }
+
+    .item-main {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .item-main h3 {
+      margin: 0 0 6px;
+      font-size: 16px;
+    }
+
+    .muted {
+      color: #777;
+      font-size: 13px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .badge.off {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    /* =========================
+       DASHBOARD
+    ========================= */
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .stat {
+      background: #fff;
+      padding: 18px;
+      border-radius: 14px;
+      box-shadow: 0 3px 12px #00000008;
+    }
+
+    .stat b {
+      display: block;
+      font-size: 25px;
+      margin-top: 5px;
+      color: #16a34a;
+    }
+
+    /* =========================
+       ORDERS V7.1
+    ========================= */
+
+    .orders-summary {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .order-summary-card {
+      background: #fff;
+      padding: 14px;
+      border-radius: 12px;
+      box-shadow: 0 3px 12px #00000008;
+      text-align: center;
+    }
+
+    .order-summary-card strong {
+      display: block;
+      font-size: 22px;
+      color: #16a34a;
+      margin-top: 5px;
+    }
+
+    .order {
+      background: #fff;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 3px 14px #0000000a;
+    }
+
+    .order-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .order-title {
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .order-date {
+      color: #777;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .order-status {
+      min-width: 145px;
+    }
+
+    .order-status select {
+      font-weight: bold;
+    }
+
+    .status-pending {
+      border-right: 4px solid #f59e0b;
+    }
+
+    .status-confirmed {
+      border-right: 4px solid #2563eb;
+    }
+
+    .status-shipped {
+      border-right: 4px solid #8b5cf6;
+    }
+
+    .status-delivered {
+      border-right: 4px solid #16a34a;
+    }
+
+    .status-cancelled {
+      border-right: 4px solid #dc2626;
+    }
+
+    .order hr {
+      border: 0;
+      border-top: 1px solid #eee;
+      margin: 14px 0;
+    }
+
+    .order-meta {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 9px;
+      margin: 10px 0;
+    }
+
+    .order-meta div {
+      background: #f8fafc;
+      padding: 11px;
+      border-radius: 10px;
+      line-height: 1.7;
+    }
+
+    .order-meta .full {
+      grid-column: 1 / -1;
+    }
+
+    .order-items {
+      background: #f6f7f8;
+      border-radius: 11px;
+      padding: 13px;
+      margin: 12px 0;
+      line-height: 1.9;
+    }
+
+    .order-item-line {
+      border-bottom: 1px solid #e5e7eb;
+      padding: 5px 0;
+    }
+
+    .order-item-line:last-child {
+      border-bottom: 0;
+    }
+
+    .order-total {
+      background: #ecfdf5;
+      color: #166534;
+      border-radius: 11px;
+      padding: 13px;
+      font-size: 19px;
+      font-weight: 900;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .notes-box {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      color: #9a3412;
+      border-radius: 10px;
+      padding: 11px;
+      margin-top: 10px;
+      line-height: 1.7;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .filter-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .empty {
+      background: #fff;
+      padding: 30px;
+      border-radius: 14px;
+      text-align: center;
+      color: #777;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      max-width: 420px;
+      margin: auto;
+      background: #111;
+      color: #fff;
+      padding: 13px;
+      border-radius: 10px;
+      text-align: center;
+      display: none;
+      z-index: 100;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media(max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .orders-summary {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media(max-width: 800px) {
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .order-meta {
+        grid-template-columns: 1fr;
+      }
+
+      .order-meta .full {
+        grid-column: auto;
+      }
+
+      .filters {
+        grid-template-columns: 1fr;
+      }
+
+      .item {
+        align-items: flex-start;
+      }
+    }
+
+    @media(max-width: 550px) {
+      .orders-summary {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .order-head {
+        flex-direction: column;
+      }
+
+      .order-status {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
-
 <header id="header" class="hidden">
   <div class="top">
     <div class="logo">
-      JR <span>Shop</span> — Admin V7
+      JR <span>Shop</span> — Admin V7.1
     </div>
 
     <button id="logoutBtn" class="logout">
@@ -510,11 +524,13 @@ textarea{
 </header>
 
 
-<!-- LOGIN -->
+<!-- =========================
+     LOGIN
+========================= -->
 
 <section id="loginBox" class="login">
 
-  <h1>🔐 JR Shop Admin V7</h1>
+  <h1>🔐 JR Shop Admin</h1>
 
   <p style="text-align:center;color:#777">
     دخول لوحة التحكم
@@ -557,42 +573,29 @@ textarea{
 </section>
 
 
-<!-- APP -->
+<!-- =========================
+     APP
+========================= -->
 
 <main id="app" class="container hidden">
 
-  <!-- STATS -->
+  <!-- DASHBOARD STATS -->
 
   <div class="stats">
 
     <div class="stat">
-      <div class="stat-title">📦 المنتجات</div>
+      المنتجات
       <b id="statProducts">0</b>
-      <small class="muted">إجمالي المنتجات</small>
     </div>
 
     <div class="stat">
-      <div class="stat-title">🗂️ الفئات</div>
+      الفئات
       <b id="statCategories">0</b>
-      <small class="muted">إجمالي الفئات</small>
     </div>
 
     <div class="stat">
-      <div class="stat-title">📋 الطلبات</div>
+      الطلبات
       <b id="statOrders">0</b>
-      <small class="muted">إجمالي الطلبات</small>
-    </div>
-
-    <div class="stat">
-      <div class="stat-title">⏳ Pending</div>
-      <b id="statPending">0</b>
-      <small class="muted">طلبات قيد الانتظار</small>
-    </div>
-
-    <div class="stat">
-      <div class="stat-title">💰 المبيعات</div>
-      <b id="statSales">0 دج</b>
-      <small class="muted">مجموع الطلبات</small>
     </div>
 
   </div>
@@ -604,13 +607,6 @@ textarea{
 
     <button
       class="tab active"
-      data-tab="dashboardTab"
-    >
-      📊 Dashboard
-    </button>
-
-    <button
-      class="tab"
       data-tab="productsTab"
     >
       📦 المنتجات
@@ -633,81 +629,14 @@ textarea{
   </div>
 
 
-  <!-- DASHBOARD -->
+  <!-- =========================
+       PRODUCTS
+       نفس المنطق السابق
+  ========================= -->
 
-  <section
-    id="dashboardTab"
-    class="panel active"
-  >
-
-    <div class="dashboard-box">
-
-      <h2>
-        Dashboard JR Shop 📊
-      </h2>
-
-      <p class="muted">
-        ملخص سريع للمنتجات والمخزون والطلبات.
-      </p>
-
-      <div class="dashboard-list">
-
-        <div>
-          📦 مجموع وحدات المخزون:
-          <strong id="dashStock">0</strong>
-        </div>
-
-        <div>
-          🔴 منتجات بدون مخزون:
-          <strong
-            id="dashOutStock"
-            style="color:#dc2626"
-          >
-            0
-          </strong>
-        </div>
-
-        <div>
-          🟠 منتجات مخزونها منخفض:
-          <strong
-            id="dashLowStock"
-            style="color:#f97316"
-          >
-            0
-          </strong>
-        </div>
-
-        <div>
-          ⏳ الطلبات Pending:
-          <strong id="dashPending">
-            0
-          </strong>
-        </div>
-
-        <div>
-          💰 مجموع الطلبات:
-          <strong id="dashSales">
-            0 دج
-          </strong>
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- PRODUCTS -->
-
-  <section
-    id="productsTab"
-    class="panel"
-  >
+  <section id="productsTab" class="panel active">
 
     <div class="grid">
-
-      <!-- PRODUCT FORM -->
 
       <div class="card">
 
@@ -750,7 +679,6 @@ textarea{
 
         <div class="field">
           <label>المخزون</label>
-
           <input
             id="pStock"
             type="number"
@@ -760,17 +688,13 @@ textarea{
         </div>
 
         <div class="field">
-
-          <label>
-            الفئة
-          </label>
+          <label>الفئة</label>
 
           <select id="pCategory">
             <option value="">
               بدون فئة
             </option>
           </select>
-
         </div>
 
         <div class="field">
@@ -786,7 +710,7 @@ textarea{
           >
 
           <small style="color:#777">
-            الصورة أقل من 5MB.
+            اختار صورة من الكمبيوتر، أو استعمل رابط الصورة بالأسفل.
           </small>
 
         </div>
@@ -794,7 +718,7 @@ textarea{
         <div class="field">
 
           <label>
-            رابط الصورة
+            رابط الصورة (اختياري)
           </label>
 
           <input
@@ -807,42 +731,33 @@ textarea{
         <div class="field">
 
           <label>
-
             <input
               id="pActive"
               type="checkbox"
               checked
               style="width:auto"
             >
-
             المنتج نشط
-
           </label>
 
         </div>
 
-        <div class="actions">
+        <button
+          id="saveProduct"
+          class="btn green"
+        >
+          حفظ المنتج
+        </button>
 
-          <button
-            id="saveProduct"
-            class="btn green"
-          >
-            حفظ المنتج
-          </button>
-
-          <button
-            id="cancelProduct"
-            class="btn gray"
-          >
-            إلغاء
-          </button>
-
-        </div>
+        <button
+          id="cancelProduct"
+          class="btn gray"
+        >
+          إلغاء
+        </button>
 
       </div>
 
-
-      <!-- PRODUCTS LIST -->
 
       <div>
 
@@ -871,7 +786,10 @@ textarea{
   </section>
 
 
-  <!-- CATEGORIES -->
+  <!-- =========================
+       CATEGORIES
+       نفس المنطق السابق
+  ========================= -->
 
   <section
     id="categoriesTab"
@@ -958,23 +876,19 @@ textarea{
 
         </div>
 
-        <div class="actions">
+        <button
+          id="saveCategory"
+          class="btn green"
+        >
+          حفظ الفئة
+        </button>
 
-          <button
-            id="saveCategory"
-            class="btn green"
-          >
-            حفظ الفئة
-          </button>
-
-          <button
-            id="cancelCategory"
-            class="btn gray"
-          >
-            إلغاء
-          </button>
-
-        </div>
+        <button
+          id="cancelCategory"
+          class="btn gray"
+        >
+          إلغاء
+        </button>
 
       </div>
 
@@ -994,12 +908,51 @@ textarea{
   </section>
 
 
-  <!-- ORDERS -->
+  <!-- =========================
+       ORDERS V7.1
+  ========================= -->
 
   <section
     id="ordersTab"
     class="panel"
   >
+
+    <!-- SUMMARY -->
+
+    <div class="orders-summary">
+
+      <div class="order-summary-card">
+        إجمالي الطلبات
+        <strong id="ordersTotalCount">
+          0
+        </strong>
+      </div>
+
+      <div class="order-summary-card">
+        Pending
+        <strong id="ordersPendingCount">
+          0
+        </strong>
+      </div>
+
+      <div class="order-summary-card">
+        Delivered
+        <strong id="ordersDeliveredCount">
+          0
+        </strong>
+      </div>
+
+      <div class="order-summary-card">
+        المبيعات
+        <strong id="ordersTotalMoney">
+          0 دج
+        </strong>
+      </div>
+
+    </div>
+
+
+    <!-- FILTERS -->
 
     <div class="card">
 
@@ -1007,11 +960,15 @@ textarea{
         📋 الطلبات
       </h2>
 
+      <p class="muted">
+        عرض وإدارة الطلبات الموجودة في Supabase
+      </p>
+
       <div class="filters">
 
         <input
           id="orderSearch"
-          placeholder="ابحث بالاسم، الهاتف، الولاية..."
+          placeholder="ابحث بالاسم، الهاتف، الولاية، البلدية..."
         >
 
         <select id="orderStatusFilter">
@@ -1042,28 +999,31 @@ textarea{
 
         </select>
 
+
         <select id="orderSort">
 
-          <option value="new">
+          <option value="newest">
             الأحدث أولاً
           </option>
 
-          <option value="old">
+          <option value="oldest">
             الأقدم أولاً
           </option>
 
-          <option value="price">
+          <option value="highest">
             الأعلى سعراً
+          </option>
+
+          <option value="lowest">
+            الأقل سعراً
           </option>
 
         </select>
 
       </div>
 
-      <div
-        class="actions"
-        style="margin-top:12px"
-      >
+
+      <div class="filter-buttons">
 
         <button
           id="refreshOrders"
@@ -1083,6 +1043,9 @@ textarea{
 
     </div>
 
+
+    <!-- ORDERS LIST -->
+
     <div
       id="ordersList"
       class="orders"
@@ -1101,34 +1064,30 @@ textarea{
 
 <script>
 
-/* =========================================
+/* =====================================================
    SUPABASE
-========================================= */
+===================================================== */
 
 const SUPABASE_URL =
-"https://cstjgsuehmqcolajspqh.supabase.co";
+  "https://cstjgsuehmqcolajspqh.supabase.co";
 
 const SUPABASE_KEY =
-"sb_publishable_e_wQxqCrx21Qq1kRYKjFMg_yR6TQfKX";
+  "sb_publishable_e_wQxqCrx21Qq1kRYKjFMg_yR6TQfKX";
 
 const supabaseClient =
-window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
 
 
-/* =========================================
+/* =====================================================
    ADMIN
-========================================= */
+===================================================== */
 
 const ADMIN_EMAIL =
-"ilyesdida@hotmail.fr";
+  "ilyesdida@hotmail.fr";
 
-
-/* =========================================
-   DATA
-========================================= */
 
 let products = [];
 let categories = [];
@@ -1137,55 +1096,52 @@ let orders = [];
 let appLoaded = false;
 
 
-/* =========================================
-   HELPER
-========================================= */
+/* =====================================================
+   HELPERS
+===================================================== */
 
 const $ = id =>
-document.getElementById(id);
+  document.getElementById(id);
 
 
-function toast(message){
+function toast(msg) {
 
-  $("toast").textContent = message;
+  $("toast").textContent = msg;
 
   $("toast").style.display = "block";
 
   clearTimeout(window.jrToastTimer);
 
   window.jrToastTimer =
-  setTimeout(() => {
+    setTimeout(() => {
 
-    $("toast").style.display = "none";
+      $("toast").style.display = "none";
 
-  },3000);
-}
-
-
-function esc(value){
-
-  return String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;");
+    }, 3000);
 
 }
 
 
-function price(value){
+function esc(v) {
 
-  return Number(value || 0)
+  return String(v ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+
+}
+
+
+function price(v) {
+
+  return Number(v || 0)
     .toLocaleString("fr-FR") + " دج";
 
 }
 
 
-/* =========================================
-   LOGIN
-========================================= */
-
-function showLogin(message=""){
+function showLogin(msg = "") {
 
   $("loginBox").classList.remove("hidden");
 
@@ -1193,12 +1149,12 @@ function showLogin(message=""){
 
   $("header").classList.add("hidden");
 
-  $("loginError").textContent = message;
+  $("loginError").textContent = msg;
 
 }
 
 
-function showApp(){
+function showApp() {
 
   $("loginBox").classList.add("hidden");
 
@@ -1206,7 +1162,7 @@ function showApp(){
 
   $("header").classList.remove("hidden");
 
-  if(!appLoaded){
+  if (!appLoaded) {
 
     appLoaded = true;
 
@@ -1217,21 +1173,20 @@ function showApp(){
 }
 
 
-/* =========================================
-   SESSION
-========================================= */
+/* =====================================================
+   AUTH
+===================================================== */
 
-async function checkSession(){
+async function checkSession() {
 
-  try{
+  try {
 
     const {
       data,
       error
-    } =
-    await supabaseClient.auth.getSession();
+    } = await supabaseClient.auth.getSession();
 
-    if(error){
+    if (error) {
 
       showLogin(
         "تعذر الاتصال بـ Supabase: " +
@@ -1243,7 +1198,7 @@ async function checkSession(){
 
     const session = data?.session;
 
-    if(!session){
+    if (!session) {
 
       showLogin();
 
@@ -1251,19 +1206,19 @@ async function checkSession(){
     }
 
     const email =
-    (session.user?.email || "")
-    .trim()
-    .toLowerCase();
+      (session.user?.email || "")
+        .trim()
+        .toLowerCase();
 
-    if(
+    if (
       email !==
       ADMIN_EMAIL.toLowerCase()
-    ){
+    ) {
 
       await supabaseClient.auth.signOut();
 
       showLogin(
-        "هذا الحساب غير مصرح له بالدخول."
+        "هذا الحساب غير مصرح له بالدخول إلى لوحة الإدارة."
       );
 
       return;
@@ -1271,9 +1226,9 @@ async function checkSession(){
 
     showApp();
 
-  }catch(error){
+  } catch (e) {
 
-    console.error(error);
+    console.error(e);
 
     showLogin(
       "حدث خطأ أثناء التحقق من الدخول."
@@ -1284,16 +1239,12 @@ async function checkSession(){
 }
 
 
-/* =========================================
-   AUTH CHANGE
-========================================= */
-
 supabaseClient.auth.onAuthStateChange(
-  (event,session)=>{
+  (event, session) => {
 
-    setTimeout(async()=>{
+    setTimeout(async () => {
 
-      if(event === "SIGNED_OUT"){
+      if (event === "SIGNED_OUT") {
 
         appLoaded = false;
 
@@ -1302,36 +1253,36 @@ supabaseClient.auth.onAuthStateChange(
         return;
       }
 
-      if(
+      if (
         event === "SIGNED_IN" ||
         event === "INITIAL_SESSION"
-      ){
+      ) {
 
-        if(session){
+        if (session) {
 
           const email =
-          (session.user?.email || "")
-          .trim()
-          .toLowerCase();
+            (session.user?.email || "")
+              .trim()
+              .toLowerCase();
 
-          if(
+          if (
             email ===
             ADMIN_EMAIL.toLowerCase()
-          ){
+          ) {
 
             showApp();
 
-          }else{
+          } else {
 
             await supabaseClient.auth.signOut();
 
             showLogin(
-              "هذا الحساب غير مصرح له بالدخول."
+              "هذا الحساب غير مصرح له بالدخول إلى لوحة الإدارة."
             );
 
           }
 
-        }else{
+        } else {
 
           showLogin();
 
@@ -1339,172 +1290,172 @@ supabaseClient.auth.onAuthStateChange(
 
       }
 
-    },0);
+    }, 0);
 
   }
 );
 
 
-/* =========================================
-   LOGIN BUTTON
-========================================= */
+/* =====================================================
+   LOGIN
+===================================================== */
 
 $("loginBtn").onclick =
-async()=>{
+  async () => {
 
-  $("loginError").textContent = "";
+    $("loginError").textContent = "";
 
-  const email =
-  $("email").value.trim().toLowerCase();
+    const email =
+      $("email").value
+        .trim()
+        .toLowerCase();
 
-  const password =
-  $("password").value;
+    const password =
+      $("password").value;
 
-  if(!email || !password){
-
-    $("loginError").textContent =
-    "دخل Email وكلمة المرور.";
-
-    return;
-  }
-
-  $("loginBtn").disabled = true;
-
-  $("loginBtn").textContent =
-  "جاري الدخول...";
-
-  try{
-
-    const {
-      data,
-      error
-    } =
-    await supabaseClient.auth
-      .signInWithPassword({
-        email,
-        password
-      });
-
-    if(error){
-
-      let msg =
-      error.message ||
-      "فشل تسجيل الدخول";
-
-      if(
-        /invalid login credentials/i
-        .test(msg)
-      ){
-
-        msg =
-        "Email أو كلمة المرور غير صحيحة.";
-
-      }
-
-      if(
-        /email not confirmed/i
-        .test(msg)
-      ){
-
-        msg =
-        "لازم تأكد Email الحساب من Supabase.";
-
-      }
-
-      $("loginError").textContent = msg;
-
-      return;
-    }
-
-    const loggedEmail =
-    (data?.user?.email || email)
-    .trim()
-    .toLowerCase();
-
-    if(
-      loggedEmail !==
-      ADMIN_EMAIL.toLowerCase()
-    ){
-
-      await supabaseClient.auth.signOut();
+    if (!email || !password) {
 
       $("loginError").textContent =
-      "هذا الحساب غير مصرح له بالدخول.";
+        "دخل Email وكلمة المرور.";
 
       return;
     }
 
-    showApp();
-
-  }catch(error){
-
-    console.error(error);
-
-    $("loginError").textContent =
-    "تعذر تسجيل الدخول: " +
-    (error.message || error);
-
-  }finally{
-
-    $("loginBtn").disabled = false;
+    $("loginBtn").disabled = true;
 
     $("loginBtn").textContent =
-    "دخول";
+      "جاري الدخول...";
 
-  }
+    try {
 
-};
+      const {
+        data,
+        error
+      } =
+        await supabaseClient.auth.signInWithPassword({
+          email,
+          password
+        });
 
+      if (error) {
 
-/* =========================================
-   LOGOUT
-========================================= */
+        let msg =
+          error.message ||
+          "فشل تسجيل الدخول";
 
-$("logoutBtn").onclick =
-async()=>{
+        if (
+          /invalid login credentials/i.test(msg)
+        ) {
 
-  await supabaseClient.auth.signOut();
+          msg =
+            "Email أو كلمة المرور غير صحيحة.";
 
-};
+        }
 
+        if (
+          /email not confirmed/i.test(msg)
+        ) {
 
-/* =========================================
-   TABS
-========================================= */
+          msg =
+            "لازم تأكد Email الحساب من Supabase أولًا.";
 
-document
-.querySelectorAll(".tab")
-.forEach(button=>{
+        }
 
-  button.onclick = ()=>{
+        $("loginError").textContent =
+          msg;
 
-    document
-    .querySelectorAll(".tab")
-    .forEach(x =>
-      x.classList.remove("active")
-    );
+        return;
+      }
 
-    document
-    .querySelectorAll(".panel")
-    .forEach(x =>
-      x.classList.remove("active")
-    );
+      const loggedEmail =
+        (data?.user?.email || email)
+          .trim()
+          .toLowerCase();
 
-    button.classList.add("active");
+      if (
+        loggedEmail !==
+        ADMIN_EMAIL.toLowerCase()
+      ) {
 
-    $(button.dataset.tab)
-      .classList.add("active");
+        await supabaseClient.auth.signOut();
+
+        $("loginError").textContent =
+          "هذا الحساب غير مصرح له بالدخول إلى لوحة الإدارة.";
+
+        return;
+      }
+
+      showApp();
+
+    } catch (e) {
+
+      console.error(e);
+
+      $("loginError").textContent =
+        "تعذر تسجيل الدخول: " +
+        (e.message || e);
+
+    } finally {
+
+      $("loginBtn").disabled = false;
+
+      $("loginBtn").textContent =
+        "دخول";
+
+    }
 
   };
 
-});
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+$("logoutBtn").onclick =
+  async () => {
+
+    await supabaseClient.auth.signOut();
+
+  };
 
 
-/* =========================================
+/* =====================================================
+   TABS
+===================================================== */
+
+document
+  .querySelectorAll(".tab")
+  .forEach(button => {
+
+    button.onclick = () => {
+
+      document
+        .querySelectorAll(".tab")
+        .forEach(x =>
+          x.classList.remove("active")
+        );
+
+      document
+        .querySelectorAll(".panel")
+        .forEach(x =>
+          x.classList.remove("active")
+        );
+
+      button.classList.add("active");
+
+      $(button.dataset.tab)
+        .classList.add("active");
+
+    };
+
+  });
+
+
+/* =====================================================
    LOAD ALL
-========================================= */
+===================================================== */
 
-async function loadAll(){
+async function loadAll() {
 
   await Promise.all([
     loadCategories(),
@@ -1512,34 +1463,33 @@ async function loadAll(){
     loadOrders()
   ]);
 
-  updateDashboard();
-
 }
 
 
-/* =========================================
+/* =====================================================
    CATEGORIES
-========================================= */
+   نفس المنطق السابق
+===================================================== */
 
-async function loadCategories(){
+async function loadCategories() {
 
   const {
     data,
     error
   } =
-  await supabaseClient
-    .from("categories")
-    .select("*")
-    .order("sort_order",{ascending:true});
+    await supabaseClient
+      .from("categories")
+      .select("*")
+      .order(
+        "sort_order",
+        {
+          ascending: true
+        }
+      );
 
-  if(error){
+  if (error) {
 
-    console.error(error);
-
-    toast(
-      "خطأ الفئات: " +
-      error.message
-    );
+    toast(error.message);
 
     return;
   }
@@ -1547,122 +1497,117 @@ async function loadCategories(){
   categories = data || [];
 
   $("statCategories").textContent =
-  categories.length;
+    categories.length;
 
 
   $("pCategory").innerHTML =
-  '<option value="">بدون فئة</option>' +
+    '<option value="">بدون فئة</option>' +
 
-  categories.map(category => `
-
-    <option value="${category.id}">
-      ${esc(category.name)}
-    </option>
-
-  `).join("");
+    categories
+      .map(c =>
+        `<option value="${c.id}">
+          ${esc(c.name)}
+        </option>`
+      )
+      .join("");
 
 
   $("categoriesList").innerHTML =
+    categories
+      .map(c => `
 
-  categories.map(category => `
+        <div
+          class="item"
+          style="margin-bottom:10px"
+        >
 
-    <div
-      class="item"
-      style="margin-bottom:10px"
-    >
+          <img
+            src="${esc(
+              c.image_url ||
+              "https://placehold.co/100x100?text=JR"
+            )}"
+            onerror="
+              this.src='https://placehold.co/100x100?text=JR'
+            "
+          >
 
-      <img
-        src="${
-          esc(
-            category.image_url ||
-            "https://placehold.co/100x100?text=JR"
-          )
-        }"
-        onerror="
-          this.src='https://placehold.co/100x100?text=JR'
-        "
-      >
+          <div class="item-main">
 
-      <div class="item-main">
+            <h3>
+              ${esc(c.name)}
+            </h3>
 
-        <h3>
-          ${esc(category.name)}
-        </h3>
+            <div class="muted">
+              ${esc(c.slug)}
+              · ترتيب ${c.sort_order ?? 0}
+            </div>
 
-        <div class="muted">
-          ${esc(category.slug || "")}
-          · ترتيب
-          ${category.sort_order ?? 0}
+            <span
+              class="badge ${
+                c.active ? "" : "off"
+              }"
+            >
+              ${
+                c.active
+                  ? "نشطة"
+                  : "موقوفة"
+              }
+            </span>
+
+          </div>
+
+          <div class="actions">
+
+            <button
+              class="btn dark"
+              onclick="editCategory('${c.id}')"
+            >
+              تعديل
+            </button>
+
+            <button
+              class="btn red"
+              onclick="deleteCategory('${c.id}')"
+            >
+              حذف
+            </button>
+
+          </div>
+
         </div>
 
-        <span
-          class="badge ${
-            category.active === false
-            ? "off"
-            : ""
-          }"
-        >
-          ${
-            category.active === false
-            ? "موقوفة"
-            : "نشطة"
-          }
-        </span>
+      `)
+      .join("") ||
 
-      </div>
-
-      <div class="actions">
-
-        <button
-          class="btn dark"
-          onclick="editCategory('${category.id}')"
-        >
-          تعديل
-        </button>
-
-        <button
-          class="btn red"
-          onclick="deleteCategory('${category.id}')"
-        >
-          حذف
-        </button>
-
-      </div>
-
-    </div>
-
-  `).join("")
-
-  ||
-
-  '<p class="empty">لا توجد فئات.</p>';
+    '<p class="empty">لا توجد فئات.</p>';
 
 }
 
 
-/* =========================================
+/* =====================================================
    PRODUCTS
-========================================= */
+   نفس المنطق السابق
+===================================================== */
 
-async function loadProducts(){
+async function loadProducts() {
 
   const {
     data,
     error
   } =
-  await supabaseClient
-    .from("products")
-    .select("*")
-    .order("created_at",{ascending:false});
+    await supabaseClient
+      .from("products")
+      .select("*")
+      .order(
+        "created_at",
+        {
+          ascending: false
+        }
+      );
 
-  if(error){
+  if (error) {
 
-    console.error(error);
-
-    toast(
-      "خطأ المنتجات: " +
-      error.message
-    );
+    toast(error.message);
 
     return;
   }
@@ -1670,162 +1615,116 @@ async function loadProducts(){
   products = data || [];
 
   $("statProducts").textContent =
-  products.length;
+    products.length;
 
   renderProducts();
-
-  updateDashboard();
 
 }
 
 
-/* =========================================
-   RENDER PRODUCTS
-========================================= */
+function renderProducts() {
 
-function renderProducts(){
-
-  const query =
-  $("productSearch")
-    .value
-    .trim()
-    .toLowerCase();
-
-  const list =
-  products.filter(product => {
-
-    const name =
-    String(product.name || "")
+  const q =
+    $("productSearch")
+      .value
+      .trim()
       .toLowerCase();
 
-    return name.includes(query);
-
-  });
+  const list =
+    products.filter(p =>
+      (p.name || "")
+        .toLowerCase()
+        .includes(q)
+    );
 
 
   $("productsList").innerHTML =
+    list
+      .map(p => `
 
-  list.map(product => {
+        <div class="item">
 
-    const stock =
-    Number(product.stock || 0);
-
-    let stockClass = "";
-    let stockText = "متوفر";
-
-    if(stock <= 0){
-
-      stockClass = "stock-zero";
-      stockText = "نفذ المخزون";
-
-    }else if(stock <= 5){
-
-      stockClass = "stock-low";
-      stockText = "مخزون منخفض";
-
-    }
-
-
-    const inactive =
-      product.active === false ||
-      product.is_active === false;
-
-
-    return `
-
-      <div class="item">
-
-        <img
-          src="${
-            esc(
-              product.image_url ||
-              product.image ||
+          <img
+            src="${esc(
+              p.image_url ||
+              p.image ||
               "https://placehold.co/100x100?text=JR"
-            )
-          }"
-          onerror="
-            this.src='https://placehold.co/100x100?text=JR'
-          "
-        >
+            )}"
+            onerror="
+              this.src='https://placehold.co/100x100?text=JR'
+            "
+          >
 
-        <div class="item-main">
+          <div class="item-main">
 
-          <h3>
-            ${esc(product.name)}
-          </h3>
+            <h3>
+              ${esc(p.name)}
+            </h3>
 
-          <div class="muted">
+            <div class="muted">
 
-            ${price(product.price)}
+              ${price(p.price)}
 
-            · المخزون:
+              · المخزون:
+              ${p.stock ?? 0}
 
-            <strong>
-              ${stock}
-            </strong>
+            </div>
+
+            <span
+              class="badge ${
+                p.active === false ||
+                p.is_active === false
+                  ? "off"
+                  : ""
+              }"
+            >
+              ${
+                p.active === false ||
+                p.is_active === false
+                  ? "غير نشط"
+                  : "نشط"
+              }
+            </span>
 
           </div>
 
-          <span
-            class="badge ${stockClass}"
-          >
-            ${stockText}
-          </span>
+          <div class="actions">
 
-          <span
-            class="badge ${
-              inactive ? "off" : ""
-            }"
-          >
-            ${
-              inactive
-              ? "غير نشط"
-              : "نشط"
-            }
-          </span>
+            <button
+              class="btn dark"
+              onclick="editProduct('${p.id}')"
+            >
+              تعديل
+            </button>
 
-        </div>
+            <button
+              class="btn red"
+              onclick="deleteProduct('${p.id}')"
+            >
+              حذف
+            </button>
 
-        <div class="actions">
-
-          <button
-            class="btn dark"
-            onclick="editProduct('${product.id}')"
-          >
-            تعديل
-          </button>
-
-          <button
-            class="btn red"
-            onclick="deleteProduct('${product.id}')"
-          >
-            حذف
-          </button>
+          </div>
 
         </div>
 
-      </div>
+      `)
+      .join("") ||
 
-    `;
-
-  }).join("")
-
-  ||
-
-  '<p class="empty">لا توجد منتجات.</p>';
+    '<p class="empty">لا توجد منتجات.</p>';
 
 }
 
 
 $("productSearch").oninput =
-renderProducts;
+  renderProducts;
 
 
-/* =========================================
-   RESET PRODUCT
-========================================= */
+/* =====================================================
+   PRODUCT FORM
+===================================================== */
 
-function resetProduct(){
+function resetProduct() {
 
   $("productId").value = "";
 
@@ -1848,168 +1747,117 @@ function resetProduct(){
   $("pActive").checked = true;
 
   $("productFormTitle").textContent =
-  "➕ إضافة منتج";
+    "➕ إضافة منتج";
 
 }
 
 
 $("cancelProduct").onclick =
-resetProduct;
+  resetProduct;
 
 
-/* =========================================
-   EDIT PRODUCT
-========================================= */
-
-window.editProduct =
-id => {
-
-  const product =
-  products.find(
-    x => String(x.id) === String(id)
-  );
-
-  if(!product) return;
-
-  $("productId").value =
-  product.id;
-
-  $("pName").value =
-  product.name || "";
-
-  $("pDescription").value =
-  product.description || "";
-
-  $("pPrice").value =
-  product.price ?? "";
-
-  $("pOldPrice").value =
-  product.old_price ?? "";
-
-  $("pStock").value =
-  product.stock ?? 0;
-
-  $("pCategory").value =
-  product.category_id || "";
-
-  $("pImage").value =
-  product.image_url ||
-  product.image ||
-  "";
-
-  $("pImageFile").value = "";
-
-  $("pActive").checked =
-  !(
-    product.active === false ||
-    product.is_active === false
-  );
-
-  $("productFormTitle").textContent =
-  "✏️ تعديل المنتج";
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-
-};
-
-
-/* =========================================
+/* =====================================================
    SAVE PRODUCT
-========================================= */
+===================================================== */
 
 $("saveProduct").onclick =
-async()=>{
+  async () => {
 
-  const id =
-  $("productId").value;
+    const id =
+      $("productId").value;
 
-  const file =
-  $("pImageFile").files[0];
+    const file =
+      $("pImageFile").files[0];
 
-  const name =
-  $("pName").value.trim();
+    if (
+      !$("pName").value.trim()
+    ) {
 
-  if(!name){
+      toast(
+        "اكتب اسم المنتج"
+      );
 
-    toast("اكتب اسم المنتج.");
+      return;
+    }
 
-    return;
-  }
-
-  let imageUrl =
-  $("pImage").value.trim() ||
-  null;
-
-
-  $("saveProduct").disabled = true;
-
-  $("saveProduct").textContent =
-  "جاري الحفظ...";
+    let imageUrl =
+      $("pImage").value.trim() ||
+      null;
 
 
-  try{
+    if (file) {
 
-    /* UPLOAD IMAGE */
-
-    if(file){
-
-      if(file.size > 5 * 1024 * 1024){
+      if (
+        file.size >
+        5 * 1024 * 1024
+      ) {
 
         toast(
-          "الصورة لازم تكون أقل من 5MB."
+          "الصورة لازم تكون أقل من 5MB"
         );
 
         return;
       }
 
-      if(!file.type.startsWith("image/")){
+      if (
+        !file.type.startsWith("image/")
+      ) {
 
         toast(
-          "اختار ملف صورة فقط."
+          "اختار ملف صورة فقط"
         );
 
         return;
       }
 
-      const extension =
-      (
-        file.name
-        .split(".")
-        .pop() ||
-        "jpg"
-      )
-      .toLowerCase()
-      .replace(/[^a-z0-9]/gi,"")
-      || "jpg";
+      const ext =
+        (
+          file.name
+            .split(".")
+            .pop() ||
+          "jpg"
+        )
+          .toLowerCase()
+          .replace(
+            /[^a-z0-9]/gi,
+            ""
+          ) ||
+        "jpg";
 
 
       const fileName =
-      `${crypto.randomUUID()}.${extension}`;
+        `${crypto.randomUUID()}.${ext}`;
 
+
+      $("saveProduct").disabled =
+        true;
 
       $("saveProduct").textContent =
-      "جاري رفع الصورة...";
+        "جاري رفع الصورة...";
 
 
       const upload =
-      await supabaseClient
-        .storage
-        .from("product-images")
-        .upload(
-          fileName,
-          file,
-          {
-            cacheControl:"3600",
-            upsert:false,
-            contentType:file.type
-          }
-        );
+        await supabaseClient
+          .storage
+          .from("product-images")
+          .upload(
+            fileName,
+            file,
+            {
+              cacheControl: "3600",
+              upsert: false,
+              contentType: file.type
+            }
+          );
 
 
-      if(upload.error){
+      if (upload.error) {
+
+        $("saveProduct").disabled =
+          false;
+
+        $("saveProduct").textContent =
+          "حفظ المنتج";
 
         toast(
           "فشل رفع الصورة: " +
@@ -2021,87 +1869,85 @@ async()=>{
 
 
       imageUrl =
-      supabaseClient
-        .storage
-        .from("product-images")
-        .getPublicUrl(fileName)
-        .data
-        .publicUrl;
+        supabaseClient
+          .storage
+          .from("product-images")
+          .getPublicUrl(fileName)
+          .data
+          .publicUrl;
 
     }
 
 
-    /* PRODUCT DATA */
+    const obj = {
 
-    const productData = {
-
-      name:name,
+      name:
+        $("pName")
+          .value
+          .trim(),
 
       description:
-      $("pDescription")
-        .value
-        .trim(),
+        $("pDescription")
+          .value
+          .trim(),
 
       price:
-      Number(
-        $("pPrice").value || 0
-      ),
+        Number(
+          $("pPrice").value || 0
+        ),
 
       old_price:
-      Number(
-        $("pOldPrice").value || 0
-      ),
+        Number(
+          $("pOldPrice").value || 0
+        ),
 
       stock:
-      Number(
-        $("pStock").value || 0
-      ),
+        Number(
+          $("pStock").value || 0
+        ),
 
       category_id:
-      $("pCategory").value ||
-      null,
+        $("pCategory").value ||
+        null,
 
       image_url:
-      imageUrl,
+        imageUrl,
 
       active:
-      $("pActive").checked,
+        $("pActive").checked,
 
       is_active:
-      $("pActive").checked,
+        $("pActive").checked,
 
       updated_at:
-      new Date().toISOString()
+        new Date().toISOString()
 
     };
 
 
-    let result;
+    const res = id
+
+      ? await supabaseClient
+          .from("products")
+          .update(obj)
+          .eq("id", id)
+
+      : await supabaseClient
+          .from("products")
+          .insert(obj);
 
 
-    if(id){
+    $("saveProduct").disabled =
+      false;
 
-      result =
-      await supabaseClient
-        .from("products")
-        .update(productData)
-        .eq("id",id);
-
-    }else{
-
-      result =
-      await supabaseClient
-        .from("products")
-        .insert(productData);
-
-    }
+    $("saveProduct").textContent =
+      "حفظ المنتج";
 
 
-    if(result.error){
+    if (res.error) {
 
       toast(
-        "خطأ: " +
-        result.error.message
+        res.error.message
       );
 
       return;
@@ -2110,95 +1956,23 @@ async()=>{
 
     toast(
       id
-      ? "تم تعديل المنتج ✅"
-      : "تمت إضافة المنتج ✅"
+        ? "تم تعديل المنتج مع الصورة ✅"
+        : "تمت إضافة المنتج مع الصورة ✅"
     );
 
 
     resetProduct();
 
-    await loadProducts();
+    loadProducts();
 
-  }catch(error){
-
-    console.error(error);
-
-    toast(
-      "حدث خطأ: " +
-      (error.message || error)
-    );
-
-  }finally{
-
-    $("saveProduct").disabled = false;
-
-    $("saveProduct").textContent =
-    "حفظ المنتج";
-
-  }
-
-};
+  };
 
 
-/* =========================================
-   DELETE PRODUCT
-========================================= */
+/* =====================================================
+   CATEGORY FORM
+===================================================== */
 
-window.deleteProduct =
-async id => {
-
-  const product =
-  products.find(
-    x => String(x.id) === String(id)
-  );
-
-  if(!product) return;
-
-
-  if(
-    !confirm(
-      `حذف المنتج "${product.name}"؟`
-    )
-  ){
-
-    return;
-  }
-
-
-  const {
-    error
-  } =
-  await supabaseClient
-    .from("products")
-    .delete()
-    .eq("id",id);
-
-
-  if(error){
-
-    toast(
-      "فشل الحذف: " +
-      error.message
-    );
-
-    return;
-  }
-
-
-  toast(
-    "تم حذف المنتج ✅"
-  );
-
-  loadProducts();
-
-};
-
-
-/* =========================================
-   CATEGORY RESET
-========================================= */
-
-function resetCategory(){
+function resetCategory() {
 
   $("categoryId").value = "";
 
@@ -2213,229 +1987,341 @@ function resetCategory(){
   $("cActive").checked = true;
 
   $("categoryFormTitle").textContent =
-  "➕ إضافة فئة";
+    "➕ إضافة فئة";
 
 }
 
 
 $("cancelCategory").onclick =
-resetCategory;
+  resetCategory;
 
 
-/* =========================================
+/* =====================================================
    SAVE CATEGORY
-========================================= */
+===================================================== */
 
 $("saveCategory").onclick =
-async()=>{
+  async () => {
 
-  const id =
-  $("categoryId").value;
-
-  const name =
-  $("cName").value.trim();
-
-  const slug =
-  $("cSlug").value.trim();
+    const id =
+      $("categoryId").value;
 
 
-  if(!name || !slug){
+    const obj = {
+
+      name:
+        $("cName")
+          .value
+          .trim(),
+
+      slug:
+        $("cSlug")
+          .value
+          .trim(),
+
+      image_url:
+        $("cImage")
+          .value
+          .trim() ||
+        null,
+
+      sort_order:
+        Number(
+          $("cOrder").value || 0
+        ),
+
+      active:
+        $("cActive").checked
+
+    };
+
+
+    if (
+      !obj.name ||
+      !obj.slug
+    ) {
+
+      toast(
+        "أدخل اسم وSlug الفئة"
+      );
+
+      return;
+    }
+
+
+    const res = id
+
+      ? await supabaseClient
+          .from("categories")
+          .update(obj)
+          .eq("id", id)
+
+      : await supabaseClient
+          .from("categories")
+          .insert(obj);
+
+
+    if (res.error) {
+
+      toast(
+        res.error.message
+      );
+
+      return;
+    }
+
 
     toast(
-      "أدخل اسم وSlug الفئة."
+      id
+        ? "تم تعديل الفئة ✅"
+        : "تمت إضافة الفئة ✅"
     );
 
-    return;
-  }
 
+    resetCategory();
 
-  const categoryData = {
-
-    name:name,
-
-    slug:slug,
-
-    image_url:
-    $("cImage").value.trim() ||
-    null,
-
-    sort_order:
-    Number(
-      $("cOrder").value || 0
-    ),
-
-    active:
-    $("cActive").checked
+    loadCategories();
 
   };
 
 
-  let result;
-
-
-  if(id){
-
-    result =
-    await supabaseClient
-      .from("categories")
-      .update(categoryData)
-      .eq("id",id);
-
-  }else{
-
-    result =
-    await supabaseClient
-      .from("categories")
-      .insert(categoryData);
-
-  }
-
-
-  if(result.error){
-
-    toast(
-      "خطأ: " +
-      result.error.message
-    );
-
-    return;
-  }
-
-
-  toast(
-    id
-    ? "تم تعديل الفئة ✅"
-    : "تمت إضافة الفئة ✅"
-  );
-
-
-  resetCategory();
-
-  await loadCategories();
-
-};
-
-
-/* =========================================
+/* =====================================================
    EDIT CATEGORY
-========================================= */
+===================================================== */
 
 window.editCategory =
-id => {
+  id => {
 
-  const category =
-  categories.find(
-    x => String(x.id) === String(id)
-  );
+    const c =
+      categories.find(
+        x => x.id === id
+      );
 
-  if(!category) return;
-
-
-  $("categoryId").value =
-  category.id;
-
-  $("cName").value =
-  category.name || "";
-
-  $("cSlug").value =
-  category.slug || "";
-
-  $("cImage").value =
-  category.image_url || "";
-
-  $("cOrder").value =
-  category.sort_order ?? 0;
-
-  $("cActive").checked =
-  category.active !== false;
+    if (!c) return;
 
 
-  $("categoryFormTitle").textContent =
-  "✏️ تعديل الفئة";
+    $("categoryId").value =
+      c.id;
+
+    $("cName").value =
+      c.name || "";
+
+    $("cSlug").value =
+      c.slug || "";
+
+    $("cImage").value =
+      c.image_url || "";
+
+    $("cOrder").value =
+      c.sort_order || 0;
+
+    $("cActive").checked =
+      c.active !== false;
 
 
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-
-};
+    $("categoryFormTitle").textContent =
+      "✏️ تعديل الفئة";
 
 
-/* =========================================
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+
+  };
+
+
+/* =====================================================
    DELETE CATEGORY
-========================================= */
+===================================================== */
 
 window.deleteCategory =
-async id => {
+  async id => {
 
-  if(
-    !confirm(
-      "حذف الفئة؟ المنتجات المرتبطة بها ستصبح بدون فئة."
-    )
-  ){
+    if (
+      !confirm(
+        "حذف الفئة؟ المنتجات المرتبطة بها ستصبح بدون فئة."
+      )
+    ) {
 
-    return;
-  }
-
-
-  const {
-    error
-  } =
-  await supabaseClient
-    .from("categories")
-    .delete()
-    .eq("id",id);
+      return;
+    }
 
 
-  if(error){
+    const {
+      error
+    } =
+      await supabaseClient
+        .from("categories")
+        .delete()
+        .eq("id", id);
+
+
+    if (error) {
+
+      toast(
+        error.message
+      );
+
+    } else {
+
+      toast(
+        "تم الحذف"
+      );
+
+      loadCategories();
+
+      loadProducts();
+
+    }
+
+  };
+
+
+/* =====================================================
+   PRODUCT EDIT / DELETE
+   Compatible avec existing buttons
+===================================================== */
+
+window.editProduct =
+  id => {
+
+    const p =
+      products.find(
+        x => x.id === id
+      );
+
+    if (!p) return;
+
+
+    $("productId").value =
+      p.id;
+
+    $("pName").value =
+      p.name || "";
+
+    $("pDescription").value =
+      p.description || "";
+
+    $("pPrice").value =
+      p.price ?? "";
+
+    $("pOldPrice").value =
+      p.old_price ?? "";
+
+    $("pStock").value =
+      p.stock ?? 0;
+
+    $("pCategory").value =
+      p.category_id || "";
+
+    $("pImage").value =
+      p.image_url ||
+      p.image ||
+      "";
+
+    $("pImageFile").value =
+      "";
+
+    $("pActive").checked =
+      p.active !== false &&
+      p.is_active !== false;
+
+
+    $("productFormTitle").textContent =
+      "✏️ تعديل المنتج";
+
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+
+  };
+
+
+window.deleteProduct =
+  async id => {
+
+    if (
+      !confirm(
+        "هل تريد حذف هذا المنتج؟"
+      )
+    ) {
+
+      return;
+    }
+
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from("products")
+        .delete()
+        .eq("id", id);
+
+
+    if (error) {
+
+      toast(
+        error.message
+      );
+
+      return;
+    }
+
 
     toast(
-      "فشل حذف الفئة: " +
-      error.message
+      "تم حذف المنتج ✅"
     );
 
-    return;
-  }
+
+    loadProducts();
+
+  };
 
 
-  toast(
-    "تم حذف الفئة ✅"
-  );
-
-
-  await loadCategories();
-
-  await loadProducts();
-
-};
-
-
-/* =========================================
+/* =====================================================
    ORDERS
-========================================= */
+   V7.1
+   Compatible with current table:
+   
+   id
+   customer_id
+   status
+   total
+   notes
+   created_at
+   address
+   customer_name
+   phone
+   wilaya
+   items
+   commune
+===================================================== */
 
-async function loadOrders(){
+async function loadOrders() {
 
   const {
     data,
     error
   } =
-  await supabaseClient
-    .from("orders")
-    .select("*")
-    .order(
-      "created_at",
-      {ascending:false}
-    );
+    await supabaseClient
+      .from("orders")
+      .select("*")
+      .order(
+        "created_at",
+        {
+          ascending: false
+        }
+      );
 
 
-  if(error){
-
-    console.error(error);
+  if (error) {
 
     toast(
-      "خطأ الطلبات: " +
+      "خطأ في تحميل الطلبات: " +
       error.message
     );
 
@@ -2443,629 +2329,952 @@ async function loadOrders(){
   }
 
 
-  orders = data || [];
+  orders =
+    data || [];
 
 
   $("statOrders").textContent =
-  orders.length;
+    orders.length;
 
 
-  const pending =
-  orders.filter(
-    order =>
-      String(
-        order.status || "pending"
-      ).toLowerCase()
-      === "pending"
-  ).length;
-
-
-  $("statPending").textContent =
-  pending;
-
-
-  const sales =
-  orders.reduce(
-    (sum,order)=>
-      sum + Number(order.total || 0),
-    0
-  );
-
-
-  $("statSales").textContent =
-  price(sales);
-
+  updateOrderSummary();
 
   renderOrders();
 
-  updateDashboard();
+}
+
+
+/* =====================================================
+   ORDER SUMMARY
+===================================================== */
+
+function updateOrderSummary() {
+
+  const total =
+    orders.length;
+
+
+  const pending =
+    orders.filter(
+      o =>
+        String(
+          o.status || "pending"
+        ).toLowerCase() ===
+        "pending"
+    ).length;
+
+
+  const delivered =
+    orders.filter(
+      o =>
+        String(
+          o.status || ""
+        ).toLowerCase() ===
+        "delivered"
+    ).length;
+
+
+  const money =
+    orders.reduce(
+      (sum, o) =>
+        sum +
+        Number(
+          o.total || 0
+        ),
+      0
+    );
+
+
+  $("ordersTotalCount")
+    .textContent = total;
+
+  $("ordersPendingCount")
+    .textContent = pending;
+
+  $("ordersDeliveredCount")
+    .textContent = delivered;
+
+  $("ordersTotalMoney")
+    .textContent = price(money);
 
 }
 
 
-/* =========================================
-   STATUS STYLE
-========================================= */
+/* =====================================================
+   ORDER STATUS
+===================================================== */
 
-function statusClass(status){
+function orderStatusClass(status) {
 
-  status =
-  String(status || "pending")
-  .toLowerCase();
-
-
-  if(status === "delivered")
-    return "background:#dcfce7;color:#166534";
-
-  if(status === "cancelled")
-    return "background:#fee2e2;color:#991b1b";
-
-  if(status === "confirmed")
-    return "background:#dbeafe;color:#1d4ed8";
-
-  if(status === "shipped")
-    return "background:#fef3c7;color:#92400e";
-
-  return "background:#f3f4f6;color:#374151";
-
-}
-
-
-/* =========================================
-   RENDER ORDERS
-========================================= */
-
-function renderOrders(){
-
-  const query =
-  $("orderSearch")
-    .value
-    .trim()
-    .toLowerCase();
-
-
-  const status =
-  $("orderStatusFilter").value;
-
-
-  const sort =
-  $("orderSort").value;
-
-
-  let filtered =
-  orders.filter(order => {
-
-    const haystack = [
-
-      order.id,
-
-      order.customer_id,
-
-      order.customer_name,
-
-      order.phone,
-
-      order.wilaya,
-
-      order.commune,
-
-      order.address,
-
-      order.notes,
-
-      order.status
-
-    ]
-    .map(
-      value =>
-      String(value ?? "")
-      .toLowerCase()
-    )
-    .join(" ");
-
-
-    if(
-      query &&
-      !haystack.includes(query)
-    ){
-
-      return false;
-    }
-
-
-    if(
-      status &&
-      String(
-        order.status || "pending"
-      ).toLowerCase() !==
-      status
-    ){
-
-      return false;
-    }
-
-
-    return true;
-
-  });
-
-
-  /* SORT */
-
-  if(sort === "old"){
-
-    filtered.sort(
-      (a,b)=>
-        new Date(a.created_at || 0) -
-        new Date(b.created_at || 0)
-    );
-
-  }else if(sort === "price"){
-
-    filtered.sort(
-      (a,b)=>
-        Number(b.total || 0) -
-        Number(a.total || 0)
-    );
-
-  }else{
-
-    filtered.sort(
-      (a,b)=>
-        new Date(b.created_at || 0) -
-        new Date(a.created_at || 0)
-    );
-
-  }
-
-
-  if(!filtered.length){
-
-    $("ordersList").innerHTML =
-    '<div class="empty">لا توجد طلبات مطابقة.</div>';
-
-    return;
-  }
-
-
-  $("ordersList").innerHTML =
-
-  filtered.map(order => {
-
-    const orderNumber =
-    String(order.id || "")
-      .slice(0,8);
-
-
-    const currentStatus =
+  const s =
     String(
-      order.status || "pending"
+      status || "pending"
     ).toLowerCase();
 
 
-    return `
+  if (
+    [
+      "pending",
+      "confirmed",
+      "shipped",
+      "delivered",
+      "cancelled"
+    ].includes(s)
+  ) {
 
-      <article class="order">
-
-        <div class="order-head">
-
-          <div>
-
-            <b>
-              📋 #${esc(orderNumber)}
-            </b>
-
-            <br>
-
-            <span class="muted">
-
-              ${
-                order.created_at
-                ? new Date(
-                    order.created_at
-                  ).toLocaleString("ar-DZ")
-                : "—"
-              }
-
-            </span>
-
-          </div>
-
-
-          <div>
-
-            <select
-              onchange="
-                changeStatus(
-                  '${order.id}',
-                  this.value
-                )
-              "
-            >
-
-              ${
-                [
-                  "pending",
-                  "confirmed",
-                  "shipped",
-                  "delivered",
-                  "cancelled"
-                ]
-                .map(status => `
-
-                  <option
-                    value="${status}"
-                    ${
-                      currentStatus === status
-                      ? "selected"
-                      : ""
-                    }
-                  >
-                    ${status}
-                  </option>
-
-                `)
-                .join("")
-              }
-
-            </select>
-
-          </div>
-
-        </div>
-
-
-        <div style="margin-top:10px">
-
-          <span
-            class="status-badge"
-            style="${statusClass(currentStatus)}"
-          >
-            ${esc(currentStatus)}
-          </span>
-
-        </div>
-
-
-        <hr>
-
-
-        <div class="order-meta">
-
-          <div>
-            👤
-            <b>الزبون</b>
-            <br>
-            ${esc(
-              order.customer_name ||
-              "—"
-            )}
-          </div>
-
-
-          <div>
-            📞
-            <b>الهاتف</b>
-            <br>
-            ${esc(
-              order.phone ||
-              "—"
-            )}
-          </div>
-
-
-          <div>
-            📍
-            <b>الولاية</b>
-            <br>
-            ${esc(
-              order.wilaya ||
-              "—"
-            )}
-          </div>
-
-
-          <div>
-            🏙️
-            <b>البلدية</b>
-            <br>
-            ${esc(
-              order.commune ||
-              "—"
-            )}
-          </div>
-
-
-          <div>
-            🏠
-            <b>العنوان</b>
-            <br>
-            ${esc(
-              order.address ||
-              "—"
-            )}
-          </div>
-
-
-          <div>
-            📝
-            <b>ملاحظات</b>
-            <br>
-            ${esc(
-              order.notes ||
-              "—"
-            )}
-          </div>
-
-        </div>
-
-
-        <div class="order-items">
-
-          <b>
-            🛒 المنتجات:
-          </b>
-
-          <br>
-
-          ${renderOrderItems(order.items)}
-
-        </div>
-
-
-        <div>
-
-          💰
-
-          <strong style="font-size:18px">
-
-            ${price(order.total)}
-
-          </strong>
-
-        </div>
-
-      </article>
-
-    `;
-
-  }).join("");
-
-}
-
-
-/* =========================================
-   ORDER ITEMS
-========================================= */
-
-function renderOrderItems(items){
-
-  if(!items){
-
-    return "لا توجد تفاصيل المنتجات.";
+    return "status-" + s;
 
   }
 
 
-  if(Array.isArray(items)){
+  return "status-pending";
 
-    return items.map(item => {
+}
+
+
+/* =====================================================
+   ORDER STATUS LABEL
+===================================================== */
+
+function statusLabel(status) {
+
+  const s =
+    String(
+      status || "pending"
+    ).toLowerCase();
+
+
+  const labels = {
+
+    pending:
+      "⏳ Pending",
+
+    confirmed:
+      "✅ Confirmed",
+
+    shipped:
+      "🚚 Shipped",
+
+    delivered:
+      "📦 Delivered",
+
+    cancelled:
+      "❌ Cancelled"
+
+  };
+
+
+  return labels[s] ||
+    status ||
+    "Pending";
+
+}
+
+
+/* =====================================================
+   ORDER ID
+===================================================== */
+
+function orderShortId(id) {
+
+  const value =
+    String(id || "");
+
+
+  if (!value) {
+
+    return "—";
+
+  }
+
+
+  return value.slice(0, 8);
+
+}
+
+
+/* =====================================================
+   ORDER ITEMS
+   Handles:
+   - JSON array
+   - JSON string
+   - object
+   - null
+===================================================== */
+
+function normalizeOrderItems(items) {
+
+  if (!items) {
+
+    return [];
+
+  }
+
+
+  if (Array.isArray(items)) {
+
+    return items;
+
+  }
+
+
+  if (typeof items === "string") {
+
+    try {
+
+      const parsed =
+        JSON.parse(items);
+
+      if (Array.isArray(parsed)) {
+
+        return parsed;
+
+      }
+
+      if (
+        parsed &&
+        typeof parsed === "object"
+      ) {
+
+        return Object.values(
+          parsed
+        );
+
+      }
+
+    } catch (e) {
+
+      return [];
+
+    }
+
+  }
+
+
+  if (
+    typeof items === "object"
+  ) {
+
+    if (
+      Array.isArray(
+        items.items
+      )
+    ) {
+
+      return items.items;
+
+    }
+
+    return Object.values(
+      items
+    );
+
+  }
+
+
+  return [];
+
+}
+
+
+/* =====================================================
+   RENDER ORDER ITEMS
+===================================================== */
+
+function renderOrderItems(items) {
+
+  const list =
+    normalizeOrderItems(items);
+
+
+  if (!list.length) {
+
+    return `
+      <div class="muted">
+        لا توجد تفاصيل منتجات داخل هذا الطلب.
+      </div>
+    `;
+
+  }
+
+
+  return list
+    .map((item, index) => {
+
+      const name =
+        item?.name ||
+        item?.product_name ||
+        item?.title ||
+        "منتج";
+
 
       const quantity =
-      Number(
-        item.quantity ||
-        item.qty ||
-        1
-      );
+        Number(
+          item?.quantity ??
+          item?.qty ??
+          1
+        );
 
 
       const itemPrice =
-      Number(
-        item.price ||
-        0
-      );
+        Number(
+          item?.price ??
+          item?.unit_price ??
+          0
+        );
+
+
+      const lineTotal =
+        itemPrice *
+        quantity;
 
 
       return `
 
-        •
-        ${esc(
-          item.name ||
-          item.product_name ||
-          "منتج"
-        )}
+        <div class="order-item-line">
 
-        ×
+          <b>
+            ${index + 1}.
+            ${esc(name)}
+          </b>
 
-        ${quantity}
+          <br>
 
-        =
+          الكمية:
+          <b>
+            ${quantity}
+          </b>
 
-        ${price(
-          itemPrice * quantity
-        )}
+          ${
+            itemPrice
+              ? `
+                · السعر:
+                ${price(itemPrice)}
+              `
+              : ""
+          }
+
+          ${
+            lineTotal
+              ? `
+                · المجموع:
+                <b>
+                  ${price(lineTotal)}
+                </b>
+              `
+              : ""
+          }
+
+        </div>
 
       `;
 
-    }).join("<br>");
-
-  }
-
-
-  if(typeof items === "object"){
-
-    return esc(
-      JSON.stringify(items)
-    );
-
-  }
-
-
-  return esc(items);
+    })
+    .join("");
 
 }
 
 
-/* =========================================
-   CHANGE ORDER STATUS
-========================================= */
+/* =====================================================
+   RENDER ORDERS
+===================================================== */
 
-window.changeStatus =
-async(id,status)=>{
+function renderOrders() {
 
-  const {
-    error
-  } =
-  await supabaseClient
-    .from("orders")
-    .update({
-      status:status
-    })
-    .eq("id",id);
+  const q =
+    $("orderSearch")
+      .value
+      .trim()
+      .toLowerCase();
 
 
-  if(error){
-
-    toast(
-      "فشل تحديث الحالة: " +
-      error.message
-    );
-
-    return;
-  }
+  const status =
+    $("orderStatusFilter")
+      .value;
 
 
-  toast(
-    "تم تحديث حالة الطلب ✅"
+  const sort =
+    $("orderSort")
+      .value;
+
+
+  let filtered =
+    orders.filter(o => {
+
+      const haystack = [
+
+        o.id,
+
+        o.customer_id,
+
+        o.customer_name,
+
+        o.phone,
+
+        o.wilaya,
+
+        o.commune,
+
+        o.address,
+
+        o.notes,
+
+        o.status
+
+      ]
+        .map(
+          x =>
+            String(
+              x ?? ""
+            ).toLowerCase()
+        )
+        .join(" ");
+
+
+      if (
+        q &&
+        !haystack.includes(q)
+      ) {
+
+        return false;
+
+      }
+
+
+      if (
+        status &&
+        String(
+          o.status ||
+          "pending"
+        ).toLowerCase() !==
+        status
+      ) {
+
+        return false;
+
+      }
+
+
+      return true;
+
+    });
+
+
+  /* SORT */
+
+  filtered.sort(
+    (a, b) => {
+
+      if (
+        sort === "oldest"
+      ) {
+
+        return (
+          new Date(
+            a.created_at || 0
+          ) -
+          new Date(
+            b.created_at || 0
+          )
+        );
+
+      }
+
+
+      if (
+        sort === "highest"
+      ) {
+
+        return (
+          Number(
+            b.total || 0
+          ) -
+          Number(
+            a.total || 0
+          )
+        );
+
+      }
+
+
+      if (
+        sort === "lowest"
+      ) {
+
+        return (
+          Number(
+            a.total || 0
+          ) -
+          Number(
+            b.total || 0
+          )
+        );
+
+      }
+
+
+      return (
+        new Date(
+          b.created_at || 0
+        ) -
+        new Date(
+          a.created_at || 0
+        )
+      );
+
+    }
   );
 
 
-  await loadOrders();
+  if (!filtered.length) {
 
-};
+    $("ordersList").innerHTML = `
+
+      <div class="empty">
+
+        📋
+
+        <br><br>
+
+        لا توجد طلبات مطابقة.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
 
 
-/* =========================================
-   ORDER CONTROLS
-========================================= */
+  $("ordersList").innerHTML =
+    filtered
+      .map(o => {
+
+        const statusValue =
+          String(
+            o.status ||
+            "pending"
+          ).toLowerCase();
+
+
+        const dateText =
+          o.created_at
+            ? new Date(
+                o.created_at
+              ).toLocaleString(
+                "ar-DZ"
+              )
+            : "—";
+
+
+        return `
+
+          <article
+            class="order ${orderStatusClass(
+              statusValue
+            )}"
+          >
+
+            <!-- HEADER -->
+
+            <div class="order-head">
+
+              <div>
+
+                <div class="order-title">
+
+                  📋 الطلب
+                  #${esc(
+                    orderShortId(
+                      o.id
+                    )
+                  )}
+
+                </div>
+
+                <div class="order-date">
+
+                  🕐 ${esc(
+                    dateText
+                  )}
+
+                </div>
+
+              </div>
+
+
+              <div class="order-status">
+
+                <label>
+                  حالة الطلب
+                </label>
+
+                <select
+                  onchange="
+                    changeStatus(
+                      '${esc(o.id)}',
+                      this.value
+                    )
+                  "
+                >
+
+                  <option
+                    value="pending"
+                    ${
+                      statusValue ===
+                      "pending"
+                        ? "selected"
+                        : ""
+                    }
+                  >
+                    ⏳ Pending
+                  </option>
+
+                  <option
+                    value="confirmed"
+                    ${
+                      statusValue ===
+                      "confirmed"
+                        ? "selected"
+                        : ""
+                    }
+                  >
+                    ✅ Confirmed
+                  </option>
+
+                  <option
+                    value="shipped"
+                    ${
+                      statusValue ===
+                      "shipped"
+                        ? "selected"
+                        : ""
+                    }
+                  >
+                    🚚 Shipped
+                  </option>
+
+                  <option
+                    value="delivered"
+                    ${
+                      statusValue ===
+                      "delivered"
+                        ? "selected"
+                        : ""
+                    }
+                  >
+                    📦 Delivered
+                  </option>
+
+                  <option
+                    value="cancelled"
+                    ${
+                      statusValue ===
+                      "cancelled"
+                        ? "selected"
+                        : ""
+                    }
+                  >
+                    ❌ Cancelled
+                  </option>
+
+                </select>
+
+              </div>
+
+            </div>
+
+
+            <hr>
+
+
+            <!-- CUSTOMER DATA -->
+
+            <div class="order-meta">
+
+              <div>
+
+                👤
+
+                <b>
+                  الزبون
+                </b>
+
+                <br>
+
+                ${esc(
+                  o.customer_name ||
+                  "غير معروف"
+                )}
+
+              </div>
+
+
+              <div>
+
+                📞
+
+                <b>
+                  الهاتف
+                </b>
+
+                <br>
+
+                ${
+                  o.phone
+                    ? `
+                      <a
+                        href="tel:${esc(
+                          o.phone
+                        )}"
+                        style="
+                          color:#2563eb;
+                          font-weight:bold;
+                          text-decoration:none;
+                        "
+                      >
+                        ${esc(
+                          o.phone
+                        )}
+                      </a>
+                    `
+                    : "—"
+                }
+
+              </div>
+
+
+              <div>
+
+                📍
+
+                <b>
+                  الولاية
+                </b>
+
+                <br>
+
+                ${esc(
+                  o.wilaya ||
+                  "—"
+                )}
+
+              </div>
+
+
+              <div>
+
+                🏙️
+
+                <b>
+                  البلدية
+                </b>
+
+                <br>
+
+                ${esc(
+                  o.commune ||
+                  "—"
+                )}
+
+              </div>
+
+
+              <div class="full">
+
+                🏠
+
+                <b>
+                  العنوان
+                </b>
+
+                <br>
+
+                ${esc(
+                  o.address ||
+                  "—"
+                )}
+
+              </div>
+
+            </div>
+
+
+            <!-- NOTES -->
+
+            ${
+              o.notes
+                ? `
+                  <div class="notes-box">
+
+                    📝
+
+                    <b>
+                      ملاحظات:
+                    </b>
+
+                    <br>
+
+                    ${esc(
+                      o.notes
+                    )}
+
+                  </div>
+                `
+                : ""
+            }
+
+
+            <!-- PRODUCTS -->
+
+            <div class="order-items">
+
+              <b>
+                🛒 المنتجات
+              </b>
+
+              <br><br>
+
+              ${renderOrderItems(
+                o.items
+              )}
+
+            </div>
+
+
+            <!-- TOTAL -->
+
+            <div class="order-total">
+
+              💰
+
+              المجموع:
+
+              ${price(
+                o.total
+              )}
+
+            </div>
+
+
+            <!-- CUSTOMER ID -->
+
+            ${
+              o.customer_id
+                ? `
+                  <div
+                    class="muted"
+                    style="
+                      margin-top:10px;
+                      direction:ltr;
+                      text-align:left;
+                    "
+                  >
+                    Customer ID:
+                    ${esc(
+                      o.customer_id
+                    )}
+                  </div>
+                `
+                : ""
+            }
+
+          </article>
+
+        `;
+
+      })
+      .join("");
+
+}
+
+
+/* =====================================================
+   CHANGE ORDER STATUS
+===================================================== */
+
+window.changeStatus =
+  async (
+    id,
+    status
+  ) => {
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from("orders")
+        .update({
+          status
+        })
+        .eq(
+          "id",
+          id
+        );
+
+
+    if (error) {
+
+      toast(
+        "فشل تحديث الحالة: " +
+        error.message
+      );
+
+      return;
+    }
+
+
+    toast(
+      "تم تحديث حالة الطلب ✅"
+    );
+
+
+    await loadOrders();
+
+  };
+
+
+/* =====================================================
+   ORDER EVENTS
+===================================================== */
 
 $("refreshOrders").onclick =
-loadOrders;
+  loadOrders;
 
 
 $("orderSearch").oninput =
-renderOrders;
+  renderOrders;
 
 
 $("orderStatusFilter").onchange =
-renderOrders;
+  renderOrders;
 
 
 $("orderSort").onchange =
-renderOrders;
+  renderOrders;
 
 
 $("clearOrderFilters").onclick =
-()=>{
+  () => {
 
-  $("orderSearch").value = "";
+    $("orderSearch").value =
+      "";
 
-  $("orderStatusFilter").value = "";
+    $("orderStatusFilter").value =
+      "";
 
-  $("orderSort").value = "new";
+    $("orderSort").value =
+      "newest";
 
-  renderOrders();
+    renderOrders();
 
-};
-
-
-/* =========================================
-   DASHBOARD
-========================================= */
-
-function updateDashboard(){
-
-  const totalStock =
-  products.reduce(
-    (sum,product)=>
-      sum +
-      Number(product.stock || 0),
-    0
-  );
+  };
 
 
-  const outStock =
-  products.filter(
-    product =>
-      Number(product.stock || 0) <= 0
-  ).length;
-
-
-  const lowStock =
-  products.filter(
-    product => {
-
-      const stock =
-      Number(product.stock || 0);
-
-      return stock > 0 && stock <= 5;
-
-    }
-  ).length;
-
-
-  const pending =
-  orders.filter(
-    order =>
-      String(
-        order.status || "pending"
-      ).toLowerCase()
-      === "pending"
-  ).length;
-
-
-  const sales =
-  orders.reduce(
-    (sum,order)=>
-      sum +
-      Number(order.total || 0),
-    0
-  );
-
-
-  $("dashStock").textContent =
-  totalStock;
-
-
-  $("dashOutStock").textContent =
-  outStock;
-
-
-  $("dashLowStock").textContent =
-  lowStock;
-
-
-  $("dashPending").textContent =
-  pending;
-
-
-  $("dashSales").textContent =
-  price(sales);
-
-
-  $("statPending").textContent =
-  pending;
-
-
-  $("statSales").textContent =
-  price(sales);
-
-}
-
-
-/* =========================================
+/* =====================================================
    START
-========================================= */
+===================================================== */
 
 checkSession();
 
