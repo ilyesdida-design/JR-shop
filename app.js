@@ -1,4 +1,3 @@
-```js
 let allProducts = [];
 let selectedCategory = null;
 
@@ -40,6 +39,7 @@ function getCart() {
 
 
 function saveCart(cart) {
+
   localStorage.setItem(
     "jr_cart",
     JSON.stringify(cart)
@@ -50,6 +50,7 @@ function saveCart(cart) {
 
 
 function updateCartCount() {
+
   const cartCount =
     document.querySelector("#cartCount");
 
@@ -72,27 +73,42 @@ function updateCartCount() {
 ========================= */
 
 function addToCart(product) {
+
   if (!product) return;
 
-  const stock = Number(product.stock || 0);
+  const stock =
+    Number(product.stock || 0);
 
   if (stock <= 0) {
-    toast("Produit en rupture de stock");
+
+    toast(
+      "Produit en rupture de stock"
+    );
+
     return;
   }
 
+
   const cart = getCart();
 
-  const existingProduct = cart.find(
-    (item) =>
-      String(item.id) ===
-      String(product.id)
-  );
+
+  const existingProduct =
+    cart.find(
+      (item) =>
+        String(item.id) ===
+        String(product.id)
+    );
+
 
   if (existingProduct) {
 
-    if (existingProduct.qty >= stock) {
+    if (
+      Number(existingProduct.qty) >=
+      stock
+    ) {
+
       toast("Stock insuffisant");
+
       return;
     }
 
@@ -101,19 +117,33 @@ function addToCart(product) {
   } else {
 
     cart.push({
+
       id: product.id,
+
       name: product.name,
-      price: Number(product.price || 0),
-      image_url: product.image_url || product.image || "",
+
+      price:
+        Number(product.price || 0),
+
+      image_url:
+        product.image_url ||
+        product.image ||
+        "",
+
       qty: 1,
+
       stock: stock
+
     });
 
   }
 
+
   saveCart(cart);
 
-  toast("Produit ajouté au panier");
+  toast(
+    "Produit ajouté au panier"
+  );
 }
 
 
@@ -122,15 +152,28 @@ function addToCart(product) {
 ========================= */
 
 function escapeHtml(value) {
+
   return String(value ?? "").replace(
     /[&<>"']/g,
-    (character) => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#039;"
-    })[character]
+    (character) => {
+
+      const map = {
+
+        "&": "&amp;",
+
+        "<": "&lt;",
+
+        ">": "&gt;",
+
+        '"': "&quot;",
+
+        "'": "&#039;"
+
+      };
+
+      return map[character];
+
+    }
   );
 }
 
@@ -140,12 +183,14 @@ function escapeHtml(value) {
 ========================= */
 
 function money(value) {
-  const number = Number(value || 0);
+
+  const number =
+    Number(value || 0);
 
   return (
-    new Intl.NumberFormat("fr-DZ").format(
-      number
-    ) + " DA"
+    new Intl.NumberFormat("fr-DZ")
+      .format(number)
+    + " DA"
   );
 }
 
@@ -161,12 +206,14 @@ function productCard(product) {
     product.image ||
     "https://placehold.co/600x700?text=JR+Shop";
 
+
   const stock =
     Number(product.stock || 0);
 
+
   const stockText =
     stock > 0
-      ? `Stock: ${stock}`
+      ? "Stock: " + stock
       : "Rupture de stock";
 
 
@@ -215,11 +262,13 @@ function productCard(product) {
           data-id="${escapeHtml(product.id)}"
           ${stock <= 0 ? "disabled" : ""}
         >
+
           ${
             stock > 0
               ? "Ajouter au panier"
               : "Rupture de stock"
           }
+
         </button>
 
       </div>
@@ -241,17 +290,13 @@ async function loadCategories() {
   if (!categoriesBox) return;
 
 
-  categoriesBox.innerHTML = `
-    <p>Chargement des catégories...</p>
-  `;
+  categoriesBox.innerHTML =
+    "<p>Chargement des catégories...</p>";
 
 
   try {
 
-    const {
-      data,
-      error
-    } =
+    const result =
       await supabaseClient
         .from("categories")
         .select("*")
@@ -261,6 +306,10 @@ async function loadCategories() {
         });
 
 
+    const data = result.data;
+    const error = result.error;
+
+
     if (error) {
 
       console.error(
@@ -268,17 +317,16 @@ async function loadCategories() {
         error
       );
 
-      categoriesBox.innerHTML = `
-        <p>
-          Impossible de charger les catégories.
-        </p>
-      `;
+
+      categoriesBox.innerHTML =
+        "<p>Impossible de charger les catégories.</p>";
 
       return;
     }
 
 
-    const categories = data || [];
+    const categories =
+      data || [];
 
 
     categoriesBox.innerHTML = `
@@ -295,39 +343,40 @@ async function loadCategories() {
 
       </button>
 
+      ${
+        categories
+          .map((category) => {
 
-      ${categories
-        .map((category) => {
-
-          const image =
-            category.image_url ||
-            "https://placehold.co/120x100?text=Cat";
+            const image =
+              category.image_url ||
+              "https://placehold.co/120x100?text=Cat";
 
 
-          return `
+            return `
 
-            <button
-              class="cat"
-              data-cat="${escapeHtml(category.id)}"
-              type="button"
-            >
-
-              <img
-                src="${escapeHtml(image)}"
-                alt="${escapeHtml(category.name)}"
-                loading="lazy"
+              <button
+                class="cat"
+                data-cat="${escapeHtml(category.id)}"
+                type="button"
               >
 
-              <span>
-                ${escapeHtml(category.name)}
-              </span>
+                <img
+                  src="${escapeHtml(image)}"
+                  alt="${escapeHtml(category.name)}"
+                  loading="lazy"
+                >
 
-            </button>
+                <span>
+                  ${escapeHtml(category.name)}
+                </span>
 
-          `;
+              </button>
 
-        })
-        .join("")}
+            `;
+
+          })
+          .join("")
+      }
 
     `;
 
@@ -338,10 +387,11 @@ async function loadCategories() {
 
         button.addEventListener(
           "click",
-          () => {
+          function () {
 
             selectedCategory =
-              button.dataset.cat || null;
+              button.dataset.cat ||
+              null;
 
 
             document
@@ -376,14 +426,9 @@ async function loadCategories() {
     );
 
 
-    categoriesBox.innerHTML = `
-      <p>
-        Erreur lors du chargement des catégories.
-      </p>
-    `;
-
+    categoriesBox.innerHTML =
+      "<p>Erreur lors du chargement des catégories.</p>";
   }
-
 }
 
 
@@ -399,19 +444,13 @@ async function loadProducts() {
   if (!productsBox) return;
 
 
-  productsBox.innerHTML = `
-    <p>
-      Chargement des produits...
-    </p>
-  `;
+  productsBox.innerHTML =
+    "<p>Chargement des produits...</p>";
 
 
   try {
 
-    const {
-      data,
-      error
-    } =
+    const result =
       await supabaseClient
         .from("products")
         .select("*")
@@ -419,6 +458,10 @@ async function loadProducts() {
         .order("created_at", {
           ascending: false
         });
+
+
+    const data = result.data;
+    const error = result.error;
 
 
     if (error) {
@@ -429,17 +472,15 @@ async function loadProducts() {
       );
 
 
-      productsBox.innerHTML = `
-        <p>
-          Impossible de charger les produits.
-        </p>
-      `;
+      productsBox.innerHTML =
+        "<p>Impossible de charger les produits.</p>";
 
       return;
     }
 
 
-    allProducts = data || [];
+    allProducts =
+      data || [];
 
 
     renderProducts();
@@ -453,14 +494,9 @@ async function loadProducts() {
     );
 
 
-    productsBox.innerHTML = `
-      <p>
-        Erreur lors du chargement des produits.
-      </p>
-    `;
-
+    productsBox.innerHTML =
+      "<p>Erreur lors du chargement des produits.</p>";
   }
-
 }
 
 
@@ -476,14 +512,11 @@ function renderProducts() {
   if (!productsBox) return;
 
 
-  let products = [
-    ...allProducts
-  ];
+  let products =
+    [...allProducts];
 
 
-  /* =========================
-     CATEGORY FILTER
-  ========================= */
+  /* CATEGORY */
 
   if (selectedCategory) {
 
@@ -493,13 +526,10 @@ function renderProducts() {
           String(product.category_id) ===
           String(selectedCategory)
       );
-
   }
 
 
-  /* =========================
-     SORT
-  ========================= */
+  /* SORT */
 
   const sort =
     document.querySelector("#sort")?.value;
@@ -512,7 +542,6 @@ function renderProducts() {
         Number(a.price || 0) -
         Number(b.price || 0)
     );
-
   }
 
 
@@ -523,13 +552,10 @@ function renderProducts() {
         Number(b.price || 0) -
         Number(a.price || 0)
     );
-
   }
 
 
-  /* =========================
-     EMPTY
-  ========================= */
+  /* EMPTY */
 
   if (!products.length) {
 
@@ -554,9 +580,7 @@ function renderProducts() {
   }
 
 
-  /* =========================
-     DISPLAY PRODUCTS
-  ========================= */
+  /* DISPLAY */
 
   productsBox.innerHTML =
     products
@@ -564,9 +588,7 @@ function renderProducts() {
       .join("");
 
 
-  /* =========================
-     ADD BUTTONS
-  ========================= */
+  /* ADD BUTTONS */
 
   document
     .querySelectorAll(".add")
@@ -574,9 +596,10 @@ function renderProducts() {
 
       button.addEventListener(
         "click",
-        (event) => {
+        function (event) {
 
           event.preventDefault();
+
           event.stopPropagation();
 
 
@@ -594,7 +617,6 @@ function renderProducts() {
       );
 
     });
-
 }
 
 
@@ -602,27 +624,40 @@ function renderProducts() {
    SORT
 ========================= */
 
-const sortSelect =
-  document.querySelector("#sort");
+document.addEventListener(
+  "DOMContentLoaded",
+  function () {
+
+    const sortSelect =
+      document.querySelector("#sort");
 
 
-if (sortSelect) {
+    if (sortSelect) {
 
-  sortSelect.addEventListener(
-    "change",
-    renderProducts
-  );
+      sortSelect.addEventListener(
+        "change",
+        renderProducts
+      );
 
-}
+    }
+
+  }
+);
 
 
 /* =========================
    INITIALIZE
 ========================= */
 
-updateCartCount();
+document.addEventListener(
+  "DOMContentLoaded",
+  function () {
 
-loadCategories();
+    updateCartCount();
 
-loadProducts();
-```
+    loadCategories();
+
+    loadProducts();
+
+  }
+);
