@@ -1,46 +1,54 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<link rel="icon" href="data:,">
 
-<title>Admin Dashboard - JR Shop</title>
+<title>لوحة الإدارة - JR Shop</title>
+
+<link rel="icon" href="data:,">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 
 <style>
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 :root{
-  --bg:#f4f5f7;
+  --bg:#f5f6f8;
   --card:#fff;
   --text:#171717;
   --muted:#777;
   --border:#e7e7e7;
   --dark:#111;
-  --green:#16864a;
-  --green-bg:#edf9f2;
-  --red:#c62828;
-  --red-bg:#fff0f0;
-  --orange:#d97706;
-  --orange-bg:#fff7e8;
+  --green:#159957;
+  --red:#d92d20;
+  --orange:#e58a00;
   --blue:#2563eb;
-  --blue-bg:#eff6ff;
-  --shadow:0 12px 35px rgba(0,0,0,.06);
+  --shadow:0 8px 30px rgba(0,0,0,.06);
+  --radius:18px;
 }
 
-html{scroll-behavior:smooth}
+html{
+  scroll-behavior:smooth;
+}
 
 body{
   margin:0;
   background:var(--bg);
   color:var(--text);
-  font-family:Arial,Helvetica,sans-serif;
+  font-family:
+    Arial,
+    Tahoma,
+    sans-serif;
 }
 
-button,input,textarea,select{
+button,
+input,
+textarea,
+select{
   font:inherit;
 }
 
@@ -48,310 +56,246 @@ button{
   cursor:pointer;
 }
 
-a{
-  color:inherit;
+.hidden{
+  display:none!important;
 }
 
 /* =========================
    LOGIN
 ========================= */
 
-#loginScreen{
+.login-screen{
   min-height:100vh;
-  display:none;
+  display:flex;
   align-items:center;
   justify-content:center;
   padding:20px;
-  background:#111;
 }
 
 .login-card{
   width:100%;
   max-width:430px;
   background:#fff;
+  border:1px solid var(--border);
   border-radius:24px;
   padding:35px;
-  box-shadow:0 30px 80px rgba(0,0,0,.3);
+  box-shadow:var(--shadow);
+  text-align:center;
 }
 
-.login-logo{
-  font-size:27px;
+.logo{
+  width:70px;
+  height:70px;
+  border-radius:20px;
+  background:#111;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 20px;
+  font-size:24px;
   font-weight:900;
-  letter-spacing:2px;
-  margin-bottom:7px;
 }
 
-.login-sub{
-  color:#777;
-  font-size:14px;
-  margin-bottom:25px;
+.login-card h1{
+  margin:0 0 8px;
 }
 
-.login-field{
-  margin-bottom:15px;
-}
-
-.login-field label{
-  display:block;
-  font-size:12px;
-  font-weight:800;
-  margin-bottom:7px;
-}
-
-.login-field input{
-  width:100%;
-  height:48px;
-  border:1px solid #ddd;
-  border-radius:11px;
-  padding:0 13px;
-  outline:none;
-}
-
-.login-field input:focus{
-  border-color:#111;
+.login-card p{
+  color:var(--muted);
+  margin:0 0 25px;
 }
 
 .login-btn{
   width:100%;
-  height:50px;
   border:0;
-  border-radius:12px;
   background:#111;
   color:#fff;
-  font-weight:900;
-}
-
-.login-error{
-  margin-top:12px;
-  color:#c62828;
-  font-size:13px;
-  font-weight:700;
+  padding:14px;
+  border-radius:12px;
+  font-weight:800;
 }
 
 /* =========================
    APP
 ========================= */
 
-#app{
-  display:none;
+.app{
   min-height:100vh;
 }
 
-.sidebar{
-  position:fixed;
-  left:0;
+.header{
+  position:sticky;
   top:0;
-  bottom:0;
-  width:250px;
+  z-index:100;
+  height:72px;
+  background:#fff;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 24px;
+}
+
+.header-right,
+.header-left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.header-logo{
+  font-size:21px;
+  font-weight:900;
+}
+
+.header-sub{
+  color:#999;
+  font-size:12px;
+}
+
+.user-email{
+  font-size:12px;
+  color:#777;
+  max-width:220px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.logout-btn{
+  border:1px solid #ddd;
+  background:#fff;
+  border-radius:10px;
+  padding:9px 13px;
+  font-weight:800;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.layout{
+  display:grid;
+  grid-template-columns:240px minmax(0,1fr);
+  direction:ltr;
+}
+
+.sidebar{
+  direction:rtl;
+  position:sticky;
+  top:72px;
+  height:calc(100vh - 72px);
   background:#111;
   color:#fff;
-  z-index:1000;
-  padding:22px 14px;
+  padding:18px 12px;
   overflow-y:auto;
-}
-
-.logo{
-  padding:5px 12px 24px;
-  font-size:24px;
-  font-weight:900;
-  letter-spacing:2px;
-}
-
-.logo small{
-  display:block;
-  color:#999;
-  font-size:10px;
-  letter-spacing:3px;
-  margin-top:5px;
 }
 
 .nav-title{
   color:#777;
-  font-size:10px;
-  font-weight:900;
-  letter-spacing:1.5px;
-  padding:16px 12px 8px;
+  font-size:11px;
+  font-weight:800;
+  padding:10px 13px;
 }
 
 .nav-btn{
   width:100%;
   border:0;
   background:transparent;
-  color:#bbb;
-  text-align:left;
-  padding:12px;
-  border-radius:10px;
-  margin-bottom:3px;
-  font-weight:700;
+  color:#ccc;
   display:flex;
   align-items:center;
   gap:10px;
+  text-align:right;
+  padding:13px;
+  border-radius:11px;
+  margin-bottom:4px;
+  font-weight:700;
 }
 
 .nav-btn:hover,
 .nav-btn.active{
-  background:#252525;
-  color:#fff;
+  background:#fff;
+  color:#111;
 }
 
 .nav-icon{
-  width:22px;
+  width:23px;
   text-align:center;
 }
 
-.sidebar-bottom{
-  margin-top:25px;
-  padding-top:18px;
-  border-top:1px solid #2d2d2d;
-}
-
-.logout-btn{
-  width:100%;
-  border:1px solid #333;
-  background:#181818;
-  color:#fff;
-  border-radius:10px;
-  padding:11px;
-  font-weight:800;
-}
-
-.main{
-  margin-left:250px;
-  min-height:100vh;
-}
-
-.topbar{
-  position:sticky;
-  top:0;
-  z-index:500;
-  height:70px;
-  background:#ffffffee;
-  backdrop-filter:blur(12px);
-  border-bottom:1px solid var(--border);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 28px;
-}
-
-.mobile-menu{
-  display:none;
-  border:0;
-  background:#111;
-  color:#fff;
-  width:42px;
-  height:42px;
-  border-radius:10px;
-}
-
-.page-title{
-  font-size:20px;
-  font-weight:900;
-}
-
-.top-user{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  color:#666;
-  font-size:12px;
-}
-
-.avatar{
-  width:35px;
-  height:35px;
-  border-radius:50%;
-  background:#111;
-  color:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:900;
-}
+/* =========================
+   CONTENT
+========================= */
 
 .content{
+  direction:rtl;
+  min-width:0;
   padding:25px;
 }
 
-/* =========================
-   SECTIONS
-========================= */
-
-.section{
+.page{
   display:none;
 }
 
-.section.active{
+.page.active{
   display:block;
 }
 
-.section-head{
+.page-header{
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  justify-content:space-between;
   gap:15px;
-  margin-bottom:20px;
-  flex-wrap:wrap;
+  margin-bottom:22px;
 }
 
-.section-head h1{
+.page-title{
   margin:0;
-  font-size:27px;
+  font-size:28px;
 }
 
-.section-head p{
+.page-description{
   margin:5px 0 0;
-  color:#888;
+  color:var(--muted);
   font-size:13px;
 }
 
-.card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:17px;
-  box-shadow:var(--shadow);
-}
-
-/* =========================
-   BUTTONS
-========================= */
-
-.btn{
+.primary-btn{
   border:0;
-  border-radius:10px;
-  padding:10px 14px;
-  font-weight:800;
-  font-size:13px;
-}
-
-.btn-dark{
   background:#111;
   color:#fff;
+  border-radius:11px;
+  padding:12px 17px;
+  font-weight:800;
 }
 
-.btn-light{
-  background:#f2f2f0;
-  color:#222;
+.secondary-btn{
+  border:1px solid #ddd;
+  background:#fff;
+  color:#111;
+  border-radius:11px;
+  padding:11px 15px;
+  font-weight:800;
 }
 
-.btn-danger{
-  background:#fff0f0;
+.danger-btn{
+  border:0;
+  background:#fff0ef;
   color:#c62828;
+  border-radius:9px;
+  padding:8px 11px;
+  font-weight:800;
 }
 
-.btn-green{
+.success-btn{
+  border:0;
   background:#edf9f2;
-  color:#16864a;
-}
-
-.btn-blue{
-  background:#eff6ff;
-  color:#2563eb;
-}
-
-.btn:disabled{
-  opacity:.5;
-  cursor:not-allowed;
+  color:#16834a;
+  border-radius:9px;
+  padding:8px 11px;
+  font-weight:800;
 }
 
 /* =========================
@@ -362,59 +306,63 @@ a{
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:15px;
-  margin-bottom:20px;
+  margin-bottom:22px;
 }
 
 .stat-card{
-  padding:20px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:19px;
+  box-shadow:var(--shadow);
 }
 
 .stat-top{
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.stat-icon{
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  background:#f3f3f1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
 }
 
 .stat-label{
   color:#777;
   font-size:12px;
-  font-weight:800;
+  font-weight:700;
 }
 
-.stat-icon{
-  width:38px;
-  height:38px;
-  border-radius:10px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#f3f3f1;
-}
-
-.stat-number{
+.stat-value{
   margin-top:12px;
-  font-size:29px;
+  font-size:28px;
   font-weight:900;
-}
-
-.stat-extra{
-  color:#888;
-  font-size:11px;
-  margin-top:5px;
 }
 
 .dashboard-grid{
   display:grid;
-  grid-template-columns:1.4fr 1fr;
+  grid-template-columns:1.2fr .8fr;
   gap:18px;
 }
 
-.dashboard-card{
+.panel{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:17px;
   padding:20px;
+  box-shadow:var(--shadow);
 }
 
-.card-title{
-  margin:0 0 16px;
+.panel-title{
+  margin:0 0 15px;
   font-size:17px;
 }
 
@@ -426,45 +374,11 @@ a{
 
 .quick-btn{
   border:1px solid var(--border);
-  background:#fafaf8;
+  background:#fafafa;
   border-radius:12px;
-  padding:15px;
-  text-align:left;
+  padding:16px;
+  text-align:right;
   font-weight:800;
-}
-
-.quick-btn:hover{
-  border-color:#aaa;
-  background:#fff;
-}
-
-.mini-list{
-  display:flex;
-  flex-direction:column;
-  gap:9px;
-}
-
-.mini-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  padding:10px;
-  border:1px solid #eee;
-  border-radius:10px;
-}
-
-.mini-name{
-  font-size:12px;
-  font-weight:800;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-
-.mini-value{
-  font-size:12px;
-  font-weight:900;
 }
 
 /* =========================
@@ -474,28 +388,29 @@ a{
 .toolbar{
   display:flex;
   align-items:center;
-  gap:9px;
+  gap:10px;
   flex-wrap:wrap;
-  margin-bottom:15px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:12px;
+  margin-bottom:16px;
 }
 
 .search{
   flex:1;
   min-width:220px;
-  height:43px;
-  border:1px solid var(--border);
-  background:#fff;
+  border:1px solid #ddd;
   border-radius:10px;
-  padding:0 13px;
+  padding:11px 13px;
   outline:none;
 }
 
 .filter{
-  height:43px;
-  border:1px solid var(--border);
-  background:#fff;
+  border:1px solid #ddd;
   border-radius:10px;
-  padding:0 11px;
+  padding:10px 12px;
+  background:#fff;
   outline:none;
 }
 
@@ -503,35 +418,33 @@ a{
    TABLE
 ========================= */
 
-.table-card{
-  overflow:hidden;
-}
-
 .table-wrap{
-  width:100%;
-  overflow-x:auto;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:17px;
+  overflow:auto;
+  box-shadow:var(--shadow);
 }
 
 table{
   width:100%;
   border-collapse:collapse;
-  min-width:900px;
+  min-width:850px;
 }
 
 th{
-  background:#fafaf8;
-  color:#777;
-  text-align:left;
-  font-size:11px;
-  padding:13px;
+  background:#fafafa;
+  font-size:12px;
+  color:#666;
+  text-align:right;
+  padding:14px;
   border-bottom:1px solid var(--border);
-  white-space:nowrap;
 }
 
 td{
-  padding:13px;
-  border-bottom:1px solid #eee;
-  font-size:12px;
+  padding:13px 14px;
+  border-bottom:1px solid #f0f0f0;
+  font-size:13px;
   vertical-align:middle;
 }
 
@@ -543,130 +456,122 @@ tr:last-child td{
   display:flex;
   align-items:center;
   gap:10px;
-  min-width:200px;
+  min-width:210px;
 }
 
 .product-thumb{
-  width:45px;
-  height:45px;
+  width:52px;
+  height:52px;
+  border-radius:10px;
   object-fit:cover;
-  border-radius:9px;
-  background:#eee;
-  flex:none;
+  background:#f1f1ef;
 }
 
 .product-name{
   font-weight:800;
 }
 
-.muted{
-  color:#888;
-}
-
-.price{
-  font-weight:900;
+.product-id{
+  color:#aaa;
+  font-size:10px;
+  margin-top:3px;
 }
 
 .badge{
   display:inline-flex;
   align-items:center;
-  padding:5px 8px;
+  padding:6px 9px;
   border-radius:999px;
-  font-size:10px;
-  font-weight:900;
+  font-size:11px;
+  font-weight:800;
 }
 
 .badge-green{
-  background:var(--green-bg);
-  color:var(--green);
+  color:#12834a;
+  background:#edf9f2;
 }
 
 .badge-red{
-  background:var(--red-bg);
-  color:var(--red);
+  color:#c62828;
+  background:#fff0ef;
 }
 
 .badge-orange{
-  background:var(--orange-bg);
-  color:var(--orange);
+  color:#a86300;
+  background:#fff6df;
 }
 
-.badge-blue{
-  background:var(--blue-bg);
-  color:var(--blue);
+.badge-gray{
+  color:#666;
+  background:#f0f0ef;
 }
 
 .actions{
   display:flex;
-  gap:5px;
+  gap:6px;
   flex-wrap:wrap;
 }
 
 .icon-btn{
-  width:34px;
-  height:34px;
   border:1px solid #ddd;
   background:#fff;
+  width:34px;
+  height:34px;
   border-radius:8px;
-  font-size:14px;
-}
-
-.icon-btn:hover{
-  background:#f4f4f2;
 }
 
 /* =========================
-   PRODUCT FORM
+   MODAL
 ========================= */
 
 .modal{
   position:fixed;
   inset:0;
-  background:#0009;
-  z-index:5000;
+  z-index:1000;
+  background:rgba(0,0,0,.58);
   display:none;
   align-items:center;
   justify-content:center;
-  padding:18px;
+  padding:15px;
 }
 
 .modal.open{
   display:flex;
 }
 
-.modal-box{
+.modal-card{
   width:100%;
-  max-width:900px;
+  max-width:920px;
   max-height:94vh;
-  overflow-y:auto;
+  overflow:auto;
   background:#fff;
-  border-radius:20px;
-  box-shadow:0 30px 100px #0005;
+  border-radius:21px;
+  box-shadow:0 30px 80px #0005;
 }
 
-.modal-head{
+.modal-header{
   position:sticky;
   top:0;
   z-index:2;
   background:#fff;
-  border-bottom:1px solid var(--border);
-  padding:18px 20px;
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  justify-content:space-between;
+  padding:18px 20px;
+  border-bottom:1px solid var(--border);
 }
 
 .modal-title{
-  font-size:19px;
-  font-weight:900;
+  margin:0;
+  font-size:20px;
 }
 
 .close-btn{
-  width:36px;
-  height:36px;
   border:0;
-  border-radius:9px;
   background:#f1f1ef;
+  width:38px;
+  height:38px;
+  border-radius:10px;
   font-size:20px;
 }
 
@@ -676,7 +581,7 @@ tr:last-child td{
 
 .form-grid{
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:repeat(2,1fr);
   gap:15px;
 }
 
@@ -688,145 +593,215 @@ tr:last-child td{
   grid-column:1/-1;
 }
 
-.form-group label{
+.form-label{
   display:block;
-  font-size:11px;
-  font-weight:900;
   margin-bottom:7px;
+  font-size:12px;
+  font-weight:800;
 }
 
-.form-group input,
-.form-group textarea,
-.form-group select{
+.form-input,
+.form-select,
+.form-textarea{
   width:100%;
   border:1px solid #ddd;
   border-radius:10px;
+  padding:11px 12px;
   background:#fff;
-  padding:11px;
   outline:none;
 }
 
-.form-group textarea{
+.form-textarea{
   min-height:110px;
   resize:vertical;
 }
 
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus{
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus{
   border-color:#111;
 }
 
-.form-help{
-  color:#888;
-  font-size:10px;
-  margin-top:5px;
-}
-
-.modal-foot{
-  border-top:1px solid var(--border);
-  padding:15px 20px;
+.modal-footer{
   display:flex;
-  justify-content:flex-end;
-  gap:8px;
+  justify-content:flex-start;
+  gap:9px;
+  padding:17px 20px;
+  border-top:1px solid var(--border);
 }
 
 /* =========================
-   VARIANTS
+   OPTION PICKER
 ========================= */
 
-.variant-panel{
-  grid-column:1/-1;
-  border:1px solid #e5e5e5;
-  border-radius:13px;
+.option-picker{
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:13px;
+  background:#fafafa;
+}
+
+.option-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+}
+
+.option-check{
+  position:relative;
+}
+
+.option-check input{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+
+.option-check label{
+  display:inline-flex;
+  align-items:center;
+  padding:8px 12px;
+  border:1px solid #ddd;
+  border-radius:9px;
+  background:#fff;
+  cursor:pointer;
+  font-size:12px;
+  font-weight:700;
+}
+
+.option-check input:checked+label{
+  background:#111;
+  color:#fff;
+  border-color:#111;
+}
+
+.add-custom{
+  display:flex;
+  gap:7px;
+  margin-top:10px;
+}
+
+.add-custom input{
+  flex:1;
+  border:1px solid #ddd;
+  border-radius:9px;
+  padding:9px;
+}
+
+.add-custom button{
+  border:0;
+  background:#111;
+  color:#fff;
+  border-radius:9px;
+  padding:0 13px;
+  font-weight:800;
+}
+
+/* =========================
+   VARIANT STOCK
+========================= */
+
+.variant-section{
+  margin-top:20px;
+  border:1px solid var(--border);
+  border-radius:15px;
   overflow:hidden;
 }
 
 .variant-head{
-  padding:13px;
-  background:#fafaf8;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+  background:#fafafa;
+  padding:14px;
+  border-bottom:1px solid var(--border);
 }
 
-.variant-title{
-  font-weight:900;
-  font-size:13px;
+.variant-head h3{
+  margin:0;
+  font-size:15px;
+}
+
+.variant-help{
+  margin:5px 0 0;
+  color:#888;
+  font-size:11px;
+}
+
+.variant-table-wrap{
+  overflow:auto;
 }
 
 .variant-table{
-  overflow-x:auto;
-}
-
-.variant-table table{
   min-width:500px;
+  width:100%;
+  border-collapse:collapse;
 }
 
-.variant-input{
-  width:100px;
-  padding:8px;
+.variant-table th,
+.variant-table td{
+  padding:10px;
+  border-bottom:1px solid #eee;
+  text-align:center;
+}
+
+.variant-table th:first-child,
+.variant-table td:first-child{
+  text-align:right;
+}
+
+.variant-stock-input{
+  width:80px;
   border:1px solid #ddd;
   border-radius:8px;
+  padding:8px;
+  text-align:center;
 }
 
-/* =========================
-   IMAGE PREVIEW
-========================= */
-
-.image-preview{
+.total-stock-box{
   display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-top:10px;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:12px;
+  padding:13px;
+  border-radius:11px;
+  background:#111;
+  color:#fff;
 }
 
-.preview-img{
-  width:70px;
-  height:70px;
-  border-radius:9px;
-  object-fit:cover;
-  border:1px solid #ddd;
+.total-stock-number{
+  font-size:22px;
+  font-weight:900;
 }
 
 /* =========================
    ORDERS
 ========================= */
 
-.order-status{
-  min-width:130px;
+.order-items{
+  margin-top:7px;
+  color:#777;
+  font-size:11px;
+  line-height:1.7;
+}
+
+.status-select{
   border:1px solid #ddd;
   border-radius:8px;
   padding:7px;
   background:#fff;
-  font-size:11px;
-  font-weight:800;
 }
 
-.order-detail{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:15px;
+/* =========================
+   REVIEWS
+========================= */
+
+.stars{
+  color:#f4b400;
+  letter-spacing:1px;
 }
 
-.detail-box{
-  background:#fafaf8;
-  border:1px solid #eee;
-  border-radius:12px;
-  padding:14px;
-}
-
-.detail-label{
-  font-size:10px;
-  color:#888;
-  font-weight:900;
-  margin-bottom:5px;
-}
-
-.detail-value{
-  font-size:13px;
-  font-weight:700;
-  white-space:pre-line;
+.review-comment{
+  max-width:360px;
+  white-space:pre-wrap;
+  color:#555;
 }
 
 /* =========================
@@ -840,7 +815,10 @@ tr:last-child td{
 }
 
 .category-card{
-  padding:15px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:14px;
   display:flex;
   align-items:center;
   gap:12px;
@@ -849,14 +827,13 @@ tr:last-child td{
 .category-img{
   width:55px;
   height:55px;
+  border-radius:11px;
   object-fit:cover;
-  border-radius:10px;
-  background:#eee;
+  background:#f1f1ef;
 }
 
 .category-info{
   flex:1;
-  min-width:0;
 }
 
 .category-name{
@@ -864,34 +841,13 @@ tr:last-child td{
 }
 
 .category-slug{
-  color:#888;
+  color:#999;
   font-size:11px;
   margin-top:3px;
 }
 
 /* =========================
-   STOCK
-========================= */
-
-.stock-overview{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:14px;
-  margin-bottom:18px;
-}
-
-.stock-box{
-  padding:18px;
-}
-
-.stock-number{
-  font-size:28px;
-  font-weight:900;
-  margin-top:7px;
-}
-
-/* =========================
-   EMPTY
+   EMPTY / LOADING
 ========================= */
 
 .empty{
@@ -900,10 +856,10 @@ tr:last-child td{
   color:#888;
 }
 
-.empty strong{
-  display:block;
-  color:#333;
-  margin-bottom:5px;
+.loading{
+  padding:40px;
+  text-align:center;
+  color:#777;
 }
 
 /* =========================
@@ -912,8 +868,8 @@ tr:last-child td{
 
 .toast{
   position:fixed;
-  left:50%;
   bottom:25px;
+  left:50%;
   transform:translateX(-50%) translateY(20px);
   background:#111;
   color:#fff;
@@ -924,7 +880,7 @@ tr:last-child td{
   opacity:0;
   pointer-events:none;
   transition:.25s;
-  z-index:99999;
+  z-index:9999;
 }
 
 .toast.show{
@@ -932,19 +888,23 @@ tr:last-child td{
   transform:translateX(-50%) translateY(0);
 }
 
-/* =========================
-   LOADING
-========================= */
-
-.loading{
-  padding:35px;
-  text-align:center;
-  color:#888;
+.toast.error{
+  background:#b42318;
 }
 
 /* =========================
-   RESPONSIVE
+   MOBILE
 ========================= */
+
+.mobile-menu-btn{
+  display:none;
+  border:0;
+  background:#111;
+  color:#fff;
+  width:40px;
+  height:40px;
+  border-radius:10px;
+}
 
 @media(max-width:1100px){
 
@@ -964,25 +924,30 @@ tr:last-child td{
 
 @media(max-width:800px){
 
+.header{
+  padding:0 12px;
+}
+
+.mobile-menu-btn{
+  display:block;
+}
+
+.layout{
+  display:block;
+}
+
 .sidebar{
-  transform:translateX(-100%);
+  position:fixed;
+  top:72px;
+  right:-260px;
+  width:240px;
+  height:calc(100vh - 72px);
+  z-index:90;
   transition:.25s;
 }
 
 .sidebar.open{
-  transform:translateX(0);
-}
-
-.main{
-  margin-left:0;
-}
-
-.mobile-menu{
-  display:block;
-}
-
-.topbar{
-  padding:0 15px;
+  right:0;
 }
 
 .content{
@@ -997,8 +962,13 @@ tr:last-child td{
   grid-column:auto;
 }
 
-.order-detail{
-  grid-template-columns:1fr;
+.page-header{
+  align-items:flex-start;
+  flex-direction:column;
+}
+
+.user-email{
+  display:none;
 }
 
 }
@@ -1011,15 +981,11 @@ tr:last-child td{
 }
 
 .stat-card{
-  padding:14px;
+  padding:13px;
 }
 
-.stat-number{
+.stat-value{
   font-size:22px;
-}
-
-.stat-label{
-  font-size:10px;
 }
 
 .quick-grid{
@@ -1030,29 +996,23 @@ tr:last-child td{
   grid-template-columns:1fr;
 }
 
-.stock-overview{
-  grid-template-columns:1fr;
-}
-
-.section-head h1{
-  font-size:22px;
-}
-
-.modal{
-  padding:7px;
-}
-
-.modal-box{
-  max-height:98vh;
-  border-radius:15px;
-}
-
 .modal-body{
   padding:14px;
 }
 
+.modal-footer{
+  flex-direction:column;
 }
 
+.modal-footer button{
+  width:100%;
+}
+
+.page-title{
+  font-size:23px;
+}
+
+}
 </style>
 </head>
 
@@ -1062,60 +1022,25 @@ tr:last-child td{
      LOGIN SCREEN
 ========================= -->
 
-<div id="loginScreen">
+<div id="loginScreen" class="login-screen">
 
-  <div class="login-card">
+<div class="login-card">
 
-    <div class="login-logo">JR SHOP</div>
+<div class="logo">JR</div>
 
-    <div class="login-sub">
-      Administration sécurisée
-    </div>
+<h1>لوحة إدارة JR Shop</h1>
 
-    <form id="loginForm">
+<p>
+يجب تسجيل الدخول للوصول إلى لوحة الإدارة.
+</p>
 
-      <div class="login-field">
+<button
+class="login-btn"
+onclick="goLogin()">
+تسجيل الدخول
+</button>
 
-        <label>Email</label>
-
-        <input
-          id="loginEmail"
-          type="email"
-          autocomplete="username"
-          required
-          placeholder="admin@email.com">
-
-      </div>
-
-      <div class="login-field">
-
-        <label>Mot de passe</label>
-
-        <input
-          id="loginPassword"
-          type="password"
-          autocomplete="current-password"
-          required
-          placeholder="••••••••">
-
-      </div>
-
-      <button
-        class="login-btn"
-        type="submit">
-
-        Se connecter
-
-      </button>
-
-      <div
-        id="loginError"
-        class="login-error">
-      </div>
-
-    </form>
-
-  </div>
+</div>
 
 </div>
 
@@ -1124,339 +1049,307 @@ tr:last-child td{
      APP
 ========================= -->
 
-<div id="app">
+<div id="app" class="app hidden">
 
-  <aside id="sidebar" class="sidebar">
+<header class="header">
 
-    <div class="logo">
-      JR SHOP
-      <small>ADMIN PANEL</small>
-    </div>
+<div class="header-right">
 
-    <div class="nav-title">
-      PRINCIPAL
-    </div>
+<button
+class="mobile-menu-btn"
+onclick="toggleSidebar()">
+☰
+</button>
 
-    <button class="nav-btn active" data-section="dashboard">
-      <span class="nav-icon">📊</span>
-      Dashboard
-    </button>
+<div>
+<div class="header-logo">
+JR SHOP
+</div>
 
-    <button class="nav-btn" data-section="products">
-      <span class="nav-icon">📦</span>
-      Produits
-    </button>
+<div class="header-sub">
+لوحة الإدارة
+</div>
+</div>
 
-    <button class="nav-btn" data-section="stock">
-      <span class="nav-icon">📈</span>
-      Stock
-    </button>
-
-    <button class="nav-btn" data-section="orders">
-      <span class="nav-icon">🧾</span>
-      Commandes
-    </button>
-
-    <button class="nav-btn" data-section="customers">
-      <span class="nav-icon">👥</span>
-      Clients
-    </button>
-
-    <div class="nav-title">
-      CATALOGUE
-    </div>
-
-    <button class="nav-btn" data-section="categories">
-      <span class="nav-icon">🏷️</span>
-      Catégories
-    </button>
-
-    <button class="nav-btn" data-section="reviews">
-      <span class="nav-icon">⭐</span>
-      Avis clients
-    </button>
-
-    <div class="nav-title">
-      SYSTÈME
-    </div>
-
-    <button class="nav-btn" data-section="settings">
-      <span class="nav-icon">⚙️</span>
-      Paramètres
-    </button>
-
-    <div class="sidebar-bottom">
-
-      <button
-        id="logoutBtn"
-        class="logout-btn">
-
-        ↪ Déconnexion
-
-      </button>
-
-    </div>
-
-  </aside>
+</div>
 
 
-  <main class="main">
+<div class="header-left">
 
-    <header class="topbar">
+<div
+id="userEmail"
+class="user-email">
+</div>
 
-      <div style="display:flex;align-items:center;gap:12px">
+<button
+class="logout-btn"
+onclick="logout()">
+خروج
+</button>
 
-        <button
-          id="mobileMenu"
-          class="mobile-menu">
+</div>
 
-          ☰
-
-        </button>
-
-        <div
-          id="pageTitle"
-          class="page-title">
-
-          Dashboard
-
-        </div>
-
-      </div>
-
-      <div class="top-user">
-
-        <span id="userEmail">
-          Admin
-        </span>
-
-        <div
-          id="userAvatar"
-          class="avatar">
-          A
-        </div>
-
-      </div>
-
-    </header>
+</header>
 
 
-    <div class="content">
+<div class="layout">
 
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside id="sidebar" class="sidebar">
+
+<div class="nav-title">
+الرئيسية
+</div>
+
+<button
+class="nav-btn active"
+data-page="dashboard"
+onclick="showPage('dashboard')">
+
+<span class="nav-icon">📊</span>
+لوحة التحكم
+
+</button>
+
+
+<div class="nav-title">
+المتجر
+</div>
+
+<button
+class="nav-btn"
+data-page="products"
+onclick="showPage('products')">
+
+<span class="nav-icon">📦</span>
+المنتجات
+
+</button>
+
+
+<button
+class="nav-btn"
+data-page="categories"
+onclick="showPage('categories')">
+
+<span class="nav-icon">🗂️</span>
+التصنيفات
+
+</button>
+
+
+<button
+class="nav-btn"
+data-page="orders"
+onclick="showPage('orders')">
+
+<span class="nav-icon">🛒</span>
+الطلبات
+
+</button>
+
+
+<button
+class="nav-btn"
+data-page="reviews"
+onclick="showPage('reviews')">
+
+<span class="nav-icon">⭐</span>
+التقييمات
+
+</button>
+
+</aside>
+
+
+<!-- =========================
+     CONTENT
+========================= -->
+
+<main class="content">
 
 <!-- =========================
      DASHBOARD
 ========================= -->
 
 <section
-id="section-dashboard"
-class="section active">
+id="page-dashboard"
+class="page active">
 
-  <div class="section-head">
+<div class="page-header">
 
-    <div>
+<div>
+<h1 class="page-title">
+لوحة التحكم
+</h1>
 
-      <h1>Dashboard</h1>
+<p class="page-description">
+نظرة عامة على المتجر والمخزون والطلبات.
+</p>
+</div>
 
-      <p>
-        Vue générale de votre boutique.
-      </p>
+<button
+class="primary-btn"
+onclick="refreshAll()">
+↻ تحديث
+</button>
 
-    </div>
+</div>
 
-    <button
-      class="btn btn-light"
-      onclick="loadDashboard()">
 
-      ↻ Actualiser
+<div class="stats-grid">
 
-    </button>
+<div class="stat-card">
 
-  </div>
+<div class="stat-top">
 
+<div class="stat-label">
+المنتجات
+</div>
 
-  <div class="stats-grid">
+<div class="stat-icon">
+📦
+</div>
 
-    <div class="card stat-card">
+</div>
 
-      <div class="stat-top">
+<div
+id="statProducts"
+class="stat-value">
+0
+</div>
 
-        <div class="stat-label">
-          CHIFFRE D'AFFAIRES
-        </div>
+</div>
 
-        <div class="stat-icon">
-          💰
-        </div>
 
-      </div>
+<div class="stat-card">
 
-      <div
-        id="statRevenue"
-        class="stat-number">
-        0 DA
-      </div>
+<div class="stat-top">
 
-      <div class="stat-extra">
-        Commandes confirmées
-      </div>
+<div class="stat-label">
+المخزون
+</div>
 
-    </div>
+<div class="stat-icon">
+📊
+</div>
 
+</div>
 
-    <div class="card stat-card">
+<div
+id="statStock"
+class="stat-value">
+0
+</div>
 
-      <div class="stat-top">
+</div>
 
-        <div class="stat-label">
-          COMMANDES
-        </div>
 
-        <div class="stat-icon">
-          🧾
-        </div>
+<div class="stat-card">
 
-      </div>
+<div class="stat-top">
 
-      <div
-        id="statOrders"
-        class="stat-number">
-        0
-      </div>
+<div class="stat-label">
+الطلبات
+</div>
 
-      <div
-        id="statPending"
-        class="stat-extra">
-        0 en attente
-      </div>
+<div class="stat-icon">
+🛒
+</div>
 
-    </div>
+</div>
 
+<div
+id="statOrders"
+class="stat-value">
+0
+</div>
 
-    <div class="card stat-card">
+</div>
 
-      <div class="stat-top">
 
-        <div class="stat-label">
-          PRODUITS
-        </div>
+<div class="stat-card">
 
-        <div class="stat-icon">
-          📦
-        </div>
+<div class="stat-top">
 
-      </div>
+<div class="stat-label">
+مبيعات مؤكدة
+</div>
 
-      <div
-        id="statProducts"
-        class="stat-number">
-        0
-      </div>
+<div class="stat-icon">
+💰
+</div>
 
-      <div
-        id="statLowStock"
-        class="stat-extra">
-        0 stock faible
-      </div>
+</div>
 
-    </div>
+<div
+id="statSales"
+class="stat-value">
+0 DA
+</div>
 
+</div>
 
-    <div class="card stat-card">
+</div>
 
-      <div class="stat-top">
 
-        <div class="stat-label">
-          AVIS
-        </div>
+<div class="dashboard-grid">
 
-        <div class="stat-icon">
-          ⭐
-        </div>
+<div class="panel">
 
-      </div>
+<h2 class="panel-title">
+آخر الطلبات
+</h2>
 
-      <div
-        id="statReviews"
-        class="stat-number">
-        0
-      </div>
+<div id="recentOrders">
+<div class="loading">
+جاري التحميل...
+</div>
+</div>
 
-      <div class="stat-extra">
-        Avis clients
-      </div>
+</div>
 
-    </div>
 
-  </div>
+<div class="panel">
 
+<h2 class="panel-title">
+اختصارات
+</h2>
 
-  <div class="dashboard-grid">
+<div class="quick-grid">
 
-    <div class="card dashboard-card">
+<button
+class="quick-btn"
+onclick="openProductModal()">
+➕ إضافة منتج
+</button>
 
-      <h2 class="card-title">
-        Actions rapides
-      </h2>
+<button
+class="quick-btn"
+onclick="showPage('orders')">
+🛒 إدارة الطلبات
+</button>
 
-      <div class="quick-grid">
+<button
+class="quick-btn"
+onclick="showPage('categories')">
+🗂️ التصنيفات
+</button>
 
-        <button
-          class="quick-btn"
-          onclick="openProductModal()">
+<button
+class="quick-btn"
+onclick="showPage('reviews')">
+⭐ مراجعة التقييمات
+</button>
 
-          ➕ Ajouter un produit
+</div>
 
-        </button>
+</div>
 
-        <button
-          class="quick-btn"
-          onclick="navigate('stock')">
-
-          📦 Vérifier le stock
-
-        </button>
-
-        <button
-          class="quick-btn"
-          onclick="navigate('orders')">
-
-          🧾 Voir les commandes
-
-        </button>
-
-        <button
-          class="quick-btn"
-          onclick="navigate('categories')">
-
-          🏷️ Gérer les catégories
-
-        </button>
-
-      </div>
-
-    </div>
-
-
-    <div class="card dashboard-card">
-
-      <h2 class="card-title">
-        Commandes récentes
-      </h2>
-
-      <div
-        id="recentOrders"
-        class="mini-list">
-
-        <div class="loading">
-          Chargement...
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
+</div>
 
 </section>
 
@@ -1466,444 +1359,111 @@ class="section active">
 ========================= -->
 
 <section
-id="section-products"
-class="section">
+id="page-products"
+class="page">
 
-  <div class="section-head">
+<div class="page-header">
 
-    <div>
+<div>
+<h1 class="page-title">
+المنتجات
+</h1>
 
-      <h1>Produits</h1>
+<p class="page-description">
+إضافة وتعديل وإدارة المنتجات والمخزون.
+</p>
+</div>
 
-      <p>
-        Gestion complète du catalogue et du stock.
-      </p>
+<button
+class="primary-btn"
+onclick="openProductModal()">
+＋ إضافة منتج
+</button>
 
-    </div>
+</div>
 
-    <button
-      class="btn btn-dark"
-      onclick="openProductModal()">
 
-      + Nouveau produit
+<div class="toolbar">
 
-    </button>
+<input
+id="productSearch"
+class="search"
+placeholder="🔍 ابحث عن منتج..."
+oninput="renderProducts()">
 
-  </div>
 
+<select
+id="productCategoryFilter"
+class="filter"
+onchange="renderProducts()">
 
-  <div class="toolbar">
+<option value="">
+كل التصنيفات
+</option>
 
-    <input
-      id="productSearch"
-      class="search"
-      placeholder="Rechercher un produit...">
+</select>
 
-    <select
-      id="productCategoryFilter"
-      class="filter">
 
-      <option value="">
-        Toutes les catégories
-      </option>
+<select
+id="productStockFilter"
+class="filter"
+onchange="renderProducts()">
 
-    </select>
+<option value="">
+كل المنتجات
+</option>
 
-    <select
-      id="productStockFilter"
-      class="filter">
+<option value="available">
+متوفر
+</option>
 
-      <option value="">
-        Tous les stocks
-      </option>
+<option value="low">
+مخزون منخفض
+</option>
 
-      <option value="ok">
-        En stock
-      </option>
+<option value="empty">
+نافد
+</option>
 
-      <option value="low">
-        Stock faible
-      </option>
+</select>
 
-      <option value="empty">
-        Rupture
-      </option>
+</div>
 
-    </select>
 
-    <button
-      class="btn btn-light"
-      onclick="loadProducts()">
+<div class="table-wrap">
 
-      ↻
+<table>
 
-    </button>
+<thead>
 
-  </div>
+<tr>
 
+<th>المنتج</th>
+<th>السعر</th>
+<th>المخزون</th>
+<th>التصنيف</th>
+<th>الحالة</th>
+<th>الإجراءات</th>
 
-  <div class="card table-card">
+</tr>
 
-    <div class="table-wrap">
+</thead>
 
-      <table>
+<tbody id="productsTable">
 
-        <thead>
+<tr>
+<td colspan="6">
+<div class="loading">
+جاري تحميل المنتجات...
+</div>
+</td>
+</tr>
 
-          <tr>
+</tbody>
 
-            <th>PRODUIT</th>
-            <th>CATÉGORIE</th>
-            <th>PRIX</th>
-            <th>STOCK</th>
-            <th>STATUT</th>
-            <th>ACTIONS</th>
+</table>
 
-          </tr>
-
-        </thead>
-
-        <tbody id="productsTable">
-
-          <tr>
-            <td colspan="6">
-              <div class="loading">
-                Chargement...
-              </div>
-            </td>
-          </tr>
-
-        </tbody>
-
-      </table>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =========================
-     STOCK
-========================= -->
-
-<section
-id="section-stock"
-class="section">
-
-  <div class="section-head">
-
-    <div>
-
-      <h1>Gestion du stock</h1>
-
-      <p>
-        Surveillez les produits et les variantes.
-      </p>
-
-    </div>
-
-    <button
-      class="btn btn-light"
-      onclick="loadStock()">
-
-      ↻ Actualiser
-
-    </button>
-
-  </div>
-
-
-  <div class="stock-overview">
-
-    <div class="card stock-box">
-
-      <div class="stat-label">
-        STOCK TOTAL
-      </div>
-
-      <div
-        id="stockTotal"
-        class="stock-number">
-        0
-      </div>
-
-    </div>
-
-    <div class="card stock-box">
-
-      <div class="stat-label">
-        STOCK FAIBLE
-      </div>
-
-      <div
-        id="stockLow"
-        class="stock-number">
-        0
-      </div>
-
-    </div>
-
-    <div class="card stock-box">
-
-      <div class="stat-label">
-        RUPTURE
-      </div>
-
-      <div
-        id="stockEmpty"
-        class="stock-number">
-        0
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <div class="toolbar">
-
-    <input
-      id="stockSearch"
-      class="search"
-      placeholder="Rechercher un produit...">
-
-    <select
-      id="stockFilter"
-      class="filter">
-
-      <option value="">
-        Tous
-      </option>
-
-      <option value="low">
-        Stock faible
-      </option>
-
-      <option value="empty">
-        Rupture
-      </option>
-
-    </select>
-
-  </div>
-
-
-  <div class="card table-card">
-
-    <div class="table-wrap">
-
-      <table>
-
-        <thead>
-
-          <tr>
-
-            <th>PRODUIT</th>
-            <th>STOCK GLOBAL</th>
-            <th>VARIANTES</th>
-            <th>ÉTAT</th>
-            <th>ACTION</th>
-
-          </tr>
-
-        </thead>
-
-        <tbody id="stockTable">
-
-        </tbody>
-
-      </table>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =========================
-     ORDERS
-========================= -->
-
-<section
-id="section-orders"
-class="section">
-
-  <div class="section-head">
-
-    <div>
-
-      <h1>Commandes</h1>
-
-      <p>
-        Gérez toutes les commandes clients.
-      </p>
-
-    </div>
-
-    <button
-      class="btn btn-light"
-      onclick="loadOrders()">
-
-      ↻ Actualiser
-
-    </button>
-
-  </div>
-
-
-  <div class="toolbar">
-
-    <input
-      id="orderSearch"
-      class="search"
-      placeholder="Nom, téléphone, commande...">
-
-    <select
-      id="orderStatusFilter"
-      class="filter">
-
-      <option value="">
-        Tous les statuts
-      </option>
-
-      <option value="pending">
-        Pending
-      </option>
-
-      <option value="confirmed">
-        Confirmée
-      </option>
-
-      <option value="processing">
-        En préparation
-      </option>
-
-      <option value="shipped">
-        Expédiée
-      </option>
-
-      <option value="delivered">
-        Livrée
-      </option>
-
-      <option value="cancelled">
-        Annulée
-      </option>
-
-    </select>
-
-  </div>
-
-
-  <div class="card table-card">
-
-    <div class="table-wrap">
-
-      <table>
-
-        <thead>
-
-          <tr>
-
-            <th>COMMANDE</th>
-            <th>CLIENT</th>
-            <th>CONTACT</th>
-            <th>TOTAL</th>
-            <th>DATE</th>
-            <th>STATUT</th>
-            <th></th>
-
-          </tr>
-
-        </thead>
-
-        <tbody id="ordersTable">
-
-        </tbody>
-
-      </table>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =========================
-     CUSTOMERS
-========================= -->
-
-<section
-id="section-customers"
-class="section">
-
-  <div class="section-head">
-
-    <div>
-
-      <h1>Clients</h1>
-
-      <p>
-        Clients ayant effectué des commandes.
-      </p>
-
-    </div>
-
-    <button
-      class="btn btn-light"
-      onclick="loadCustomers()">
-
-      ↻ Actualiser
-
-    </button>
-
-  </div>
-
-
-  <div class="toolbar">
-
-    <input
-      id="customerSearch"
-      class="search"
-      placeholder="Rechercher un client...">
-
-  </div>
-
-
-  <div class="card table-card">
-
-    <div class="table-wrap">
-
-      <table>
-
-        <thead>
-
-          <tr>
-
-            <th>CLIENT</th>
-            <th>TÉLÉPHONE</th>
-            <th>WILAYA</th>
-            <th>COMMANDES</th>
-            <th>TOTAL</th>
-            <th>DERNIÈRE COMMANDE</th>
-
-          </tr>
-
-        </thead>
-
-        <tbody id="customersTable">
-
-        </tbody>
-
-      </table>
-
-    </div>
-
-  </div>
+</div>
 
 </section>
 
@@ -1913,37 +1473,159 @@ class="section">
 ========================= -->
 
 <section
-id="section-categories"
-class="section">
+id="page-categories"
+class="page">
 
-  <div class="section-head">
+<div class="page-header">
 
-    <div>
+<div>
 
-      <h1>Catégories</h1>
+<h1 class="page-title">
+التصنيفات
+</h1>
 
-      <p>
-        Organisation de votre catalogue.
-      </p>
+<p class="page-description">
+إدارة تصنيفات المنتجات.
+</p>
 
-    </div>
+</div>
 
-    <button
-      class="btn btn-dark"
-      onclick="openCategoryModal()">
+<button
+class="primary-btn"
+onclick="openCategoryModal()">
+＋ إضافة تصنيف
+</button>
 
-      + Nouvelle catégorie
-
-    </button>
-
-  </div>
+</div>
 
 
-  <div
-    id="categoriesGrid"
-    class="category-list">
+<div
+id="categoriesGrid"
+class="category-list">
 
-  </div>
+<div class="loading">
+جاري تحميل التصنيفات...
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     ORDERS
+========================= -->
+
+<section
+id="page-orders"
+class="page">
+
+<div class="page-header">
+
+<div>
+
+<h1 class="page-title">
+الطلبات
+</h1>
+
+<p class="page-description">
+متابعة ومعالجة طلبات الزبائن.
+</p>
+
+</div>
+
+<button
+class="primary-btn"
+onclick="loadOrders()">
+↻ تحديث
+</button>
+
+</div>
+
+
+<div class="toolbar">
+
+<input
+id="orderSearch"
+class="search"
+placeholder="🔍 اسم الزبون أو الهاتف..."
+oninput="renderOrders()">
+
+
+<select
+id="orderStatusFilter"
+class="filter"
+onchange="renderOrders()">
+
+<option value="">
+كل الحالات
+</option>
+
+<option value="pending">
+قيد الانتظار
+</option>
+
+<option value="confirmed">
+مؤكد
+</option>
+
+<option value="processing">
+قيد المعالجة
+</option>
+
+<option value="shipped">
+تم الشحن
+</option>
+
+<option value="completed">
+مكتمل
+</option>
+
+<option value="cancelled">
+ملغى
+</option>
+
+</select>
+
+</div>
+
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>الطلب</th>
+<th>الزبون</th>
+<th>الهاتف</th>
+<th>الموقع</th>
+<th>المجموع</th>
+<th>الحالة</th>
+<th>التاريخ</th>
+<th>تفاصيل</th>
+
+</tr>
+
+</thead>
+
+<tbody id="ordersTable">
+
+<tr>
+<td colspan="8">
+<div class="loading">
+جاري تحميل الطلبات...
+</div>
+</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
 
 </section>
 
@@ -1953,171 +1635,71 @@ class="section">
 ========================= -->
 
 <section
-id="section-reviews"
-class="section">
+id="page-reviews"
+class="page">
 
-  <div class="section-head">
+<div class="page-header">
 
-    <div>
+<div>
 
-      <h1>Avis clients</h1>
+<h1 class="page-title">
+التقييمات
+</h1>
 
-      <p>
-        Consultez et modérez les avis.
-      </p>
+<p class="page-description">
+آراء العملاء حول المنتجات.
+</p>
 
-    </div>
+</div>
 
-    <button
-      class="btn btn-light"
-      onclick="loadReviews()">
+<button
+class="primary-btn"
+onclick="loadReviewsAdmin()">
+↻ تحديث
+</button>
 
-      ↻ Actualiser
-
-    </button>
-
-  </div>
-
-
-  <div class="toolbar">
-
-    <input
-      id="reviewSearch"
-      class="search"
-      placeholder="Produit, client ou commentaire...">
-
-    <select
-      id="reviewRatingFilter"
-      class="filter">
-
-      <option value="">
-        Toutes les notes
-      </option>
-
-      <option value="5">★★★★★</option>
-      <option value="4">★★★★</option>
-      <option value="3">★★★</option>
-      <option value="2">★★</option>
-      <option value="1">★</option>
-
-    </select>
-
-  </div>
+</div>
 
 
-  <div class="card table-card">
+<div class="table-wrap">
 
-    <div class="table-wrap">
+<table>
 
-      <table>
+<thead>
 
-        <thead>
+<tr>
 
-          <tr>
+<th>العميل</th>
+<th>المنتج</th>
+<th>التقييم</th>
+<th>التعليق</th>
+<th>التاريخ</th>
 
-            <th>CLIENT</th>
-            <th>PRODUIT</th>
-            <th>NOTE</th>
-            <th>COMMENTAIRE</th>
-            <th>DATE</th>
-            <th>ACTION</th>
+</tr>
 
-          </tr>
+</thead>
 
-        </thead>
+<tbody id="reviewsTable">
 
-        <tbody id="reviewsTable">
+<tr>
+<td colspan="5">
+<div class="loading">
+جاري تحميل التقييمات...
+</div>
+</td>
+</tr>
 
-        </tbody>
+</tbody>
 
-      </table>
+</table>
 
-    </div>
-
-  </div>
+</div>
 
 </section>
 
+</main>
 
-<!-- =========================
-     SETTINGS
-========================= -->
-
-<section
-id="section-settings"
-class="section">
-
-  <div class="section-head">
-
-    <div>
-
-      <h1>Paramètres</h1>
-
-      <p>
-        Informations générales de l'administration.
-      </p>
-
-    </div>
-
-  </div>
-
-
-  <div class="card dashboard-card">
-
-    <h2 class="card-title">
-      Informations
-    </h2>
-
-    <div class="detail-box">
-
-      <div class="detail-label">
-        BASE DE DONNÉES
-      </div>
-
-      <div class="detail-value">
-        Supabase
-      </div>
-
-    </div>
-
-    <br>
-
-    <div class="detail-box">
-
-      <div class="detail-label">
-        TABLES CONNECTÉES
-      </div>
-
-      <div class="detail-value">
-        products • categories • orders • order_items • reviews
-      </div>
-
-    </div>
-
-    <br>
-
-    <div class="detail-box">
-
-      <div class="detail-label">
-        SESSION
-      </div>
-
-      <div
-        id="settingsUser"
-        class="detail-value">
-        —
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-    </div>
-
-  </main>
+</div>
 
 </div>
 
@@ -2130,265 +1712,286 @@ class="section">
 id="productModal"
 class="modal">
 
-  <div class="modal-box">
+<div class="modal-card">
 
-    <div class="modal-head">
+<div class="modal-header">
 
-      <div
-        id="productModalTitle"
-        class="modal-title">
-        Nouveau produit
-      </div>
+<h2
+id="productModalTitle"
+class="modal-title">
+إضافة منتج
+</h2>
 
-      <button
-        class="close-btn"
-        onclick="closeModal('productModal')">
-        ×
-      </button>
+<button
+class="close-btn"
+onclick="closeProductModal()">
+×
+</button>
 
-    </div>
+</div>
 
 
-    <form id="productForm">
+<div class="modal-body">
 
-      <div class="modal-body">
+<input
+type="hidden"
+id="editProductId">
 
-        <input
-          id="productId"
-          type="hidden">
 
+<div class="form-grid">
 
-        <div class="form-grid">
+<div class="form-group">
 
-          <div class="form-group">
+<label class="form-label">
+اسم المنتج *
+</label>
 
-            <label>Nom *</label>
+<input
+id="productName"
+class="form-input"
+placeholder="مثال: T-shirt homme">
 
-            <input
-              id="productName"
-              required
-              placeholder="Nom du produit">
+</div>
 
-          </div>
 
+<div class="form-group">
 
-          <div class="form-group">
+<label class="form-label">
+التصنيف
+</label>
 
-            <label>Catégorie</label>
+<select
+id="productCategory"
+class="form-select">
 
-            <select id="productCategory">
+<option value="">
+بدون تصنيف
+</option>
 
-              <option value="">
-                Sans catégorie
-              </option>
+</select>
 
-            </select>
+</div>
 
-          </div>
 
+<div class="form-group">
 
-          <div class="form-group">
+<label class="form-label">
+السعر *
+</label>
 
-            <label>Prix *</label>
+<input
+id="productPrice"
+class="form-input"
+type="number"
+min="0"
+step="0.01"
+placeholder="3500">
 
-            <input
-              id="productPrice"
-              type="number"
-              step="0.01"
-              min="0"
-              value="0"
-              required>
+</div>
 
-          </div>
 
+<div class="form-group">
 
-          <div class="form-group">
+<label class="form-label">
+السعر القديم
+</label>
 
-            <label>Ancien prix</label>
+<input
+id="productOldPrice"
+class="form-input"
+type="number"
+min="0"
+step="0.01"
+placeholder="4500">
 
-            <input
-              id="productOldPrice"
-              type="number"
-              step="0.01"
-              min="0">
+</div>
 
-          </div>
 
+<div class="form-group full">
 
-          <div class="form-group">
+<label class="form-label">
+الوصف
+</label>
 
-            <label>Stock global</label>
+<textarea
+id="productDescription"
+class="form-textarea"
+placeholder="وصف المنتج..."></textarea>
 
-            <input
-              id="productStock"
-              type="number"
-              min="0"
-              value="0">
+</div>
 
-            <div class="form-help">
-              Utilisé pour les produits sans variantes.
-            </div>
 
-          </div>
+<div class="form-group full">
 
+<label class="form-label">
+رابط الصورة الرئيسية
+</label>
 
-          <div class="form-group">
+<input
+id="productImage"
+class="form-input"
+placeholder="https://...">
 
-            <label>Statut</label>
+</div>
 
-            <select id="productActive">
 
-              <option value="true">
-                Actif
-              </option>
+<div class="form-group full">
 
-              <option value="false">
-                Désactivé
-              </option>
+<label class="form-label">
+صور إضافية
+</label>
 
-            </select>
+<textarea
+id="productImages"
+class="form-textarea"
+placeholder="ضع كل رابط صورة في سطر منفصل"></textarea>
 
-          </div>
+</div>
 
 
-          <div class="form-group">
+<!-- COLORS -->
 
-            <label>Image principale URL</label>
+<div class="form-group">
 
-            <input
-              id="productImage"
-              placeholder="https://...">
+<label class="form-label">
+🎨 الألوان
+</label>
 
-          </div>
+<div class="option-picker">
 
+<div
+id="colorsPicker"
+class="option-list">
+</div>
 
-          <div class="form-group">
+<div class="add-custom">
 
-            <label>Images supplémentaires</label>
+<input
+id="customColor"
+placeholder="إضافة لون جديد">
 
-            <input
-              id="productImages"
-              placeholder="URL1, URL2, URL3">
+<button
+type="button"
+onclick="addCustomOption('color')">
++
+</button>
 
-            <div class="form-help">
-              Séparez les URLs par des virgules.
-            </div>
+</div>
 
-          </div>
+</div>
 
+</div>
 
-          <div class="form-group full">
 
-            <label>Description</label>
+<!-- SIZES -->
 
-            <textarea
-              id="productDescription"
-              placeholder="Description du produit..."></textarea>
+<div class="form-group">
 
-          </div>
+<label class="form-label">
+📏 المقاسات
+</label>
 
+<div class="option-picker">
 
-          <div class="form-group">
+<div
+id="sizesPicker"
+class="option-list">
+</div>
 
-            <label>Couleurs</label>
+<div class="add-custom">
 
-            <input
-              id="productColors"
-              placeholder="Noir, Blanc, Rouge">
+<input
+id="customSize"
+placeholder="إضافة مقاس جديد">
 
-            <div class="form-help">
-              Exemple : Noir, Blanc, Rouge
-            </div>
+<button
+type="button"
+onclick="addCustomOption('size')">
++
+</button>
 
-          </div>
+</div>
 
+</div>
 
-          <div class="form-group">
+</div>
 
-            <label>Tailles</label>
+</div>
 
-            <input
-              id="productSizes"
-              placeholder="S, M, L, XL">
 
-            <div class="form-help">
-              Exemple : S, M, L, XL
-            </div>
+<!-- VARIANT STOCK -->
 
-          </div>
+<div
+id="variantSection"
+class="variant-section">
 
+<div class="variant-head">
 
-          <div class="form-group full">
+<h3>
+📊 مخزون الألوان والمقاسات
+</h3>
 
-            <label>
-              Stock des variantes
-            </label>
+<p class="variant-help">
+أدخل الكمية المتوفرة لكل تركيبة. المجموع يتحسب تلقائيًا.
+</p>
 
-            <div
-              id="variantEditor"
-              class="variant-panel">
+</div>
 
-              <div class="variant-head">
+<div
+id="variantTable"
+class="variant-table-wrap">
 
-                <div class="variant-title">
-                  Couleur × Taille
-                </div>
+<div class="empty">
+اختر لونًا أو مقاسًا أولًا.
+</div>
 
-                <button
-                  type="button"
-                  class="btn btn-light"
-                  onclick="buildVariantEditor()">
+</div>
 
-                  Actualiser
+</div>
 
-                </button>
 
-              </div>
+<div class="form-group" style="margin-top:15px">
 
-              <div
-                id="variantTable"
-                class="variant-table">
+<label class="form-label">
+حالة المنتج
+</label>
 
-                <div class="empty">
-                  Ajoutez des couleurs et tailles.
-                </div>
+<select
+id="productActive"
+class="form-select">
 
-              </div>
+<option value="true">
+نشط ويظهر في المتجر
+</option>
 
-            </div>
+<option value="false">
+غير نشط
+</option>
 
-          </div>
+</select>
 
-        </div>
+</div>
 
-      </div>
+</div>
 
 
-      <div class="modal-foot">
+<div class="modal-footer">
 
-        <button
-          type="button"
-          class="btn btn-light"
-          onclick="closeModal('productModal')">
+<button
+class="primary-btn"
+onclick="saveProduct()">
+💾 حفظ المنتج
+</button>
 
-          Annuler
+<button
+class="secondary-btn"
+onclick="closeProductModal()">
+إلغاء
+</button>
 
-        </button>
+</div>
 
-        <button
-          id="saveProductBtn"
-          type="submit"
-          class="btn btn-dark">
-
-          Enregistrer
-
-        </button>
-
-      </div>
-
-    </form>
-
-  </div>
+</div>
 
 </div>
 
@@ -2401,130 +2004,124 @@ class="modal">
 id="categoryModal"
 class="modal">
 
-  <div class="modal-box" style="max-width:550px">
+<div class="modal-card" style="max-width:550px">
 
-    <div class="modal-head">
+<div class="modal-header">
 
-      <div
-        id="categoryModalTitle"
-        class="modal-title">
-        Nouvelle catégorie
-      </div>
+<h2
+id="categoryModalTitle"
+class="modal-title">
+إضافة تصنيف
+</h2>
 
-      <button
-        class="close-btn"
-        onclick="closeModal('categoryModal')">
-        ×
-      </button>
+<button
+class="close-btn"
+onclick="closeCategoryModal()">
+×
+</button>
 
-    </div>
+</div>
 
+<div class="modal-body">
 
-    <form id="categoryForm">
+<input
+type="hidden"
+id="editCategoryId">
 
-      <div class="modal-body">
+<div class="form-group">
 
-        <input
-          id="categoryId"
-          type="hidden">
+<label class="form-label">
+اسم التصنيف *
+</label>
 
+<input
+id="categoryName"
+class="form-input"
+placeholder="مثال: ملابس رجالية">
 
-        <div class="form-group">
+</div>
 
-          <label>Nom *</label>
+<div class="form-group">
 
-          <input
-            id="categoryName"
-            required
-            placeholder="Ex: Vêtements">
+<label class="form-label">
+Slug
+</label>
 
-        </div>
+<input
+id="categorySlug"
+class="form-input"
+placeholder="hommes">
 
+</div>
 
-        <div class="form-group">
+<div class="form-group">
 
-          <label>Slug *</label>
+<label class="form-label">
+رابط الصورة
+</label>
 
-          <input
-            id="categorySlug"
-            required
-            placeholder="vetements">
+<input
+id="categoryImage"
+class="form-input"
+placeholder="https://...">
 
-        </div>
+</div>
 
+<div class="form-group">
 
-        <div class="form-group">
+<label class="form-label">
+الترتيب
+</label>
 
-          <label>Image URL</label>
+<input
+id="categorySort"
+class="form-input"
+type="number"
+value="0">
 
-          <input
-            id="categoryImage"
-            placeholder="https://...">
+</div>
 
-        </div>
+<div class="form-group">
 
+<label class="form-label">
+الحالة
+</label>
 
-        <div class="form-grid">
+<select
+id="categoryActive"
+class="form-select">
 
-          <div class="form-group">
+<option value="true">
+نشط
+</option>
 
-            <label>Ordre</label>
+<option value="false">
+غير نشط
+</option>
 
-            <input
-              id="categorySort"
-              type="number"
-              value="0">
+</select>
 
-          </div>
+</div>
 
+</div>
 
-          <div class="form-group">
+<div class="modal-footer">
 
-            <label>Statut</label>
+<button
+class="primary-btn"
+onclick="saveCategory()">
+💾 حفظ
+</button>
 
-            <select id="categoryActive">
+<button
+class="secondary-btn"
+onclick="closeCategoryModal()">
+إلغاء
+</button>
 
-              <option value="true">
-                Active
-              </option>
+</div>
 
-              <option value="false">
-                Désactivée
-              </option>
-
-            </select>
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <div class="modal-foot">
-
-        <button
-          type="button"
-          class="btn btn-light"
-          onclick="closeModal('categoryModal')">
-
-          Annuler
-
-        </button>
-
-        <button
-          type="submit"
-          class="btn btn-dark">
-
-          Enregistrer
-
-        </button>
-
-      </div>
-
-    </form>
-
-  </div>
+</div>
 
 </div>
 
@@ -2537,54 +2134,104 @@ class="modal">
 id="orderModal"
 class="modal">
 
-  <div class="modal-box" style="max-width:800px">
+<div class="modal-card" style="max-width:700px">
 
-    <div class="modal-head">
+<div class="modal-header">
 
-      <div class="modal-title">
-        Détails de la commande
-      </div>
+<h2 class="modal-title">
+تفاصيل الطلب
+</h2>
 
-      <button
-        class="close-btn"
-        onclick="closeModal('orderModal')">
-        ×
-      </button>
+<button
+class="close-btn"
+onclick="closeOrderModal()">
+×
+</button>
 
-    </div>
+</div>
 
-    <div
-      id="orderDetails"
-      class="modal-body">
+<div
+id="orderDetails"
+class="modal-body">
+</div>
 
-    </div>
-
-  </div>
+</div>
 
 </div>
 
 
-<div id="toast" class="toast"></div>
+<div
+id="toast"
+class="toast">
+تمت العملية بنجاح
+</div>
 
 
 <script>
 
 /* =========================================================
-   JR SHOP ADMIN
-   Compatible avec le schema Supabase fourni
+   GLOBALS
 ========================================================= */
 
-let currentUser = null;
+let currentUser=null;
 
-let products = [];
-let categories = [];
-let orders = [];
-let reviews = [];
+let products=[];
 
-let editingProductId = null;
-let editingCategoryId = null;
+let categories=[];
 
-const LOW_STOCK_LIMIT = 5;
+let orders=[];
+
+let reviews=[];
+
+let customColors=[];
+
+let customSizes=[];
+
+let editingProduct=null;
+
+
+/* =========================================================
+   DEFAULT OPTIONS
+========================================================= */
+
+const DEFAULT_COLORS=[
+"أسود",
+"أبيض",
+"أحمر",
+"أزرق",
+"أخضر",
+"أصفر",
+"وردي",
+"بنفسجي",
+"برتقالي",
+"بني",
+"رمادي",
+"بيج",
+"كحلي",
+"ذهبي",
+"فضي"
+];
+
+const DEFAULT_SIZES=[
+"XS",
+"S",
+"M",
+"L",
+"XL",
+"XXL",
+"XXXL",
+"36",
+"37",
+"38",
+"39",
+"40",
+"41",
+"42",
+"43",
+"44",
+"45",
+"46"
+];
 
 
 /* =========================================================
@@ -2598,7 +2245,7 @@ function $(id){
 
 function escapeHtml(value){
 
-  if(value === null || value === undefined){
+  if(value===null || value===undefined){
     return "";
   }
 
@@ -2613,20 +2260,22 @@ function escapeHtml(value){
 
 function formatPrice(value){
 
-  const n = Number(value || 0);
+  let n=Number(value||0);
 
-  return n.toLocaleString("fr-FR") + " DA";
+  return n.toLocaleString("fr-FR")+" DA";
 }
 
 
 function formatDate(value){
 
-  if(!value) return "";
+  if(!value){
+    return "";
+  }
 
   try{
 
     return new Date(value).toLocaleDateString(
-      "fr-FR",
+      "ar-DZ",
       {
         day:"2-digit",
         month:"2-digit",
@@ -2639,165 +2288,100 @@ function formatDate(value){
     return "";
 
   }
-
 }
 
 
-function formatDateTime(value){
+function showToast(message,error=false){
 
-  if(!value) return "";
+  let t=$("toast");
 
-  try{
+  t.textContent=message;
 
-    return new Date(value).toLocaleString(
-      "fr-FR",
-      {
-        day:"2-digit",
-        month:"2-digit",
-        year:"numeric",
-        hour:"2-digit",
-        minute:"2-digit"
-      }
-    );
+  t.classList.toggle("error",error);
 
-  }catch(e){
+  t.classList.add("show");
 
-    return "";
+  clearTimeout(window.toastTimer);
 
-  }
-
+  window.toastTimer=setTimeout(()=>{
+    t.classList.remove("show");
+  },2500);
 }
 
 
 function parseJsonArray(value){
 
-  if(!value) return [];
+  if(Array.isArray(value)){
+    return value;
+  }
 
-  if(Array.isArray(value)) return value;
+  if(!value){
+    return [];
+  }
 
-  if(typeof value === "object") return [];
-
-  if(typeof value === "string"){
+  if(typeof value==="string"){
 
     try{
 
-      const parsed = JSON.parse(value);
+      let x=JSON.parse(value);
 
-      if(Array.isArray(parsed)){
-        return parsed;
-      }
+      return Array.isArray(x)?x:[];
 
-    }catch(e){}
+    }catch(e){
 
-    return value
-      .split(/[,\n|]/)
-      .map(x => x.trim())
-      .filter(Boolean);
+      return value
+        .split(/[,\n|]/)
+        .map(x=>x.trim())
+        .filter(Boolean);
+
+    }
 
   }
 
   return [];
-
 }
 
 
-function parseJsonObject(value){
+function parseVariantStock(value){
 
-  if(!value) return {};
+  if(!value){
+    return {};
+  }
 
-  if(typeof value === "object" && !Array.isArray(value)){
+  if(typeof value==="object" && !Array.isArray(value)){
     return value;
   }
 
-  if(typeof value === "string"){
+  if(typeof value==="string"){
 
     try{
 
-      const parsed = JSON.parse(value);
+      let x=JSON.parse(value);
 
-      if(
-        parsed &&
-        typeof parsed === "object" &&
-        !Array.isArray(parsed)
-      ){
+      return x && typeof x==="object"
+        ?x
+        :{};
 
-        return parsed;
+    }catch(e){
 
-      }
+      return {};
 
-    }catch(e){}
+    }
 
   }
 
   return {};
-
 }
 
 
-function slugify(value){
+function slugify(text){
 
-  return String(value || "")
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g,"")
-    .toLowerCase()
+  return String(text||"")
     .trim()
-    .replace(/[^a-z0-9]+/g,"-")
-    .replace(/^-+|-+$/g,"");
-
-}
-
-
-function showToast(message){
-
-  const toast = $("toast");
-
-  toast.textContent = message;
-
-  toast.classList.add("show");
-
-  clearTimeout(window.__toastTimer);
-
-  window.__toastTimer = setTimeout(
-    () => toast.classList.remove("show"),
-    2500
-  );
-
-}
-
-
-function showError(error){
-
-  console.error(error);
-
-  showToast(
-    error?.message ||
-    "Une erreur est survenue."
-  );
-
-}
-
-
-/* =========================================================
-   SUPABASE CHECK
-========================================================= */
-
-function checkSupabase(){
-
-  if(
-    typeof supabaseClient === "undefined" ||
-    !supabaseClient
-  ){
-
-    $("loginScreen").style.display = "flex";
-
-    $("loginError").textContent =
-      "Supabase n'est pas disponible. Vérifiez config.js.";
-
-    return false;
-
-  }
-
-  return true;
+    .toLowerCase()
+    .replace(/\s+/g,"-")
+    .replace(/[^\w\u0600-\u06FF-]/g,"")
+    .replace(/-+/g,"-");
 
 }
 
@@ -2808,1036 +2392,281 @@ function checkSupabase(){
 
 async function checkAuth(){
 
-  if(!checkSupabase()) return;
+  if(
+    typeof supabaseClient==="undefined" ||
+    !supabaseClient
+  ){
+
+    $("loginScreen").innerHTML=`
+      <div class="login-card">
+        <div class="logo">JR</div>
+        <h1>خطأ في Supabase</h1>
+        <p>لم يتم العثور على supabaseClient. تحقق من config.js</p>
+      </div>
+    `;
+
+    return;
+
+  }
+
 
   try{
 
-    const result =
-      await supabaseClient.auth.getSession();
+    let result=
+      await supabaseClient.auth.getUser();
 
-    currentUser =
-      result.data?.session?.user || null;
-
-    if(currentUser){
-
-      showApp();
-
-    }else{
-
-      showLogin();
-
-    }
-
-  }catch(error){
-
-    console.error(error);
-
-    showLogin();
-
-  }
-
-}
+    currentUser=
+      result.data?.user || null;
 
 
-function showLogin(){
+    if(!currentUser){
 
-  $("loginScreen").style.display = "flex";
-  $("app").style.display = "none";
-
-}
-
-
-function showApp(){
-
-  $("loginScreen").style.display = "none";
-  $("app").style.display = "block";
-
-  const email =
-    currentUser?.email || "Admin";
-
-  $("userEmail").textContent = email;
-
-  $("settingsUser").textContent = email;
-
-  $("userAvatar").textContent =
-    email.charAt(0).toUpperCase();
-
-  loadInitialData();
-
-}
-
-
-$("loginForm").addEventListener(
-  "submit",
-  async function(e){
-
-    e.preventDefault();
-
-    $("loginError").textContent = "";
-
-    const email =
-      $("loginEmail").value.trim();
-
-    const password =
-      $("loginPassword").value;
-
-    try{
-
-      const result =
-        await supabaseClient.auth.signInWithPassword({
-          email,
-          password
-        });
-
-      if(result.error){
-        throw result.error;
-      }
-
-      currentUser =
-        result.data?.user || null;
-
-      showApp();
-
-    }catch(error){
-
-      console.error(error);
-
-      $("loginError").textContent =
-        error?.message ||
-        "Connexion impossible.";
+      $("loginScreen").classList.remove("hidden");
+      $("app").classList.add("hidden");
+      return;
 
     }
 
-  }
-);
+
+    $("loginScreen").classList.add("hidden");
+    $("app").classList.remove("hidden");
+
+    $("userEmail").textContent=
+      currentUser.email || "";
 
 
-$("logoutBtn").addEventListener(
-  "click",
-  async function(){
+    await loadAll();
 
-    try{
+  }catch(e){
 
-      await supabaseClient.auth.signOut();
+    console.error(e);
 
-    }catch(e){}
-
-    currentUser = null;
-
-    showLogin();
+    $("loginScreen").classList.remove("hidden");
 
   }
-);
+
+}
+
+
+function goLogin(){
+
+  location.href=
+    "login.html?next="+
+    encodeURIComponent(
+      location.pathname
+    );
+
+}
+
+
+async function logout(){
+
+  try{
+
+    await supabaseClient.auth.signOut();
+
+  }catch(e){
+
+    console.error(e);
+
+  }
+
+  location.href="login.html";
+
+}
 
 
 /* =========================================================
    NAVIGATION
 ========================================================= */
 
-const sectionTitles = {
-
-  dashboard:"Dashboard",
-  products:"Produits",
-  stock:"Stock",
-  orders:"Commandes",
-  customers:"Clients",
-  categories:"Catégories",
-  reviews:"Avis clients",
-  settings:"Paramètres"
-
-};
-
-
-function navigate(section){
+function showPage(page){
 
   document
-    .querySelectorAll(".nav-btn")
-    .forEach(btn => {
-
-      btn.classList.toggle(
-        "active",
-        btn.dataset.section === section
-      );
-
+    .querySelectorAll(".page")
+    .forEach(p=>{
+      p.classList.remove("active");
     });
 
 
-  document
-    .querySelectorAll(".section")
-    .forEach(el => {
-
-      el.classList.remove("active");
-
-    });
-
-
-  const target =
-    $("section-" + section);
+  let target=$("page-"+page);
 
   if(target){
     target.classList.add("active");
   }
 
 
-  $("pageTitle").textContent =
-    sectionTitles[section] || section;
+  document
+    .querySelectorAll(".nav-btn")
+    .forEach(b=>{
+      b.classList.toggle(
+        "active",
+        b.dataset.page===page
+      );
+    });
 
 
   $("sidebar").classList.remove("open");
 
 
-  if(section === "dashboard"){
-    loadDashboard();
+  if(page==="products"){
+    renderProducts();
   }
 
-  if(section === "products"){
-    loadProducts();
+  if(page==="categories"){
+    renderCategories();
   }
 
-  if(section === "stock"){
-    loadStock();
+  if(page==="orders"){
+    renderOrders();
   }
 
-  if(section === "orders"){
-    loadOrders();
-  }
-
-  if(section === "customers"){
-    loadCustomers();
-  }
-
-  if(section === "categories"){
-    loadCategories();
-  }
-
-  if(section === "reviews"){
-    loadReviews();
+  if(page==="reviews"){
+    renderReviews();
   }
 
 }
 
 
-document
-  .querySelectorAll(".nav-btn")
-  .forEach(btn => {
+function toggleSidebar(){
 
-    btn.addEventListener(
-      "click",
-      () => navigate(btn.dataset.section)
-    );
+  $("sidebar").classList.toggle("open");
 
-  });
-
-
-$("mobileMenu").addEventListener(
-  "click",
-  () => $("sidebar").classList.toggle("open")
-);
+}
 
 
 /* =========================================================
-   LOAD INITIAL
+   LOAD ALL
 ========================================================= */
 
-async function loadInitialData(){
+async function loadAll(){
 
-  await Promise.allSettled([
+  await Promise.all([
     loadCategories(),
     loadProducts(),
     loadOrders(),
-    loadReviews()
+    loadReviewsAdmin()
   ]);
 
-  await loadDashboard();
+  updateDashboard();
 
 }
 
 
 /* =========================================================
-   DASHBOARD
-========================================================= */
-
-async function loadDashboard(){
-
-  try{
-
-    const [
-      productsResult,
-      ordersResult,
-      reviewsResult
-    ] = await Promise.all([
-
-      supabaseClient
-        .from("products")
-        .select("id,name,price,stock,is_active,active"),
-
-      supabaseClient
-        .from("orders")
-        .select("id,status,total,created_at,customer_name,phone")
-        .order("created_at",{ascending:false})
-        .limit(1000),
-
-      supabaseClient
-        .from("reviews")
-        .select("id,rating")
-
-    ]);
-
-
-    if(productsResult.error)
-      throw productsResult.error;
-
-    if(ordersResult.error)
-      throw ordersResult.error;
-
-    if(reviewsResult.error)
-      throw reviewsResult.error;
-
-
-    products =
-      productsResult.data || [];
-
-    orders =
-      ordersResult.data || [];
-
-    reviews =
-      reviewsResult.data || [];
-
-
-    const confirmed =
-      orders.filter(
-        o => o.status === "confirmed" ||
-             o.status === "delivered" ||
-             o.status === "shipped" ||
-             o.status === "processing"
-      );
-
-
-    const revenue =
-      confirmed.reduce(
-        (sum,o) =>
-          sum + Number(o.total || 0),
-        0
-      );
-
-
-    const pending =
-      orders.filter(
-        o => o.status === "pending"
-      ).length;
-
-
-    const low =
-      products.filter(
-        p => Number(p.stock || 0) > 0 &&
-             Number(p.stock || 0) <= LOW_STOCK_LIMIT
-      ).length;
-
-
-    $("statRevenue").textContent =
-      formatPrice(revenue);
-
-    $("statOrders").textContent =
-      orders.length;
-
-    $("statPending").textContent =
-      pending + " en attente";
-
-    $("statProducts").textContent =
-      products.length;
-
-    $("statLowStock").textContent =
-      low + " stock faible";
-
-    $("statReviews").textContent =
-      reviews.length;
-
-
-    renderRecentOrders();
-
-  }catch(error){
-
-    showError(error);
-
-  }
-
-}
-
-
-function renderRecentOrders(){
-
-  const box = $("recentOrders");
-
-  const list =
-    orders.slice(0,6);
-
-  if(!list.length){
-
-    box.innerHTML =
-      '<div class="empty">Aucune commande.</div>';
-
-    return;
-
-  }
-
-
-  box.innerHTML = "";
-
-  list.forEach(order => {
-
-    const row =
-      document.createElement("div");
-
-    row.className = "mini-row";
-
-    row.innerHTML = `
-
-      <div style="min-width:0">
-
-        <div class="mini-name">
-          #${escapeHtml(
-            String(order.id).slice(0,8).toUpperCase()
-          )}
-        </div>
-
-        <div class="muted">
-          ${escapeHtml(
-            order.customer_name || "Client"
-          )}
-        </div>
-
-      </div>
-
-      <div style="text-align:right">
-
-        <div class="mini-value">
-          ${formatPrice(order.total)}
-        </div>
-
-        <div class="muted">
-          ${formatDate(order.created_at)}
-        </div>
-
-      </div>
-
-    `;
-
-    box.appendChild(row);
-
-  });
-
-}
-
-
-/* =========================================================
-   CATEGORIES
-========================================================= */
-
-async function loadCategories(){
-
-  try{
-
-    const result =
-      await supabaseClient
-        .from("categories")
-        .select("*")
-        .order("sort_order",{ascending:true})
-        .order("name",{ascending:true});
-
-
-    if(result.error)
-      throw result.error;
-
-
-    categories =
-      result.data || [];
-
-
-    renderCategories();
-
-    fillCategorySelects();
-
-  }catch(error){
-
-    console.error(error);
-
-  }
-
-}
-
-
-function fillCategorySelects(){
-
-  const selects = [
-    $("productCategory"),
-    $("productCategoryFilter")
-  ];
-
-
-  selects.forEach(select => {
-
-    if(!select) return;
-
-    const current =
-      select.value;
-
-    if(select.id === "productCategory"){
-
-      select.innerHTML =
-        '<option value="">Sans catégorie</option>';
-
-    }else{
-
-      select.innerHTML =
-        '<option value="">Toutes les catégories</option>';
-
-    }
-
-
-    categories.forEach(category => {
-
-      const option =
-        document.createElement("option");
-
-      option.value =
-        category.id;
-
-      option.textContent =
-        category.name;
-
-      select.appendChild(option);
-
-    });
-
-
-    if(current){
-      select.value = current;
-    }
-
-  });
-
-}
-
-
-function renderCategories(){
-
-  const grid =
-    $("categoriesGrid");
-
-  if(!categories.length){
-
-    grid.innerHTML =
-      '<div class="card empty" style="grid-column:1/-1"><strong>Aucune catégorie</strong>Créez votre première catégorie.</div>';
-
-    return;
-
-  }
-
-
-  grid.innerHTML = "";
-
-
-  categories.forEach(category => {
-
-    const card =
-      document.createElement("div");
-
-    card.className =
-      "card category-card";
-
-
-    const image =
-      category.image_url ||
-      "https://placehold.co/100x100?text=JR";
-
-
-    card.innerHTML = `
-
-      <img
-        class="category-img"
-        src="${escapeHtml(image)}"
-        alt="">
-
-      <div class="category-info">
-
-        <div class="category-name">
-          ${escapeHtml(category.name)}
-        </div>
-
-        <div class="category-slug">
-          ${escapeHtml(category.slug)}
-        </div>
-
-        <div style="margin-top:6px">
-
-          ${
-            category.active
-              ? '<span class="badge badge-green">ACTIVE</span>'
-              : '<span class="badge badge-red">DÉSACTIVÉE</span>'
-          }
-
-        </div>
-
-      </div>
-
-      <div class="actions">
-
-        <button
-          class="icon-btn"
-          title="Modifier"
-          onclick="editCategory('${category.id}')">
-
-          ✏️
-
-        </button>
-
-        <button
-          class="icon-btn"
-          title="Supprimer"
-          onclick="deleteCategory('${category.id}')">
-
-          🗑️
-
-        </button>
-
-      </div>
-
-    `;
-
-    grid.appendChild(card);
-
-  });
-
-}
-
-
-function openCategoryModal(category=null){
-
-  editingCategoryId =
-    category?.id || null;
-
-  $("categoryModalTitle").textContent =
-    category
-      ? "Modifier la catégorie"
-      : "Nouvelle catégorie";
-
-  $("categoryId").value =
-    category?.id || "";
-
-  $("categoryName").value =
-    category?.name || "";
-
-  $("categorySlug").value =
-    category?.slug || "";
-
-  $("categoryImage").value =
-    category?.image_url || "";
-
-  $("categorySort").value =
-    category?.sort_order ?? 0;
-
-  $("categoryActive").value =
-    String(category?.active ?? true);
-
-  $("categoryModal").classList.add("open");
-
-}
-
-
-$("categoryName").addEventListener(
-  "input",
-  () => {
-
-    if(!editingCategoryId){
-
-      $("categorySlug").value =
-        slugify($("categoryName").value);
-
-    }
-
-  }
-);
-
-
-$("categoryForm").addEventListener(
-  "submit",
-  async function(e){
-
-    e.preventDefault();
-
-    const payload = {
-
-      name:
-        $("categoryName").value.trim(),
-
-      slug:
-        $("categorySlug").value.trim(),
-
-      image_url:
-        $("categoryImage").value.trim() || null,
-
-      sort_order:
-        Number($("categorySort").value || 0),
-
-      active:
-        $("categoryActive").value === "true"
-
-    };
-
-
-    if(!payload.name || !payload.slug){
-
-      showToast("Nom et slug obligatoires.");
-
-      return;
-
-    }
-
-
-    try{
-
-      let result;
-
-
-      if(editingCategoryId){
-
-        result =
-          await supabaseClient
-            .from("categories")
-            .update(payload)
-            .eq("id",editingCategoryId);
-
-      }else{
-
-        result =
-          await supabaseClient
-            .from("categories")
-            .insert(payload);
-
-      }
-
-
-      if(result.error)
-        throw result.error;
-
-
-      closeModal("categoryModal");
-
-      showToast("Catégorie enregistrée ✓");
-
-      await loadCategories();
-
-    }catch(error){
-
-      showError(error);
-
-    }
-
-  }
-);
-
-
-function editCategory(id){
-
-  const category =
-    categories.find(
-      x => String(x.id) === String(id)
-    );
-
-  if(category){
-    openCategoryModal(category);
-  }
-
-}
-
-
-async function deleteCategory(id){
-
-  const category =
-    categories.find(
-      x => String(x.id) === String(id)
-    );
-
-
-  if(!category) return;
-
-
-  if(
-    !confirm(
-      `Supprimer la catégorie "${category.name}" ?`
-    )
-  ){
-
-    return;
-
-  }
-
-
-  try{
-
-    /*
-      On ne supprime pas automatiquement les produits.
-      On détache d'abord leur category_id.
-    */
-
-    const update =
-      await supabaseClient
-        .from("products")
-        .update({
-          category_id:null
-        })
-        .eq("category_id",id);
-
-
-    if(update.error)
-      throw update.error;
-
-
-    const result =
-      await supabaseClient
-        .from("categories")
-        .delete()
-        .eq("id",id);
-
-
-    if(result.error)
-      throw result.error;
-
-
-    showToast("Catégorie supprimée ✓");
-
-    await loadCategories();
-    await loadProducts();
-
-  }catch(error){
-
-    showError(error);
-
-  }
-
-}
-
-
-/* =========================================================
-   PRODUCTS
+   PRODUCTS LOAD
 ========================================================= */
 
 async function loadProducts(){
 
-  try{
-
-    const result =
-      await supabaseClient
-        .from("products")
-        .select(`
-          *,
-          categories(
-            id,
-            name,
-            slug
-          )
-        `)
-        .order("created_at",{ascending:false});
+  let result=
+    await supabaseClient
+      .from("products")
+      .select("*")
+      .order("created_at",{ascending:false});
 
 
-    if(result.error)
-      throw result.error;
+  if(result.error){
 
+    console.error(result.error);
 
-    products =
-      result.data || [];
-
-
-    renderProducts();
-
-  }catch(error){
-
-    showError(error);
-
-  }
-
-}
-
-
-function getProductCategory(product){
-
-  if(product.categories){
-    return product.categories.name || "";
-  }
-
-  const category =
-    categories.find(
-      c => String(c.id) === String(product.category_id)
+    showToast(
+      "فشل تحميل المنتجات",
+      true
     );
 
-  return category?.name || "";
-
-}
-
-
-function getProductActive(product){
-
-  if(product.is_active === false)
-    return false;
-
-  if(product.active === false)
-    return false;
-
-  return true;
-
-}
-
-
-function getStockStatus(stock){
-
-  const n =
-    Number(stock || 0);
-
-  if(n <= 0){
-
-    return {
-      text:"RUPTURE",
-      class:"badge-red"
-    };
+    return;
 
   }
 
-  if(n <= LOW_STOCK_LIMIT){
 
-    return {
-      text:"STOCK FAIBLE",
-      class:"badge-orange"
-    };
+  products=result.data || [];
 
-  }
+  renderProducts();
 
-  return {
-    text:"EN STOCK",
-    class:"badge-green"
-  };
+  updateProductCategorySelects();
 
 }
 
 
-function getProductImage(product){
-
-  return (
-    product.image_url ||
-    product.image ||
-    "https://placehold.co/100x100?text=JR"
-  );
-
-}
-
+/* =========================================================
+   PRODUCT RENDER
+========================================================= */
 
 function renderProducts(){
 
-  const tbody =
-    $("productsTable");
+  let tbody=$("productsTable");
 
-
-  const search =
-    $("productSearch").value
+  let search=
+    ($("productSearch")?.value||"")
       .trim()
       .toLowerCase();
 
 
-  const category =
-    $("productCategoryFilter").value;
+  let cat=
+    $("productCategoryFilter")?.value||"";
 
 
-  const stockFilter =
-    $("productStockFilter").value;
+  let stockFilter=
+    $("productStockFilter")?.value||"";
 
 
-  let list =
-    [...products];
+  let list=
+    products.filter(p=>{
+
+      let name=
+        String(p.name||"")
+          .toLowerCase();
+
+      let matchSearch=
+        !search ||
+        name.includes(search);
 
 
-  if(search){
-
-    list =
-      list.filter(product => {
-
-        const text = [
-
-          product.name,
-
-          product.description,
-
-          product.id,
-
-          getProductCategory(product)
-
-        ]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase();
-
-        return text.includes(search);
-
-      });
-
-  }
+      let matchCat=
+        !cat ||
+        String(p.category_id||"")===String(cat);
 
 
-  if(category){
+      let stock=
+        Number(p.stock||0);
 
-    list =
-      list.filter(
-        p =>
-          String(p.category_id) ===
-          String(category)
+
+      let matchStock=true;
+
+
+      if(stockFilter==="available"){
+        matchStock=stock>0;
+      }
+
+      if(stockFilter==="low"){
+        matchStock=stock>0 && stock<=5;
+      }
+
+      if(stockFilter==="empty"){
+        matchStock=stock<=0;
+      }
+
+
+      return(
+        matchSearch &&
+        matchCat &&
+        matchStock
       );
 
-  }
-
-
-  if(stockFilter){
-
-    list =
-      list.filter(p => {
-
-        const stock =
-          Number(p.stock || 0);
-
-        if(stockFilter === "ok")
-          return stock > LOW_STOCK_LIMIT;
-
-        if(stockFilter === "low")
-          return stock > 0 &&
-                 stock <= LOW_STOCK_LIMIT;
-
-        if(stockFilter === "empty")
-          return stock <= 0;
-
-        return true;
-
-      });
-
-  }
+    });
 
 
   if(!list.length){
 
-    tbody.innerHTML = `
-
+    tbody.innerHTML=`
       <tr>
-
         <td colspan="6">
-
           <div class="empty">
-
-            <strong>Aucun produit</strong>
-
-            Aucun résultat pour votre recherche.
-
+            لا توجد منتجات.
           </div>
-
         </td>
-
       </tr>
-
     `;
 
     return;
@@ -3845,26 +2674,67 @@ function renderProducts(){
   }
 
 
-  tbody.innerHTML = "";
+  tbody.innerHTML="";
 
 
-  list.forEach(product => {
+  list.forEach(p=>{
 
-    const stock =
-      Number(product.stock || 0);
-
-    const status =
-      getStockStatus(stock);
-
-    const active =
-      getProductActive(product);
+    let category=
+      categories.find(
+        c=>String(c.id)===String(p.category_id)
+      );
 
 
-    const tr =
-      document.createElement("tr");
+    let image=
+      p.image_url||
+      p.image||
+      parseJsonArray(p.image_urls)[0]||
+      "https://placehold.co/100x100?text=JR";
 
 
-    tr.innerHTML = `
+    let stock=
+      Number(p.stock||0);
+
+
+    let stockBadge;
+
+
+    if(stock<=0){
+
+      stockBadge=`
+        <span class="badge badge-red">
+          نافد
+        </span>
+      `;
+
+    }else if(stock<=5){
+
+      stockBadge=`
+        <span class="badge badge-orange">
+          منخفض: ${stock}
+        </span>
+      `;
+
+    }else{
+
+      stockBadge=`
+        <span class="badge badge-green">
+          ${stock} متوفر
+        </span>
+      `;
+
+    }
+
+
+    let active=
+      p.is_active!==false &&
+      p.active!==false;
+
+
+    let row=document.createElement("tr");
+
+
+    row.innerHTML=`
 
       <td>
 
@@ -3872,23 +2742,18 @@ function renderProducts(){
 
           <img
             class="product-thumb"
-            src="${escapeHtml(
-              getProductImage(product)
-            )}"
-            alt="">
+            src="${escapeHtml(image)}"
+            onerror="this.src='https://placehold.co/100x100?text=JR'"
+          >
 
           <div>
 
             <div class="product-name">
-              ${escapeHtml(
-                product.name
-              )}
+              ${escapeHtml(p.name)}
             </div>
 
-            <div class="muted">
-              ${escapeHtml(
-                String(product.id).slice(0,8)
-              )}
+            <div class="product-id">
+              ${escapeHtml(String(p.id).slice(0,8))}
             </div>
 
           </div>
@@ -3899,38 +2764,19 @@ function renderProducts(){
 
 
       <td>
-
-        ${escapeHtml(
-          getProductCategory(product) ||
-          "—"
-        )}
-
-      </td>
-
-
-      <td>
-
-        <div class="price">
-          ${formatPrice(product.price)}
-        </div>
-
-        ${
-          product.old_price
-            ? `<div class="muted" style="text-decoration:line-through">
-                ${formatPrice(product.old_price)}
-               </div>`
-            : ""
-        }
-
-      </td>
-
-
-      <td>
-
         <strong>
-          ${stock}
+          ${formatPrice(p.price)}
         </strong>
+      </td>
 
+
+      <td>
+        ${stockBadge}
+      </td>
+
+
+      <td>
+        ${escapeHtml(category?.name||"بدون تصنيف")}
       </td>
 
 
@@ -3938,12 +2784,10 @@ function renderProducts(){
 
         ${
           active
-            ? `<span class="badge ${status.class}">
-                ${status.text}
-              </span>`
-            : `<span class="badge badge-red">
-                DÉSACTIVÉ
-              </span>`
+          ?
+          `<span class="badge badge-green">نشط</span>`
+          :
+          `<span class="badge badge-gray">مخفي</span>`
         }
 
       </td>
@@ -3955,38 +2799,25 @@ function renderProducts(){
 
           <button
             class="icon-btn"
-            title="Modifier"
-            onclick="editProduct('${product.id}')">
-
+            title="تعديل"
+            onclick="openProductModal('${p.id}')">
             ✏️
-
           </button>
+
 
           <button
             class="icon-btn"
-            title="Stock"
-            onclick="quickStock('${product.id}')">
-
-            📦
-
+            title="تفعيل/تعطيل"
+            onclick="toggleProduct('${p.id}')">
+            ${active?"👁️":"🚫"}
           </button>
+
 
           <button
             class="icon-btn"
-            title="Voir"
-            onclick="viewProduct('${product.id}')">
-
-            👁️
-
-          </button>
-
-          <button
-            class="icon-btn"
-            title="Supprimer"
-            onclick="deleteProduct('${product.id}')">
-
+            title="حذف"
+            onclick="deleteProduct('${p.id}')">
             🗑️
-
           </button>
 
         </div>
@@ -3996,200 +2827,321 @@ function renderProducts(){
     `;
 
 
-    tbody.appendChild(tr);
+    tbody.appendChild(row);
 
   });
 
 }
 
 
-$("productSearch").addEventListener(
-  "input",
-  renderProducts
-);
-
-$("productCategoryFilter").addEventListener(
-  "change",
-  renderProducts
-);
-
-$("productStockFilter").addEventListener(
-  "change",
-  renderProducts
-);
-
-
 /* =========================================================
-   PRODUCT MODAL
+   PRODUCT CATEGORY SELECT
 ========================================================= */
 
-function openProductModal(product=null){
+function updateProductCategorySelects(){
 
-  editingProductId =
-    product?.id || null;
+  let select=$("productCategory");
 
-
-  $("productModalTitle").textContent =
-    product
-      ? "Modifier le produit"
-      : "Nouveau produit";
+  let filter=$("productCategoryFilter");
 
 
-  $("productId").value =
-    product?.id || "";
+  if(select){
 
-  $("productName").value =
-    product?.name || "";
+    let current=select.value;
 
-  $("productCategory").value =
-    product?.category_id || "";
-
-  $("productPrice").value =
-    product?.price ?? 0;
-
-  $("productOldPrice").value =
-    product?.old_price ?? "";
-
-  $("productStock").value =
-    product?.stock ?? 0;
-
-  $("productImage").value =
-    product?.image_url ||
-    product?.image ||
-    "";
-
-  $("productImages").value =
-    parseJsonArray(
-      product?.image_urls
-    ).join(", ");
+    select.innerHTML=`
+      <option value="">
+        بدون تصنيف
+      </option>
+    `;
 
 
-  $("productDescription").value =
-    product?.description || "";
+    categories.forEach(c=>{
+
+      let o=document.createElement("option");
+
+      o.value=c.id;
+
+      o.textContent=c.name;
+
+      select.appendChild(o);
+
+    });
 
 
-  $("productColors").value =
-    parseJsonArray(
-      product?.colors
-    ).join(", ");
+    select.value=current;
+
+  }
 
 
-  $("productSizes").value =
-    parseJsonArray(
-      product?.sizes
-    ).join(", ");
+  if(filter){
+
+    let current=filter.value;
+
+    filter.innerHTML=`
+      <option value="">
+        كل التصنيفات
+      </option>
+    `;
 
 
-  $("productActive").value =
-    String(
-      getProductActive(
-        product || {}
-      )
-    );
+    categories.forEach(c=>{
+
+      let o=document.createElement("option");
+
+      o.value=c.id;
+
+      o.textContent=c.name;
+
+      filter.appendChild(o);
+
+    });
 
 
-  $("productModal").classList.add("open");
-
-
-  buildVariantEditor(
-    product?.variant_stock || {}
-  );
-
-}
-
-
-function editProduct(id){
-
-  const product =
-    products.find(
-      p => String(p.id) === String(id)
-    );
-
-  if(product){
-
-    openProductModal(product);
+    filter.value=current;
 
   }
 
 }
 
 
-function closeModal(id){
+/* =========================================================
+   OPTIONS PICKERS
+========================================================= */
 
-  $(id).classList.remove("open");
+function getAvailableColors(){
+
+  return [
+    ...new Set([
+      ...DEFAULT_COLORS,
+      ...customColors
+    ])
+  ];
 
 }
 
 
-function viewProduct(id){
+function getAvailableSizes(){
 
-  window.open(
-    "product-details.html?id=" +
-    encodeURIComponent(id),
-    "_blank"
+  return [
+    ...new Set([
+      ...DEFAULT_SIZES,
+      ...customSizes
+    ])
+  ];
+
+}
+
+
+function renderOptionPickers(
+  selectedColors=[],
+  selectedSizes=[]
+){
+
+  let cp=$("colorsPicker");
+  let sp=$("sizesPicker");
+
+
+  cp.innerHTML="";
+  sp.innerHTML="";
+
+
+  getAvailableColors().forEach((color,index)=>{
+
+    let id=
+      "color_"+index;
+
+
+    let wrap=document.createElement("div");
+
+    wrap.className="option-check";
+
+
+    wrap.innerHTML=`
+
+      <input
+        type="checkbox"
+        id="${id}"
+        value="${escapeHtml(color)}"
+        ${selectedColors.includes(color)?"checked":""}
+      >
+
+      <label for="${id}">
+        ${escapeHtml(color)}
+      </label>
+
+    `;
+
+
+    cp.appendChild(wrap);
+
+  });
+
+
+  getAvailableSizes().forEach((size,index)=>{
+
+    let id=
+      "size_"+index;
+
+
+    let wrap=document.createElement("div");
+
+    wrap.className="option-check";
+
+
+    wrap.innerHTML=`
+
+      <input
+        type="checkbox"
+        id="${id}"
+        value="${escapeHtml(size)}"
+        ${selectedSizes.includes(size)?"checked":""}
+      >
+
+      <label for="${id}">
+        ${escapeHtml(size)}
+      </label>
+
+    `;
+
+
+    sp.appendChild(wrap);
+
+  });
+
+
+  cp
+    .querySelectorAll("input")
+    .forEach(x=>{
+      x.addEventListener(
+        "change",
+        renderVariantTable
+      );
+    });
+
+
+  sp
+    .querySelectorAll("input")
+    .forEach(x=>{
+      x.addEventListener(
+        "change",
+        renderVariantTable
+      );
+    });
+
+}
+
+
+function getSelectedOptions(type){
+
+  let selector=
+    type==="color"
+    ?"#colorsPicker input:checked"
+    :"#sizesPicker input:checked";
+
+
+  return [
+    ...document.querySelectorAll(selector)
+  ].map(x=>x.value);
+
+}
+
+
+function addCustomOption(type){
+
+  let input=
+    type==="color"
+    ?$("customColor")
+    :$("customSize");
+
+
+  let value=
+    input.value.trim();
+
+
+  if(!value){
+    return;
+  }
+
+
+  if(type==="color"){
+
+    if(!customColors.includes(value)){
+      customColors.push(value);
+    }
+
+  }else{
+
+    if(!customSizes.includes(value)){
+      customSizes.push(value);
+    }
+
+  }
+
+
+  input.value="";
+
+
+  let selectedColors=
+    getSelectedOptions("color");
+
+
+  let selectedSizes=
+    getSelectedOptions("size");
+
+
+  if(type==="color"){
+    selectedColors.push(value);
+  }else{
+    selectedSizes.push(value);
+  }
+
+
+  renderOptionPickers(
+    [...new Set(selectedColors)],
+    [...new Set(selectedSizes)]
   );
+
+
+  renderVariantTable();
 
 }
 
 
 /* =========================================================
-   VARIANT EDITOR
+   VARIANT TABLE
 ========================================================= */
-
-function getFormColors(){
-
-  return $("productColors")
-    .value
-    .split(",")
-    .map(x => x.trim())
-    .filter(Boolean);
-
-}
-
-
-function getFormSizes(){
-
-  return $("productSizes")
-    .value
-    .split(",")
-    .map(x => x.trim())
-    .filter(Boolean);
-
-}
-
 
 function variantKey(color,size){
 
-  return String(color).trim() +
-    "|" +
-    String(size).trim();
+  return (
+    String(color||"").trim()+
+    "|"+
+    String(size||"").trim()
+  );
 
 }
 
 
-function buildVariantEditor(existing={}){
+function renderVariantTable(){
 
-  const colors =
-    getFormColors();
+  let colors=
+    getSelectedOptions("color");
 
-  const sizes =
-    getFormSizes();
 
-  const table =
-    $("variantTable");
+  let sizes=
+    getSelectedOptions("size");
+
+
+  let box=$("variantTable");
 
 
   if(!colors.length && !sizes.length){
 
-    table.innerHTML = `
-
+    box.innerHTML=`
       <div class="empty">
-
-        Ajoutez des couleurs et/ou des tailles
-        pour gérer le stock par variante.
-
+        اختر لونًا أو مقاسًا لإنشاء المخزون.
       </div>
-
     `;
 
     return;
@@ -4197,229 +3149,393 @@ function buildVariantEditor(existing={}){
   }
 
 
-  const variants =
-    parseJsonObject(existing);
+  let existing=
+    editingProduct
+    ?parseVariantStock(
+      editingProduct.variant_stock
+    )
+    :{};
 
 
-  let html = `
-
-    <table>
-
-      <thead>
-
-        <tr>
-
-          <th>COULEUR</th>
-
-  `;
+  let html="";
 
 
-  if(sizes.length){
+  /*
+    اللون + المقاس
+  */
 
-    sizes.forEach(size => {
+  if(colors.length && sizes.length){
 
-      html += `
-        <th>
-          ${escapeHtml(size)}
-        </th>
-      `;
+    html+=`
+      <table class="variant-table">
 
-    });
+        <thead>
+          <tr>
+            <th>اللون / المقاس</th>
+            ${sizes.map(s=>`
+              <th>${escapeHtml(s)}</th>
+            `).join("")}
+          </tr>
+        </thead>
 
-  }else{
+        <tbody>
 
-    html += `
-      <th>STOCK</th>
+          ${colors.map(color=>`
+
+            <tr>
+
+              <td>
+                <strong>
+                  ${escapeHtml(color)}
+                </strong>
+              </td>
+
+              ${sizes.map(size=>{
+
+                let key=
+                  variantKey(color,size);
+
+                let value=
+                  existing[key]??0;
+
+                return `
+                  <td>
+
+                    <input
+                      class="variant-stock-input"
+                      type="number"
+                      min="0"
+                      data-key="${escapeHtml(key)}"
+                      value="${Number(value)||0}"
+                      oninput="calculateTotalStock()"
+                    >
+
+                  </td>
+                `;
+
+              }).join("")}
+
+            </tr>
+
+          `).join("")}
+
+        </tbody>
+
+      </table>
     `;
 
   }
 
 
-  html += `
-        </tr>
-      </thead>
-      <tbody>
-  `;
+  /*
+    اللون فقط
+  */
 
+  else if(colors.length){
 
-  if(colors.length){
+    html+=`
+      <table class="variant-table">
 
-    colors.forEach(color => {
+        <thead>
+          <tr>
+            <th>اللون</th>
+            <th>المخزون</th>
+          </tr>
+        </thead>
 
-      html += `
+        <tbody>
 
-        <tr>
+          ${colors.map(color=>{
 
-          <td>
-            <strong>
-              ${escapeHtml(color)}
-            </strong>
-          </td>
+            let key=
+              variantKey(color,"");
 
-      `;
+            let value=
+              existing[color]??
+              existing[key]??
+              0;
 
+            return `
+              <tr>
 
-      if(sizes.length){
+                <td>
+                  ${escapeHtml(color)}
+                </td>
 
-        sizes.forEach(size => {
+                <td>
 
-          const key =
-            variantKey(color,size);
+                  <input
+                    class="variant-stock-input"
+                    type="number"
+                    min="0"
+                    data-key="${escapeHtml(color)}"
+                    value="${Number(value)||0}"
+                    oninput="calculateTotalStock()"
+                  >
 
-          const value =
-            variants[key] ??
-            variants[
-              color + "_" + size
-            ] ??
-            0;
+                </td>
 
+              </tr>
+            `;
 
-          html += `
+          }).join("")}
 
-            <td>
+        </tbody>
 
-              <input
-                class="variant-input"
-                type="number"
-                min="0"
-                data-variant-key="${escapeHtml(key)}"
-                value="${Number(value) || 0}">
-
-            </td>
-
-          `;
-
-        });
-
-      }else{
-
-        const value =
-          variants[color] ?? 0;
-
-
-        html += `
-
-          <td>
-
-            <input
-              class="variant-input"
-              type="number"
-              min="0"
-              data-variant-key="${escapeHtml(color)}"
-              value="${Number(value) || 0}">
-
-          </td>
-
-        `;
-
-      }
-
-
-      html += `
-        </tr>
-      `;
-
-    });
-
-  }else{
-
-    sizes.forEach(size => {
-
-      const value =
-        variants[size] ?? 0;
-
-
-      html += `
-
-        <tr>
-
-          <td>
-            ${escapeHtml(size)}
-          </td>
-
-          <td>
-
-            <input
-              class="variant-input"
-              type="number"
-              min="0"
-              data-variant-key="${escapeHtml(size)}"
-              value="${Number(value) || 0}">
-
-          </td>
-
-        </tr>
-
-      `;
-
-    });
+      </table>
+    `;
 
   }
 
 
-  html += `
+  /*
+    المقاس فقط
+  */
 
-      </tbody>
+  else{
 
-    </table>
+    html+=`
+      <table class="variant-table">
 
-  `;
+        <thead>
+          <tr>
+            <th>المقاس</th>
+            <th>المخزون</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          ${sizes.map(size=>{
+
+            let key=
+              variantKey("",size);
+
+            let value=
+              existing[size]??
+              existing[key]??
+              0;
+
+            return `
+              <tr>
+
+                <td>
+                  ${escapeHtml(size)}
+                </td>
+
+                <td>
+
+                  <input
+                    class="variant-stock-input"
+                    type="number"
+                    min="0"
+                    data-key="${escapeHtml(size)}"
+                    value="${Number(value)||0}"
+                    oninput="calculateTotalStock()"
+                  >
+
+                </td>
+
+              </tr>
+            `;
+
+          }).join("")}
+
+        </tbody>
+
+      </table>
+    `;
+
+  }
 
 
-  table.innerHTML = html;
+  box.innerHTML=html;
+
+
+  box.insertAdjacentHTML(
+    "beforeend",
+    `
+      <div class="total-stock-box">
+        <span>المخزون الإجمالي</span>
+        <span
+          id="totalVariantStock"
+          class="total-stock-number">
+          0
+        </span>
+      </div>
+    `
+  );
+
+
+  calculateTotalStock();
 
 }
 
 
-$("productColors").addEventListener(
-  "input",
-  () => buildVariantEditor()
-);
+function calculateTotalStock(){
 
-$("productSizes").addEventListener(
-  "input",
-  () => buildVariantEditor()
-);
+  let total=0;
 
-
-function collectVariantStock(){
-
-  const object = {};
 
   document
-    .querySelectorAll(
-      "#variantTable [data-variant-key]"
-    )
-    .forEach(input => {
+    .querySelectorAll(".variant-stock-input")
+    .forEach(input=>{
 
-      object[
-        input.dataset.variantKey
-      ] =
+      let n=
         Math.max(
           0,
-          Number(input.value || 0)
+          Number(input.value)||0
         );
+
+      total+=n;
 
     });
 
 
-  return object;
+  let el=$("totalVariantStock");
+
+  if(el){
+    el.textContent=total;
+  }
+
+
+  return total;
 
 }
 
 
-function calculateVariantTotal(){
+function getVariantStockFromForm(){
 
-  const variants =
-    collectVariantStock();
+  let obj={};
 
-  return Object
-    .values(variants)
-    .reduce(
-      (sum,value) =>
-        sum + Number(value || 0),
-      0
+
+  document
+    .querySelectorAll(".variant-stock-input")
+    .forEach(input=>{
+
+      let key=input.dataset.key;
+
+      let value=
+        Math.max(
+          0,
+          parseInt(input.value,10)||0
+        );
+
+
+      obj[key]=value;
+
+    });
+
+
+  return obj;
+
+}
+
+
+/* =========================================================
+   PRODUCT MODAL
+========================================================= */
+
+function openProductModal(productId=null){
+
+  editingProduct=
+    productId
+    ?products.find(
+      p=>String(p.id)===String(productId)
+    )
+    :null;
+
+
+  $("productModalTitle").textContent=
+    editingProduct
+    ?"تعديل المنتج"
+    :"إضافة منتج";
+
+
+  $("editProductId").value=
+    editingProduct?.id||"";
+
+
+  $("productName").value=
+    editingProduct?.name||"";
+
+
+  $("productPrice").value=
+    editingProduct?.price??"";
+
+
+  $("productOldPrice").value=
+    editingProduct?.old_price??"";
+
+
+  $("productDescription").value=
+    editingProduct?.description||"";
+
+
+  $("productImage").value=
+    editingProduct?.image_url||
+    editingProduct?.image||
+    "";
+
+
+  let images=
+    parseJsonArray(
+      editingProduct?.image_urls
     );
+
+
+  $("productImages").value=
+    images.join("\n");
+
+
+  $("productCategory").value=
+    editingProduct?.category_id||"";
+
+
+  let active=
+    editingProduct
+    ?(
+      editingProduct.is_active!==false &&
+      editingProduct.active!==false
+    )
+    :true;
+
+
+  $("productActive").value=
+    active?"true":"false";
+
+
+  let selectedColors=
+    parseJsonArray(
+      editingProduct?.colors
+    ).map(String);
+
+
+  let selectedSizes=
+    parseJsonArray(
+      editingProduct?.sizes
+    ).map(String);
+
+
+  renderOptionPickers(
+    selectedColors,
+    selectedSizes
+  );
+
+
+  renderVariantTable();
+
+
+  $("productModal").classList.add("open");
+
+}
+
+
+function closeProductModal(){
+
+  $("productModal").classList.remove("open");
+
+  editingProduct=null;
 
 }
 
@@ -4428,210 +3544,262 @@ function calculateVariantTotal(){
    SAVE PRODUCT
 ========================================================= */
 
-$("productForm").addEventListener(
-  "submit",
-  async function(e){
+async function saveProduct(){
 
-    e.preventDefault();
+  let name=
+    $("productName").value.trim();
 
 
-    const name =
-      $("productName").value.trim();
+  let price=
+    Number($("productPrice").value);
 
-    if(!name){
 
-      showToast("Le nom est obligatoire.");
+  if(!name){
 
-      return;
+    showToast(
+      "اسم المنتج مطلوب",
+      true
+    );
 
-    }
-
-
-    const colors =
-      getFormColors();
-
-    const sizes =
-      getFormSizes();
-
-
-    const variantStock =
-      collectVariantStock();
-
-
-    let globalStock =
-      Number(
-        $("productStock").value || 0
-      );
-
-
-    /*
-      Si variantes présentes,
-      le stock global est automatiquement
-      calculé à partir des variantes.
-    */
-
-    if(
-      Object.keys(variantStock).length
-    ){
-
-      globalStock =
-        calculateVariantTotal();
-
-      $("productStock").value =
-        globalStock;
-
-    }
-
-
-    const image =
-      $("productImage").value.trim();
-
-
-    const extraImages =
-      $("productImages")
-        .value
-        .split(",")
-        .map(x => x.trim())
-        .filter(Boolean);
-
-
-    const allImages =
-      [
-        ...new Set(
-          [
-            image,
-            ...extraImages
-          ].filter(Boolean)
-        )
-      ];
-
-
-    const payload = {
-
-      name,
-
-      description:
-        $("productDescription")
-          .value
-          .trim() || null,
-
-      price:
-        Number(
-          $("productPrice").value || 0
-        ),
-
-      old_price:
-        $("productOldPrice").value
-          ? Number(
-              $("productOldPrice").value
-            )
-          : null,
-
-      stock:
-        globalStock,
-
-      category_id:
-        $("productCategory").value ||
-        null,
-
-      image_url:
-        image || null,
-
-      image:
-        image || null,
-
-      /*
-        Le schema actuel n'affiche pas image_urls
-        dans products, donc on ne l'envoie pas.
-      */
-
-      colors,
-
-      sizes,
-
-      variant_stock:
-        variantStock,
-
-      is_active:
-        $("productActive").value === "true",
-
-      active:
-        $("productActive").value === "true",
-
-      updated_at:
-        new Date().toISOString()
-
-    };
-
-
-    const button =
-      $("saveProductBtn");
-
-    button.disabled = true;
-
-    button.textContent =
-      "Enregistrement...";
-
-
-    try{
-
-      let result;
-
-
-      if(editingProductId){
-
-        result =
-          await supabaseClient
-            .from("products")
-            .update(payload)
-            .eq(
-              "id",
-              editingProductId
-            );
-
-      }else{
-
-        result =
-          await supabaseClient
-            .from("products")
-            .insert(payload);
-
-      }
-
-
-      if(result.error)
-        throw result.error;
-
-
-      closeModal("productModal");
-
-      showToast(
-        editingProductId
-          ? "Produit modifié ✓"
-          : "Produit créé ✓"
-      );
-
-
-      await loadProducts();
-      await loadStock();
-      await loadDashboard();
-
-
-    }catch(error){
-
-      showError(error);
-
-    }finally{
-
-      button.disabled = false;
-
-      button.textContent =
-        "Enregistrer";
-
-    }
+    return;
 
   }
-);
+
+
+  if(
+    Number.isNaN(price) ||
+    price<0
+  ){
+
+    showToast(
+      "أدخل سعرًا صحيحًا",
+      true
+    );
+
+    return;
+
+  }
+
+
+  let colors=
+    getSelectedOptions("color");
+
+
+  let sizes=
+    getSelectedOptions("size");
+
+
+  let variantStock=
+    getVariantStockFromForm();
+
+
+  let totalStock=
+    Object.values(variantStock)
+      .reduce(
+        (sum,v)=>
+          sum+(Number(v)||0),
+        0
+      );
+
+
+  /*
+    إذا ماكانش variants
+    نخلي stock = 0
+    ويمكن تعديله لاحقًا من variants.
+  */
+
+
+  let image=
+    $("productImage").value.trim();
+
+
+  let extraImages=
+    $("productImages")
+      .value
+      .split(/\n/)
+      .map(x=>x.trim())
+      .filter(Boolean);
+
+
+  let imageUrls=
+    [
+      ...new Set([
+        ...(
+          image
+          ?[image]
+          :[]
+        ),
+        ...extraImages
+      ])
+    ];
+
+
+  let active=
+    $("productActive").value==="true";
+
+
+  let payload={
+
+    name:name,
+
+    description:
+      $("productDescription")
+        .value
+        .trim()||null,
+
+    price:price,
+
+    old_price:
+      Number($("productOldPrice").value)||null,
+
+    stock:totalStock,
+
+    category_id:
+      $("productCategory").value||null,
+
+    image_url:
+      image||null,
+
+    image:
+      image||null,
+
+    image_urls:
+      imageUrls,
+
+    colors:colors,
+
+    sizes:sizes,
+
+    variant_stock:variantStock,
+
+    is_active:active,
+
+    active:active,
+
+    updated_at:
+      new Date().toISOString()
+
+  };
+
+
+  try{
+
+    let result;
+
+
+    if(editingProduct){
+
+      result=
+        await supabaseClient
+          .from("products")
+          .update(payload)
+          .eq(
+            "id",
+            editingProduct.id
+          );
+
+    }else{
+
+      result=
+        await supabaseClient
+          .from("products")
+          .insert(payload);
+
+    }
+
+
+    if(result.error){
+      throw result.error;
+    }
+
+
+    showToast(
+      editingProduct
+      ?"تم تعديل المنتج ✓"
+      :"تمت إضافة المنتج ✓"
+    );
+
+
+    closeProductModal();
+
+    await loadProducts();
+
+    updateDashboard();
+
+
+  }catch(e){
+
+    console.error(e);
+
+    showToast(
+      "فشل حفظ المنتج: "+
+      (e.message||"خطأ"),
+      true
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   TOGGLE PRODUCT
+========================================================= */
+
+async function toggleProduct(id){
+
+  let p=
+    products.find(
+      x=>String(x.id)===String(id)
+    );
+
+
+  if(!p){
+    return;
+  }
+
+
+  let active=
+    p.is_active!==false &&
+    p.active!==false;
+
+
+  let newValue=!active;
+
+
+  let result=
+    await supabaseClient
+      .from("products")
+      .update({
+        is_active:newValue,
+        active:newValue,
+        updated_at:new Date().toISOString()
+      })
+      .eq("id",id);
+
+
+  if(result.error){
+
+    showToast(
+      "فشل تغيير الحالة",
+      true
+    );
+
+    return;
+
+  }
+
+
+  showToast(
+    newValue
+    ?"تم تفعيل المنتج ✓"
+    :"تم إخفاء المنتج ✓"
+  );
+
+
+  await loadProducts();
+
+}
 
 
 /* =========================================================
@@ -4640,253 +3808,117 @@ $("productForm").addEventListener(
 
 async function deleteProduct(id){
 
-  const product =
+  let p=
     products.find(
-      p => String(p.id) === String(id)
+      x=>String(x.id)===String(id)
     );
 
 
-  if(!product) return;
+  if(!p){
+    return;
+  }
 
 
-  if(
-    !confirm(
-      `Supprimer "${product.name}" ?\n\nCette action peut être impossible si le produit est utilisé dans des commandes.`
-    )
-  ){
+  let ok=
+    confirm(
+      "هل أنت متأكد من حذف المنتج؟\n\n"+
+      p.name+
+      "\n\nلا يمكن التراجع عن هذه العملية."
+    );
+
+
+  if(!ok){
+    return;
+  }
+
+
+  let result=
+    await supabaseClient
+      .from("products")
+      .delete()
+      .eq("id",id);
+
+
+  if(result.error){
+
+    showToast(
+      "تعذر حذف المنتج. قد يكون مرتبطًا بطلبات.",
+      true
+    );
+
+    console.error(result.error);
 
     return;
 
   }
 
 
-  try{
-
-    const result =
-      await supabaseClient
-        .from("products")
-        .delete()
-        .eq("id",id);
+  showToast(
+    "تم حذف المنتج ✓"
+  );
 
 
-    if(result.error)
-      throw result.error;
+  await loadProducts();
 
-
-    showToast(
-      "Produit supprimé ✓"
-    );
-
-
-    await loadProducts();
-    await loadDashboard();
-
-
-  }catch(error){
-
-    showError(error);
-
-  }
+  updateDashboard();
 
 }
 
 
 /* =========================================================
-   QUICK STOCK
+   CATEGORIES LOAD
 ========================================================= */
 
-async function quickStock(id){
+async function loadCategories(){
 
-  const product =
-    products.find(
-      p => String(p.id) === String(id)
-    );
-
-
-  if(!product) return;
-
-
-  const current =
-    Number(product.stock || 0);
+  let result=
+    await supabaseClient
+      .from("categories")
+      .select("*")
+      .order("sort_order",{ascending:true})
+      .order("created_at",{ascending:false});
 
 
-  const value =
-    prompt(
-      `Nouveau stock pour "${product.name}"`,
-      current
-    );
+  if(result.error){
 
-
-  if(value === null) return;
-
-
-  const stock =
-    Math.max(
-      0,
-      parseInt(value,10) || 0
-    );
-
-
-  try{
-
-    const result =
-      await supabaseClient
-        .from("products")
-        .update({
-          stock,
-          updated_at:
-            new Date().toISOString()
-        })
-        .eq("id",id);
-
-
-    if(result.error)
-      throw result.error;
-
+    console.error(result.error);
 
     showToast(
-      "Stock mis à jour ✓"
+      "فشل تحميل التصنيفات",
+      true
     );
 
-
-    await loadProducts();
-    await loadStock();
-    await loadDashboard();
-
-
-  }catch(error){
-
-    showError(error);
+    return;
 
   }
+
+
+  categories=
+    result.data||[];
+
+
+  renderCategories();
+
+  updateProductCategorySelects();
 
 }
 
 
 /* =========================================================
-   STOCK
+   CATEGORIES RENDER
 ========================================================= */
 
-async function loadStock(){
+function renderCategories(){
 
-  if(!products.length){
-
-    await loadProducts();
-
-  }
+  let grid=$("categoriesGrid");
 
 
-  const total =
-    products.reduce(
-      (sum,p) =>
-        sum + Number(p.stock || 0),
-      0
-    );
+  if(!categories.length){
 
-
-  const low =
-    products.filter(
-      p =>
-        Number(p.stock || 0) > 0 &&
-        Number(p.stock || 0) <= LOW_STOCK_LIMIT
-    );
-
-
-  const empty =
-    products.filter(
-      p =>
-        Number(p.stock || 0) <= 0
-    );
-
-
-  $("stockTotal").textContent =
-    total;
-
-  $("stockLow").textContent =
-    low.length;
-
-  $("stockEmpty").textContent =
-    empty.length;
-
-
-  renderStock();
-
-}
-
-
-function renderStock(){
-
-  const tbody =
-    $("stockTable");
-
-
-  const search =
-    $("stockSearch").value
-      .trim()
-      .toLowerCase();
-
-
-  const filter =
-    $("stockFilter").value;
-
-
-  let list =
-    [...products];
-
-
-  if(search){
-
-    list =
-      list.filter(
-        p =>
-          String(p.name || "")
-            .toLowerCase()
-            .includes(search)
-      );
-
-  }
-
-
-  if(filter === "low"){
-
-    list =
-      list.filter(
-        p =>
-          Number(p.stock || 0) > 0 &&
-          Number(p.stock || 0) <= LOW_STOCK_LIMIT
-      );
-
-  }
-
-
-  if(filter === "empty"){
-
-    list =
-      list.filter(
-        p =>
-          Number(p.stock || 0) <= 0
-      );
-
-  }
-
-
-  if(!list.length){
-
-    tbody.innerHTML = `
-
-      <tr>
-
-        <td colspan="5">
-
-          <div class="empty">
-            <strong>Aucun produit</strong>
-            Aucun résultat.
-          </div>
-
-        </td>
-
-      </tr>
-
+    grid.innerHTML=`
+      <div class="empty">
+        لا توجد تصنيفات.
+      </div>
     `;
 
     return;
@@ -4894,274 +3926,461 @@ function renderStock(){
   }
 
 
-  tbody.innerHTML = "";
+  grid.innerHTML="";
 
 
-  list.forEach(product => {
+  categories.forEach(c=>{
 
-    const stock =
-      Number(product.stock || 0);
+    let card=document.createElement("div");
 
-    const status =
-      getStockStatus(stock);
-
-    const variants =
-      parseJsonObject(
-        product.variant_stock
-      );
-
-    const variantCount =
-      Object.keys(variants).length;
+    card.className="category-card";
 
 
-    const tr =
-      document.createElement("tr");
+    let image=
+      c.image_url||
+      "https://placehold.co/100x100?text=JR";
 
 
-    tr.innerHTML = `
+    card.innerHTML=`
 
-      <td>
+      <img
+        class="category-img"
+        src="${escapeHtml(image)}"
+        onerror="this.src='https://placehold.co/100x100?text=JR'"
+      >
 
-        <div class="product-cell">
 
-          <img
-            class="product-thumb"
-            src="${escapeHtml(
-              getProductImage(product)
-            )}">
+      <div class="category-info">
 
-          <div class="product-name">
-            ${escapeHtml(product.name)}
-          </div>
+        <div class="category-name">
+          ${escapeHtml(c.name)}
+        </div>
+
+        <div class="category-slug">
+          ${escapeHtml(c.slug||"")}
+        </div>
+
+        <div style="margin-top:5px">
+
+          ${
+            c.active
+            ?
+            `<span class="badge badge-green">نشط</span>`
+            :
+            `<span class="badge badge-gray">مخفي</span>`
+          }
 
         </div>
 
-      </td>
+      </div>
 
 
-      <td>
-
-        <strong style="font-size:16px">
-          ${stock}
-        </strong>
-
-      </td>
-
-
-      <td>
-
-        ${
-          variantCount
-            ? `<span class="badge badge-blue">
-                ${variantCount} variantes
-              </span>`
-            : `<span class="muted">
-                Stock global
-              </span>`
-        }
-
-      </td>
-
-
-      <td>
-
-        <span class="badge ${status.class}">
-          ${status.text}
-        </span>
-
-      </td>
-
-
-      <td>
+      <div class="actions">
 
         <button
-          class="btn btn-light"
-          onclick="editProduct('${product.id}')">
-
-          Gérer
-
+          class="icon-btn"
+          onclick="openCategoryModal('${c.id}')">
+          ✏️
         </button>
 
-      </td>
+        <button
+          class="icon-btn"
+          onclick="deleteCategory('${c.id}')">
+          🗑️
+        </button>
+
+      </div>
 
     `;
 
 
-    tbody.appendChild(tr);
+    grid.appendChild(card);
 
   });
 
 }
 
 
-$("stockSearch").addEventListener(
-  "input",
-  renderStock
-);
-
-$("stockFilter").addEventListener(
-  "change",
-  renderStock
-);
-
-
 /* =========================================================
-   ORDERS
+   CATEGORY MODAL
 ========================================================= */
 
-async function loadOrders(){
+function openCategoryModal(id=null){
 
-  try{
-
-    const result =
-      await supabaseClient
-        .from("orders")
-        .select("*")
-        .order(
-          "created_at",
-          {ascending:false}
-        )
-        .limit(1000);
+  let c=
+    id
+    ?categories.find(
+      x=>String(x.id)===String(id)
+    )
+    :null;
 
 
-    if(result.error)
-      throw result.error;
+  $("categoryModalTitle").textContent=
+    c
+    ?"تعديل تصنيف"
+    :"إضافة تصنيف";
 
 
-    orders =
-      result.data || [];
+  $("editCategoryId").value=
+    c?.id||"";
 
 
-    renderOrders();
+  $("categoryName").value=
+    c?.name||"";
 
-    renderRecentOrders();
+
+  $("categorySlug").value=
+    c?.slug||"";
 
 
-  }catch(error){
+  $("categoryImage").value=
+    c?.image_url||"";
 
-    showError(error);
 
-  }
+  $("categorySort").value=
+    c?.sort_order??0;
+
+
+  $("categoryActive").value=
+    c?.active===false
+    ?"false"
+    :"true";
+
+
+  $("categoryModal").classList.add("open");
 
 }
 
 
-function statusBadge(status){
+function closeCategoryModal(){
 
-  const map = {
+  $("categoryModal").classList.remove("open");
 
-    pending:["PENDING","badge-orange"],
+}
 
-    confirmed:["CONFIRMÉE","badge-blue"],
 
-    processing:["PRÉPARATION","badge-blue"],
+/* =========================================================
+   SAVE CATEGORY
+========================================================= */
 
-    shipped:["EXPÉDIÉE","badge-blue"],
+async function saveCategory(){
 
-    delivered:["LIVRÉE","badge-green"],
+  let name=
+    $("categoryName").value.trim();
 
-    cancelled:["ANNULÉE","badge-red"]
+
+  if(!name){
+
+    showToast(
+      "اسم التصنيف مطلوب",
+      true
+    );
+
+    return;
+
+  }
+
+
+  let slug=
+    $("categorySlug").value.trim()||
+    slugify(name);
+
+
+  let payload={
+
+    name:name,
+
+    slug:slug,
+
+    image_url:
+      $("categoryImage")
+        .value
+        .trim()||null,
+
+    sort_order:
+      parseInt(
+        $("categorySort").value,
+        10
+      )||0,
+
+    active:
+      $("categoryActive").value==="true"
 
   };
 
 
-  const item =
-    map[status] ||
-    [
-      String(status || "UNKNOWN").toUpperCase(),
-      "badge-orange"
-    ];
+  let id=
+    $("editCategoryId").value;
 
 
-  return `
-    <span class="badge ${item[1]}">
-      ${escapeHtml(item[0])}
-    </span>
-  `;
+  let result;
+
+
+  if(id){
+
+    result=
+      await supabaseClient
+        .from("categories")
+        .update(payload)
+        .eq("id",id);
+
+  }else{
+
+    result=
+      await supabaseClient
+        .from("categories")
+        .insert(payload);
+
+  }
+
+
+  if(result.error){
+
+    console.error(result.error);
+
+    showToast(
+      "فشل حفظ التصنيف",
+      true
+    );
+
+    return;
+
+  }
+
+
+  showToast(
+    id
+    ?"تم تعديل التصنيف ✓"
+    :"تمت إضافة التصنيف ✓"
+  );
+
+
+  closeCategoryModal();
+
+  await loadCategories();
 
 }
 
 
+/* =========================================================
+   DELETE CATEGORY
+========================================================= */
+
+async function deleteCategory(id){
+
+  let c=
+    categories.find(
+      x=>String(x.id)===String(id)
+    );
+
+
+  if(!c){
+    return;
+  }
+
+
+  if(
+    !confirm(
+      "حذف التصنيف:\n"+
+      c.name+
+      "\n\nهل أنت متأكد؟"
+    )
+  ){
+    return;
+  }
+
+
+  let result=
+    await supabaseClient
+      .from("categories")
+      .delete()
+      .eq("id",id);
+
+
+  if(result.error){
+
+    showToast(
+      "تعذر حذف التصنيف. قد تكون هناك منتجات مرتبطة به.",
+      true
+    );
+
+    return;
+
+  }
+
+
+  showToast(
+    "تم حذف التصنيف ✓"
+  );
+
+
+  await loadCategories();
+
+}
+
+
+/* =========================================================
+   ORDERS LOAD
+========================================================= */
+
+async function loadOrders(){
+
+  let result=
+    await supabaseClient
+      .from("orders")
+      .select(`
+        *,
+        order_items(
+          id,
+          product_id,
+          quantity,
+          price,
+          color,
+          size,
+          variant_color,
+          variant_size
+        )
+      `)
+      .order(
+        "created_at",
+        {ascending:false}
+      );
+
+
+  if(result.error){
+
+    console.error(result.error);
+
+    showToast(
+      "فشل تحميل الطلبات",
+      true
+    );
+
+    return;
+
+  }
+
+
+  orders=
+    result.data||[];
+
+
+  renderOrders();
+
+  updateDashboard();
+
+}
+
+
+/* =========================================================
+   ORDER STATUS
+========================================================= */
+
+function statusLabel(status){
+
+  let map={
+
+    pending:"قيد الانتظار",
+
+    confirmed:"مؤكد",
+
+    processing:"قيد المعالجة",
+
+    shipped:"تم الشحن",
+
+    completed:"مكتمل",
+
+    cancelled:"ملغى"
+
+  };
+
+
+  return map[status]||status||"غير معروف";
+
+}
+
+
+function statusClass(status){
+
+  if(status==="completed"||status==="confirmed"){
+    return "badge-green";
+  }
+
+  if(status==="cancelled"){
+    return "badge-red";
+  }
+
+  if(status==="processing"||status==="shipped"){
+    return "badge-orange";
+  }
+
+  return "badge-gray";
+
+}
+
+
+/* =========================================================
+   ORDERS RENDER
+========================================================= */
+
 function renderOrders(){
 
-  const tbody =
-    $("ordersTable");
+  let tbody=$("ordersTable");
 
 
-  const search =
-    $("orderSearch").value
+  let search=
+    ($("orderSearch")?.value||"")
       .trim()
       .toLowerCase();
 
 
-  const filter =
-    $("orderStatusFilter").value;
+  let status=
+    $("orderStatusFilter")?.value||"";
 
 
-  let list =
-    [...orders];
+  let list=
+    orders.filter(o=>{
+
+      let text=
+        (
+          o.customer_name||
+          ""
+        )+
+        " "+
+        (
+          o.phone||
+          ""
+        );
 
 
-  if(search){
-
-    list =
-      list.filter(order => {
-
-        const text = [
-
-          order.id,
-
-          order.customer_name,
-
-          order.phone,
-
-          order.wilaya,
-
-          order.commune
-
-        ]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase();
-
-        return text.includes(search);
-
-      });
-
-  }
+      let matchSearch=
+        !search||
+        text.toLowerCase().includes(search);
 
 
-  if(filter){
+      let matchStatus=
+        !status||
+        o.status===status;
 
-    list =
-      list.filter(
-        order =>
-          order.status === filter
+
+      return(
+        matchSearch&&
+        matchStatus
       );
 
-  }
+    });
 
 
   if(!list.length){
 
-    tbody.innerHTML = `
-
+    tbody.innerHTML=`
       <tr>
-
-        <td colspan="7">
-
+        <td colspan="8">
           <div class="empty">
-
-            <strong>Aucune commande</strong>
-
-            Aucun résultat.
-
+            لا توجد طلبات.
           </div>
-
         </td>
-
       </tr>
-
     `;
 
     return;
@@ -5169,80 +4388,86 @@ function renderOrders(){
   }
 
 
-  tbody.innerHTML = "";
+  tbody.innerHTML="";
 
 
-  list.forEach(order => {
+  list.forEach(o=>{
 
-    const tr =
-      document.createElement("tr");
+    let row=document.createElement("tr");
 
 
-    tr.innerHTML = `
+    let location=[
+      o.wilaya,
+      o.commune
+    ]
+    .filter(Boolean)
+    .join(" / ");
+
+
+    row.innerHTML=`
 
       <td>
 
         <strong>
           #${escapeHtml(
-            String(order.id)
-              .slice(0,8)
-              .toUpperCase()
+            String(o.id).slice(0,8).toUpperCase()
           )}
         </strong>
 
-      </td>
+        <div class="order-items">
 
+          ${(o.order_items||[]).length}
+          منتج
 
-      <td>
-
-        <strong>
-          ${escapeHtml(
-            order.customer_name ||
-            "Client"
-          )}
-        </strong>
-
-      </td>
-
-
-      <td>
-
-        <div>
-          ${escapeHtml(
-            order.phone || "—"
-          )}
-        </div>
-
-        <div class="muted">
-          ${escapeHtml(
-            order.wilaya || ""
-          )}
         </div>
 
       </td>
 
 
       <td>
-
-        <strong>
-          ${formatPrice(order.total)}
-        </strong>
-
+        ${escapeHtml(o.customer_name||"—")}
       </td>
 
 
       <td>
-        ${formatDateTime(order.created_at)}
+        ${escapeHtml(o.phone||"—")}
+      </td>
+
+
+      <td>
+        ${escapeHtml(location||"—")}
+      </td>
+
+
+      <td>
+        <strong>
+          ${formatPrice(o.total)}
+        </strong>
       </td>
 
 
       <td>
 
         <select
-          class="order-status"
-          onchange="changeOrderStatus('${order.id}',this.value)">
+          class="status-select"
+          onchange="changeOrderStatus('${o.id}',this.value)">
 
-          ${renderStatusOptions(order.status)}
+          ${[
+            "pending",
+            "confirmed",
+            "processing",
+            "shipped",
+            "completed",
+            "cancelled"
+          ].map(s=>`
+
+            <option
+              value="${s}"
+              ${o.status===s?"selected":""}>
+              ${statusLabel(s)}
+            </option>
+
+          `).join("")}
 
         </select>
 
@@ -5250,13 +4475,16 @@ function renderOrders(){
 
 
       <td>
+        ${formatDate(o.created_at)}
+      </td>
+
+
+      <td>
 
         <button
           class="icon-btn"
-          onclick="viewOrder('${order.id}')">
-
+          onclick="openOrderModal('${o.id}')">
           👁️
-
         </button>
 
       </td>
@@ -5264,770 +4492,694 @@ function renderOrders(){
     `;
 
 
-    tbody.appendChild(tr);
+    tbody.appendChild(row);
 
   });
 
 }
 
 
-function renderStatusOptions(current){
+/* =========================================================
+   CHANGE ORDER STATUS
+========================================================= */
 
-  const statuses = [
+async function changeOrderStatus(id,status){
 
-    ["pending","Pending"],
-    ["confirmed","Confirmée"],
-    ["processing","En préparation"],
-    ["shipped","Expédiée"],
-    ["delivered","Livrée"],
-    ["cancelled","Annulée"]
-
-  ];
+  let order=
+    orders.find(
+      o=>String(o.id)===String(id)
+    );
 
 
-  return statuses
-    .map(
-      ([value,label]) =>
-        `<option value="${value}" ${
-          value === current
-            ? "selected"
-            : ""
-        }>${label}</option>`
-    )
-    .join("");
+  if(!order){
+    return;
+  }
+
+
+  let oldStatus=
+    order.status;
+
+
+  /*
+    إذا كان الانتقال إلى confirmed
+    من status آخر، نحاول خصم stock.
+  */
+
+  if(
+    status==="confirmed" &&
+    oldStatus!=="confirmed"
+  ){
+
+    let ok=
+      await decreaseStockForOrder(order);
+
+
+    if(!ok){
+
+      showToast(
+        "لم يتم تأكيد الطلب بسبب مشكلة في المخزون.",
+        true
+      );
+
+      renderOrders();
+
+      return;
+
+    }
+
+  }
+
+
+  /*
+    إذا ألغينا طلبًا كان confirmed
+    نرجع المخزون.
+  */
+
+  if(
+    status==="cancelled" &&
+    oldStatus==="confirmed"
+  ){
+
+    await restoreStockForOrder(order);
+
+  }
+
+
+  let result=
+    await supabaseClient
+      .from("orders")
+      .update({
+        status:status
+      })
+      .eq("id",id);
+
+
+  if(result.error){
+
+    console.error(result.error);
+
+    showToast(
+      "فشل تحديث حالة الطلب",
+      true
+    );
+
+    return;
+
+  }
+
+
+  showToast(
+    "تم تحديث حالة الطلب ✓"
+  );
+
+
+  await loadOrders();
+
+  await loadProducts();
+
+  updateDashboard();
 
 }
 
 
-async function changeOrderStatus(
-  id,
-  status
-){
+/* =========================================================
+   STOCK FUNCTIONS FOR ORDERS
+========================================================= */
 
-  try{
+async function decreaseStockForOrder(order){
 
-    const result =
+  /*
+    هذه العملية تعتمد على variant_stock.
+    نقرأ المنتج ونحدثه واحدًا واحدًا.
+  */
+
+  for(let item of (order.order_items||[])){
+
+    if(!item.product_id){
+      continue;
+    }
+
+
+    let result=
       await supabaseClient
-        .from("orders")
-        .update({status})
-        .eq("id",id);
+        .from("products")
+        .select(
+          "id,name,stock,colors,sizes,variant_stock"
+        )
+        .eq(
+          "id",
+          item.product_id
+        )
+        .maybeSingle();
 
 
-    if(result.error)
-      throw result.error;
+    if(result.error || !result.data){
+
+      console.error(result.error);
+
+      return false;
+
+    }
 
 
-    showToast(
-      "Statut de commande mis à jour ✓"
-    );
+    let p=result.data;
 
 
-    const order =
-      orders.find(
-        o => String(o.id) === String(id)
+    let qty=
+      Math.max(
+        1,
+        Number(item.quantity)||1
       );
 
 
-    if(order){
-      order.status = status;
+    let variants=
+      parseVariantStock(
+        p.variant_stock
+      );
+
+
+    let colors=
+      parseJsonArray(p.colors);
+
+
+    let sizes=
+      parseJsonArray(p.sizes);
+
+
+    let color=
+      item.color||
+      item.variant_color||
+      "";
+
+
+    let size=
+      item.size||
+      item.variant_size||
+      "";
+
+
+    if(
+      Object.keys(variants).length &&
+      (color||size)
+    ){
+
+      let key=
+        variantKey(color,size);
+
+
+      if(
+        variants[key]===undefined
+      ){
+
+        /*
+          fallback
+        */
+
+        if(color && !size){
+          key=color;
+        }
+
+        if(size && !color){
+          key=size;
+        }
+
+      }
+
+
+      let available=
+        Number(
+          variants[key]??0
+        );
+
+
+      if(available<qty){
+
+        showToast(
+          "المخزون غير كافٍ للمنتج: "+
+          p.name,
+          true
+        );
+
+        return false;
+
+      }
+
+
+      variants[key]=
+        available-qty;
+
+
+      let total=
+        Object.values(variants)
+          .reduce(
+            (sum,v)=>
+              sum+(Number(v)||0),
+            0
+          );
+
+
+      let update=
+        await supabaseClient
+          .from("products")
+          .update({
+            variant_stock:variants,
+            stock:total,
+            updated_at:new Date().toISOString()
+          })
+          .eq("id",p.id);
+
+
+      if(update.error){
+
+        console.error(update.error);
+
+        return false;
+
+      }
+
+    }else{
+
+      let available=
+        Number(p.stock||0);
+
+
+      if(available<qty){
+
+        showToast(
+          "المخزون غير كافٍ للمنتج: "+
+          p.name,
+          true
+        );
+
+        return false;
+
+      }
+
+
+      let update=
+        await supabaseClient
+          .from("products")
+          .update({
+            stock:available-qty,
+            updated_at:new Date().toISOString()
+          })
+          .eq("id",p.id);
+
+
+      if(update.error){
+
+        console.error(update.error);
+
+        return false;
+
+      }
+
+    }
+
+  }
+
+
+  return true;
+
+}
+
+
+/*
+  ملاحظة:
+  هذه الدالة ترجع الكمية عند إلغاء confirmed.
+*/
+
+async function restoreStockForOrder(order){
+
+  for(let item of (order.order_items||[])){
+
+    if(!item.product_id){
+      continue;
     }
 
 
-    await loadDashboard();
+    let result=
+      await supabaseClient
+        .from("products")
+        .select(
+          "id,stock,variant_stock"
+        )
+        .eq(
+          "id",
+          item.product_id
+        )
+        .maybeSingle();
 
 
-  }catch(error){
+    if(result.error || !result.data){
+      continue;
+    }
 
-    showError(error);
 
-    await loadOrders();
+    let p=result.data;
+
+
+    let qty=
+      Math.max(
+        1,
+        Number(item.quantity)||1
+      );
+
+
+    let variants=
+      parseVariantStock(
+        p.variant_stock
+      );
+
+
+    let color=
+      item.color||
+      item.variant_color||
+      "";
+
+
+    let size=
+      item.size||
+      item.variant_size||
+      "";
+
+
+    if(
+      Object.keys(variants).length &&
+      (color||size)
+    ){
+
+      let key=
+        variantKey(color,size);
+
+
+      if(variants[key]===undefined){
+
+        if(color && !size){
+          key=color;
+        }
+
+        if(size && !color){
+          key=size;
+        }
+
+      }
+
+
+      variants[key]=
+        Number(variants[key]||0)+qty;
+
+
+      let total=
+        Object.values(variants)
+          .reduce(
+            (sum,v)=>
+              sum+(Number(v)||0),
+            0
+          );
+
+
+      await supabaseClient
+        .from("products")
+        .update({
+          variant_stock:variants,
+          stock:total,
+          updated_at:new Date().toISOString()
+        })
+        .eq("id",p.id);
+
+    }else{
+
+      await supabaseClient
+        .from("products")
+        .update({
+          stock:
+            Number(p.stock||0)+qty,
+          updated_at:new Date().toISOString()
+        })
+        .eq("id",p.id);
+
+    }
 
   }
 
 }
 
 
-async function viewOrder(id){
+/* =========================================================
+   ORDER MODAL
+========================================================= */
 
-  const order =
+function openOrderModal(id){
+
+  let o=
     orders.find(
-      o => String(o.id) === String(id)
+      x=>String(x.id)===String(id)
     );
 
 
-  if(!order) return;
-
-
-  let items = [];
-
-
-  try{
-
-    const result =
-      await supabaseClient
-        .from("order_items")
-        .select(`
-          *,
-          products(
-            id,
-            name,
-            image_url
-          )
-        `)
-        .eq("order_id",id);
-
-
-    if(!result.error){
-
-      items =
-        result.data || [];
-
-    }
-
-  }catch(e){
-
-    console.error(e);
-
+  if(!o){
+    return;
   }
 
 
-  const itemsHtml =
-    items.length
-
-      ? `
-
-        <div style="margin-top:20px">
-
-          <h3 class="card-title">
-            Produits
-          </h3>
-
-          <div class="mini-list">
-
-            ${
-              items.map(item => {
-
-                const name =
-                  item.products?.name ||
-                  "Produit";
-
-                const image =
-                  item.products?.image_url ||
-                  "https://placehold.co/60x60?text=JR";
-
-                const variant =
-                  [
-                    item.color,
-                    item.size
-                  ]
-                  .filter(Boolean)
-                  .join(" • ");
+  let items=
+    o.order_items||[];
 
 
-                return `
+  let html=`
 
-                  <div class="mini-row">
+    <div class="form-grid">
 
-                    <div
-                      style="
-                        display:flex;
-                        align-items:center;
-                        gap:10px;
-                      ">
+      <div class="panel">
 
-                      <img
-                        src="${escapeHtml(image)}"
-                        style="
-                          width:45px;
-                          height:45px;
-                          object-fit:cover;
-                          border-radius:8px;
-                        ">
+        <h3 class="panel-title">
+          معلومات الزبون
+        </h3>
 
-                      <div>
+        <p>
+          <strong>الاسم:</strong>
+          ${escapeHtml(o.customer_name||"—")}
+        </p>
 
-                        <div class="mini-name">
-                          ${escapeHtml(name)}
-                        </div>
+        <p>
+          <strong>الهاتف:</strong>
+          ${escapeHtml(o.phone||"—")}
+        </p>
 
-                        <div class="muted">
-                          Qté:
-                          ${Number(item.quantity || 0)}
-                          ${
-                            variant
-                              ? " • " +
-                                escapeHtml(variant)
-                              : ""
-                          }
-                        </div>
+        <p>
+          <strong>الولاية:</strong>
+          ${escapeHtml(o.wilaya||"—")}
+        </p>
 
-                      </div>
+        <p>
+          <strong>البلدية:</strong>
+          ${escapeHtml(o.commune||"—")}
+        </p>
 
-                    </div>
+        <p>
+          <strong>العنوان:</strong>
+          ${escapeHtml(o.address||"—")}
+        </p>
 
-                    <strong>
-                      ${formatPrice(
-                        Number(item.price || 0) *
-                        Number(item.quantity || 0)
-                      )}
-                    </strong>
-
-                  </div>
-
-                `;
-
-              }).join("")
-            }
-
-          </div>
-
-        </div>
-
-      `
-
-      : "";
-
-
-  $("orderDetails").innerHTML = `
-
-    <div class="order-detail">
-
-      <div class="detail-box">
-
-        <div class="detail-label">
-          COMMANDE
-        </div>
-
-        <div class="detail-value">
-          #${escapeHtml(
-            String(order.id)
-              .toUpperCase()
-          )}
-        </div>
+        <p>
+          <strong>ملاحظات:</strong>
+          ${escapeHtml(o.notes||"—")}
+        </p>
 
       </div>
 
 
-      <div class="detail-box">
+      <div class="panel">
 
-        <div class="detail-label">
-          DATE
-        </div>
+        <h3 class="panel-title">
+          معلومات الطلب
+        </h3>
 
-        <div class="detail-value">
-          ${formatDateTime(
-            order.created_at
-          )}
-        </div>
+        <p>
+          <strong>رقم الطلب:</strong>
+          ${escapeHtml(o.id)}
+        </p>
 
-      </div>
+        <p>
+          <strong>التاريخ:</strong>
+          ${formatDate(o.created_at)}
+        </p>
 
+        <p>
+          <strong>الحالة:</strong>
+          <span class="badge ${statusClass(o.status)}">
+            ${statusLabel(o.status)}
+          </span>
+        </p>
 
-      <div class="detail-box">
-
-        <div class="detail-label">
-          CLIENT
-        </div>
-
-        <div class="detail-value">
-          ${escapeHtml(
-            order.customer_name ||
-            "—"
-          )}
-        </div>
-
-      </div>
-
-
-      <div class="detail-box">
-
-        <div class="detail-label">
-          TÉLÉPHONE
-        </div>
-
-        <div class="detail-value">
-          ${escapeHtml(
-            order.phone || "—"
-          )}
-        </div>
+        <p>
+          <strong>المجموع:</strong>
+          ${formatPrice(o.total)}
+        </p>
 
       </div>
-
-
-      <div class="detail-box">
-
-        <div class="detail-label">
-          WILAYA
-        </div>
-
-        <div class="detail-value">
-          ${escapeHtml(
-            order.wilaya || "—"
-          )}
-        </div>
-
-      </div>
-
-
-      <div class="detail-box">
-
-        <div class="detail-label">
-          COMMUNE
-        </div>
-
-        <div class="detail-value">
-          ${escapeHtml(
-            order.commune || "—"
-          )}
-        </div>
-
-      </div>
-
-
-      <div class="detail-box">
-
-        <div class="detail-label">
-          ADRESSE
-        </div>
-
-        <div class="detail-value">
-          ${escapeHtml(
-            order.address || "—"
-          )}
-        </div>
-
-      </div>
-
-
-      <div class="detail-box">
-
-        <div class="detail-label">
-          TOTAL
-        </div>
-
-        <div class="detail-value">
-          ${formatPrice(order.total)}
-        </div>
-
-      </div>
-
-
-      <div class="detail-box">
-
-        <div class="detail-label">
-          STATUT
-        </div>
-
-        <div class="detail-value">
-          ${statusBadge(order.status)}
-        </div>
-
-      </div>
-
-
-      ${
-        order.notes
-          ? `
-
-            <div
-              class="detail-box"
-              style="grid-column:1/-1">
-
-              <div class="detail-label">
-                NOTES
-              </div>
-
-              <div class="detail-value">
-                ${escapeHtml(order.notes)}
-              </div>
-
-            </div>
-
-          `
-          : ""
-      }
 
     </div>
 
 
-    ${itemsHtml}
+    <div class="panel" style="margin-top:15px">
+
+      <h3 class="panel-title">
+        المنتجات
+      </h3>
+
+      ${
+        items.length
+        ?
+        items.map(item=>{
+
+          let product=
+            products.find(
+              p=>
+                String(p.id)===
+                String(item.product_id)
+            );
+
+
+          return `
+            <div
+              style="
+                padding:12px 0;
+                border-bottom:1px solid #eee;
+              ">
+
+              <strong>
+                ${escapeHtml(
+                  product?.name||
+                  "منتج"
+                )}
+              </strong>
+
+              <div
+                style="
+                  color:#777;
+                  font-size:12px;
+                  margin-top:5px;
+                ">
+
+                الكمية:
+                ${Number(item.quantity||1)}
+
+                ${
+                  item.color||
+                  item.variant_color
+                  ?
+                  " • اللون: "+
+                  escapeHtml(
+                    item.color||
+                    item.variant_color
+                  )
+                  :""
+                }
+
+                ${
+                  item.size||
+                  item.variant_size
+                  ?
+                  " • المقاس: "+
+                  escapeHtml(
+                    item.size||
+                    item.variant_size
+                  )
+                  :""
+                }
+
+                • السعر:
+                ${formatPrice(item.price)}
+
+              </div>
+
+            </div>
+          `;
+
+        }).join("")
+        :
+        `<div class="empty">لا توجد تفاصيل.</div>`
+      }
+
+    </div>
 
   `;
 
+
+  $("orderDetails").innerHTML=html;
 
   $("orderModal").classList.add("open");
 
 }
 
 
-$("orderSearch").addEventListener(
-  "input",
-  renderOrders
-);
+function closeOrderModal(){
 
-$("orderStatusFilter").addEventListener(
-  "change",
-  renderOrders
-);
-
-
-/* =========================================================
-   CUSTOMERS
-========================================================= */
-
-async function loadCustomers(){
-
-  if(!orders.length){
-
-    await loadOrders();
-
-  }
-
-
-  const map =
-    new Map();
-
-
-  orders.forEach(order => {
-
-    const key =
-      order.customer_id ||
-      order.phone ||
-      order.customer_name ||
-      order.id;
-
-
-    if(!map.has(key)){
-
-      map.set(
-        key,
-        {
-          id:key,
-          name:
-            order.customer_name ||
-            "Client",
-          phone:
-            order.phone || "",
-          wilaya:
-            order.wilaya || "",
-          orders:0,
-          total:0,
-          lastOrder:
-            order.created_at
-        }
-      );
-
-    }
-
-
-    const customer =
-      map.get(key);
-
-
-    customer.orders++;
-
-    customer.total +=
-      Number(order.total || 0);
-
-
-    if(
-      new Date(order.created_at) >
-      new Date(customer.lastOrder)
-    ){
-
-      customer.lastOrder =
-        order.created_at;
-
-    }
-
-  });
-
-
-  window.customerList =
-    Array.from(map.values());
-
-
-  renderCustomers();
+  $("orderModal").classList.remove("open");
 
 }
 
 
-function renderCustomers(){
+/* =========================================================
+   REVIEWS LOAD
+========================================================= */
 
-  const tbody =
-    $("customersTable");
+async function loadReviewsAdmin(){
 
-
-  const search =
-    $("customerSearch").value
-      .trim()
-      .toLowerCase();
-
-
-  let list =
-    window.customerList || [];
-
-
-  if(search){
-
-    list =
-      list.filter(c => {
-
-        const text = [
-
-          c.name,
-          c.phone,
-          c.wilaya
-
-        ]
-        .join(" ")
-        .toLowerCase();
-
-        return text.includes(search);
-
-      });
-
-  }
+  let result=
+    await supabaseClient
+      .from("reviews")
+      .select("*")
+      .order(
+        "created_at",
+        {ascending:false}
+      );
 
 
-  if(!list.length){
+  if(result.error){
 
-    tbody.innerHTML = `
+    console.error(result.error);
 
-      <tr>
-
-        <td colspan="6">
-
-          <div class="empty">
-
-            <strong>Aucun client</strong>
-
-            Les clients apparaîtront ici
-            après leurs commandes.
-
-          </div>
-
-        </td>
-
-      </tr>
-
-    `;
+    showToast(
+      "فشل تحميل التقييمات",
+      true
+    );
 
     return;
 
   }
 
 
-  tbody.innerHTML = "";
+  reviews=
+    result.data||[];
 
 
-  list.forEach(customer => {
-
-    const tr =
-      document.createElement("tr");
-
-
-    tr.innerHTML = `
-
-      <td>
-
-        <strong>
-          ${escapeHtml(customer.name)}
-        </strong>
-
-      </td>
-
-
-      <td>
-        ${escapeHtml(
-          customer.phone || "—"
-        )}
-      </td>
-
-
-      <td>
-        ${escapeHtml(
-          customer.wilaya || "—"
-        )}
-      </td>
-
-
-      <td>
-        <strong>
-          ${customer.orders}
-        </strong>
-      </td>
-
-
-      <td>
-        <strong>
-          ${formatPrice(customer.total)}
-        </strong>
-      </td>
-
-
-      <td>
-        ${formatDate(
-          customer.lastOrder
-        )}
-      </td>
-
-    `;
-
-
-    tbody.appendChild(tr);
-
-  });
+  renderReviews();
 
 }
-
-
-$("customerSearch").addEventListener(
-  "input",
-  renderCustomers
-);
 
 
 /* =========================================================
-   REVIEWS
+   REVIEWS RENDER
 ========================================================= */
-
-async function loadReviews(){
-
-  try{
-
-    const result =
-      await supabaseClient
-        .from("reviews")
-        .select(`
-          *,
-          products(
-            id,
-            name
-          )
-        `)
-        .order(
-          "created_at",
-          {ascending:false}
-        );
-
-
-    if(result.error)
-      throw result.error;
-
-
-    reviews =
-      result.data || [];
-
-
-    renderReviews();
-
-
-  }catch(error){
-
-    showError(error);
-
-  }
-
-}
-
-
-function stars(rating){
-
-  const n =
-    Math.max(
-      0,
-      Math.min(
-        5,
-        Number(rating || 0)
-      )
-    );
-
-  return (
-    "★".repeat(n) +
-    "☆".repeat(5-n)
-  );
-
-}
-
 
 function renderReviews(){
 
-  const tbody =
-    $("reviewsTable");
+  let tbody=$("reviewsTable");
 
 
-  const search =
-    $("reviewSearch").value
-      .trim()
-      .toLowerCase();
+  if(!reviews.length){
 
-
-  const rating =
-    $("reviewRatingFilter").value;
-
-
-  let list =
-    [...reviews];
-
-
-  if(search){
-
-    list =
-      list.filter(review => {
-
-        const text = [
-
-          review.customer_name,
-
-          review.comment,
-
-          review.products?.name
-
-        ]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase();
-
-        return text.includes(search);
-
-      });
-
-  }
-
-
-  if(rating){
-
-    list =
-      list.filter(
-        r =>
-          String(r.rating) ===
-          String(rating)
-      );
-
-  }
-
-
-  if(!list.length){
-
-    tbody.innerHTML = `
-
+    tbody.innerHTML=`
       <tr>
-
-        <td colspan="6">
-
+        <td colspan="5">
           <div class="empty">
-
-            <strong>Aucun avis</strong>
-
-            Aucun avis trouvé.
-
+            لا توجد تقييمات.
           </div>
-
         </td>
-
       </tr>
-
     `;
 
     return;
@@ -6035,170 +5187,286 @@ function renderReviews(){
   }
 
 
-  tbody.innerHTML = "";
+  tbody.innerHTML="";
 
 
-  list.forEach(review => {
+  reviews.forEach(r=>{
 
-    const tr =
-      document.createElement("tr");
+    let product=
+      products.find(
+        p=>
+          String(p.id)===
+          String(r.product_id)
+      );
 
 
-    tr.innerHTML = `
+    let row=document.createElement("tr");
+
+
+    row.innerHTML=`
 
       <td>
-
         <strong>
           ${escapeHtml(
-            review.customer_name ||
-            "Client"
+            r.customer_name||
+            "عميل"
           )}
         </strong>
-
       </td>
 
 
       <td>
-
         ${escapeHtml(
-          review.products?.name ||
-          "Produit supprimé"
+          product?.name||
+          "منتج محذوف"
         )}
-
       </td>
 
 
       <td>
 
-        <span
-          style="
-            color:#f4b400;
-            letter-spacing:1px;
-          ">
-
-          ${stars(review.rating)}
-
-        </span>
-
-      </td>
-
-
-      <td>
-
-        <div
-          style="
-            max-width:350px;
-            white-space:normal;
-            line-height:1.5;
-          ">
-
-          ${escapeHtml(
-            review.comment ||
-            "—"
+        <div class="stars">
+          ${"★".repeat(
+            Math.max(
+              0,
+              Math.min(
+                5,
+                Number(r.rating)||0
+              )
+            )
           )}
-
         </div>
 
       </td>
 
 
       <td>
-        ${formatDate(review.created_at)}
+
+        <div class="review-comment">
+          ${escapeHtml(
+            r.comment||
+            "بدون تعليق"
+          )}
+        </div>
+
       </td>
 
 
       <td>
-
-        <button
-          class="icon-btn"
-          onclick="deleteReview('${review.id}')">
-
-          🗑️
-
-        </button>
-
+        ${formatDate(r.created_at)}
       </td>
 
     `;
 
 
-    tbody.appendChild(tr);
+    tbody.appendChild(row);
 
   });
 
 }
 
 
-async function deleteReview(id){
+/* =========================================================
+   DASHBOARD
+========================================================= */
 
-  if(
-    !confirm(
-      "Supprimer cet avis définitivement ?"
-    )
-  ){
+function updateDashboard(){
+
+  let totalProducts=
+    products.length;
+
+
+  let totalStock=
+    products.reduce(
+      (sum,p)=>
+        sum+
+        Math.max(
+          0,
+          Number(p.stock)||0
+        ),
+      0
+    );
+
+
+  let totalOrders=
+    orders.length;
+
+
+  let confirmedSales=
+    orders
+      .filter(
+        o=>
+          o.status==="confirmed"||
+          o.status==="processing"||
+          o.status==="shipped"||
+          o.status==="completed"
+      )
+      .reduce(
+        (sum,o)=>
+          sum+
+          (Number(o.total)||0),
+        0
+      );
+
+
+  $("statProducts").textContent=
+    totalProducts;
+
+
+  $("statStock").textContent=
+    totalStock;
+
+
+  $("statOrders").textContent=
+    totalOrders;
+
+
+  $("statSales").textContent=
+    formatPrice(confirmedSales);
+
+
+  renderRecentOrders();
+
+}
+
+
+function renderRecentOrders(){
+
+  let box=$("recentOrders");
+
+
+  let list=
+    orders.slice(0,6);
+
+
+  if(!list.length){
+
+    box.innerHTML=`
+      <div class="empty">
+        لا توجد طلبات بعد.
+      </div>
+    `;
 
     return;
 
   }
 
 
-  try{
-
-    const result =
-      await supabaseClient
-        .from("reviews")
-        .delete()
-        .eq("id",id);
+  box.innerHTML="";
 
 
-    if(result.error)
-      throw result.error;
+  list.forEach(o=>{
+
+    let div=document.createElement("div");
 
 
-    showToast(
-      "Avis supprimé ✓"
-    );
+    div.style.cssText=`
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:12px 0;
+      border-bottom:1px solid #eee;
+    `;
 
 
-    await loadReviews();
-    await loadDashboard();
+    div.innerHTML=`
+
+      <div>
+
+        <strong>
+          ${escapeHtml(
+            o.customer_name||
+            "عميل"
+          )}
+        </strong>
+
+        <div
+          style="
+            color:#999;
+            font-size:11px;
+            margin-top:3px;
+          ">
+
+          #${String(o.id)
+            .slice(0,8)
+            .toUpperCase()}
+
+          •
+          ${formatDate(o.created_at)}
+
+        </div>
+
+      </div>
 
 
-  }catch(error){
+      <div style="text-align:left">
 
-    showError(error);
+        <strong>
+          ${formatPrice(o.total)}
+        </strong>
 
-  }
+        <div style="margin-top:3px">
+
+          <span
+            class="badge ${statusClass(o.status)}">
+
+            ${statusLabel(o.status)}
+
+          </span>
+
+        </div>
+
+      </div>
+
+    `;
+
+
+    box.appendChild(div);
+
+  });
 
 }
 
 
-$("reviewSearch").addEventListener(
-  "input",
-  renderReviews
-);
+/* =========================================================
+   REFRESH
+========================================================= */
 
-$("reviewRatingFilter").addEventListener(
-  "change",
-  renderReviews
-);
+async function refreshAll(){
+
+  showToast(
+    "جاري التحديث..."
+  );
+
+
+  await loadAll();
+
+
+  showToast(
+    "تم التحديث ✓"
+  );
+
+}
 
 
 /* =========================================================
-   MODAL OUTSIDE CLICK
+   MODAL CLICK OUTSIDE
 ========================================================= */
 
 document
   .querySelectorAll(".modal")
-  .forEach(modal => {
+  .forEach(modal=>{
 
     modal.addEventListener(
       "click",
-      function(e){
+      e=>{
 
-        if(e.target === modal){
+        if(e.target===modal){
 
-          modal.classList.remove("open");
+          modal.classList.remove(
+            "open"
+          );
 
         }
 
@@ -6206,66 +5474,6 @@ document
     );
 
   });
-
-
-/* =========================================================
-   ESCAPE
-========================================================= */
-
-document.addEventListener(
-  "keydown",
-  e => {
-
-    if(e.key === "Escape"){
-
-      document
-        .querySelectorAll(".modal.open")
-        .forEach(modal =>
-          modal.classList.remove("open")
-        );
-
-    }
-
-  }
-);
-
-
-/* =========================================================
-   AUTH STATE
-========================================================= */
-
-if(
-  typeof supabaseClient !== "undefined" &&
-  supabaseClient
-){
-
-  supabaseClient.auth.onAuthStateChange(
-    (_event,session) => {
-
-      currentUser =
-        session?.user || null;
-
-      if(currentUser){
-
-        if(
-          $("app").style.display !==
-          "block"
-        ){
-
-          showApp();
-
-        }
-
-      }else{
-
-        showLogin();
-
-      }
-
-    }
-  );
-
-}
 
 
 /* =========================================================
@@ -6274,13 +5482,9 @@ if(
 
 document.addEventListener(
   "DOMContentLoaded",
-  async () => {
+  ()=>{
 
-    if(!checkSupabase()){
-      return;
-    }
-
-    await checkAuth();
+    checkAuth();
 
   }
 );
