@@ -33,6 +33,10 @@
   --radius:18px;
 }
 
+html{
+  scroll-behavior:smooth;
+}
+
 body{
   font-family:Inter,Arial,sans-serif;
   background:var(--bg);
@@ -40,12 +44,20 @@ body{
   min-height:100vh;
 }
 
-button,input,select,textarea{
+button,
+input,
+select,
+textarea{
   font:inherit;
 }
 
 button{
   cursor:pointer;
+}
+
+button:disabled{
+  opacity:.6;
+  cursor:not-allowed;
 }
 
 .layout{
@@ -302,6 +314,7 @@ button{
   border:1px solid var(--border);
   border-radius:10px;
   outline:none;
+  background:white;
 }
 
 .search:focus,
@@ -310,6 +323,24 @@ select:focus,
 textarea:focus{
   border-color:#9ca3af;
   box-shadow:0 0 0 3px rgba(17,24,39,.05);
+}
+
+input,
+select,
+textarea{
+  width:100%;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:10px 12px;
+  outline:none;
+  background:white;
+}
+
+label{
+  display:block;
+  font-size:12px;
+  font-weight:700;
+  margin-bottom:7px;
 }
 
 /* TABLE */
@@ -324,7 +355,8 @@ table{
   min-width:900px;
 }
 
-th,td{
+th,
+td{
   padding:13px 15px;
   border-bottom:1px solid #f0f1f3;
   text-align:left;
@@ -462,6 +494,7 @@ tr:hover td{
   border-radius:11px;
   border:1px solid var(--border);
   background:#f3f4f6;
+  flex-shrink:0;
 }
 
 .product-name{
@@ -472,18 +505,6 @@ tr:hover td{
   color:var(--muted);
   font-size:11px;
   margin-top:4px;
-}
-
-/* FILTERS */
-
-.filters{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-}
-
-.filters select{
-  min-width:150px;
 }
 
 /* MODAL */
@@ -770,6 +791,15 @@ tr:hover td{
     padding:12px;
   }
 
+  .modal{
+    padding:10px;
+  }
+
+  .modal-box{
+    max-height:96vh;
+    border-radius:16px;
+  }
+
 }
 </style>
 
@@ -836,21 +866,25 @@ tr:hover td{
 
 <main class="main">
 
-<!-- TOP -->
-
 <div class="topbar">
 
   <div class="title">
-    <h1 id="pageTitle">Dashboard</h1>
-    <p id="pageSubtitle">
-      Vue globale de votre boutique JR Shop.
-    </p>
+
+```
+<h1 id="pageTitle">Dashboard</h1>
+
+<p id="pageSubtitle">
+  Vue globale de votre boutique JR Shop.
+</p>
+```
+
   </div>
 
   <div class="top-actions">
 
 ```
 <button
+  id="refreshBtn"
   class="btn btn-light"
   onclick="refreshAll()"
 >
@@ -869,9 +903,7 @@ tr:hover td{
 
 </div>
 
-<!-- =========================
-     DASHBOARD
-========================= -->
+<!-- DASHBOARD -->
 
 <section id="dashboardPage" class="page active">
 
@@ -891,7 +923,6 @@ tr:hover td{
   </div>
 </div>
 
-
 <div class="stat">
   <div class="stat-top">
     <div class="stat-label">Chiffre d'affaires</div>
@@ -905,7 +936,6 @@ tr:hover td{
   </div>
 </div>
 
-
 <div class="stat">
   <div class="stat-top">
     <div class="stat-label">En attente</div>
@@ -918,7 +948,6 @@ tr:hover td{
     Commandes à traiter
   </div>
 </div>
-
 
 <div class="stat">
   <div class="stat-top">
@@ -939,11 +968,10 @@ tr:hover td{
   <div class="dashboard-grid">
 
 ```
-<!-- RECENT ORDERS -->
-
 <div class="panel">
 
   <div class="panel-head">
+
     <h2>Commandes récentes</h2>
 
     <button
@@ -952,6 +980,7 @@ tr:hover td{
     >
       Voir tout
     </button>
+
   </div>
 
   <div class="table-wrap">
@@ -959,25 +988,23 @@ tr:hover td{
     <table>
 
       <thead>
+
         <tr>
           <th>Client</th>
           <th>Total</th>
           <th>Status</th>
           <th>Date</th>
         </tr>
+
       </thead>
 
-      <tbody id="recentOrdersBody">
-      </tbody>
+      <tbody id="recentOrdersBody"></tbody>
 
     </table>
 
   </div>
 
 </div>
-
-
-<!-- LOW STOCK -->
 
 <div class="panel">
 
@@ -994,15 +1021,12 @@ tr:hover td{
 
   </div>
 
-  <div id="lowStockList" class="quick-list">
-  </div>
+  <div id="lowStockList" class="quick-list"></div>
 
 </div>
 ```
 
   </div>
-
-  <!-- ORDER STATUS -->
 
   <div class="panel">
 
@@ -1011,17 +1035,14 @@ tr:hover td{
   <h2>Répartition des commandes</h2>
 </div>
 
-<div class="quick-list" id="statusSummary">
-</div>
+<div class="quick-list" id="statusSummary"></div>
 ```
 
   </div>
 
 </section>
 
-<!-- =========================
-     ORDERS
-========================= -->
+<!-- ORDERS -->
 
 <section id="ordersPage" class="page">
 
@@ -1058,7 +1079,6 @@ tr:hover td{
 
 </div>
 
-
 <div class="table-wrap">
 
   <table>
@@ -1077,8 +1097,7 @@ tr:hover td{
 
     </thead>
 
-    <tbody id="ordersBody">
-    </tbody>
+    <tbody id="ordersBody"></tbody>
 
   </table>
 
@@ -1089,9 +1108,7 @@ tr:hover td{
 
 </section>
 
-<!-- =========================
-     PRODUCTS
-========================= -->
+<!-- PRODUCTS -->
 
 <section id="productsPage" class="page">
 
@@ -1149,7 +1166,6 @@ tr:hover td{
 
 </div>
 
-
 <div class="table-wrap">
 
   <table>
@@ -1168,8 +1184,7 @@ tr:hover td{
 
     </thead>
 
-    <tbody id="productsBody">
-    </tbody>
+    <tbody id="productsBody"></tbody>
 
   </table>
 
@@ -1180,9 +1195,7 @@ tr:hover td{
 
 </section>
 
-<!-- =========================
-     CATEGORIES
-========================= -->
+<!-- CATEGORIES -->
 
 <section id="categoriesPage" class="page">
 
@@ -1202,7 +1215,6 @@ tr:hover td{
 
 </div>
 
-
 <div class="table-wrap">
 
   <table>
@@ -1217,8 +1229,7 @@ tr:hover td{
 
     </thead>
 
-    <tbody id="categoriesBody">
-    </tbody>
+    <tbody id="categoriesBody"></tbody>
 
   </table>
 
@@ -1233,9 +1244,7 @@ tr:hover td{
 
 </div>
 
-<!-- =========================
-     ORDER MODAL
-========================= -->
+<!-- ORDER MODAL -->
 
 <div id="orderModal" class="modal">
 
@@ -1244,9 +1253,7 @@ tr:hover td{
 ```
 <div class="modal-head">
 
-  <div>
-    <h2>Détails de la commande</h2>
-  </div>
+  <h2>Détails de la commande</h2>
 
   <button
     class="close"
@@ -1257,10 +1264,7 @@ tr:hover td{
 
 </div>
 
-
-<div id="orderDetails" class="modal-body">
-</div>
-
+<div id="orderDetails" class="modal-body"></div>
 
 <div class="modal-footer">
 
@@ -1278,9 +1282,7 @@ tr:hover td{
 
 </div>
 
-<!-- =========================
-     PRODUCT MODAL
-========================= -->
+<!-- PRODUCT MODAL -->
 
 <div id="productModal" class="modal">
 
@@ -1302,7 +1304,6 @@ tr:hover td{
 
 </div>
 
-
 <div class="modal-body">
 
   <form id="productForm">
@@ -1319,7 +1320,7 @@ tr:hover td{
     ">
 
       <div>
-        <label>Nom</label>
+        <label for="productName">Nom</label>
 
         <input
           id="productName"
@@ -1328,9 +1329,8 @@ tr:hover td{
         >
       </div>
 
-
       <div>
-        <label>Catégorie</label>
+        <label for="productCategory">Catégorie</label>
 
         <select
           id="productCategory"
@@ -1342,9 +1342,8 @@ tr:hover td{
         </select>
       </div>
 
-
       <div>
-        <label>Prix</label>
+        <label for="productPrice">Prix</label>
 
         <input
           id="productPrice"
@@ -1355,9 +1354,8 @@ tr:hover td{
         >
       </div>
 
-
       <div>
-        <label>Ancien prix</label>
+        <label for="productOldPrice">Ancien prix</label>
 
         <input
           id="productOldPrice"
@@ -1367,9 +1365,8 @@ tr:hover td{
         >
       </div>
 
-
       <div>
-        <label>Stock</label>
+        <label for="productStock">Stock</label>
 
         <input
           id="productStock"
@@ -1379,22 +1376,23 @@ tr:hover td{
         >
       </div>
 
-
       <div>
-        <label>Image URL</label>
+        <label for="productImage">Image URL</label>
 
         <input
           id="productImage"
+          type="url"
           placeholder="https://..."
         >
       </div>
 
     </div>
 
-
     <div style="margin-top:15px">
 
-      <label>Description</label>
+      <label for="productDescription">
+        Description
+      </label>
 
       <textarea
         id="productDescription"
@@ -1403,7 +1401,6 @@ tr:hover td{
       ></textarea>
 
     </div>
-
 
     <div style="
       margin-top:15px;
@@ -1419,14 +1416,18 @@ tr:hover td{
         style="width:auto"
       >
 
-      <label>Produit actif</label>
+      <label
+        for="productActive"
+        style="margin:0"
+      >
+        Produit actif
+      </label>
 
     </div>
 
   </form>
 
 </div>
-
 
 <div class="modal-footer">
 
@@ -1471,6 +1472,14 @@ if(
   );
 }
 
+if(
+  !window.supabase ||
+  typeof SUPABASE_URL === "undefined" ||
+  typeof SUPABASE_ANON_KEY === "undefined"
+){
+  throw new Error("Configuration Supabase invalide.");
+}
+
 const db = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
@@ -1484,13 +1493,14 @@ const db = window.supabase.createClient(
 let orders = [];
 let products = [];
 let categories = [];
+let refreshing = false;
 
 
 /* =========================================================
    INIT
 ========================================================= */
 
-document.addEventListener("DOMContentLoaded",async()=>{
+document.addEventListener("DOMContentLoaded", async()=>{
 
   await loadCategories();
   await loadOrders();
@@ -1525,7 +1535,6 @@ function showPage(page,button){
   }
 
   updatePageTitle(page);
-
 }
 
 
@@ -1534,7 +1543,7 @@ function showPageByName(page){
   const buttons =
     document.querySelectorAll(".nav-item");
 
-  let foundButton=null;
+  let foundButton = null;
 
   buttons.forEach(button=>{
 
@@ -1542,6 +1551,7 @@ function showPageByName(page){
       button.innerText.toLowerCase();
 
     if(
+      (page==="dashboard" && text.includes("dashboard")) ||
       (page==="orders" && text.includes("commandes")) ||
       (page==="products" && text.includes("produits")) ||
       (page==="categories" && text.includes("catégories"))
@@ -1565,26 +1575,34 @@ function updatePageTitle(page){
     document.getElementById("pageSubtitle");
 
   const data={
+
     dashboard:[
       "Dashboard",
       "Vue globale de votre boutique JR Shop."
     ],
+
     orders:[
       "Commandes",
       "Gérez et suivez toutes les commandes."
     ],
+
     products:[
       "Produits",
       "Gérez votre catalogue et votre stock."
     ],
+
     categories:[
       "Catégories",
       "Organisez les produits de votre boutique."
     ]
+
   };
 
-  title.textContent=data[page]?.[0]||"Admin";
-  subtitle.textContent=data[page]?.[1]||"";
+  title.textContent =
+    data[page]?.[0] || "Admin";
+
+  subtitle.textContent =
+    data[page]?.[1] || "";
 
 }
 
@@ -1600,13 +1618,12 @@ function toast(message,type="success"){
 
   box.textContent=message;
 
-  box.className=
-    "toast show "+
-    type;
+  box.className =
+    "toast show " + type;
 
   clearTimeout(window.__toastTimer);
 
-  window.__toastTimer=
+  window.__toastTimer =
     setTimeout(()=>{
       box.className="toast";
     },3500);
@@ -1625,84 +1642,32 @@ async function loadCategories(){
 
   try{
 
-    const {data,error}=await db
-      .from("categories")
-      .select("id,name,slug")
-      .order("name");
+    if(body){
+
+      body.innerHTML=`
+        <tr>
+          <td colspan="3" class="loading">
+            Chargement des catégories...
+          </td>
+        </tr>
+      `;
+
+    }
+
+    const {data,error} =
+      await db
+        .from("categories")
+        .select("id,name,slug")
+        .order("name");
 
     if(error) throw error;
 
-    categories=data||[];
+    categories=data || [];
 
-    const select =
-      document.getElementById("productCategory");
+    populateCategorySelect();
+    renderCategories();
 
-    if(select){
-
-      select.innerHTML=
-        `<option value="">Choisir une catégorie</option>`;
-
-      categories.forEach(category=>{
-
-        const option=
-          document.createElement("option");
-
-        option.value=category.id;
-
-        option.textContent=
-          category.name||
-          category.slug||
-          "Sans nom";
-
-        select.appendChild(option);
-
-      });
-
-    }
-
-    if(body){
-
-      if(!categories.length){
-
-        body.innerHTML=
-          `<tr>
-            <td colspan="3" class="empty">
-              Aucune catégorie.
-            </td>
-          </tr>`;
-
-        return;
-      }
-
-      body.innerHTML=
-        categories.map(category=>{
-
-          const count=
-            products.filter(
-              p=>p.category_id===category.id
-            ).length;
-
-          return `
-            <tr>
-              <td>
-                <strong>
-                  ${escapeHtml(category.name||"—")}
-                </strong>
-              </td>
-
-              <td>
-                ${escapeHtml(category.slug||"—")}
-              </td>
-
-              <td>
-                ${count}
-              </td>
-            </tr>
-          `;
-
-        }).join("");
-
-    }
+    renderProducts();
 
   }catch(error){
 
@@ -1710,21 +1675,108 @@ async function loadCategories(){
 
     if(body){
 
-      body.innerHTML=
-        `<tr>
+      body.innerHTML=`
+        <tr>
           <td colspan="3" class="empty">
-            Erreur de chargement.
+            Erreur de chargement des catégories.
           </td>
-        </tr>`;
+        </tr>
+      `;
 
     }
 
     toast(
-      "Erreur catégories : "+error.message,
+      "Erreur catégories : " + error.message,
       "error"
     );
 
   }
+
+}
+
+
+function populateCategorySelect(){
+
+  const select =
+    document.getElementById("productCategory");
+
+  if(!select) return;
+
+  select.innerHTML = `
+    <option value="">
+      Choisir une catégorie
+    </option>
+  `;
+
+  categories.forEach(category=>{
+
+    const option =
+      document.createElement("option");
+
+    option.value =
+      category.id;
+
+    option.textContent =
+      category.name ||
+      category.slug ||
+      "Sans nom";
+
+    select.appendChild(option);
+
+  });
+
+}
+
+
+function renderCategories(){
+
+  const body =
+    document.getElementById("categoriesBody");
+
+  if(!body) return;
+
+  if(!categories.length){
+
+    body.innerHTML=`
+      <tr>
+        <td colspan="3" class="empty">
+          Aucune catégorie.
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+  body.innerHTML =
+    categories.map(category=>{
+
+      const count =
+        products.filter(
+          p=>p.category_id===category.id
+        ).length;
+
+      return `
+        <tr>
+
+          <td>
+            <strong>
+              ${escapeHtml(category.name || "—")}
+            </strong>
+          </td>
+
+          <td>
+            ${escapeHtml(category.slug || "—")}
+          </td>
+
+          <td>
+            ${count}
+          </td>
+
+        </tr>
+      `;
+
+    }).join("");
 
 }
 
@@ -1740,41 +1792,42 @@ async function loadOrders(){
 
   if(body){
 
-    body.innerHTML=
-      `<tr>
+    body.innerHTML=`
+      <tr>
         <td colspan="7" class="loading">
           Chargement des commandes...
         </td>
-      </tr>`;
+      </tr>
+    `;
 
   }
 
   try{
 
-    const {data,error}=await db
-      .from("orders")
-      .select(`
-        id,
-        customer_id,
-        status,
-        total,
-        notes,
-        created_at,
-        address,
-        customer_name,
-        phone,
-        wilaya,
-        items,
-        commune
-      `)
-      .order("created_at",{ascending:false});
+    const {data,error} =
+      await db
+        .from("orders")
+        .select(`
+          id,
+          customer_id,
+          status,
+          total,
+          notes,
+          created_at,
+          address,
+          customer_name,
+          phone,
+          wilaya,
+          items,
+          commune
+        `)
+        .order("created_at",{ascending:false});
 
     if(error) throw error;
 
-    orders=data||[];
+    orders=data || [];
 
     renderOrders();
-
     updateDashboard();
 
   }catch(error){
@@ -1783,17 +1836,18 @@ async function loadOrders(){
 
     if(body){
 
-      body.innerHTML=
-        `<tr>
+      body.innerHTML=`
+        <tr>
           <td colspan="7" class="empty">
             Impossible de charger les commandes.
           </td>
-        </tr>`;
+        </tr>
+      `;
 
     }
 
     toast(
-      "Erreur commandes : "+error.message,
+      "Erreur commandes : " + error.message,
       "error"
     );
 
@@ -1813,55 +1867,57 @@ function renderOrders(){
 
   if(!body) return;
 
-  const search=
+  const search =
     (
-      document.getElementById("orderSearch")?.value||
+      document.getElementById("orderSearch")?.value ||
       ""
     )
     .trim()
     .toLowerCase();
 
-  const status=
-    document.getElementById("orderStatusFilter")?.value||
+  const status =
+    document.getElementById("orderStatusFilter")?.value ||
     "";
 
-  const filtered=
+  const filtered =
     orders.filter(order=>{
 
       const text=`
-        ${order.id||""}
-        ${order.customer_name||""}
-        ${order.phone||""}
-        ${order.wilaya||""}
-        ${order.commune||""}
+        ${order.id || ""}
+        ${order.customer_name || ""}
+        ${order.phone || ""}
+        ${order.wilaya || ""}
+        ${order.commune || ""}
       `.toLowerCase();
 
-      const matchSearch=
-        !search||text.includes(search);
+      const matchSearch =
+        !search || text.includes(search);
 
-      const matchStatus=
-        !status||normalizeStatus(order.status)===status;
+      const matchStatus =
+        !status ||
+        normalizeStatus(order.status)===status;
 
-      return matchSearch&&matchStatus;
+      return matchSearch && matchStatus;
 
     });
 
 
   if(!filtered.length){
 
-    body.innerHTML=
-      `<tr>
+    body.innerHTML=`
+      <tr>
         <td colspan="7" class="empty">
           Aucune commande trouvée.
         </td>
-      </tr>`;
+      </tr>
+    `;
 
     return;
 
   }
 
 
-  body.innerHTML=
+  body.innerHTML =
     filtered.map(order=>{
 
       return `
@@ -1873,32 +1929,29 @@ function renderOrders(){
             </div>
           </td>
 
-
           <td>
 
             <div class="customer-name">
-              ${escapeHtml(order.customer_name||"Client")}
+              ${escapeHtml(order.customer_name || "Client")}
             </div>
 
             <div class="customer-phone">
-              ${escapeHtml(order.phone||"—")}
+              ${escapeHtml(order.phone || "—")}
             </div>
 
           </td>
-
 
           <td>
 
             <div>
-              ${escapeHtml(order.wilaya||"—")}
+              ${escapeHtml(order.wilaya || "—")}
             </div>
 
             <div class="customer-phone">
-              ${escapeHtml(order.commune||"")}
+              ${escapeHtml(order.commune || "")}
             </div>
 
           </td>
-
 
           <td>
             <span class="amount">
@@ -1906,16 +1959,13 @@ function renderOrders(){
             </span>
           </td>
 
-
           <td>
             ${statusBadge(order.status)}
           </td>
 
-
           <td>
             ${formatDate(order.created_at)}
           </td>
-
 
           <td>
 
@@ -1923,18 +1973,17 @@ function renderOrders(){
 
               <button
                 class="btn btn-blue btn-small"
-                onclick="openOrder('${order.id}')"
+                onclick="openOrder('${escapeAttr(order.id)}')"
+                title="Voir"
               >
                 👁️
               </button>
 
               <select
                 class="btn btn-light btn-small"
-                onchange="changeOrderStatus('${order.id}',this.value)"
+                onchange="changeOrderStatus('${escapeAttr(order.id)}',this.value)"
               >
-
                 ${statusOptions(order.status)}
-
               </select>
 
             </div>
@@ -1955,54 +2004,62 @@ function renderOrders(){
 
 function normalizeStatus(status){
 
-  const value=
-    String(status||"pending")
+  const value =
+    String(status || "pending")
       .trim()
       .toLowerCase();
 
   const map={
+
     "en attente":"pending",
     "pending":"pending",
+
     "confirmée":"confirmed",
     "confirmee":"confirmed",
     "confirmed":"confirmed",
+
     "expédiée":"shipped",
     "expediee":"shipped",
     "shipped":"shipped",
+
     "livrée":"delivered",
     "livree":"delivered",
     "delivered":"delivered",
+
     "annulée":"cancelled",
     "annulee":"cancelled",
     "cancelled":"cancelled"
+
   };
 
-  return map[value]||value;
+  return map[value] || value;
 
 }
 
 
 function statusLabel(status){
 
-  const value=
+  const value =
     normalizeStatus(status);
 
   const labels={
+
     pending:"En attente",
     confirmed:"Confirmée",
     shipped:"Expédiée",
     delivered:"Livrée",
     cancelled:"Annulée"
+
   };
 
-  return labels[value]||status||"—";
+  return labels[value] || status || "—";
 
 }
 
 
 function statusBadge(status){
 
-  const value=
+  const value =
     normalizeStatus(status);
 
   const safe=[
@@ -2026,15 +2083,17 @@ function statusBadge(status){
 
 function statusOptions(current){
 
-  const value=
+  const value =
     normalizeStatus(current);
 
   const statuses=[
+
     ["pending","En attente"],
     ["confirmed","Confirmée"],
     ["shipped","Expédiée"],
     ["delivered","Livrée"],
     ["cancelled","Annulée"]
+
   ];
 
   return statuses.map(item=>{
@@ -2042,7 +2101,7 @@ function statusOptions(current){
     return `
       <option
         value="${item[0]}"
-        ${item[0]===value?"selected":""}
+        ${item[0]===value ? "selected" : ""}
       >
         ${item[1]}
       </option>
@@ -2059,24 +2118,25 @@ function statusOptions(current){
 
 async function changeOrderStatus(id,status){
 
-  const order=
+  const order =
     orders.find(o=>o.id===id);
 
   if(!order) return;
 
-  const oldStatus=
+  const oldStatus =
     normalizeStatus(order.status);
 
   if(oldStatus===status) return;
 
   try{
 
-    const {error}=await db
-      .from("orders")
-      .update({
-        status:status
-      })
-      .eq("id",id);
+    const {error} =
+      await db
+        .from("orders")
+        .update({
+          status:status
+        })
+        .eq("id",id);
 
     if(error) throw error;
 
@@ -2095,7 +2155,7 @@ async function changeOrderStatus(id,status){
     console.error(error);
 
     toast(
-      "Impossible de modifier le statut : "+
+      "Impossible de modifier le statut : " +
       error.message,
       "error"
     );
@@ -2113,48 +2173,48 @@ async function changeOrderStatus(id,status){
 
 function openOrder(id){
 
-  const order=
+  const order =
     orders.find(o=>o.id===id);
 
   if(!order) return;
 
-  const details=
+  const details =
     document.getElementById("orderDetails");
 
-  const items=
+  const items =
     normalizeItems(order.items);
 
-  const itemsHtml=
+  const itemsHtml =
     items.length
       ? items.map(item=>{
 
-          const name=
-            item.name||
-            item.product_name||
-            item.title||
+          const name =
+            item.name ||
+            item.product_name ||
+            item.title ||
             "Produit";
 
-          const quantity=
+          const quantity =
             Number(
-              item.quantity||
-              item.qty||
+              item.quantity ||
+              item.qty ||
               1
             );
 
-          const price=
+          const price =
             Number(
-              item.price||
-              item.unit_price||
+              item.price ||
+              item.unit_price ||
               0
             );
 
-          const color=
-            item.color||
-            item.colour||
+          const color =
+            item.color ||
+            item.colour ||
             "";
 
-          const size=
-            item.size||
+          const size =
+            item.size ||
             "";
 
           return `
@@ -2170,22 +2230,26 @@ function openOrder(id){
 
                   Quantité : ${quantity}
 
-                  ${color
-                    ? " • Couleur : "+
-                      escapeHtml(color)
-                    : ""}
+                  ${
+                    color
+                      ? " • Couleur : " +
+                        escapeHtml(color)
+                      : ""
+                  }
 
-                  ${size
-                    ? " • Taille : "+
-                      escapeHtml(size)
-                    : ""}
+                  ${
+                    size
+                      ? " • Taille : " +
+                        escapeHtml(size)
+                      : ""
+                  }
 
                 </div>
 
               </div>
 
               <div class="item-price">
-                ${formatPrice(price*quantity)}
+                ${formatPrice(price * quantity)}
               </div>
 
             </div>
@@ -2204,6 +2268,7 @@ function openOrder(id){
     <div class="order-header">
 
       <div class="info-box">
+
         <div class="info-label">
           Commande
         </div>
@@ -2211,10 +2276,11 @@ function openOrder(id){
         <div class="info-value">
           #${escapeHtml(shortId(order.id))}
         </div>
+
       </div>
 
-
       <div class="info-box">
+
         <div class="info-label">
           Date
         </div>
@@ -2222,10 +2288,11 @@ function openOrder(id){
         <div class="info-value">
           ${formatDate(order.created_at)}
         </div>
+
       </div>
 
-
       <div class="info-box">
+
         <div class="info-label">
           Statut
         </div>
@@ -2233,10 +2300,10 @@ function openOrder(id){
         <div class="info-value">
           ${statusBadge(order.status)}
         </div>
+
       </div>
 
     </div>
-
 
     <div class="order-section">
 
@@ -2245,18 +2312,17 @@ function openOrder(id){
       <div class="address-box">
 
         <strong>
-          ${escapeHtml(order.customer_name||"Client")}
+          ${escapeHtml(order.customer_name || "Client")}
         </strong>
 
         <br>
 
         Téléphone :
-        ${escapeHtml(order.phone||"—")}
+        ${escapeHtml(order.phone || "—")}
 
       </div>
 
     </div>
-
 
     <div class="order-section">
 
@@ -2265,21 +2331,25 @@ function openOrder(id){
       <div class="address-box">
 
         <strong>
-          ${escapeHtml(order.wilaya||"—")}
+          ${escapeHtml(order.wilaya || "—")}
         </strong>
 
-        ${order.commune
-          ? " — "+escapeHtml(order.commune)
-          : ""}
+        ${
+          order.commune
+            ? " — " + escapeHtml(order.commune)
+            : ""
+        }
 
         <br>
 
-        ${escapeHtml(order.address||"Adresse non renseignée")}
+        ${escapeHtml(
+          order.address ||
+          "Adresse non renseignée"
+        )}
 
       </div>
 
     </div>
-
 
     <div class="order-section">
 
@@ -2291,7 +2361,6 @@ function openOrder(id){
 
     </div>
 
-
     <div class="order-section">
 
       <h3>📝 Notes</h3>
@@ -2299,14 +2368,13 @@ function openOrder(id){
       <div class="address-box">
 
         ${escapeHtml(
-          order.notes||
+          order.notes ||
           "Aucune note."
         )}
 
       </div>
 
     </div>
-
 
     <div class="order-section">
 
@@ -2366,12 +2434,21 @@ function normalizeItems(items){
 
     try{
 
-      const parsed=
+      const parsed =
         JSON.parse(items);
 
-      return Array.isArray(parsed)
-        ? parsed
-        : [];
+      if(Array.isArray(parsed)){
+        return parsed;
+      }
+
+      if(
+        parsed &&
+        Array.isArray(parsed.items)
+      ){
+        return parsed.items;
+      }
+
+      return [];
 
     }catch{
       return [];
@@ -2405,48 +2482,57 @@ async function loadProducts(){
 
   if(body){
 
-    body.innerHTML=
-      `<tr>
+    body.innerHTML=`
+      <tr>
         <td colspan="7" class="loading">
           Chargement des produits...
         </td>
-      </tr>`;
+      </tr>
+    `;
 
   }
 
   try{
 
-    const {data,error}=await db
-      .from("products")
-      .select(`
-        id,
-        name,
-        description,
-        price,
-        old_price,
-        stock,
-        category_id,
-        image_url,
-        is_active,
-        active,
-        image,
-        colors,
-        sizes,
-        variant_stock,
-        created_at
-      `)
-      .order("created_at",{ascending:false});
+    /*
+      IMPORTANT:
+      On sélectionne uniquement les colonnes
+      principales connues de products.
+
+      Cela évite qu'une colonne inexistante
+      fasse échouer toute la requête.
+    */
+
+    const {data,error} =
+      await db
+        .from("products")
+        .select(`
+          id,
+          name,
+          description,
+          price,
+          old_price,
+          stock,
+          category_id,
+          image_url,
+          is_active
+        `)
+        .order("created_at",{ascending:false});
 
     if(error) throw error;
 
-    products=data||[];
+    products =
+      (data || []).map(product=>({
+        ...product,
+        __variantCount:0,
+        __variantStock:0
+      }));
 
     await loadVariantCounts();
 
     renderProducts();
     updateProductStats();
-
-    await loadCategories();
+    renderCategories();
 
   }catch(error){
 
@@ -2454,17 +2540,23 @@ async function loadProducts(){
 
     if(body){
 
-      body.innerHTML=
-        `<tr>
+      body.innerHTML=`
+        <tr>
           <td colspan="7" class="empty">
             Erreur lors du chargement des produits.
+            <br><br>
+            <small>
+              ${escapeHtml(error.message)}
+            </small>
           </td>
-        </tr>`;
+        </tr>
+      `;
 
     }
 
     toast(
-      "Erreur produits : "+error.message,
+      "Erreur produits : " +
+      error.message,
       "error"
     );
 
@@ -2480,21 +2572,26 @@ async function loadProducts(){
 async function loadVariantCounts(){
 
   products.forEach(p=>{
+
     p.__variantCount=0;
     p.__variantStock=0;
+
   });
+
+  if(!products.length) return;
 
   try{
 
-    const {data,error}=await db
-      .from("product_variants")
-      .select("id,product_id,stock");
+    const {data,error} =
+      await db
+        .from("product_variants")
+        .select("id,product_id,stock");
 
     if(error) throw error;
 
     const map={};
 
-    (data||[]).forEach(v=>{
+    (data || []).forEach(v=>{
 
       if(!map[v.product_id]){
 
@@ -2507,23 +2604,29 @@ async function loadVariantCounts(){
 
       map[v.product_id].count++;
 
-      map[v.product_id].stock+=
-        Number(v.stock||0);
+      map[v.product_id].stock +=
+        Number(v.stock || 0);
 
     });
 
 
     products.forEach(p=>{
 
-      p.__variantCount=
-        map[p.id]?.count||0;
+      p.__variantCount =
+        map[p.id]?.count || 0;
 
-      p.__variantStock=
-        map[p.id]?.stock||0;
+      p.__variantStock =
+        map[p.id]?.stock || 0;
 
     });
 
   }catch(error){
+
+    /*
+      Si product_variants n'est pas encore prêt,
+      les produits continuent à fonctionner
+      avec le stock principal.
+    */
 
     console.warn(
       "Variants indisponibles:",
@@ -2541,77 +2644,78 @@ async function loadVariantCounts(){
 
 function renderProducts(){
 
-  const body=
+  const body =
     document.getElementById("productsBody");
 
   if(!body) return;
 
-  const search=
+  const search =
     (
-      document.getElementById("productSearch")?.value||
+      document.getElementById("productSearch")?.value ||
       ""
     )
     .trim()
     .toLowerCase();
 
-  const filtered=
+  const filtered =
     products.filter(product=>{
 
-      const category=
+      const category =
         categories.find(
           c=>c.id===product.category_id
         );
 
       const text=`
-        ${product.name||""}
-        ${category?.name||""}
+        ${product.name || ""}
+        ${category?.name || ""}
       `.toLowerCase();
 
-      return !search||text.includes(search);
+      return !search || text.includes(search);
 
     });
 
 
   if(!filtered.length){
 
-    body.innerHTML=
-      `<tr>
+    body.innerHTML=`
+      <tr>
         <td colspan="7" class="empty">
           Aucun produit trouvé.
         </td>
-      </tr>`;
+      </tr>
+    `;
 
     return;
 
   }
 
 
-  body.innerHTML=
+  body.innerHTML =
     filtered.map(product=>{
 
-      const category=
+      const category =
         categories.find(
           c=>c.id===product.category_id
         );
 
-      const active=
-        product.is_active!==false &&
-        product.active!==false;
+      const active =
+        product.is_active !== false;
 
-      const stock=
-        product.__variantCount>0
+      const stock =
+        product.__variantCount > 0
           ? product.__variantStock
-          : Number(product.stock||0);
+          : Number(product.stock || 0);
 
-      const image=
-        product.image_url||
-        product.image||
-        "";
+      const image =
+        product.image_url || "";
 
-      let stockClass="badge-active";
+      let stockClass =
+        "badge-active";
 
       if(stock<=0){
         stockClass="badge-inactive";
+      }else if(stock<=5){
+        stockClass="badge-pending";
       }
 
       return `
@@ -2628,7 +2732,9 @@ function renderProducts(){
                     <img
                       class="product-img"
                       src="${escapeAttr(image)}"
-                      alt=""
+                      alt="${escapeAttr(product.name || "")}"
+                      loading="lazy"
+                      onerror="this.style.display='none'"
                     >
                   `
                   : `
@@ -2639,12 +2745,12 @@ function renderProducts(){
               <div>
 
                 <div class="product-name">
-                  ${escapeHtml(product.name)}
+                  ${escapeHtml(product.name || "Produit")}
                 </div>
 
                 <div class="product-category">
                   ${escapeHtml(
-                    category?.name||
+                    category?.name ||
                     "Sans catégorie"
                   )}
                 </div>
@@ -2655,19 +2761,16 @@ function renderProducts(){
 
           </td>
 
-
           <td>
             ${escapeHtml(
-              category?.name||
+              category?.name ||
               "—"
             )}
           </td>
 
-
           <td>
             ${formatPrice(product.price)}
           </td>
-
 
           <td>
 
@@ -2677,11 +2780,9 @@ function renderProducts(){
 
           </td>
 
-
           <td>
-            ${product.__variantCount||0}
+            ${product.__variantCount || 0}
           </td>
-
 
           <td>
 
@@ -2701,21 +2802,22 @@ function renderProducts(){
 
           </td>
 
-
           <td>
 
             <div class="actions">
 
               <button
                 class="btn btn-light btn-small"
-                onclick="editProduct('${product.id}')"
+                onclick="editProduct('${escapeAttr(product.id)}')"
+                title="Modifier"
               >
                 ✏️
               </button>
 
               <button
                 class="btn btn-danger btn-small"
-                onclick="deleteProduct('${product.id}')"
+                onclick="deleteProduct('${escapeAttr(product.id)}')"
+                title="Supprimer"
               >
                 🗑️
               </button>
@@ -2739,45 +2841,56 @@ function renderProducts(){
 
 function updateProductStats(){
 
-  const active=
+  const active =
     products.filter(
-      p=>
-        p.is_active!==false &&
-        p.active!==false
+      p=>p.is_active !== false
     ).length;
 
-  const stock=
+  const stock =
     products.reduce(
       (sum,p)=>
-        sum+
+        sum +
         (
-          p.__variantCount>0
-            ? Number(p.__variantStock||0)
-            : Number(p.stock||0)
+          p.__variantCount > 0
+            ? Number(p.__variantStock || 0)
+            : Number(p.stock || 0)
         ),
       0
     );
 
-  const variants=
+  const variants =
     products.reduce(
       (sum,p)=>
-        sum+
-        Number(p.__variantCount||0),
+        sum +
+        Number(p.__variantCount || 0),
       0
     );
 
 
-  document.getElementById("productStatTotal")
-    .textContent=products.length;
+  const total =
+    document.getElementById("productStatTotal");
 
-  document.getElementById("productStatActive")
-    .textContent=active;
+  const activeEl =
+    document.getElementById("productStatActive");
 
-  document.getElementById("productStatStock")
-    .textContent=stock;
+  const stockEl =
+    document.getElementById("productStatStock");
 
-  document.getElementById("productStatVariants")
-    .textContent=variants;
+  const variantsEl =
+    document.getElementById("productStatVariants");
+
+
+  if(total)
+    total.textContent=products.length;
+
+  if(activeEl)
+    activeEl.textContent=active;
+
+  if(stockEl)
+    stockEl.textContent=stock;
+
+  if(variantsEl)
+    variantsEl.textContent=variants;
 
 }
 
@@ -2788,25 +2901,22 @@ function updateProductStats(){
 
 function openProductModal(product=null){
 
-  document
-    .getElementById("productModal")
-    .classList.add("show");
+  const modal =
+    document.getElementById("productModal");
 
-  document
-    .getElementById("productForm")
-    .reset();
+  const form =
+    document.getElementById("productForm");
 
-  document
-    .getElementById("productId")
+  form.reset();
+
+  document.getElementById("productId")
     .value="";
 
-  document
-    .getElementById("productActive")
+  document.getElementById("productActive")
     .checked=true;
 
-  document
-    .getElementById("productModalTitle")
-    .textContent=
+  document.getElementById("productModalTitle")
+    .textContent =
       product
         ? "Modifier le produit"
         : "Ajouter un produit";
@@ -2818,36 +2928,33 @@ function openProductModal(product=null){
       .value=product.id;
 
     document.getElementById("productName")
-      .value=product.name||"";
+      .value=product.name || "";
 
     document.getElementById("productCategory")
-      .value=product.category_id||"";
+      .value=product.category_id || "";
 
     document.getElementById("productPrice")
-      .value=product.price??0;
+      .value=product.price ?? 0;
 
     document.getElementById("productOldPrice")
-      .value=product.old_price??"";
+      .value=product.old_price ?? "";
 
     document.getElementById("productStock")
-      .value=product.stock??0;
+      .value=product.stock ?? 0;
 
     document.getElementById("productImage")
-      .value=
-        product.image_url||
-        product.image||
-        "";
+      .value=product.image_url || "";
 
     document.getElementById("productDescription")
-      .value=
-        product.description||"";
+      .value=product.description || "";
 
     document.getElementById("productActive")
-      .checked=
-        product.is_active!==false &&
-        product.active!==false;
+      .checked =
+        product.is_active !== false;
 
   }
+
+  modal.classList.add("show");
 
 }
 
@@ -2867,7 +2974,7 @@ function closeProductModal(){
 
 function editProduct(id){
 
-  const product=
+  const product =
     products.find(p=>p.id===id);
 
   if(!product) return;
@@ -2883,8 +2990,10 @@ function editProduct(id){
 
 async function saveProduct(){
 
-  const button=
+  const button =
     document.getElementById("saveProductBtn");
+
+  if(button.disabled) return;
 
   button.disabled=true;
   button.textContent="Enregistrement...";
@@ -2892,57 +3001,56 @@ async function saveProduct(){
 
   try{
 
-    const id=
+    const id =
       document.getElementById("productId")
         .value
         .trim();
 
-    const name=
+    const name =
       document.getElementById("productName")
         .value
         .trim();
 
-    const categoryId=
+    const categoryId =
       document.getElementById("productCategory")
-        .value||
-      null;
+        .value || null;
 
-    const price=
+    const price =
       Number(
         document.getElementById("productPrice")
-          .value||0
+          .value || 0
       );
 
-    const oldPriceInput=
+    const oldPriceInput =
       document.getElementById("productOldPrice")
         .value;
 
-    const oldPrice=
-      oldPriceInput===""
+    const oldPrice =
+      oldPriceInput === ""
         ? null
         : Number(oldPriceInput);
 
-    const stock=
+    const stock =
       Math.max(
         0,
         parseInt(
           document.getElementById("productStock")
-            .value||0,
+            .value || 0,
           10
         )
       );
 
-    const description=
+    const description =
       document.getElementById("productDescription")
         .value
         .trim();
 
-    const image=
+    const image =
       document.getElementById("productImage")
         .value
         .trim();
 
-    const active=
+    const active =
       document.getElementById("productActive")
         .checked;
 
@@ -2971,6 +3079,39 @@ async function saveProduct(){
     }
 
 
+    if(!Number.isFinite(price) || price<0){
+
+      toast(
+        "Le prix est invalide.",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    if(
+      oldPrice !== null &&
+      (!Number.isFinite(oldPrice) || oldPrice<0)
+    ){
+
+      toast(
+        "L'ancien prix est invalide.",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    /*
+      IMPORTANT:
+      On utilise seulement les colonnes
+      confirmées dans products.
+    */
+
     const productData={
 
       name:name,
@@ -2984,52 +3125,40 @@ async function saveProduct(){
       stock:stock,
 
       description:
-        description||null,
+        description || null,
 
       image_url:
-        image||null,
-
-      image:
-        image||null,
+        image || null,
 
       is_active:
-        active,
-
-      active:
-        active,
-
-      updated_at:
-        new Date().toISOString()
+        active
 
     };
 
 
-    let error;
-
+    let result;
 
     if(id){
 
-      const result=
+      result =
         await db
           .from("products")
           .update(productData)
           .eq("id",id);
 
-      error=result.error;
-
     }else{
 
-      const result=
+      result =
         await db
           .from("products")
           .insert(productData);
 
-      error=result.error;
-
     }
 
 
-    if(error) throw error;
+    if(result.error){
+      throw result.error;
+    }
 
 
     toast(
@@ -3051,7 +3180,7 @@ async function saveProduct(){
     console.error(error);
 
     toast(
-      "Erreur produit : "+
+      "Erreur produit : " +
       error.message,
       "error"
     );
@@ -3072,15 +3201,15 @@ async function saveProduct(){
 
 async function deleteProduct(id){
 
-  const product=
+  const product =
     products.find(p=>p.id===id);
 
   if(!product) return;
 
 
-  const confirmed=
+  const confirmed =
     confirm(
-      `Supprimer "${product.name}" ?\n\n`+
+      `Supprimer "${product.name}" ?\n\n` +
       `Cette action est irréversible.`
     );
 
@@ -3090,10 +3219,11 @@ async function deleteProduct(id){
 
   try{
 
-    const {error}=await db
-      .from("products")
-      .delete()
-      .eq("id",id);
+    const {error} =
+      await db
+        .from("products")
+        .delete()
+        .eq("id",id);
 
     if(error) throw error;
 
@@ -3113,7 +3243,7 @@ async function deleteProduct(id){
     console.error(error);
 
     toast(
-      "Erreur suppression : "+
+      "Erreur suppression : " +
       error.message,
       "error"
     );
@@ -3129,15 +3259,15 @@ async function deleteProduct(id){
 
 function updateDashboard(){
 
-  const totalOrders=
+  const totalOrders =
     orders.length;
 
-  const pending=
+  const pending =
     orders.filter(
       o=>normalizeStatus(o.status)==="pending"
     ).length;
 
-  const revenue=
+  const revenue =
     orders
       .filter(
         o=>
@@ -3145,22 +3275,35 @@ function updateDashboard(){
       )
       .reduce(
         (sum,o)=>
-          sum+Number(o.total||0),
+          sum + Number(o.total || 0),
         0
       );
 
 
-  document.getElementById("statOrders")
-    .textContent=totalOrders;
+  const statOrders =
+    document.getElementById("statOrders");
 
-  document.getElementById("statPending")
-    .textContent=pending;
+  const statPending =
+    document.getElementById("statPending");
 
-  document.getElementById("statRevenue")
-    .textContent=formatPrice(revenue);
+  const statRevenue =
+    document.getElementById("statRevenue");
 
-  document.getElementById("statProducts")
-    .textContent=products.length;
+  const statProducts =
+    document.getElementById("statProducts");
+
+
+  if(statOrders)
+    statOrders.textContent=totalOrders;
+
+  if(statPending)
+    statPending.textContent=pending;
+
+  if(statRevenue)
+    statRevenue.textContent=formatPrice(revenue);
+
+  if(statProducts)
+    statProducts.textContent=products.length;
 
 
   renderRecentOrders();
@@ -3176,55 +3319,58 @@ function updateDashboard(){
 
 function renderRecentOrders(){
 
-  const body=
+  const body =
     document.getElementById("recentOrdersBody");
 
   if(!body) return;
 
 
-  const recent=
+  const recent =
     [...orders]
       .sort(
         (a,b)=>
-          new Date(b.created_at||0)-
-          new Date(a.created_at||0)
+          new Date(b.created_at || 0) -
+          new Date(a.created_at || 0)
       )
       .slice(0,6);
 
 
   if(!recent.length){
 
-    body.innerHTML=
-      `<tr>
+    body.innerHTML=`
+      <tr>
         <td colspan="4" class="empty">
           Aucune commande.
         </td>
-      </tr>`;
+      </tr>
+    `;
 
     return;
 
   }
 
 
-  body.innerHTML=
+  body.innerHTML =
     recent.map(order=>{
 
       return `
         <tr>
 
           <td>
+
             <strong>
               ${escapeHtml(
-                order.customer_name||
+                order.customer_name ||
                 "Client"
               )}
             </strong>
 
             <div class="customer-phone">
               ${escapeHtml(
-                order.phone||""
+                order.phone || ""
               )}
             </div>
+
           </td>
 
           <td>
@@ -3253,24 +3399,24 @@ function renderRecentOrders(){
 
 function renderLowStock(){
 
-  const box=
+  const box =
     document.getElementById("lowStockList");
 
   if(!box) return;
 
 
-  const low=
+  const low =
     products
       .map(p=>{
 
-        const stock=
-          p.__variantCount>0
-            ? Number(p.__variantStock||0)
-            : Number(p.stock||0);
+        const stock =
+          p.__variantCount > 0
+            ? Number(p.__variantStock || 0)
+            : Number(p.stock || 0);
 
         return {
           product:p,
-          stock
+          stock:stock
         };
 
       })
@@ -3281,17 +3427,18 @@ function renderLowStock(){
 
   if(!low.length){
 
-    box.innerHTML=
-      `<div class="empty">
+    box.innerHTML=`
+      <div class="empty">
         Aucun stock faible 🎉
-      </div>`;
+      </div>
+    `;
 
     return;
 
   }
 
 
-  box.innerHTML=
+  box.innerHTML =
     low.map(x=>{
 
       return `
@@ -3301,7 +3448,7 @@ function renderLowStock(){
 
             <div class="quick-title">
               ${escapeHtml(
-                x.product.name||"Produit"
+                x.product.name || "Produit"
               )}
             </div>
 
@@ -3316,7 +3463,7 @@ function renderLowStock(){
               ? "badge-inactive"
               : "badge-pending"
           }">
-            ${x.stock<=0?"Rupture":"Faible"}
+            ${x.stock<=0 ? "Rupture" : "Faible"}
           </span>
 
         </div>
@@ -3333,25 +3480,27 @@ function renderLowStock(){
 
 function renderStatusSummary(){
 
-  const box=
+  const box =
     document.getElementById("statusSummary");
 
   if(!box) return;
 
 
   const statuses=[
+
     ["pending","⏳"],
     ["confirmed","✅"],
     ["shipped","🚚"],
     ["delivered","📦"],
     ["cancelled","❌"]
+
   ];
 
 
-  box.innerHTML=
+  box.innerHTML =
     statuses.map(item=>{
 
-      const count=
+      const count =
         orders.filter(
           o=>normalizeStatus(o.status)===item[0]
         ).length;
@@ -3391,21 +3540,56 @@ function renderStatusSummary(){
 
 async function refreshAll(){
 
-  toast(
-    "Actualisation...",
-    "success"
-  );
+  if(refreshing) return;
 
-  await loadCategories();
-  await loadOrders();
-  await loadProducts();
+  refreshing=true;
 
-  updateDashboard();
+  const button =
+    document.getElementById("refreshBtn");
 
-  toast(
-    "Données actualisées ✓",
-    "success"
-  );
+  if(button){
+
+    button.disabled=true;
+    button.textContent="↻ Actualisation...";
+
+  }
+
+  try{
+
+    await Promise.all([
+      loadCategories(),
+      loadOrders(),
+      loadProducts()
+    ]);
+
+    updateDashboard();
+
+    toast(
+      "Données actualisées ✓",
+      "success"
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    toast(
+      "Erreur pendant l'actualisation.",
+      "error"
+    );
+
+  }finally{
+
+    refreshing=false;
+
+    if(button){
+
+      button.disabled=false;
+      button.textContent="↻ Actualiser";
+
+    }
+
+  }
 
 }
 
@@ -3417,12 +3601,12 @@ async function refreshAll(){
 function formatPrice(value){
 
   return (
-    Number(value||0)
+    Number(value || 0)
       .toLocaleString("fr-FR",{
         minimumFractionDigits:2,
         maximumFractionDigits:2
       })
-    +" DA"
+    + " DA"
   );
 
 }
@@ -3432,11 +3616,12 @@ function formatDate(value){
 
   if(!value) return "—";
 
-  const date=
+  const date =
     new Date(value);
 
-  if(Number.isNaN(date.getTime()))
+  if(Number.isNaN(date.getTime())){
     return "—";
+  }
 
   return date.toLocaleString(
     "fr-FR",
@@ -3463,7 +3648,7 @@ function shortId(id){
 
 function escapeHtml(value){
 
-  return String(value??"")
+  return String(value ?? "")
     .replaceAll("&","&amp;")
     .replaceAll("<","&lt;")
     .replaceAll(">","&gt;")
@@ -3481,7 +3666,7 @@ function escapeAttr(value){
 
 
 /* =========================================================
-   CLOSE MODALS OUTSIDE
+   MODAL EVENTS
 ========================================================= */
 
 document
@@ -3504,6 +3689,18 @@ document
     }
 
   });
+
+
+document.addEventListener("keydown",event=>{
+
+  if(event.key==="Escape"){
+
+    closeOrderModal();
+    closeProductModal();
+
+  }
+
+});
 
 </script>
 
