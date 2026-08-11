@@ -10,74 +10,117 @@
   <link rel="stylesheet" href="style.css">
 
   <style>
-    /* =========================
-       PRODUCT DETAILS
-    ========================= */
+    /* =========================================================
+       JR SHOP — PREMIUM PRODUCT DETAILS
+    ========================================================= */
 
     * {
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
-      background: #f7f7f7;
-      color: #222;
+      background: #f6f6f4;
+      color: #171717;
       font-family: Arial, Helvetica, sans-serif;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      -webkit-tap-highlight-color: transparent;
     }
 
     .details-page {
       width: 100%;
-      max-width: 1200px;
+      max-width: 1280px;
       margin: auto;
-      padding: 25px 18px 50px;
+      padding: 24px 20px 70px;
+    }
+
+    /* =========================================================
+       TOP
+    ========================================================= */
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+      gap: 15px;
     }
 
     .back-btn {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 20px;
-      padding: 10px 16px;
-      border: 0;
-      border-radius: 10px;
+      padding: 11px 16px;
+      border-radius: 12px;
       background: #111;
       color: #fff;
       text-decoration: none;
-      cursor: pointer;
       font-size: 14px;
+      font-weight: 600;
+      transition: .2s ease;
     }
+
+    .back-btn:hover {
+      transform: translateY(-1px);
+      opacity: .9;
+    }
+
+    .brand-mini {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #777;
+    }
+
+    /* =========================================================
+       CARD
+    ========================================================= */
 
     .product-details-card {
       background: #fff;
-      border-radius: 18px;
-      padding: 22px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
+      border: 1px solid #ecece8;
+      border-radius: 24px;
+      padding: 26px;
+      box-shadow: 0 18px 55px rgba(0, 0, 0, .07);
     }
 
     .product-layout {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 35px;
+      grid-template-columns: minmax(0, 1.08fr) minmax(360px, .92fr);
+      gap: 46px;
       align-items: start;
     }
 
-    /* =========================
+    /* =========================================================
        GALLERY
-    ========================= */
+    ========================================================= */
 
     .gallery {
-      width: 100%;
+      min-width: 0;
     }
 
     .main-image-box {
+      position: relative;
       width: 100%;
-      height: 500px;
-      background: #f5f5f5;
-      border-radius: 16px;
+      height: 620px;
+      background: #f4f4f1;
+      border-radius: 20px;
       overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
+      cursor: zoom-in;
     }
 
     .main-image {
@@ -85,26 +128,102 @@
       height: 100%;
       object-fit: contain;
       display: block;
+      transition: transform .35s ease;
+    }
+
+    .main-image-box:hover .main-image {
+      transform: scale(1.025);
+    }
+
+    .image-counter {
+      position: absolute;
+      right: 16px;
+      bottom: 16px;
+      padding: 8px 11px;
+      border-radius: 999px;
+      background: rgba(17, 17, 17, .82);
+      color: #fff;
+      font-size: 12px;
+      backdrop-filter: blur(8px);
+    }
+
+    .zoom-label {
+      position: absolute;
+      left: 16px;
+      bottom: 16px;
+      padding: 8px 11px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .9);
+      color: #222;
+      font-size: 12px;
+      font-weight: 600;
+      opacity: 0;
+      transition: .2s ease;
+    }
+
+    .main-image-box:hover .zoom-label {
+      opacity: 1;
+    }
+
+    .gallery-nav {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .gallery-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,.94);
+      color: #111;
+      box-shadow: 0 5px 20px rgba(0,0,0,.12);
+      cursor: pointer;
+      pointer-events: auto;
+      font-size: 20px;
+      transition: .2s;
+    }
+
+    .gallery-arrow:hover {
+      transform: translateY(-50%) scale(1.05);
+    }
+
+    .gallery-prev {
+      left: 15px;
+    }
+
+    .gallery-next {
+      right: 15px;
     }
 
     .thumbnails {
       display: flex;
-      gap: 10px;
-      margin-top: 12px;
+      gap: 11px;
+      margin-top: 14px;
       overflow-x: auto;
-      padding-bottom: 5px;
+      padding: 2px 2px 7px;
+      scrollbar-width: thin;
     }
 
     .thumbnail {
-      width: 78px;
-      height: 78px;
-      min-width: 78px;
-      border-radius: 10px;
+      width: 82px;
+      height: 82px;
+      min-width: 82px;
+      padding: 0;
+      border-radius: 13px;
       overflow: hidden;
       border: 2px solid transparent;
-      background: #f3f3f3;
+      background: #f2f2ef;
       cursor: pointer;
-      padding: 0;
+      transition: .2s ease;
+    }
+
+    .thumbnail:hover {
+      transform: translateY(-2px);
     }
 
     .thumbnail.active {
@@ -118,147 +237,398 @@
       display: block;
     }
 
-    /* =========================
-       INFO
-    ========================= */
+    /* =========================================================
+       PRODUCT INFO
+    ========================================================= */
 
     .product-info {
-      padding: 5px 0;
+      padding: 8px 4px;
+      min-width: 0;
+    }
+
+    .category-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 17px;
+      flex-wrap: wrap;
     }
 
     .product-category {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
       padding: 7px 12px;
-      background: #f0f0f0;
+      background: #f1f1ee;
       color: #555;
-      border-radius: 20px;
-      font-size: 13px;
-      margin-bottom: 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .2px;
+    }
+
+    .stock-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .stock-pill::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .stock-ok {
+      color: #138a4a;
+      background: #edf9f2;
+    }
+
+    .stock-empty {
+      color: #c62828;
+      background: #fff0f0;
     }
 
     .product-title {
-      font-size: 32px;
-      line-height: 1.2;
-      margin: 0 0 15px;
-      font-weight: 700;
+      font-size: clamp(30px, 4vw, 46px);
+      line-height: 1.08;
+      letter-spacing: -.8px;
+      margin: 0 0 14px;
+      font-weight: 800;
+    }
+
+    .rating-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .stars {
+      color: #f4b400;
+      letter-spacing: 1px;
+      font-size: 15px;
+    }
+
+    .rating-text {
+      color: #666;
+      font-size: 13px;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-bottom: 18px;
     }
 
     .product-price {
-      font-size: 28px;
-      font-weight: 700;
-      margin: 15px 0 20px;
+      font-size: 31px;
+      font-weight: 800;
+      letter-spacing: -.5px;
+    }
+
+    .old-price {
+      color: #999;
+      font-size: 17px;
+      text-decoration: line-through;
+    }
+
+    .discount-badge {
+      display: none;
+      padding: 6px 9px;
+      border-radius: 8px;
+      background: #111;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
     }
 
     .product-description {
       color: #666;
       line-height: 1.8;
-      font-size: 16px;
+      font-size: 15px;
       white-space: pre-line;
-      margin-bottom: 25px;
+      margin: 0 0 25px;
     }
 
-    .product-stock {
+    /* =========================================================
+       PURCHASE BOX
+    ========================================================= */
+
+    .purchase-box {
+      border-top: 1px solid #ecece8;
+      border-bottom: 1px solid #ecece8;
+      padding: 21px 0;
       margin-bottom: 20px;
-      font-size: 14px;
-      font-weight: 600;
     }
-
-    .stock-ok {
-      color: #159447;
-    }
-
-    .stock-empty {
-      color: #d92d20;
-    }
-
-    /* =========================
-       QUANTITY
-    ========================= */
 
     .quantity-title {
-      font-size: 15px;
-      font-weight: 700;
-      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 9px;
     }
 
     .quantity-box {
       display: inline-flex;
       align-items: center;
       border: 1px solid #ddd;
-      border-radius: 10px;
+      border-radius: 12px;
       overflow: hidden;
-      margin-bottom: 20px;
+      margin-bottom: 17px;
+      background: #fff;
     }
 
     .quantity-btn {
-      width: 42px;
-      height: 42px;
+      width: 43px;
+      height: 43px;
       border: 0;
-      background: #f5f5f5;
+      background: #f5f5f3;
       cursor: pointer;
       font-size: 20px;
+      transition: .15s;
+    }
+
+    .quantity-btn:hover {
+      background: #e9e9e6;
     }
 
     .quantity-input {
-      width: 55px;
-      height: 42px;
+      width: 54px;
+      height: 43px;
       border: 0;
       text-align: center;
-      font-size: 16px;
+      font-size: 15px;
+      font-weight: 700;
       outline: none;
       background: #fff;
     }
 
-    /* =========================
-       CART
-    ========================= */
+    .quantity-input::-webkit-inner-spin-button,
+    .quantity-input::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+    }
 
     .add-cart-btn {
       width: 100%;
-      min-height: 52px;
+      min-height: 58px;
       border: 0;
-      border-radius: 12px;
+      border-radius: 14px;
       background: #111;
       color: #fff;
       font-size: 16px;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
-      transition: 0.2s;
+      transition: .2s ease;
+      box-shadow: 0 9px 25px rgba(0,0,0,.13);
     }
 
     .add-cart-btn:hover {
-      opacity: 0.88;
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      box-shadow: 0 13px 30px rgba(0,0,0,.18);
     }
 
     .add-cart-btn:disabled {
       background: #aaa;
       cursor: not-allowed;
       transform: none;
+      box-shadow: none;
     }
 
     .cart-info {
-      margin-top: 15px;
+      min-height: 21px;
+      margin-top: 11px;
       text-align: center;
-      font-size: 14px;
-      color: #159447;
-      min-height: 20px;
+      font-size: 13px;
+      color: #138a4a;
+      font-weight: 700;
     }
 
-    /* =========================
+    /* =========================================================
+       TRUST
+    ========================================================= */
+
+    .trust-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+      margin-top: 18px;
+    }
+
+    .trust-item {
+      padding: 13px 8px;
+      border: 1px solid #ecece8;
+      border-radius: 12px;
+      text-align: center;
+      background: #fafaf8;
+    }
+
+    .trust-icon {
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+
+    .trust-title {
+      font-size: 11px;
+      font-weight: 800;
+      color: #222;
+    }
+
+    .trust-text {
+      margin-top: 3px;
+      color: #888;
+      font-size: 10px;
+    }
+
+    /* =========================================================
+       LOWER DETAILS
+    ========================================================= */
+
+    .lower-section {
+      margin-top: 28px;
+      background: #fff;
+      border: 1px solid #ecece8;
+      border-radius: 22px;
+      overflow: hidden;
+    }
+
+    .accordion {
+      border-bottom: 1px solid #ecece8;
+    }
+
+    .accordion:last-child {
+      border-bottom: 0;
+    }
+
+    .accordion-btn {
+      width: 100%;
+      border: 0;
+      background: #fff;
+      padding: 20px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-weight: 800;
+      text-align: left;
+    }
+
+    .accordion-icon {
+      font-size: 20px;
+      color: #777;
+      transition: .2s;
+    }
+
+    .accordion.open .accordion-icon {
+      transform: rotate(45deg);
+    }
+
+    .accordion-content {
+      display: none;
+      padding: 0 22px 22px;
+      color: #666;
+      line-height: 1.8;
+      font-size: 14px;
+      white-space: pre-line;
+    }
+
+    .accordion.open .accordion-content {
+      display: block;
+    }
+
+    /* =========================================================
+       REVIEWS
+    ========================================================= */
+
+    .reviews-section {
+      margin-top: 28px;
+      background: #fff;
+      border: 1px solid #ecece8;
+      border-radius: 22px;
+      padding: 26px;
+    }
+
+    .section-heading {
+      margin: 0 0 7px;
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .section-subtitle {
+      color: #888;
+      font-size: 13px;
+      margin-bottom: 20px;
+    }
+
+    .review-summary {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 18px;
+      border-radius: 15px;
+      background: #f8f8f5;
+    }
+
+    .review-number {
+      font-size: 38px;
+      font-weight: 800;
+    }
+
+    .review-stars {
+      color: #f4b400;
+      font-size: 18px;
+    }
+
+    .review-note {
+      color: #777;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    /* =========================================================
+       RELATED
+    ========================================================= */
+
+    .related-section {
+      margin-top: 28px;
+    }
+
+    .related-title {
+      margin: 0 0 15px;
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .related-placeholder {
+      padding: 30px;
+      border-radius: 18px;
+      background: #fff;
+      border: 1px solid #ecece8;
+      color: #888;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    /* =========================================================
        LOADING / ERROR
-    ========================= */
+    ========================================================= */
 
     .state-box {
       background: #fff;
-      border-radius: 18px;
-      padding: 50px 25px;
+      border-radius: 22px;
+      padding: 65px 25px;
       text-align: center;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
+      box-shadow: 0 12px 40px rgba(0,0,0,.06);
     }
 
     .loading {
-      font-size: 17px;
+      font-size: 16px;
       color: #666;
     }
 
@@ -277,7 +647,7 @@
       border-radius: 10px;
       text-align: left;
       word-break: break-word;
-      font-size: 14px;
+      font-size: 13px;
       color: #7a271a;
     }
 
@@ -291,57 +661,210 @@
       cursor: pointer;
     }
 
-    /* =========================
-       RESPONSIVE
-    ========================= */
+    /* =========================================================
+       LIGHTBOX
+    ========================================================= */
 
-    @media (max-width: 800px) {
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0,0,0,.92);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 25px;
+    }
+
+    .lightbox.open {
+      display: flex;
+    }
+
+    .lightbox-image {
+      max-width: 92vw;
+      max-height: 88vh;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .lightbox-close {
+      position: fixed;
+      top: 18px;
+      right: 20px;
+      width: 44px;
+      height: 44px;
+      border: 0;
+      border-radius: 50%;
+      background: #fff;
+      color: #111;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    /* =========================================================
+       MOBILE STICKY CART
+    ========================================================= */
+
+    .mobile-cart-bar {
+      display: none;
+    }
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
+
+    @media (max-width: 900px) {
 
       .details-page {
-        padding: 15px 12px 35px;
+        padding: 15px 12px 95px;
       }
 
       .product-details-card {
         padding: 14px;
-        border-radius: 14px;
+        border-radius: 18px;
       }
 
       .product-layout {
         grid-template-columns: 1fr;
-        gap: 22px;
+        gap: 25px;
+      }
+
+      .main-image-box {
+        height: 520px;
+      }
+
+      .product-info {
+        padding: 3px 2px;
+      }
+
+      .product-title {
+        font-size: 31px;
+      }
+
+      .mobile-cart-bar {
+        position: fixed;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        z-index: 5000;
+        padding: 9px;
+        background: rgba(255,255,255,.96);
+        border: 1px solid #ddd;
+        border-radius: 16px;
+        box-shadow: 0 10px 35px rgba(0,0,0,.18);
+        backdrop-filter: blur(12px);
+      }
+
+      .mobile-price {
+        flex: 1;
+        min-width: 0;
+        font-weight: 800;
+        font-size: 14px;
+      }
+
+      .mobile-cart-btn {
+        border: 0;
+        border-radius: 11px;
+        background: #111;
+        color: #fff;
+        min-height: 46px;
+        padding: 0 18px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+    }
+
+    @media (max-width: 600px) {
+
+      .details-page {
+        padding: 10px 8px 90px;
+      }
+
+      .top-bar {
+        margin-bottom: 12px;
+      }
+
+      .brand-mini {
+        display: none;
+      }
+
+      .back-btn {
+        padding: 9px 13px;
+        font-size: 13px;
+      }
+
+      .product-details-card {
+        padding: 9px;
+        border-radius: 16px;
       }
 
       .main-image-box {
         height: 390px;
-      }
-
-      .product-title {
-        font-size: 25px;
-      }
-
-      .product-price {
-        font-size: 24px;
-      }
-    }
-
-    @media (max-width: 480px) {
-
-      .main-image-box {
-        height: 330px;
-      }
-
-      .product-title {
-        font-size: 22px;
-      }
-
-      .product-description {
-        font-size: 15px;
+        border-radius: 15px;
       }
 
       .thumbnail {
-        width: 65px;
-        height: 65px;
-        min-width: 65px;
+        width: 68px;
+        height: 68px;
+        min-width: 68px;
+      }
+
+      .product-title {
+        font-size: 26px;
+        letter-spacing: -.4px;
+      }
+
+      .product-price {
+        font-size: 26px;
+      }
+
+      .product-description {
+        font-size: 14px;
+      }
+
+      .trust-grid {
+        gap: 6px;
+      }
+
+      .trust-item {
+        padding: 10px 5px;
+      }
+
+      .trust-title {
+        font-size: 9px;
+      }
+
+      .trust-text {
+        font-size: 8px;
+      }
+
+      .lower-section,
+      .reviews-section {
+        border-radius: 16px;
+      }
+
+      .reviews-section {
+        padding: 18px;
+      }
+
+      .review-summary {
+        padding: 14px;
+      }
+
+      .review-number {
+        font-size: 30px;
+      }
+
+      .gallery-arrow {
+        width: 36px;
+        height: 36px;
+      }
+
+      .zoom-label {
+        display: none;
       }
     }
   </style>
@@ -351,130 +874,454 @@
 
   <main class="details-page">
 
-    <a href="index.html" class="back-btn">
-      ← Retour
-    </a>
+    <!-- TOP -->
+    <div class="top-bar">
 
+      <a href="index.html" class="back-btn">
+        ← Retour
+      </a>
+
+      <div class="brand-mini">
+        JR SHOP
+      </div>
+
+    </div>
+
+
+    <!-- LOADING -->
     <div id="loadingState" class="state-box">
+
       <div class="loading">
         Chargement du produit...
       </div>
+
     </div>
 
-    <div id="errorState" class="state-box error-box" style="display:none;">
+
+    <!-- ERROR -->
+    <div
+      id="errorState"
+      class="state-box error-box"
+      style="display:none;"
+    >
+
       <h2>Impossible de charger le produit</h2>
 
       <p id="errorMessage">
         Une erreur est survenue.
       </p>
 
-      <div id="errorDetails" class="error-details" style="display:none;"></div>
+      <div
+        id="errorDetails"
+        class="error-details"
+        style="display:none;"
+      ></div>
 
-      <button class="retry-btn" onclick="loadProduct()">
+      <button
+        class="retry-btn"
+        onclick="loadProduct()"
+      >
         Réessayer
       </button>
+
     </div>
 
-    <section id="productCard" class="product-details-card" style="display:none;">
+
+    <!-- PRODUCT -->
+    <section
+      id="productCard"
+      class="product-details-card"
+      style="display:none;"
+    >
 
       <div class="product-layout">
 
         <!-- =========================
              GALLERY
-        ========================= -->
+        ========================== -->
 
         <div class="gallery">
 
-          <div class="main-image-box">
+          <div
+            class="main-image-box"
+            onclick="openLightbox()"
+          >
+
             <img
               id="mainImage"
               class="main-image"
               src=""
               alt="Produit"
             >
+
+            <div
+              id="imageCounter"
+              class="image-counter"
+            >
+              1 / 1
+            </div>
+
+            <div class="zoom-label">
+              🔍 Cliquer pour agrandir
+            </div>
+
+            <div class="gallery-nav">
+
+              <button
+                type="button"
+                class="gallery-arrow gallery-prev"
+                onclick="event.stopPropagation(); previousImage()"
+                aria-label="Image précédente"
+              >
+                ‹
+              </button>
+
+              <button
+                type="button"
+                class="gallery-arrow gallery-next"
+                onclick="event.stopPropagation(); nextImage()"
+                aria-label="Image suivante"
+              >
+                ›
+              </button>
+
+            </div>
+
           </div>
 
-          <div id="thumbnails" class="thumbnails"></div>
+
+          <div
+            id="thumbnails"
+            class="thumbnails"
+          ></div>
 
         </div>
 
+
         <!-- =========================
-             PRODUCT INFO
-        ========================= -->
+             INFO
+        ========================== -->
 
         <div class="product-info">
 
-          <div
-            id="productCategory"
-            class="product-category"
-            style="display:none;"
-          ></div>
+          <div class="category-row">
+
+            <div
+              id="productCategory"
+              class="product-category"
+              style="display:none;"
+            ></div>
+
+            <div
+              id="stockPill"
+              class="stock-pill stock-ok"
+              style="display:none;"
+            ></div>
+
+          </div>
+
 
           <h1
             id="productTitle"
             class="product-title"
           ></h1>
 
-          <div
-            id="productPrice"
-            class="product-price"
-          ></div>
+
+          <div class="rating-row">
+
+            <div class="stars">
+              ★★★★★
+            </div>
+
+            <div class="rating-text">
+              Excellent produit
+            </div>
+
+          </div>
+
+
+          <div class="price-row">
+
+            <div
+              id="productPrice"
+              class="product-price"
+            ></div>
+
+            <div
+              id="oldPrice"
+              class="old-price"
+              style="display:none;"
+            ></div>
+
+            <div
+              id="discountBadge"
+              class="discount-badge"
+            ></div>
+
+          </div>
+
 
           <div
             id="productDescription"
             class="product-description"
           ></div>
 
-          <div
-            id="productStock"
-            class="product-stock"
-          ></div>
 
-          <div class="quantity-title">
-            Quantité
-          </div>
+          <div class="purchase-box">
 
-          <div class="quantity-box">
+            <div class="quantity-title">
+              Quantité
+            </div>
+
+            <div class="quantity-box">
+
+              <button
+                type="button"
+                class="quantity-btn"
+                onclick="changeQuantity(-1)"
+              >
+                −
+              </button>
+
+              <input
+                id="quantityInput"
+                class="quantity-input"
+                type="number"
+                min="1"
+                value="1"
+                inputmode="numeric"
+              >
+
+              <button
+                type="button"
+                class="quantity-btn"
+                onclick="changeQuantity(1)"
+              >
+                +
+              </button>
+
+            </div>
+
 
             <button
-              type="button"
-              class="quantity-btn"
-              onclick="changeQuantity(-1)"
+              id="addCartBtn"
+              class="add-cart-btn"
+              onclick="addToCart()"
             >
-              −
+              Ajouter au panier
             </button>
 
-            <input
-              id="quantityInput"
-              class="quantity-input"
-              type="number"
-              min="1"
-              value="1"
-            >
 
-            <button
-              type="button"
-              class="quantity-btn"
-              onclick="changeQuantity(1)"
-            >
-              +
-            </button>
+            <div
+              id="cartMessage"
+              class="cart-info"
+            ></div>
 
           </div>
+
+
+          <!-- TRUST -->
+          <div class="trust-grid">
+
+            <div class="trust-item">
+
+              <div class="trust-icon">
+                🚚
+              </div>
+
+              <div class="trust-title">
+                Livraison rapide
+              </div>
+
+              <div class="trust-text">
+                Expédition locale
+              </div>
+
+            </div>
+
+
+            <div class="trust-item">
+
+              <div class="trust-icon">
+                🔒
+              </div>
+
+              <div class="trust-title">
+                Paiement sécurisé
+              </div>
+
+              <div class="trust-text">
+                Commande protégée
+              </div>
+
+            </div>
+
+
+            <div class="trust-item">
+
+              <div class="trust-icon">
+                ↩
+              </div>
+
+              <div class="trust-title">
+                Retour facile
+              </div>
+
+              <div class="trust-text">
+                Service client
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =========================
+           DETAILS ACCORDION
+      ========================== -->
+
+      <div class="lower-section">
+
+        <div class="accordion open">
 
           <button
-            id="addCartBtn"
-            class="add-cart-btn"
-            onclick="addToCart()"
+            type="button"
+            class="accordion-btn"
+            onclick="toggleAccordion(this)"
           >
-            Ajouter au panier
+
+            <span>
+              Description
+            </span>
+
+            <span class="accordion-icon">
+              +
+            </span>
+
           </button>
 
           <div
-            id="cartMessage"
-            class="cart-info"
+            id="descriptionAccordion"
+            class="accordion-content"
           ></div>
 
+        </div>
+
+
+        <div class="accordion">
+
+          <button
+            type="button"
+            class="accordion-btn"
+            onclick="toggleAccordion(this)"
+          >
+
+            <span>
+              Livraison
+            </span>
+
+            <span class="accordion-icon">
+              +
+            </span>
+
+          </button>
+
+          <div class="accordion-content">
+
+            Livraison disponible selon les zones
+            couvertes par JR Shop.
+
+            <br><br>
+
+            Les informations de livraison peuvent
+            être confirmées lors de la commande.
+
+          </div>
+
+        </div>
+
+
+        <div class="accordion">
+
+          <button
+            type="button"
+            class="accordion-btn"
+            onclick="toggleAccordion(this)"
+          >
+
+            <span>
+              Informations produit
+            </span>
+
+            <span class="accordion-icon">
+              +
+            </span>
+
+          </button>
+
+          <div
+            id="productMeta"
+            class="accordion-content"
+          ></div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =========================
+           REVIEWS
+      ========================== -->
+
+      <div class="reviews-section">
+
+        <h2 class="section-heading">
+          Avis clients
+        </h2>
+
+        <div class="section-subtitle">
+          Découvrez l'expérience de nos clients.
+        </div>
+
+        <div class="review-summary">
+
+          <div class="review-number">
+            4.9
+          </div>
+
+          <div>
+
+            <div class="review-stars">
+              ★★★★★
+            </div>
+
+            <div class="review-note">
+              Excellente satisfaction
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =========================
+           RELATED
+      ========================== -->
+
+      <div class="related-section">
+
+        <h2 class="related-title">
+          Vous aimerez peut-être aussi
+        </h2>
+
+        <div class="related-placeholder">
+          Découvrez bientôt nos produits recommandés.
         </div>
 
       </div>
@@ -484,9 +1331,58 @@
   </main>
 
 
-  <!-- =========================
-       SUPABASE
-  ========================= -->
+  <!-- MOBILE STICKY CART -->
+
+  <div
+    id="mobileCartBar"
+    class="mobile-cart-bar"
+    style="display:none;"
+  >
+
+    <div
+      id="mobilePrice"
+      class="mobile-price"
+    ></div>
+
+    <button
+      class="mobile-cart-btn"
+      onclick="addToCart()"
+    >
+      Ajouter
+    </button>
+
+  </div>
+
+
+  <!-- LIGHTBOX -->
+
+  <div
+    id="lightbox"
+    class="lightbox"
+    onclick="closeLightbox()"
+  >
+
+    <button
+      type="button"
+      class="lightbox-close"
+      onclick="closeLightbox()"
+      aria-label="Fermer"
+    >
+      ×
+    </button>
+
+    <img
+      id="lightboxImage"
+      class="lightbox-image"
+      src=""
+      alt="Produit"
+      onclick="event.stopPropagation()"
+    >
+
+  </div>
+
+
+  <!-- SUPABASE -->
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -497,7 +1393,7 @@
   <script>
 
     /* =====================================================
-       JR SHOP - PRODUCT DETAILS
+       JR SHOP — PRODUCT DETAILS
     ===================================================== */
 
     let currentProduct = null;
@@ -513,7 +1409,10 @@
 
     function getProductId() {
 
-      const params = new URLSearchParams(window.location.search);
+      const params =
+        new URLSearchParams(
+          window.location.search
+        );
 
       return params.get("id");
 
@@ -526,7 +1425,10 @@
 
     function escapeHtml(value) {
 
-      if (value === null || value === undefined) {
+      if (
+        value === null ||
+        value === undefined
+      ) {
         return "";
       }
 
@@ -541,12 +1443,16 @@
 
 
     /* =====================================================
-       PRICE FORMAT
+       PRICE
     ===================================================== */
 
     function formatPrice(value) {
 
-      if (value === null || value === undefined || value === "") {
+      if (
+        value === null ||
+        value === undefined ||
+        value === ""
+      ) {
         return "";
       }
 
@@ -556,13 +1462,16 @@
         return escapeHtml(value);
       }
 
-      return number.toLocaleString("fr-FR") + " DA";
+      return (
+        number.toLocaleString("fr-FR") +
+        " DA"
+      );
 
     }
 
 
     /* =====================================================
-       PARSE IMAGE FIELD
+       IMAGES
     ===================================================== */
 
     function parseImages(value) {
@@ -583,28 +1492,19 @@
           return [];
         }
 
-        /*
-          Try JSON first.
-          Example:
-          ["image1.jpg","image2.jpg"]
-        */
-
         try {
 
-          const parsed = JSON.parse(text);
+          const parsed =
+            JSON.parse(text);
 
           if (Array.isArray(parsed)) {
             return parsed;
           }
 
         } catch (error) {
-          /* Not JSON - continue */
+          /* Continue */
         }
 
-
-        /*
-          Support comma-separated URLs.
-        */
 
         if (text.includes(",")) {
 
@@ -615,10 +1515,6 @@
 
         }
 
-
-        /*
-          Support newline-separated URLs.
-        */
 
         if (text.includes("\n")) {
 
@@ -639,63 +1535,42 @@
     }
 
 
-    /* =====================================================
-       GET ALL PRODUCT IMAGES
-    ===================================================== */
-
     function getProductImages(product) {
 
       let images = [];
 
-
-      /*
-        1. image_urls
-      */
 
       images = images.concat(
         parseImages(product.image_urls)
       );
 
 
-      /*
-        2. images
-      */
-
       images = images.concat(
         parseImages(product.images)
       );
 
-
-      /*
-        3. gallery
-      */
 
       images = images.concat(
         parseImages(product.gallery)
       );
 
 
-      /*
-        4. image_url
-      */
-
       if (product.image_url) {
-
         images.push(product.image_url);
-
       }
 
 
-      /*
-        Remove empty values + duplicates.
-      */
-
       images = images
         .filter(Boolean)
-        .map(image => String(image).trim())
+        .map(image =>
+          String(image).trim()
+        )
         .filter(Boolean);
 
-      images = [...new Set(images)];
+
+      images = [
+        ...new Set(images)
+      ];
 
 
       return images;
@@ -704,33 +1579,50 @@
 
 
     /* =====================================================
-       SHOW ERROR
+       ERROR
     ===================================================== */
 
-    function showError(message, details = "") {
+    function showError(
+      message,
+      details = ""
+    ) {
 
-      document.getElementById("loadingState").style.display = "none";
+      document.getElementById(
+        "loadingState"
+      ).style.display = "none";
 
-      document.getElementById("productCard").style.display = "none";
+      document.getElementById(
+        "productCard"
+      ).style.display = "none";
 
-      document.getElementById("errorState").style.display = "block";
+      document.getElementById(
+        "errorState"
+      ).style.display = "block";
 
-      document.getElementById("errorMessage").textContent = message;
+
+      document.getElementById(
+        "errorMessage"
+      ).textContent = message;
 
 
       const detailsBox =
-        document.getElementById("errorDetails");
+        document.getElementById(
+          "errorDetails"
+        );
 
 
       if (details) {
 
-        detailsBox.style.display = "block";
+        detailsBox.style.display =
+          "block";
 
-        detailsBox.textContent = details;
+        detailsBox.textContent =
+          details;
 
       } else {
 
-        detailsBox.style.display = "none";
+        detailsBox.style.display =
+          "none";
 
       }
 
@@ -746,9 +1638,7 @@
       currentProduct = product;
 
 
-      /* =========================
-         TITLE
-      ========================= */
+      /* TITLE */
 
       const title =
         product.name ||
@@ -757,13 +1647,16 @@
         "Produit";
 
 
-      document.getElementById("productTitle")
-        .textContent = title;
+      document.getElementById(
+        "productTitle"
+      ).textContent = title;
 
 
-      /* =========================
-         PRICE
-      ========================= */
+      document.title =
+        title + " - JR Shop";
+
+
+      /* PRICE */
 
       const price =
         product.price ??
@@ -771,13 +1664,79 @@
         product.product_price;
 
 
-      document.getElementById("productPrice")
-        .textContent = formatPrice(price);
+      document.getElementById(
+        "productPrice"
+      ).textContent =
+        formatPrice(price);
 
 
-      /* =========================
-         DESCRIPTION
-      ========================= */
+      document.getElementById(
+        "mobilePrice"
+      ).textContent =
+        formatPrice(price);
+
+
+      /* OLD PRICE / DISCOUNT */
+
+      const oldPrice =
+        product.old_price ??
+        product.compare_at_price ??
+        product.original_price ??
+        product.previous_price;
+
+
+      const oldPriceElement =
+        document.getElementById(
+          "oldPrice"
+        );
+
+
+      const discountElement =
+        document.getElementById(
+          "discountBadge"
+        );
+
+
+      if (
+        oldPrice &&
+        Number(oldPrice) > Number(price)
+      ) {
+
+        const discount =
+          Math.round(
+            (
+              (Number(oldPrice) -
+                Number(price)) /
+              Number(oldPrice)
+            ) * 100
+          );
+
+
+        oldPriceElement.style.display =
+          "inline";
+
+        oldPriceElement.textContent =
+          formatPrice(oldPrice);
+
+
+        discountElement.style.display =
+          "inline-block";
+
+        discountElement.textContent =
+          "-" + discount + "%";
+
+      } else {
+
+        oldPriceElement.style.display =
+          "none";
+
+        discountElement.style.display =
+          "none";
+
+      }
+
+
+      /* DESCRIPTION */
 
       const description =
         product.description ||
@@ -786,26 +1745,21 @@
         "";
 
 
-      const descriptionElement =
-        document.getElementById("productDescription");
+      document.getElementById(
+        "productDescription"
+      ).textContent =
+        description ||
+        "Aucune description disponible.";
 
 
-      if (description) {
-
-        descriptionElement.textContent =
-          description;
-
-      } else {
-
-        descriptionElement.textContent =
-          "Aucune description disponible.";
-
-      }
+      document.getElementById(
+        "descriptionAccordion"
+      ).textContent =
+        description ||
+        "Aucune description disponible.";
 
 
-      /* =========================
-         CATEGORY
-      ========================= */
+      /* CATEGORY */
 
       const category =
         product.category ||
@@ -817,25 +1771,28 @@
 
 
       const categoryElement =
-        document.getElementById("productCategory");
+        document.getElementById(
+          "productCategory"
+        );
 
 
       if (category) {
 
-        categoryElement.style.display = "inline-block";
+        categoryElement.style.display =
+          "inline-flex";
 
-        categoryElement.textContent = category;
+        categoryElement.textContent =
+          category;
 
       } else {
 
-        categoryElement.style.display = "none";
+        categoryElement.style.display =
+          "none";
 
       }
 
 
-      /* =========================
-         STOCK
-      ========================= */
+      /* STOCK */
 
       const stock =
         product.stock ??
@@ -843,8 +1800,16 @@
         product.inventory;
 
 
-      const stockElement =
-        document.getElementById("productStock");
+      const stockPill =
+        document.getElementById(
+          "stockPill"
+        );
+
+
+      const cartButton =
+        document.getElementById(
+          "addCartBtn"
+        );
 
 
       if (
@@ -853,7 +1818,8 @@
         stock !== ""
       ) {
 
-        const stockNumber = Number(stock);
+        const stockNumber =
+          Number(stock);
 
 
         if (
@@ -861,54 +1827,57 @@
           stockNumber <= 0
         ) {
 
-          stockElement.className =
-            "product-stock stock-empty";
+          stockPill.style.display =
+            "inline-flex";
 
-          stockElement.textContent =
-            "Produit en rupture de stock";
+          stockPill.className =
+            "stock-pill stock-empty";
 
-          document.getElementById("addCartBtn")
-            .disabled = true;
+          stockPill.textContent =
+            "Rupture de stock";
+
+
+          cartButton.disabled =
+            true;
 
         } else {
 
-          stockElement.className =
-            "product-stock stock-ok";
+          stockPill.style.display =
+            "inline-flex";
 
-          stockElement.textContent =
+          stockPill.className =
+            "stock-pill stock-ok";
+
+          stockPill.textContent =
             "En stock";
+
+
+          cartButton.disabled =
+            false;
 
         }
 
       } else {
 
-        /*
-          If there is no stock field,
-          don't block Add to Cart.
-        */
+        stockPill.style.display =
+          "none";
 
-        stockElement.textContent = "";
+        cartButton.disabled =
+          false;
 
       }
 
 
-      /* =========================
-         IMAGES
-      ========================= */
+      /* IMAGES */
 
       productImages =
         getProductImages(product);
 
 
-      if (productImages.length === 0) {
-
-        /*
-          No fake 01.jpg / 02.jpg / 03.jpg.
-          We only use the actual product image.
-        */
+      if (!productImages.length) {
 
         productImages = [
-          "https://via.placeholder.com/800x800?text=JR+Shop"
+          "https://via.placeholder.com/900x900?text=JR+Shop"
         ];
 
       }
@@ -919,34 +1888,86 @@
       renderGallery();
 
 
-      /* =========================
-         DISPLAY
-      ========================= */
+      /* PRODUCT META */
 
-      document.getElementById("loadingState")
-        .style.display = "none";
+      const meta = [];
 
-      document.getElementById("errorState")
-        .style.display = "none";
 
-      document.getElementById("productCard")
-        .style.display = "block";
+      if (product.brand) {
+        meta.push(
+          "Marque : " +
+          product.brand
+        );
+      }
+
+
+      if (product.sku) {
+        meta.push(
+          "Référence : " +
+          product.sku
+        );
+      }
+
+
+      if (category) {
+        meta.push(
+          "Catégorie : " +
+          category
+        );
+      }
+
+
+      document.getElementById(
+        "productMeta"
+      ).textContent =
+        meta.length
+          ? meta.join("\n")
+          : "Informations supplémentaires non disponibles.";
+
+
+      /* DISPLAY */
+
+      document.getElementById(
+        "loadingState"
+      ).style.display = "none";
+
+      document.getElementById(
+        "errorState"
+      ).style.display = "none";
+
+      document.getElementById(
+        "productCard"
+      ).style.display = "block";
+
+      document.getElementById(
+        "mobileCartBar"
+      ).style.display = "flex";
 
     }
 
 
     /* =====================================================
-       RENDER GALLERY
+       GALLERY
     ===================================================== */
 
     function renderGallery() {
 
       const mainImage =
-        document.getElementById("mainImage");
+        document.getElementById(
+          "mainImage"
+        );
 
 
       const thumbnails =
-        document.getElementById("thumbnails");
+        document.getElementById(
+          "thumbnails"
+        );
+
+
+      const counter =
+        document.getElementById(
+          "imageCounter"
+        );
 
 
       if (!productImages.length) {
@@ -955,7 +1976,9 @@
 
 
       mainImage.src =
-        productImages[currentImageIndex];
+        productImages[
+          currentImageIndex
+        ];
 
 
       mainImage.alt =
@@ -964,57 +1987,203 @@
         "Produit";
 
 
+      counter.textContent =
+        (
+          currentImageIndex + 1
+        ) +
+        " / " +
+        productImages.length;
+
+
       thumbnails.innerHTML = "";
 
 
-      productImages.forEach((image, index) => {
+      productImages.forEach(
+        (image, index) => {
 
-        const button =
-          document.createElement("button");
+          const button =
+            document.createElement(
+              "button"
+            );
 
 
-        button.type = "button";
+          button.type = "button";
 
-        button.className =
-          "thumbnail" +
-          (
-            index === currentImageIndex
-              ? " active"
-              : ""
+
+          button.className =
+            "thumbnail" +
+            (
+              index === currentImageIndex
+                ? " active"
+                : ""
+            );
+
+
+          button.onclick =
+            function () {
+
+              currentImageIndex =
+                index;
+
+              renderGallery();
+
+            };
+
+
+          const img =
+            document.createElement(
+              "img"
+            );
+
+
+          img.src = image;
+
+          img.alt =
+            "Image " +
+            (index + 1);
+
+
+          img.onerror =
+            function () {
+
+              this.style.display =
+                "none";
+
+            };
+
+
+          button.appendChild(img);
+
+          thumbnails.appendChild(
+            button
           );
 
+        }
+      );
 
-        button.onclick = function () {
-
-          currentImageIndex = index;
-
-          renderGallery();
-
-        };
+    }
 
 
-        const img =
-          document.createElement("img");
+    function nextImage() {
+
+      if (productImages.length <= 1) {
+        return;
+      }
 
 
-        img.src = image;
-
-        img.alt =
-          "Image " + (index + 1);
-
-
-        img.onerror = function () {
-
-          this.style.display = "none";
-
-        };
+      currentImageIndex =
+        (
+          currentImageIndex + 1
+        ) %
+        productImages.length;
 
 
-        button.appendChild(img);
+      renderGallery();
 
-        thumbnails.appendChild(button);
+    }
 
-      });
+
+    function previousImage() {
+
+      if (productImages.length <= 1) {
+        return;
+      }
+
+
+      currentImageIndex =
+        (
+          currentImageIndex -
+          1 +
+          productImages.length
+        ) %
+        productImages.length;
+
+
+      renderGallery();
+
+    }
+
+
+    /* =====================================================
+       LIGHTBOX
+    ===================================================== */
+
+    function openLightbox() {
+
+      if (!productImages.length) {
+        return;
+      }
+
+
+      document.getElementById(
+        "lightboxImage"
+      ).src =
+        productImages[
+          currentImageIndex
+        ];
+
+
+      document.getElementById(
+        "lightbox"
+      ).classList.add("open");
+
+
+      document.body.style.overflow =
+        "hidden";
+
+    }
+
+
+    function closeLightbox() {
+
+      document.getElementById(
+        "lightbox"
+      ).classList.remove("open");
+
+
+      document.body.style.overflow =
+        "";
+
+    }
+
+
+    document.addEventListener(
+      "keydown",
+      function(event) {
+
+        if (event.key === "Escape") {
+          closeLightbox();
+        }
+
+        if (event.key === "ArrowRight") {
+          nextImage();
+        }
+
+        if (event.key === "ArrowLeft") {
+          previousImage();
+        }
+
+      }
+    );
+
+
+    /* =====================================================
+       ACCORDIONS
+    ===================================================== */
+
+    function toggleAccordion(button) {
+
+      const accordion =
+        button.closest(
+          ".accordion"
+        );
+
+
+      if (accordion) {
+        accordion.classList.toggle(
+          "open"
+        );
+      }
 
     }
 
@@ -1026,11 +2195,16 @@
     function changeQuantity(amount) {
 
       const input =
-        document.getElementById("quantityInput");
+        document.getElementById(
+          "quantityInput"
+        );
 
 
       let quantity =
-        parseInt(input.value, 10) || 1;
+        parseInt(
+          input.value,
+          10
+        ) || 1;
 
 
       quantity += amount;
@@ -1040,10 +2214,6 @@
         quantity = 1;
       }
 
-
-      /*
-        Respect stock if available.
-      */
 
       if (currentProduct) {
 
@@ -1069,7 +2239,8 @@
             quantity > stockNumber
           ) {
 
-            quantity = stockNumber;
+            quantity =
+              stockNumber;
 
           }
 
@@ -1078,13 +2249,14 @@
       }
 
 
-      input.value = quantity;
+      input.value =
+        quantity;
 
     }
 
 
     /* =====================================================
-       CART HELPERS
+       CART
     ===================================================== */
 
     function getCart() {
@@ -1092,14 +2264,19 @@
       try {
 
         const saved =
-          localStorage.getItem("jr_cart");
+          localStorage.getItem(
+            "jr_cart"
+          );
+
 
         if (!saved) {
           return [];
         }
 
+
         const parsed =
           JSON.parse(saved);
+
 
         return Array.isArray(parsed)
           ? parsed
@@ -1129,10 +2306,6 @@
     }
 
 
-    /* =====================================================
-       ADD TO CART
-    ===================================================== */
-
     function addToCart() {
 
       if (!currentProduct) {
@@ -1141,11 +2314,16 @@
 
 
       const input =
-        document.getElementById("quantityInput");
+        document.getElementById(
+          "quantityInput"
+        );
 
 
       let quantity =
-        parseInt(input.value, 10) || 1;
+        parseInt(
+          input.value,
+          10
+        ) || 1;
 
 
       if (quantity < 1) {
@@ -1188,9 +2366,11 @@
           quantity > stockNumber
         ) {
 
-          quantity = stockNumber;
+          quantity =
+            stockNumber;
 
-          input.value = quantity;
+          input.value =
+            quantity;
 
         }
 
@@ -1217,20 +2397,17 @@
 
 
       const existingIndex =
-        cart.findIndex(item =>
-          String(item.id) ===
-          String(productId)
+        cart.findIndex(
+          item =>
+            String(item.id) ===
+            String(productId)
         );
 
 
-      /*
-        Keep the product information
-        needed by the cart.
-      */
-
       const cartProduct = {
 
-        id: currentProduct.id,
+        id:
+          currentProduct.id,
 
         name:
           currentProduct.name ||
@@ -1259,28 +2436,35 @@
           currentProduct.image_urls ||
           productImages,
 
-        quantity: quantity
+        quantity:
+          quantity
 
       };
 
 
       if (existingIndex !== -1) {
 
-        cart[existingIndex].quantity =
+        cart[
+          existingIndex
+        ].quantity =
           (
-            Number(cart[existingIndex].quantity) ||
-            0
+            Number(
+              cart[
+                existingIndex
+              ].quantity
+            ) || 0
           ) + quantity;
 
       } else {
 
-        cart.push(cartProduct);
+        cart.push(
+          cartProduct
+        );
 
       }
 
 
       saveCart(cart);
-
 
       updateCartCount();
 
@@ -1292,30 +2476,36 @@
     }
 
 
-    /* =====================================================
-       CART MESSAGE
-    ===================================================== */
-
-    function showCartMessage(message) {
+    function showCartMessage(
+      message
+    ) {
 
       const element =
-        document.getElementById("cartMessage");
+        document.getElementById(
+          "cartMessage"
+        );
 
 
-      element.textContent = message;
+      element.textContent =
+        message;
 
 
-      setTimeout(() => {
+      setTimeout(
+        function() {
 
-        if (
-          element.textContent === message
-        ) {
+          if (
+            element.textContent ===
+            message
+          ) {
 
-          element.textContent = "";
+            element.textContent =
+              "";
 
-        }
+          }
 
-      }, 3000);
+        },
+        3000
+      );
 
     }
 
@@ -1334,61 +2524,62 @@
         cart.reduce(
           (total, item) =>
             total +
-            (Number(item.quantity) || 0),
+            (
+              Number(
+                item.quantity
+              ) || 0
+            ),
           0
         );
 
 
-      /*
-        Support several possible
-        cart count IDs from the shop.
-      */
-
       const ids = [
 
         "cartCount",
-
         "cart-count",
-
         "cartCounter",
-
         "cart-count-badge"
 
       ];
 
 
-      ids.forEach(id => {
+      ids.forEach(
+        id => {
 
-        const element =
-          document.getElementById(id);
+          const element =
+            document.getElementById(
+              id
+            );
 
 
-        if (element) {
+          if (element) {
 
-          element.textContent = count;
+            element.textContent =
+              count;
 
-          element.style.display =
-            count > 0
-              ? ""
-              : "none";
+            element.style.display =
+              count > 0
+                ? ""
+                : "none";
+
+          }
 
         }
+      );
 
-      });
-
-
-      /*
-        Also update elements using
-        the data-cart-count attribute.
-      */
 
       document
-        .querySelectorAll("[data-cart-count]")
-        .forEach(element => {
+        .querySelectorAll(
+          "[data-cart-count]"
+        )
+        .forEach(
+          element => {
 
-          element.textContent = count;
+            element.textContent =
+              count;
 
-        });
+          }
+        );
 
     }
 
@@ -1399,26 +2590,29 @@
 
     async function loadProduct() {
 
-      /*
-        Reset UI.
-      */
-
-      document.getElementById("loadingState")
-        .style.display = "block";
-
-      document.getElementById("errorState")
-        .style.display = "none";
-
-      document.getElementById("productCard")
-        .style.display = "none";
+      document.getElementById(
+        "loadingState"
+      ).style.display = "block";
 
 
-      /*
-        Check Supabase client.
-      */
+      document.getElementById(
+        "errorState"
+      ).style.display = "none";
+
+
+      document.getElementById(
+        "productCard"
+      ).style.display = "none";
+
+
+      document.getElementById(
+        "mobileCartBar"
+      ).style.display = "none";
+
 
       if (
-        typeof supabaseClient === "undefined" ||
+        typeof supabaseClient ===
+          "undefined" ||
         !supabaseClient
       ) {
 
@@ -1431,10 +2625,6 @@
 
       }
 
-
-      /*
-        Get ID from URL.
-      */
 
       const productId =
         getProductId();
@@ -1460,15 +2650,6 @@
 
       try {
 
-        /*
-          IMPORTANT:
-          We DO NOT use:
-          .eq("is_active", true)
-
-          The product is searched directly
-          by its ID.
-        */
-
         const result =
           await supabaseClient
             .from("products")
@@ -1477,14 +2658,13 @@
             .maybeSingle();
 
 
-        const data = result.data;
+        const data =
+          result.data;
 
-        const error = result.error;
 
+        const error =
+          result.error;
 
-        /*
-          Real Supabase error.
-        */
 
         if (error) {
 
@@ -1507,10 +2687,6 @@
 
         }
 
-
-        /*
-          Product not found.
-        */
 
         if (!data) {
 
@@ -1558,7 +2734,7 @@
 
     document.addEventListener(
       "DOMContentLoaded",
-      function () {
+      function() {
 
         updateCartCount();
 
@@ -1568,17 +2744,17 @@
     );
 
 
-    /*
-      Update cart count if another
-      page/tab changes localStorage.
-    */
+    /* =====================================================
+       STORAGE
+    ===================================================== */
 
     window.addEventListener(
       "storage",
-      function (event) {
+      function(event) {
 
         if (
-          event.key === "jr_cart"
+          event.key ===
+          "jr_cart"
         ) {
 
           updateCartCount();
