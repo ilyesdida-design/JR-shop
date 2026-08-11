@@ -5,1555 +5,2561 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link rel="icon" href="data:,">
 
-<title>Produit - JR Shop</title>
+<title>Admin Dashboard - JR Shop</title>
 
-<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
 
 <style>
 *{box-sizing:border-box}
+
+:root{
+  --bg:#f4f5f7;
+  --card:#fff;
+  --text:#171717;
+  --muted:#777;
+  --border:#e7e7e7;
+  --dark:#111;
+  --green:#16864a;
+  --green-bg:#edf9f2;
+  --red:#c62828;
+  --red-bg:#fff0f0;
+  --orange:#d97706;
+  --orange-bg:#fff7e8;
+  --blue:#2563eb;
+  --blue-bg:#eff6ff;
+  --shadow:0 12px 35px rgba(0,0,0,.06);
+}
+
 html{scroll-behavior:smooth}
 
 body{
-margin:0;
-background:#f6f6f4;
-color:#171717;
-font-family:Arial,Helvetica,sans-serif
-}
-
-button,input,textarea,select{font:inherit}
-button{-webkit-tap-highlight-color:transparent}
-
-.details-page{
-width:100%;
-max-width:1280px;
-margin:auto;
-padding:20px 16px 90px
-}
-
-.top-bar{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:10px;
-margin-bottom:16px
-}
-
-.back-btn,
-.share-btn{
-border:0;
-display:inline-flex;
-align-items:center;
-gap:7px;
-padding:11px 15px;
-border-radius:12px;
-background:#111;
-color:#fff;
-text-decoration:none;
-font-size:14px;
-font-weight:700;
-cursor:pointer
-}
-
-.brand-mini{
-font-size:13px;
-font-weight:800;
-letter-spacing:2px;
-color:#777
-}
-
-.product-details-card,
-.lower-section,
-.reviews-section{
-background:#fff;
-border:1px solid #ecece8;
-border-radius:22px;
-box-shadow:0 14px 45px rgba(0,0,0,.06)
-}
-
-.product-details-card{padding:24px}
-
-.product-layout{
-display:grid;
-grid-template-columns:minmax(0,1.08fr) minmax(340px,.92fr);
-gap:38px;
-align-items:start
-}
-
-.gallery{min-width:0}
-
-.main-image-box{
-position:relative;
-height:590px;
-background:#f4f4f1;
-border-radius:18px;
-overflow:hidden;
-display:flex;
-align-items:center;
-justify-content:center;
-cursor:zoom-in;
-touch-action:pan-y
-}
-
-.main-image{
-width:100%;
-height:100%;
-object-fit:contain;
-display:block;
-transition:.3s
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
 }
 
-.main-image-box:hover .main-image{
-transform:scale(1.025)
+button,input,textarea,select{
+  font:inherit;
 }
 
-.gallery-arrow{
-position:absolute;
-top:50%;
-transform:translateY(-50%);
-width:42px;
-height:42px;
-border:0;
-border-radius:50%;
-background:rgba(255,255,255,.95);
-box-shadow:0 5px 20px #0002;
-cursor:pointer;
-font-size:22px;
-z-index:2
+button{
+  cursor:pointer;
 }
 
-.gallery-prev{left:14px}
-.gallery-next{right:14px}
+a{
+  color:inherit;
+}
+
+/* =========================
+   LOGIN
+========================= */
+
+#loginScreen{
+  min-height:100vh;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:#111;
+}
+
+.login-card{
+  width:100%;
+  max-width:430px;
+  background:#fff;
+  border-radius:24px;
+  padding:35px;
+  box-shadow:0 30px 80px rgba(0,0,0,.3);
+}
+
+.login-logo{
+  font-size:27px;
+  font-weight:900;
+  letter-spacing:2px;
+  margin-bottom:7px;
+}
+
+.login-sub{
+  color:#777;
+  font-size:14px;
+  margin-bottom:25px;
+}
+
+.login-field{
+  margin-bottom:15px;
+}
+
+.login-field label{
+  display:block;
+  font-size:12px;
+  font-weight:800;
+  margin-bottom:7px;
+}
+
+.login-field input{
+  width:100%;
+  height:48px;
+  border:1px solid #ddd;
+  border-radius:11px;
+  padding:0 13px;
+  outline:none;
+}
+
+.login-field input:focus{
+  border-color:#111;
+}
+
+.login-btn{
+  width:100%;
+  height:50px;
+  border:0;
+  border-radius:12px;
+  background:#111;
+  color:#fff;
+  font-weight:900;
+}
+
+.login-error{
+  margin-top:12px;
+  color:#c62828;
+  font-size:13px;
+  font-weight:700;
+}
 
-.image-counter,
-.zoom-label{
-position:absolute;
-bottom:14px;
-padding:8px 11px;
-border-radius:999px;
-font-size:12px;
-z-index:2
+/* =========================
+   APP
+========================= */
+
+#app{
+  display:none;
+  min-height:100vh;
+}
+
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  width:250px;
+  background:#111;
+  color:#fff;
+  z-index:1000;
+  padding:22px 14px;
+  overflow-y:auto;
+}
+
+.logo{
+  padding:5px 12px 24px;
+  font-size:24px;
+  font-weight:900;
+  letter-spacing:2px;
+}
+
+.logo small{
+  display:block;
+  color:#999;
+  font-size:10px;
+  letter-spacing:3px;
+  margin-top:5px;
+}
+
+.nav-title{
+  color:#777;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:1.5px;
+  padding:16px 12px 8px;
+}
+
+.nav-btn{
+  width:100%;
+  border:0;
+  background:transparent;
+  color:#bbb;
+  text-align:left;
+  padding:12px;
+  border-radius:10px;
+  margin-bottom:3px;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.nav-btn:hover,
+.nav-btn.active{
+  background:#252525;
+  color:#fff;
+}
+
+.nav-icon{
+  width:22px;
+  text-align:center;
+}
+
+.sidebar-bottom{
+  margin-top:25px;
+  padding-top:18px;
+  border-top:1px solid #2d2d2d;
 }
 
-.image-counter{
-right:14px;
-background:#111d;
-color:#fff
+.logout-btn{
+  width:100%;
+  border:1px solid #333;
+  background:#181818;
+  color:#fff;
+  border-radius:10px;
+  padding:11px;
+  font-weight:800;
 }
 
-.zoom-label{
-left:14px;
-background:#fffc;
-font-weight:700
+.main{
+  margin-left:250px;
+  min-height:100vh;
 }
 
-.thumbnails{
-display:flex;
-gap:9px;
-overflow-x:auto;
-margin-top:12px;
-padding:2px 2px 6px
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:500;
+  height:70px;
+  background:#ffffffee;
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
 }
 
-.thumbnail{
-width:78px;
-height:78px;
-min-width:78px;
-padding:0;
-border:2px solid transparent;
-border-radius:12px;
-overflow:hidden;
-background:#f2f2ef;
-cursor:pointer
+.mobile-menu{
+  display:none;
+  border:0;
+  background:#111;
+  color:#fff;
+  width:42px;
+  height:42px;
+  border-radius:10px;
 }
 
-.thumbnail.active{border-color:#111}
+.page-title{
+  font-size:20px;
+  font-weight:900;
+}
 
-.thumbnail img{
-width:100%;
-height:100%;
-object-fit:cover
+.top-user{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:#666;
+  font-size:12px;
 }
 
-.product-info{
-padding:4px;
-min-width:0
+.avatar{
+  width:35px;
+  height:35px;
+  border-radius:50%;
+  background:#111;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
 }
 
-.category-row{
-display:flex;
-gap:8px;
-flex-wrap:wrap;
-margin-bottom:14px
+.content{
+  padding:25px;
 }
+
+/* =========================
+   SECTIONS
+========================= */
 
-.pill{
-display:inline-flex;
-align-items:center;
-padding:7px 11px;
-border-radius:999px;
-font-size:12px;
-font-weight:800
+.section{
+  display:none;
 }
 
-.category{
-background:#f1f1ee;
-color:#555
+.section.active{
+  display:block;
 }
 
-.stock-ok{
-background:#edf9f2;
-color:#138a4a
+.section-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:20px;
+  flex-wrap:wrap;
 }
 
-.stock-empty{
-background:#fff0f0;
-color:#c62828
+.section-head h1{
+  margin:0;
+  font-size:27px;
 }
 
-.product-title{
-font-size:clamp(29px,4vw,44px);
-line-height:1.08;
-letter-spacing:-.8px;
-margin:0 0 12px
+.section-head p{
+  margin:5px 0 0;
+  color:#888;
+  font-size:13px;
 }
 
-.rating-row{
-display:flex;
-align-items:center;
-gap:9px;
-margin-bottom:17px
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:17px;
+  box-shadow:var(--shadow);
 }
 
-.stars,
-.review-stars{
-color:#f4b400;
-letter-spacing:1px
+/* =========================
+   BUTTONS
+========================= */
+
+.btn{
+  border:0;
+  border-radius:10px;
+  padding:10px 14px;
+  font-weight:800;
+  font-size:13px;
 }
 
-.rating-text{
-color:#777;
-font-size:13px
+.btn-dark{
+  background:#111;
+  color:#fff;
 }
 
-.price-row{
-display:flex;
-align-items:baseline;
-flex-wrap:wrap;
-gap:10px;
-margin-bottom:15px
+.btn-light{
+  background:#f2f2f0;
+  color:#222;
 }
 
-.product-price{
-font-size:30px;
-font-weight:900
+.btn-danger{
+  background:#fff0f0;
+  color:#c62828;
 }
 
-.old-price{
-color:#999;
-text-decoration:line-through
+.btn-green{
+  background:#edf9f2;
+  color:#16864a;
 }
 
-.discount{
-display:none;
-padding:6px 9px;
-border-radius:8px;
-background:#111;
-color:#fff;
-font-size:11px;
-font-weight:800
+.btn-blue{
+  background:#eff6ff;
+  color:#2563eb;
 }
 
-.product-description{
-color:#666;
-line-height:1.75;
-font-size:15px;
-margin:0 0 20px;
-white-space:pre-line
+.btn:disabled{
+  opacity:.5;
+  cursor:not-allowed;
 }
 
-.option-box{
-display:none;
-margin:14px 0
+/* =========================
+   DASHBOARD
+========================= */
+
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+  margin-bottom:20px;
 }
 
-.option-title{
-font-size:13px;
-font-weight:800;
-margin-bottom:8px
+.stat-card{
+  padding:20px;
 }
 
-.option-list{
-display:flex;
-flex-wrap:wrap;
-gap:8px
+.stat-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
-.option-btn{
-border:1px solid #ddd;
-background:#fff;
-border-radius:10px;
-padding:9px 13px;
-cursor:pointer;
-font-weight:700
+.stat-label{
+  color:#777;
+  font-size:12px;
+  font-weight:800;
 }
 
-.option-btn.selected{
-background:#111;
-color:#fff;
-border-color:#111
+.stat-icon{
+  width:38px;
+  height:38px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#f3f3f1;
 }
 
-.option-btn.disabled{
-opacity:.45;
-cursor:not-allowed;
-text-decoration:line-through
+.stat-number{
+  margin-top:12px;
+  font-size:29px;
+  font-weight:900;
 }
 
-.variant-stock-info{
-margin-top:8px;
-font-size:12px;
-font-weight:800
+.stat-extra{
+  color:#888;
+  font-size:11px;
+  margin-top:5px;
 }
 
-.variant-stock-info.ok{
-color:#138a4a
+.dashboard-grid{
+  display:grid;
+  grid-template-columns:1.4fr 1fr;
+  gap:18px;
 }
 
-.variant-stock-info.empty{
-color:#c62828
+.dashboard-card{
+  padding:20px;
 }
 
-.purchase-box{
-border-top:1px solid #ecece8;
-border-bottom:1px solid #ecece8;
-padding:18px 0;
-margin-bottom:18px
+.card-title{
+  margin:0 0 16px;
+  font-size:17px;
 }
 
-.quantity-title{
-font-size:13px;
-font-weight:800;
-margin-bottom:8px
+.quick-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
 }
 
-.quantity-box{
-display:inline-flex;
-border:1px solid #ddd;
-border-radius:11px;
-overflow:hidden;
-margin-bottom:13px
+.quick-btn{
+  border:1px solid var(--border);
+  background:#fafaf8;
+  border-radius:12px;
+  padding:15px;
+  text-align:left;
+  font-weight:800;
 }
 
-.quantity-btn{
-width:43px;
-height:43px;
-border:0;
-background:#f5f5f3;
-cursor:pointer;
-font-size:20px
+.quick-btn:hover{
+  border-color:#aaa;
+  background:#fff;
 }
 
-.quantity-input{
-width:54px;
-height:43px;
-border:0;
-text-align:center;
-font-weight:800;
-outline:0
+.mini-list{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
 }
 
-.add-cart-btn{
-width:100%;
-min-height:57px;
-border:0;
-border-radius:14px;
-background:#111;
-color:#fff;
-font-weight:900;
-cursor:pointer;
-box-shadow:0 8px 22px #0002
+.mini-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:10px;
+  border:1px solid #eee;
+  border-radius:10px;
 }
 
-.add-cart-btn:disabled{
-background:#aaa;
-cursor:not-allowed
+.mini-name{
+  font-size:12px;
+  font-weight:800;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
 }
 
-.cart-info{
-text-align:center;
-min-height:21px;
-margin-top:9px;
-color:#138a4a;
-font-size:13px;
-font-weight:800
+.mini-value{
+  font-size:12px;
+  font-weight:900;
 }
+
+/* =========================
+   TOOLBAR
+========================= */
 
-.action-row{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:9px;
-margin-bottom:16px
+.toolbar{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  flex-wrap:wrap;
+  margin-bottom:15px;
 }
 
-.action-btn{
-min-height:45px;
-border:1px solid #ddd;
-border-radius:11px;
-background:#fff;
-font-weight:800;
-cursor:pointer
+.search{
+  flex:1;
+  min-width:220px;
+  height:43px;
+  border:1px solid var(--border);
+  background:#fff;
+  border-radius:10px;
+  padding:0 13px;
+  outline:none;
 }
 
-.action-btn.active{
-background:#fff4f4;
-border-color:#e55;
-color:#c22
+.filter{
+  height:43px;
+  border:1px solid var(--border);
+  background:#fff;
+  border-radius:10px;
+  padding:0 11px;
+  outline:none;
 }
 
-.trust-grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:7px
+/* =========================
+   TABLE
+========================= */
+
+.table-card{
+  overflow:hidden;
 }
 
-.trust-item{
-padding:11px 5px;
-text-align:center;
-border:1px solid #ecece8;
-border-radius:11px;
-background:#fafaf8
+.table-wrap{
+  width:100%;
+  overflow-x:auto;
 }
 
-.trust-icon{font-size:18px}
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:900px;
+}
 
-.trust-title{
-font-size:10px;
-font-weight:800;
-margin-top:4px
+th{
+  background:#fafaf8;
+  color:#777;
+  text-align:left;
+  font-size:11px;
+  padding:13px;
+  border-bottom:1px solid var(--border);
+  white-space:nowrap;
 }
 
-.trust-text{
-font-size:9px;
-color:#888;
-margin-top:2px
+td{
+  padding:13px;
+  border-bottom:1px solid #eee;
+  font-size:12px;
+  vertical-align:middle;
 }
 
-.lower-section,
-.reviews-section{
-margin-top:25px;
-overflow:hidden
+tr:last-child td{
+  border-bottom:0;
 }
 
-.accordion{
-border-bottom:1px solid #ecece8
+.product-cell{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:200px;
 }
 
-.accordion:last-child{border:0}
+.product-thumb{
+  width:45px;
+  height:45px;
+  object-fit:cover;
+  border-radius:9px;
+  background:#eee;
+  flex:none;
+}
 
-.accordion-btn{
-width:100%;
-padding:19px 20px;
-border:0;
-background:#fff;
-display:flex;
-justify-content:space-between;
-font-weight:800;
-text-align:left;
-cursor:pointer
+.product-name{
+  font-weight:800;
 }
 
-.accordion-content{
-display:none;
-padding:0 20px 20px;
-color:#666;
-line-height:1.75;
-font-size:14px;
-white-space:pre-line
+.muted{
+  color:#888;
 }
 
-.accordion.open .accordion-content{
-display:block
+.price{
+  font-weight:900;
 }
 
-.accordion-icon{
-transition:.2s
+.badge{
+  display:inline-flex;
+  align-items:center;
+  padding:5px 8px;
+  border-radius:999px;
+  font-size:10px;
+  font-weight:900;
 }
 
-.accordion.open .accordion-icon{
-transform:rotate(45deg)
+.badge-green{
+  background:var(--green-bg);
+  color:var(--green);
 }
 
-.reviews-section{
-padding:23px
+.badge-red{
+  background:var(--red-bg);
+  color:var(--red);
 }
 
-.section-heading{
-margin:0 0 6px;
-font-size:22px
+.badge-orange{
+  background:var(--orange-bg);
+  color:var(--orange);
 }
 
-.section-subtitle{
-color:#888;
-font-size:13px;
-margin-bottom:18px
+.badge-blue{
+  background:var(--blue-bg);
+  color:var(--blue);
 }
 
-.review-summary{
-display:flex;
-gap:16px;
-align-items:center;
-background:#f8f8f5;
-padding:16px;
-border-radius:14px;
-margin-bottom:20px
+.actions{
+  display:flex;
+  gap:5px;
+  flex-wrap:wrap;
 }
 
-.review-number{
-font-size:36px;
-font-weight:900
+.icon-btn{
+  width:34px;
+  height:34px;
+  border:1px solid #ddd;
+  background:#fff;
+  border-radius:8px;
+  font-size:14px;
 }
 
-.review-list{
-display:flex;
-flex-direction:column;
-gap:12px
+.icon-btn:hover{
+  background:#f4f4f2;
 }
 
-.review-card{
-border:1px solid #ecece8;
-border-radius:14px;
-padding:15px
+/* =========================
+   PRODUCT FORM
+========================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:#0009;
+  z-index:5000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
 }
 
-.review-head{
-display:flex;
-justify-content:space-between;
-gap:10px
+.modal.open{
+  display:flex;
 }
 
-.reviewer{
-font-weight:800;
-font-size:14px
+.modal-box{
+  width:100%;
+  max-width:900px;
+  max-height:94vh;
+  overflow-y:auto;
+  background:#fff;
+  border-radius:20px;
+  box-shadow:0 30px 100px #0005;
 }
 
-.review-date{
-font-size:11px;
-color:#999
+.modal-head{
+  position:sticky;
+  top:0;
+  z-index:2;
+  background:#fff;
+  border-bottom:1px solid var(--border);
+  padding:18px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
-.review-card-stars{
-color:#f4b400;
-margin:7px 0
+.modal-title{
+  font-size:19px;
+  font-weight:900;
 }
 
-.review-comment{
-color:#555;
-line-height:1.65;
-font-size:14px;
-white-space:pre-line
+.close-btn{
+  width:36px;
+  height:36px;
+  border:0;
+  border-radius:9px;
+  background:#f1f1ef;
+  font-size:20px;
 }
 
-.no-reviews{
-text-align:center;
-padding:25px;
-color:#888;
-border:1px dashed #ddd;
-border-radius:14px
+.modal-body{
+  padding:20px;
 }
 
-.no-reviews strong{
-display:block;
-color:#333;
-margin-bottom:6px
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
 }
 
-.review-form-box{
-margin-top:22px;
-padding:20px;
-background:#f8f8f5;
-border:1px solid #ecece8;
-border-radius:15px
+.form-group{
+  margin-bottom:14px;
 }
 
-.review-form-title{
-margin:0 0 7px
+.form-group.full{
+  grid-column:1/-1;
 }
 
-.review-form-note{
-font-size:13px;
-color:#777;
-line-height:1.6;
-margin-bottom:15px
+.form-group label{
+  display:block;
+  font-size:11px;
+  font-weight:900;
+  margin-bottom:7px;
 }
 
-.review-login-btn,
-.review-submit-btn{
-display:inline-flex;
-justify-content:center;
-border:0;
-border-radius:10px;
-padding:12px 16px;
-background:#111;
-color:#fff;
-font-weight:800;
-text-decoration:none;
-cursor:pointer
+.form-group input,
+.form-group textarea,
+.form-group select{
+  width:100%;
+  border:1px solid #ddd;
+  border-radius:10px;
+  background:#fff;
+  padding:11px;
+  outline:none;
 }
 
-.review-submit-btn{
-width:100%;
-margin-top:10px
+.form-group textarea{
+  min-height:110px;
+  resize:vertical;
 }
 
-.review-submit-btn:disabled{
-background:#aaa
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus{
+  border-color:#111;
 }
 
-.review-field{
-margin-bottom:13px
+.form-help{
+  color:#888;
+  font-size:10px;
+  margin-top:5px;
 }
 
-.review-field label{
-display:block;
-font-size:12px;
-font-weight:800;
-margin-bottom:7px
+.modal-foot{
+  border-top:1px solid var(--border);
+  padding:15px 20px;
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
 }
 
-.review-rating-input{
-display:flex;
-gap:5px
+/* =========================
+   VARIANTS
+========================= */
+
+.variant-panel{
+  grid-column:1/-1;
+  border:1px solid #e5e5e5;
+  border-radius:13px;
+  overflow:hidden;
 }
 
-.rating-star-btn{
-width:38px;
-height:38px;
-border:1px solid #ddd;
-border-radius:9px;
-background:#fff;
-color:#bbb;
-cursor:pointer;
-font-size:19px
+.variant-head{
+  padding:13px;
+  background:#fafaf8;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
-.rating-star-btn.selected{
-color:#f4b400;
-border-color:#f4b400;
-background:#fffaf0
+.variant-title{
+  font-weight:900;
+  font-size:13px;
 }
 
-.review-textarea,
-.review-order-select{
-width:100%;
-border:1px solid #ddd;
-border-radius:10px;
-padding:11px;
-background:#fff;
-outline:0
+.variant-table{
+  overflow-x:auto;
 }
 
-.review-textarea{
-min-height:105px;
-resize:vertical
+.variant-table table{
+  min-width:500px;
 }
 
-.review-status{
-margin-top:9px;
-font-size:13px;
-font-weight:800
+.variant-input{
+  width:100px;
+  padding:8px;
+  border:1px solid #ddd;
+  border-radius:8px;
 }
+
+/* =========================
+   IMAGE PREVIEW
+========================= */
 
-.success{color:#138a4a}
-.error{color:#b42318}
+.image-preview{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
 
-.related-section{
-margin-top:25px
+.preview-img{
+  width:70px;
+  height:70px;
+  border-radius:9px;
+  object-fit:cover;
+  border:1px solid #ddd;
 }
 
-.related-title{
-font-size:22px;
-margin:0 0 13px
+/* =========================
+   ORDERS
+========================= */
+
+.order-status{
+  min-width:130px;
+  border:1px solid #ddd;
+  border-radius:8px;
+  padding:7px;
+  background:#fff;
+  font-size:11px;
+  font-weight:800;
 }
 
-.related-grid{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:12px
+.order-detail{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
 }
 
-.related-card{
-background:#fff;
-border:1px solid #ecece8;
-border-radius:15px;
-overflow:hidden;
-text-decoration:none;
-color:#111
+.detail-box{
+  background:#fafaf8;
+  border:1px solid #eee;
+  border-radius:12px;
+  padding:14px;
 }
 
-.related-card img{
-width:100%;
-aspect-ratio:1/1;
-object-fit:cover;
-background:#f2f2ef;
-display:block
+.detail-label{
+  font-size:10px;
+  color:#888;
+  font-weight:900;
+  margin-bottom:5px;
 }
 
-.related-card-body{
-padding:10px
+.detail-value{
+  font-size:13px;
+  font-weight:700;
+  white-space:pre-line;
 }
+
+/* =========================
+   CATEGORY
+========================= */
 
-.related-name{
-font-size:13px;
-font-weight:800;
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis
+.category-list{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
 }
 
-.related-price{
-font-size:14px;
-font-weight:900;
-margin-top:5px
+.category-card{
+  padding:15px;
+  display:flex;
+  align-items:center;
+  gap:12px;
 }
 
-.state-box{
-background:#fff;
-border-radius:20px;
-padding:60px 20px;
-text-align:center
+.category-img{
+  width:55px;
+  height:55px;
+  object-fit:cover;
+  border-radius:10px;
+  background:#eee;
 }
 
-.error-box{
-color:#b42318
+.category-info{
+  flex:1;
+  min-width:0;
 }
 
-.error-details{
-margin-top:12px;
-padding:12px;
-background:#fff3f2;
-text-align:left;
-border-radius:9px;
-font-size:12px;
-word-break:break-word
+.category-name{
+  font-weight:900;
 }
 
-.retry-btn{
-margin-top:15px;
-padding:11px 17px;
-border:0;
-border-radius:10px;
-background:#111;
-color:#fff
+.category-slug{
+  color:#888;
+  font-size:11px;
+  margin-top:3px;
 }
 
-.lightbox{
-position:fixed;
-inset:0;
-z-index:9999;
-background:#000e;
-display:none;
-align-items:center;
-justify-content:center;
-padding:20px
+/* =========================
+   STOCK
+========================= */
+
+.stock-overview{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  margin-bottom:18px;
 }
 
-.lightbox.open{
-display:flex
+.stock-box{
+  padding:18px;
 }
 
-.lightbox-image{
-max-width:94vw;
-max-height:88vh;
-object-fit:contain
+.stock-number{
+  font-size:28px;
+  font-weight:900;
+  margin-top:7px;
 }
 
-.lightbox-close{
-position:fixed;
-right:18px;
-top:16px;
-width:43px;
-height:43px;
-border:0;
-border-radius:50%;
-background:#fff;
-font-size:24px;
-cursor:pointer
+/* =========================
+   EMPTY
+========================= */
+
+.empty{
+  padding:45px 20px;
+  text-align:center;
+  color:#888;
 }
 
-.mobile-cart-bar{
-display:none
+.empty strong{
+  display:block;
+  color:#333;
+  margin-bottom:5px;
 }
+
+/* =========================
+   TOAST
+========================= */
 
 .toast{
-position:fixed;
-left:50%;
-bottom:24px;
-transform:translateX(-50%) translateY(20px);
-background:#111;
-color:#fff;
-padding:12px 17px;
-border-radius:12px;
-font-size:13px;
-font-weight:800;
-opacity:0;
-pointer-events:none;
-transition:.25s;
-z-index:10000
+  position:fixed;
+  left:50%;
+  bottom:25px;
+  transform:translateX(-50%) translateY(20px);
+  background:#111;
+  color:#fff;
+  padding:12px 18px;
+  border-radius:11px;
+  font-size:13px;
+  font-weight:800;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:99999;
 }
 
 .toast.show{
-opacity:1;
-transform:translateX(-50%) translateY(0)
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
 }
 
-@media(max-width:900px){
+/* =========================
+   LOADING
+========================= */
 
-.details-page{
-padding:12px 10px 92px
+.loading{
+  padding:35px;
+  text-align:center;
+  color:#888;
 }
 
-.product-details-card{
-padding:12px
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1100px){
+
+.stats-grid{
+  grid-template-columns:repeat(2,1fr);
 }
 
-.product-layout{
-grid-template-columns:1fr;
-gap:20px
+.dashboard-grid{
+  grid-template-columns:1fr;
 }
 
-.main-image-box{
-height:500px
+.category-list{
+  grid-template-columns:repeat(2,1fr);
 }
 
-.related-grid{
-grid-template-columns:repeat(3,1fr)
 }
 
-.mobile-cart-bar{
-position:fixed;
-display:flex;
-align-items:center;
-gap:9px;
-left:9px;
-right:9px;
-bottom:9px;
-z-index:5000;
-padding:8px;
-background:#fffF;
-border:1px solid #ddd;
-border-radius:15px;
-box-shadow:0 10px 35px #0003
+@media(max-width:800px){
+
+.sidebar{
+  transform:translateX(-100%);
+  transition:.25s;
 }
 
-.mobile-price{
-flex:1;
-font-weight:900;
-font-size:14px
+.sidebar.open{
+  transform:translateX(0);
 }
 
-.mobile-cart-btn{
-border:0;
-border-radius:10px;
-background:#111;
-color:#fff;
-min-height:45px;
-padding:0 17px;
-font-weight:900
+.main{
+  margin-left:0;
+}
+
+.mobile-menu{
+  display:block;
+}
+
+.topbar{
+  padding:0 15px;
+}
+
+.content{
+  padding:15px;
+}
+
+.form-grid{
+  grid-template-columns:1fr;
+}
+
+.form-group.full{
+  grid-column:auto;
+}
+
+.order-detail{
+  grid-template-columns:1fr;
 }
 
 }
 
 @media(max-width:600px){
 
-.details-page{
-padding:8px 7px 85px
+.stats-grid{
+  grid-template-columns:1fr 1fr;
+  gap:9px;
 }
 
-.brand-mini{
-display:none
+.stat-card{
+  padding:14px;
 }
 
-.back-btn,
-.share-btn{
-padding:9px 12px;
-font-size:13px
+.stat-number{
+  font-size:22px;
 }
 
-.product-details-card{
-padding:8px;
-border-radius:16px
+.stat-label{
+  font-size:10px;
 }
 
-.main-image-box{
-height:390px;
-border-radius:14px
+.quick-grid{
+  grid-template-columns:1fr;
 }
 
-.thumbnail{
-width:66px;
-height:66px;
-min-width:66px
+.category-list{
+  grid-template-columns:1fr;
 }
 
-.product-title{
-font-size:26px
+.stock-overview{
+  grid-template-columns:1fr;
 }
 
-.product-price{
-font-size:26px
+.section-head h1{
+  font-size:22px;
 }
 
-.trust-title{
-font-size:9px
+.modal{
+  padding:7px;
 }
 
-.trust-text{
-font-size:8px
+.modal-box{
+  max-height:98vh;
+  border-radius:15px;
 }
 
-.related-grid{
-grid-template-columns:repeat(2,1fr)
-}
-
-.reviews-section{
-padding:17px
-}
-
-.zoom-label{
-display:none
-}
-
-.gallery-arrow{
-width:36px;
-height:36px
-}
-
-.action-row{
-grid-template-columns:1fr 1fr
+.modal-body{
+  padding:14px;
 }
 
 }
+
 </style>
 </head>
 
 <body>
 
-<main class="details-page">
+<!-- =========================
+     LOGIN SCREEN
+========================= -->
 
-<div class="top-bar">
+<div id="loginScreen">
 
-<a href="index.html" class="back-btn">
-← Retour
-</a>
+  <div class="login-card">
 
-<div class="brand-mini">
-JR SHOP
-</div>
-
-<button class="share-btn" type="button" onclick="shareProduct()">
-↗ Partager
-</button>
-
-</div>
-
-<div id="loadingState" class="state-box">
-Chargement du produit...
-</div>
-
-<div id="errorState" class="state-box error-box" style="display:none">
-
-<h2>Impossible de charger le produit</h2>
-
-<p id="errorMessage">
-Une erreur est survenue.
-</p>
-
-<div id="errorDetails" class="error-details" style="display:none"></div>
-
-<button class="retry-btn" onclick="loadProduct()">
-Réessayer
-</button>
-
-</div>
-
-
-<section id="productCard" class="product-details-card" style="display:none">
-
-<div class="product-layout">
-
-<div class="gallery">
-
-<div id="mainImageBox"
-class="main-image-box"
-onclick="openLightbox()">
-
-<img id="mainImage"
-class="main-image"
-src=""
-alt="Produit">
-
-<button
-type="button"
-class="gallery-arrow gallery-prev"
-onclick="event.stopPropagation();previousImage()">
-‹
-</button>
-
-<button
-type="button"
-class="gallery-arrow gallery-next"
-onclick="event.stopPropagation();nextImage()">
-›
-</button>
-
-<div id="imageCounter" class="image-counter">
-1 / 1
-</div>
-
-<div class="zoom-label">
-🔍 Cliquer pour agrandir
-</div>
-
-</div>
-
-<div id="thumbnails" class="thumbnails"></div>
-
-</div>
-
-
-<div class="product-info">
-
-<div class="category-row">
-
-<div
-id="productCategory"
-class="pill category"
-style="display:none">
-</div>
-
-<div
-id="stockPill"
-class="pill stock-ok"
-style="display:none">
-</div>
-
-</div>
-
-
-<h1 id="productTitle" class="product-title"></h1>
-
-
-<div class="rating-row">
-
-<div id="topStars" class="stars">
-☆☆☆☆☆
-</div>
-
-<div id="topRatingText" class="rating-text">
-Aucun avis
-</div>
-
-</div>
-
-
-<div class="price-row">
-
-<div id="productPrice" class="product-price"></div>
-
-<div id="oldPrice"
-class="old-price"
-style="display:none">
-</div>
-
-<div id="discountBadge"
-class="discount"
-style="display:none">
-</div>
-
-</div>
-
-
-<p id="productDescription"
-class="product-description">
-</p>
-
-
-<!-- COULEURS -->
-
-<div id="colorOption" class="option-box">
-
-<div class="option-title">
+    <div class="login-logo">JR SHOP</div>
 
-Couleur :
+    <div class="login-sub">
+      Administration sécurisée
+    </div>
 
-<span id="selectedColor">
-</span>
+    <form id="loginForm">
 
-</div>
-
-<div id="colorList" class="option-list"></div>
-
-</div>
-
-
-<!-- TAILLES -->
-
-<div id="sizeOption" class="option-box">
-
-<div class="option-title">
+      <div class="login-field">
 
-Taille :
+        <label>Email</label>
 
-<span id="selectedSize">
-</span>
+        <input
+          id="loginEmail"
+          type="email"
+          autocomplete="username"
+          required
+          placeholder="admin@email.com">
 
-</div>
-
-<div id="sizeList" class="option-list"></div>
-
-</div>
+      </div>
 
+      <div class="login-field">
 
-<div
-id="variantStockInfo"
-class="variant-stock-info">
-</div>
-
+        <label>Mot de passe</label>
 
-<div class="purchase-box">
-
-<div class="quantity-title">
-Quantité
-</div>
+        <input
+          id="loginPassword"
+          type="password"
+          autocomplete="current-password"
+          required
+          placeholder="••••••••">
 
-<div class="quantity-box">
-
-<button
-class="quantity-btn"
-onclick="changeQuantity(-1)">
-−
-</button>
-
-<input
-id="quantityInput"
-class="quantity-input"
-type="number"
-min="1"
-value="1">
-
-<button
-class="quantity-btn"
-onclick="changeQuantity(1)">
-+
-</button>
+      </div>
 
-</div>
+      <button
+        class="login-btn"
+        type="submit">
 
+        Se connecter
 
-<button
-id="addCartBtn"
-class="add-cart-btn"
-onclick="addToCart()">
+      </button>
 
-Ajouter au panier
+      <div
+        id="loginError"
+        class="login-error">
+      </div>
 
-</button>
+    </form>
 
-<div
-id="cartMessage"
-class="cart-info">
-</div>
+  </div>
 
 </div>
-
-
-<div class="action-row">
-
-<button
-id="wishlistBtn"
-class="action-btn"
-onclick="toggleWishlist()">
-
-♡ Ajouter aux favoris
-
-</button>
-
-<button
-class="action-btn"
-onclick="copyProductLink()">
 
-🔗 Copier le lien
 
-</button>
+<!-- =========================
+     APP
+========================= -->
 
-</div>
-
+<div id="app">
 
-<div class="trust-grid">
+  <aside id="sidebar" class="sidebar">
 
-<div class="trust-item">
+    <div class="logo">
+      JR SHOP
+      <small>ADMIN PANEL</small>
+    </div>
 
-<div class="trust-icon">🚚</div>
+    <div class="nav-title">
+      PRINCIPAL
+    </div>
 
-<div class="trust-title">
-Livraison rapide
-</div>
+    <button class="nav-btn active" data-section="dashboard">
+      <span class="nav-icon">📊</span>
+      Dashboard
+    </button>
 
-<div class="trust-text">
-Expédition locale
-</div>
+    <button class="nav-btn" data-section="products">
+      <span class="nav-icon">📦</span>
+      Produits
+    </button>
 
-</div>
+    <button class="nav-btn" data-section="stock">
+      <span class="nav-icon">📈</span>
+      Stock
+    </button>
 
+    <button class="nav-btn" data-section="orders">
+      <span class="nav-icon">🧾</span>
+      Commandes
+    </button>
 
-<div class="trust-item">
+    <button class="nav-btn" data-section="customers">
+      <span class="nav-icon">👥</span>
+      Clients
+    </button>
 
-<div class="trust-icon">🔒</div>
+    <div class="nav-title">
+      CATALOGUE
+    </div>
 
-<div class="trust-title">
-Paiement sécurisé
-</div>
+    <button class="nav-btn" data-section="categories">
+      <span class="nav-icon">🏷️</span>
+      Catégories
+    </button>
 
-<div class="trust-text">
-Commande protégée
-</div>
+    <button class="nav-btn" data-section="reviews">
+      <span class="nav-icon">⭐</span>
+      Avis clients
+    </button>
 
-</div>
+    <div class="nav-title">
+      SYSTÈME
+    </div>
 
+    <button class="nav-btn" data-section="settings">
+      <span class="nav-icon">⚙️</span>
+      Paramètres
+    </button>
 
-<div class="trust-item">
+    <div class="sidebar-bottom">
 
-<div class="trust-icon">↩</div>
+      <button
+        id="logoutBtn"
+        class="logout-btn">
 
-<div class="trust-title">
-Retour facile
-</div>
+        ↪ Déconnexion
 
-<div class="trust-text">
-Service client
-</div>
+      </button>
 
-</div>
+    </div>
 
-</div>
+  </aside>
 
-</div>
 
-</div>
+  <main class="main">
 
+    <header class="topbar">
 
-<div class="lower-section">
+      <div style="display:flex;align-items:center;gap:12px">
 
-<div class="accordion open">
+        <button
+          id="mobileMenu"
+          class="mobile-menu">
 
-<button
-class="accordion-btn"
-onclick="toggleAccordion(this)">
+          ☰
 
-<span>Description</span>
+        </button>
 
-<span class="accordion-icon">
-+
-</span>
+        <div
+          id="pageTitle"
+          class="page-title">
 
-</button>
+          Dashboard
 
-<div
-id="descriptionAccordion"
-class="accordion-content">
-</div>
+        </div>
 
-</div>
+      </div>
 
+      <div class="top-user">
 
-<div class="accordion">
+        <span id="userEmail">
+          Admin
+        </span>
 
-<button
-class="accordion-btn"
-onclick="toggleAccordion(this)">
+        <div
+          id="userAvatar"
+          class="avatar">
+          A
+        </div>
 
-<span>Livraison</span>
+      </div>
 
-<span class="accordion-icon">
-+
-</span>
+    </header>
 
-</button>
 
-<div class="accordion-content">
+    <div class="content">
 
-Livraison disponible selon les zones couvertes par JR Shop.
 
-<br><br>
+<!-- =========================
+     DASHBOARD
+========================= -->
 
-Les informations de livraison peuvent être confirmées lors de la commande.
+<section
+id="section-dashboard"
+class="section active">
 
-</div>
+  <div class="section-head">
 
-</div>
+    <div>
 
+      <h1>Dashboard</h1>
 
-<div class="accordion">
+      <p>
+        Vue générale de votre boutique.
+      </p>
 
-<button
-class="accordion-btn"
-onclick="toggleAccordion(this)">
+    </div>
 
-<span>
-Informations produit
-</span>
+    <button
+      class="btn btn-light"
+      onclick="loadDashboard()">
 
-<span class="accordion-icon">
-+
-</span>
+      ↻ Actualiser
 
-</button>
+    </button>
 
-<div
-id="productMeta"
-class="accordion-content">
-</div>
+  </div>
 
-</div>
 
-</div>
+  <div class="stats-grid">
 
+    <div class="card stat-card">
 
-<div class="reviews-section">
+      <div class="stat-top">
 
-<h2 class="section-heading">
-Avis clients
-</h2>
+        <div class="stat-label">
+          CHIFFRE D'AFFAIRES
+        </div>
 
-<div class="section-subtitle">
-Découvrez l'expérience réelle de nos clients.
-</div>
+        <div class="stat-icon">
+          💰
+        </div>
 
+      </div>
 
-<div class="review-summary">
+      <div
+        id="statRevenue"
+        class="stat-number">
+        0 DA
+      </div>
 
-<div id="reviewAverage"
-class="review-number">
-—
-</div>
+      <div class="stat-extra">
+        Commandes confirmées
+      </div>
 
-<div>
+    </div>
 
-<div id="reviewAverageStars"
-class="review-stars">
-☆☆☆☆☆
-</div>
 
-<div
-id="reviewCountText"
-class="review-note">
-Aucun avis pour le moment
-</div>
+    <div class="card stat-card">
 
-</div>
+      <div class="stat-top">
 
-</div>
+        <div class="stat-label">
+          COMMANDES
+        </div>
 
+        <div class="stat-icon">
+          🧾
+        </div>
 
-<div
-id="reviewsList"
-class="review-list">
+      </div>
 
-<div class="no-reviews">
-Chargement des avis...
-</div>
+      <div
+        id="statOrders"
+        class="stat-number">
+        0
+      </div>
 
-</div>
+      <div
+        id="statPending"
+        class="stat-extra">
+        0 en attente
+      </div>
 
+    </div>
 
-<div class="review-form-box">
 
-<h3 class="review-form-title">
-Donner votre avis
-</h3>
+    <div class="card stat-card">
 
-<div
-id="reviewFormMessage"
-class="review-form-note">
+      <div class="stat-top">
 
-Les avis sont réservés aux clients ayant acheté ce produit.
+        <div class="stat-label">
+          PRODUITS
+        </div>
 
-</div>
+        <div class="stat-icon">
+          📦
+        </div>
 
+      </div>
 
-<div id="reviewLoginArea">
+      <div
+        id="statProducts"
+        class="stat-number">
+        0
+      </div>
 
-<a
-id="reviewLoginButton"
-href="login.html"
-class="review-login-btn">
+      <div
+        id="statLowStock"
+        class="stat-extra">
+        0 stock faible
+      </div>
 
-Se connecter
+    </div>
 
-</a>
 
-</div>
+    <div class="card stat-card">
 
+      <div class="stat-top">
 
-<div
-id="reviewFormArea"
-style="display:none">
+        <div class="stat-label">
+          AVIS
+        </div>
 
-<div class="review-field">
+        <div class="stat-icon">
+          ⭐
+        </div>
 
-<label>
-Votre note
-</label>
+      </div>
 
-<div class="review-rating-input">
+      <div
+        id="statReviews"
+        class="stat-number">
+        0
+      </div>
 
-<button
-class="rating-star-btn"
-data-rating="1">
-★
-</button>
+      <div class="stat-extra">
+        Avis clients
+      </div>
 
-<button
-class="rating-star-btn"
-data-rating="2">
-★
-</button>
+    </div>
 
-<button
-class="rating-star-btn"
-data-rating="3">
-★
-</button>
+  </div>
 
-<button
-class="rating-star-btn"
-data-rating="4">
-★
-</button>
 
-<button
-class="rating-star-btn"
-data-rating="5">
-★
-</button>
+  <div class="dashboard-grid">
 
-</div>
+    <div class="card dashboard-card">
 
-</div>
+      <h2 class="card-title">
+        Actions rapides
+      </h2>
 
+      <div class="quick-grid">
 
-<div class="review-field">
+        <button
+          class="quick-btn"
+          onclick="openProductModal()">
 
-<label for="reviewComment">
-Votre commentaire
-</label>
+          ➕ Ajouter un produit
 
-<textarea
-id="reviewComment"
-class="review-textarea"
-maxlength="1000"
-placeholder="Partagez votre expérience avec ce produit...">
-</textarea>
+        </button>
 
-</div>
+        <button
+          class="quick-btn"
+          onclick="navigate('stock')">
 
+          📦 Vérifier le stock
 
-<div
-id="reviewOrderBox"
-style="display:none"
-class="review-field">
+        </button>
 
-<label for="reviewOrderSelect">
-Commande / achat
-</label>
+        <button
+          class="quick-btn"
+          onclick="navigate('orders')">
 
-<select
-id="reviewOrderSelect"
-class="review-order-select">
-</select>
+          🧾 Voir les commandes
 
-</div>
+        </button>
 
+        <button
+          class="quick-btn"
+          onclick="navigate('categories')">
 
-<button
-id="submitReviewBtn"
-class="review-submit-btn"
-onclick="submitReview()">
+          🏷️ Gérer les catégories
 
-Publier mon avis
+        </button>
 
-</button>
+      </div>
 
-<div
-id="reviewStatus"
-class="review-status">
-</div>
+    </div>
 
-</div>
 
-</div>
+    <div class="card dashboard-card">
 
-</div>
+      <h2 class="card-title">
+        Commandes récentes
+      </h2>
 
+      <div
+        id="recentOrders"
+        class="mini-list">
 
-<div class="related-section">
+        <div class="loading">
+          Chargement...
+        </div>
 
-<h2 class="related-title">
-Vous aimerez peut-être aussi
-</h2>
+      </div>
 
-<div
-id="relatedGrid"
-class="related-grid">
-</div>
+    </div>
 
-</div>
+  </div>
 
 </section>
 
-</main>
+
+<!-- =========================
+     PRODUCTS
+========================= -->
+
+<section
+id="section-products"
+class="section">
+
+  <div class="section-head">
+
+    <div>
+
+      <h1>Produits</h1>
+
+      <p>
+        Gestion complète du catalogue et du stock.
+      </p>
+
+    </div>
+
+    <button
+      class="btn btn-dark"
+      onclick="openProductModal()">
+
+      + Nouveau produit
+
+    </button>
+
+  </div>
 
 
-<div
-id="mobileCartBar"
-class="mobile-cart-bar"
-style="display:none">
+  <div class="toolbar">
 
-<div
-id="mobilePrice"
-class="mobile-price">
+    <input
+      id="productSearch"
+      class="search"
+      placeholder="Rechercher un produit...">
+
+    <select
+      id="productCategoryFilter"
+      class="filter">
+
+      <option value="">
+        Toutes les catégories
+      </option>
+
+    </select>
+
+    <select
+      id="productStockFilter"
+      class="filter">
+
+      <option value="">
+        Tous les stocks
+      </option>
+
+      <option value="ok">
+        En stock
+      </option>
+
+      <option value="low">
+        Stock faible
+      </option>
+
+      <option value="empty">
+        Rupture
+      </option>
+
+    </select>
+
+    <button
+      class="btn btn-light"
+      onclick="loadProducts()">
+
+      ↻
+
+    </button>
+
+  </div>
+
+
+  <div class="card table-card">
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>PRODUIT</th>
+            <th>CATÉGORIE</th>
+            <th>PRIX</th>
+            <th>STOCK</th>
+            <th>STATUT</th>
+            <th>ACTIONS</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody id="productsTable">
+
+          <tr>
+            <td colspan="6">
+              <div class="loading">
+                Chargement...
+              </div>
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     STOCK
+========================= -->
+
+<section
+id="section-stock"
+class="section">
+
+  <div class="section-head">
+
+    <div>
+
+      <h1>Gestion du stock</h1>
+
+      <p>
+        Surveillez les produits et les variantes.
+      </p>
+
+    </div>
+
+    <button
+      class="btn btn-light"
+      onclick="loadStock()">
+
+      ↻ Actualiser
+
+    </button>
+
+  </div>
+
+
+  <div class="stock-overview">
+
+    <div class="card stock-box">
+
+      <div class="stat-label">
+        STOCK TOTAL
+      </div>
+
+      <div
+        id="stockTotal"
+        class="stock-number">
+        0
+      </div>
+
+    </div>
+
+    <div class="card stock-box">
+
+      <div class="stat-label">
+        STOCK FAIBLE
+      </div>
+
+      <div
+        id="stockLow"
+        class="stock-number">
+        0
+      </div>
+
+    </div>
+
+    <div class="card stock-box">
+
+      <div class="stat-label">
+        RUPTURE
+      </div>
+
+      <div
+        id="stockEmpty"
+        class="stock-number">
+        0
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="toolbar">
+
+    <input
+      id="stockSearch"
+      class="search"
+      placeholder="Rechercher un produit...">
+
+    <select
+      id="stockFilter"
+      class="filter">
+
+      <option value="">
+        Tous
+      </option>
+
+      <option value="low">
+        Stock faible
+      </option>
+
+      <option value="empty">
+        Rupture
+      </option>
+
+    </select>
+
+  </div>
+
+
+  <div class="card table-card">
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>PRODUIT</th>
+            <th>STOCK GLOBAL</th>
+            <th>VARIANTES</th>
+            <th>ÉTAT</th>
+            <th>ACTION</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody id="stockTable">
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     ORDERS
+========================= -->
+
+<section
+id="section-orders"
+class="section">
+
+  <div class="section-head">
+
+    <div>
+
+      <h1>Commandes</h1>
+
+      <p>
+        Gérez toutes les commandes clients.
+      </p>
+
+    </div>
+
+    <button
+      class="btn btn-light"
+      onclick="loadOrders()">
+
+      ↻ Actualiser
+
+    </button>
+
+  </div>
+
+
+  <div class="toolbar">
+
+    <input
+      id="orderSearch"
+      class="search"
+      placeholder="Nom, téléphone, commande...">
+
+    <select
+      id="orderStatusFilter"
+      class="filter">
+
+      <option value="">
+        Tous les statuts
+      </option>
+
+      <option value="pending">
+        Pending
+      </option>
+
+      <option value="confirmed">
+        Confirmée
+      </option>
+
+      <option value="processing">
+        En préparation
+      </option>
+
+      <option value="shipped">
+        Expédiée
+      </option>
+
+      <option value="delivered">
+        Livrée
+      </option>
+
+      <option value="cancelled">
+        Annulée
+      </option>
+
+    </select>
+
+  </div>
+
+
+  <div class="card table-card">
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>COMMANDE</th>
+            <th>CLIENT</th>
+            <th>CONTACT</th>
+            <th>TOTAL</th>
+            <th>DATE</th>
+            <th>STATUT</th>
+            <th></th>
+
+          </tr>
+
+        </thead>
+
+        <tbody id="ordersTable">
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     CUSTOMERS
+========================= -->
+
+<section
+id="section-customers"
+class="section">
+
+  <div class="section-head">
+
+    <div>
+
+      <h1>Clients</h1>
+
+      <p>
+        Clients ayant effectué des commandes.
+      </p>
+
+    </div>
+
+    <button
+      class="btn btn-light"
+      onclick="loadCustomers()">
+
+      ↻ Actualiser
+
+    </button>
+
+  </div>
+
+
+  <div class="toolbar">
+
+    <input
+      id="customerSearch"
+      class="search"
+      placeholder="Rechercher un client...">
+
+  </div>
+
+
+  <div class="card table-card">
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>CLIENT</th>
+            <th>TÉLÉPHONE</th>
+            <th>WILAYA</th>
+            <th>COMMANDES</th>
+            <th>TOTAL</th>
+            <th>DERNIÈRE COMMANDE</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody id="customersTable">
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     CATEGORIES
+========================= -->
+
+<section
+id="section-categories"
+class="section">
+
+  <div class="section-head">
+
+    <div>
+
+      <h1>Catégories</h1>
+
+      <p>
+        Organisation de votre catalogue.
+      </p>
+
+    </div>
+
+    <button
+      class="btn btn-dark"
+      onclick="openCategoryModal()">
+
+      + Nouvelle catégorie
+
+    </button>
+
+  </div>
+
+
+  <div
+    id="categoriesGrid"
+    class="category-list">
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     REVIEWS
+========================= -->
+
+<section
+id="section-reviews"
+class="section">
+
+  <div class="section-head">
+
+    <div>
+
+      <h1>Avis clients</h1>
+
+      <p>
+        Consultez et modérez les avis.
+      </p>
+
+    </div>
+
+    <button
+      class="btn btn-light"
+      onclick="loadReviews()">
+
+      ↻ Actualiser
+
+    </button>
+
+  </div>
+
+
+  <div class="toolbar">
+
+    <input
+      id="reviewSearch"
+      class="search"
+      placeholder="Produit, client ou commentaire...">
+
+    <select
+      id="reviewRatingFilter"
+      class="filter">
+
+      <option value="">
+        Toutes les notes
+      </option>
+
+      <option value="5">★★★★★</option>
+      <option value="4">★★★★</option>
+      <option value="3">★★★</option>
+      <option value="2">★★</option>
+      <option value="1">★</option>
+
+    </select>
+
+  </div>
+
+
+  <div class="card table-card">
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>CLIENT</th>
+            <th>PRODUIT</th>
+            <th>NOTE</th>
+            <th>COMMENTAIRE</th>
+            <th>DATE</th>
+            <th>ACTION</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody id="reviewsTable">
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     SETTINGS
+========================= -->
+
+<section
+id="section-settings"
+class="section">
+
+  <div class="section-head">
+
+    <div>
+
+      <h1>Paramètres</h1>
+
+      <p>
+        Informations générales de l'administration.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div class="card dashboard-card">
+
+    <h2 class="card-title">
+      Informations
+    </h2>
+
+    <div class="detail-box">
+
+      <div class="detail-label">
+        BASE DE DONNÉES
+      </div>
+
+      <div class="detail-value">
+        Supabase
+      </div>
+
+    </div>
+
+    <br>
+
+    <div class="detail-box">
+
+      <div class="detail-label">
+        TABLES CONNECTÉES
+      </div>
+
+      <div class="detail-value">
+        products • categories • orders • order_items • reviews
+      </div>
+
+    </div>
+
+    <br>
+
+    <div class="detail-box">
+
+      <div class="detail-label">
+        SESSION
+      </div>
+
+      <div
+        id="settingsUser"
+        class="detail-value">
+        —
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+    </div>
+
+  </main>
+
 </div>
 
-<button
-class="mobile-cart-btn"
-onclick="addToCart()">
 
-Ajouter
+<!-- =========================
+     PRODUCT MODAL
+========================= -->
 
-</button>
+<div
+id="productModal"
+class="modal">
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <div
+        id="productModalTitle"
+        class="modal-title">
+        Nouveau produit
+      </div>
+
+      <button
+        class="close-btn"
+        onclick="closeModal('productModal')">
+        ×
+      </button>
+
+    </div>
+
+
+    <form id="productForm">
+
+      <div class="modal-body">
+
+        <input
+          id="productId"
+          type="hidden">
+
+
+        <div class="form-grid">
+
+          <div class="form-group">
+
+            <label>Nom *</label>
+
+            <input
+              id="productName"
+              required
+              placeholder="Nom du produit">
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>Catégorie</label>
+
+            <select id="productCategory">
+
+              <option value="">
+                Sans catégorie
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>Prix *</label>
+
+            <input
+              id="productPrice"
+              type="number"
+              step="0.01"
+              min="0"
+              value="0"
+              required>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>Ancien prix</label>
+
+            <input
+              id="productOldPrice"
+              type="number"
+              step="0.01"
+              min="0">
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>Stock global</label>
+
+            <input
+              id="productStock"
+              type="number"
+              min="0"
+              value="0">
+
+            <div class="form-help">
+              Utilisé pour les produits sans variantes.
+            </div>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>Statut</label>
+
+            <select id="productActive">
+
+              <option value="true">
+                Actif
+              </option>
+
+              <option value="false">
+                Désactivé
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>Image principale URL</label>
+
+            <input
+              id="productImage"
+              placeholder="https://...">
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>Images supplémentaires</label>
+
+            <input
+              id="productImages"
+              placeholder="URL1, URL2, URL3">
+
+            <div class="form-help">
+              Séparez les URLs par des virgules.
+            </div>
+
+          </div>
+
+
+          <div class="form-group full">
+
+            <label>Description</label>
+
+            <textarea
+              id="productDescription"
+              placeholder="Description du produit..."></textarea>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>Couleurs</label>
+
+            <input
+              id="productColors"
+              placeholder="Noir, Blanc, Rouge">
+
+            <div class="form-help">
+              Exemple : Noir, Blanc, Rouge
+            </div>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>Tailles</label>
+
+            <input
+              id="productSizes"
+              placeholder="S, M, L, XL">
+
+            <div class="form-help">
+              Exemple : S, M, L, XL
+            </div>
+
+          </div>
+
+
+          <div class="form-group full">
+
+            <label>
+              Stock des variantes
+            </label>
+
+            <div
+              id="variantEditor"
+              class="variant-panel">
+
+              <div class="variant-head">
+
+                <div class="variant-title">
+                  Couleur × Taille
+                </div>
+
+                <button
+                  type="button"
+                  class="btn btn-light"
+                  onclick="buildVariantEditor()">
+
+                  Actualiser
+
+                </button>
+
+              </div>
+
+              <div
+                id="variantTable"
+                class="variant-table">
+
+                <div class="empty">
+                  Ajoutez des couleurs et tailles.
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="modal-foot">
+
+        <button
+          type="button"
+          class="btn btn-light"
+          onclick="closeModal('productModal')">
+
+          Annuler
+
+        </button>
+
+        <button
+          id="saveProductBtn"
+          type="submit"
+          class="btn btn-dark">
+
+          Enregistrer
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
 
 </div>
 
 
+<!-- =========================
+     CATEGORY MODAL
+========================= -->
+
 <div
-id="lightbox"
-class="lightbox"
-onclick="closeLightbox()">
+id="categoryModal"
+class="modal">
 
-<button
-class="lightbox-close"
-onclick="event.stopPropagation();closeLightbox()">
+  <div class="modal-box" style="max-width:550px">
 
-×
+    <div class="modal-head">
 
-</button>
+      <div
+        id="categoryModalTitle"
+        class="modal-title">
+        Nouvelle catégorie
+      </div>
 
-<img
-id="lightboxImage"
-class="lightbox-image"
-src=""
-alt="Produit"
-onclick="event.stopPropagation()">
+      <button
+        class="close-btn"
+        onclick="closeModal('categoryModal')">
+        ×
+      </button>
+
+    </div>
+
+
+    <form id="categoryForm">
+
+      <div class="modal-body">
+
+        <input
+          id="categoryId"
+          type="hidden">
+
+
+        <div class="form-group">
+
+          <label>Nom *</label>
+
+          <input
+            id="categoryName"
+            required
+            placeholder="Ex: Vêtements">
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>Slug *</label>
+
+          <input
+            id="categorySlug"
+            required
+            placeholder="vetements">
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>Image URL</label>
+
+          <input
+            id="categoryImage"
+            placeholder="https://...">
+
+        </div>
+
+
+        <div class="form-grid">
+
+          <div class="form-group">
+
+            <label>Ordre</label>
+
+            <input
+              id="categorySort"
+              type="number"
+              value="0">
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>Statut</label>
+
+            <select id="categoryActive">
+
+              <option value="true">
+                Active
+              </option>
+
+              <option value="false">
+                Désactivée
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="modal-foot">
+
+        <button
+          type="button"
+          class="btn btn-light"
+          onclick="closeModal('categoryModal')">
+
+          Annuler
+
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-dark">
+
+          Enregistrer
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     ORDER MODAL
+========================= -->
+
+<div
+id="orderModal"
+class="modal">
+
+  <div class="modal-box" style="max-width:800px">
+
+    <div class="modal-head">
+
+      <div class="modal-title">
+        Détails de la commande
+      </div>
+
+      <button
+        class="close-btn"
+        onclick="closeModal('orderModal')">
+        ×
+      </button>
+
+    </div>
+
+    <div
+      id="orderDetails"
+      class="modal-body">
+
+    </div>
+
+  </div>
 
 </div>
 
@@ -1561,3124 +2567,3722 @@ onclick="event.stopPropagation()">
 <div id="toast" class="toast"></div>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script src="config.js"></script>
-
-
 <script>
 
-let currentProduct=null;
+/* =========================================================
+   JR SHOP ADMIN
+   Compatible avec le schema Supabase fourni
+========================================================= */
 
-let productImages=[];
+let currentUser = null;
 
-let currentImageIndex=0;
+let products = [];
+let categories = [];
+let orders = [];
+let reviews = [];
 
-let currentUser=null;
+let editingProductId = null;
+let editingCategoryId = null;
 
-let verifiedOrderItems=[];
-
-let selectedRating=0;
-
-let selectedColor="";
-
-let selectedSize="";
-
-let colorsList=[];
-
-let sizesList=[];
+const LOW_STOCK_LIMIT = 5;
 
 
-/* =========================
-   PRODUCT ID
-========================= */
+/* =========================================================
+   HELPERS
+========================================================= */
 
-function getProductId(){
+function $(id){
+  return document.getElementById(id);
+}
 
-return new URLSearchParams(location.search).get("id");
+
+function escapeHtml(value){
+
+  if(value === null || value === undefined){
+    return "";
+  }
+
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+
+function formatPrice(value){
+
+  const n = Number(value || 0);
+
+  return n.toLocaleString("fr-FR") + " DA";
+}
+
+
+function formatDate(value){
+
+  if(!value) return "";
+
+  try{
+
+    return new Date(value).toLocaleDateString(
+      "fr-FR",
+      {
+        day:"2-digit",
+        month:"2-digit",
+        year:"numeric"
+      }
+    );
+
+  }catch(e){
+
+    return "";
+
+  }
 
 }
 
 
-/* =========================
-   HTML SAFE
-========================= */
+function formatDateTime(value){
 
-function escapeHtml(v){
+  if(!value) return "";
 
-if(v==null)return "";
+  try{
 
-return String(v)
+    return new Date(value).toLocaleString(
+      "fr-FR",
+      {
+        day:"2-digit",
+        month:"2-digit",
+        year:"numeric",
+        hour:"2-digit",
+        minute:"2-digit"
+      }
+    );
 
-.replace(/&/g,"&amp;")
+  }catch(e){
 
-.replace(/</g,"&lt;")
+    return "";
 
-.replace(/>/g,"&gt;")
-
-.replace(/"/g,"&quot;")
-
-.replace(/'/g,"&#039;");
-
-}
-
-
-/* =========================
-   PRICE
-========================= */
-
-function formatPrice(v){
-
-if(v==null||v==="")return "";
-
-let n=Number(v);
-
-return Number.isNaN(n)
-
-?escapeHtml(v)
-
-:n.toLocaleString("fr-FR")+" DA";
+  }
 
 }
 
 
-/* =========================
-   ARRAY PARSER
-========================= */
+function parseJsonArray(value){
 
-function parseArray(v){
+  if(!value) return [];
 
-if(!v)return [];
+  if(Array.isArray(value)) return value;
 
-if(Array.isArray(v))return v;
+  if(typeof value === "object") return [];
 
-if(typeof v==="string"){
+  if(typeof value === "string"){
 
-let s=v.trim();
+    try{
 
-if(!s)return [];
+      const parsed = JSON.parse(value);
 
-try{
+      if(Array.isArray(parsed)){
+        return parsed;
+      }
 
-let x=JSON.parse(s);
+    }catch(e){}
 
-if(Array.isArray(x))return x;
+    return value
+      .split(/[,\n|]/)
+      .map(x => x.trim())
+      .filter(Boolean);
 
-}catch(e){}
+  }
 
-return s
-
-.split(/[,\n|]/)
-
-.map(x=>x.trim())
-
-.filter(Boolean);
-
-}
-
-return [];
+  return [];
 
 }
 
 
-/* =========================
-   IMAGES
-========================= */
+function parseJsonObject(value){
 
-function getProductImages(p){
+  if(!value) return {};
 
-let a=[
+  if(typeof value === "object" && !Array.isArray(value)){
+    return value;
+  }
 
-...parseArray(p.image_urls),
+  if(typeof value === "string"){
 
-...parseArray(p.images),
+    try{
 
-...parseArray(p.gallery)
+      const parsed = JSON.parse(value);
 
-];
+      if(
+        parsed &&
+        typeof parsed === "object" &&
+        !Array.isArray(parsed)
+      ){
 
-if(p.image_url)a.push(p.image_url);
+        return parsed;
 
-if(p.image)a.push(p.image);
+      }
 
-return [
+    }catch(e){}
 
-...new Set(
+  }
 
-a
-
-.filter(Boolean)
-
-.map(String)
-
-.map(x=>x.trim())
-
-.filter(Boolean)
-
-)
-
-];
+  return {};
 
 }
 
 
-/* =========================
-   OLD STOCK
-========================= */
+function slugify(value){
 
-function getGlobalStock(){
-
-let s=
-
-currentProduct?.stock??
-
-currentProduct?.quantity??
-
-currentProduct?.inventory;
-
-if(s===null||s===undefined||s==="")
-
-return null;
-
-let n=Number(s);
-
-return Number.isNaN(n)?0:n;
+  return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g,"-")
+    .replace(/^-+|-+$/g,"");
 
 }
 
 
-/* =========================
-   VARIANT STOCK
-========================= */
+function showToast(message){
 
-function getVariantStockObject(){
+  const toast = $("toast");
 
-if(!currentProduct)
+  toast.textContent = message;
 
-return {};
+  toast.classList.add("show");
 
-let v=currentProduct.variant_stock;
+  clearTimeout(window.__toastTimer);
 
-if(!v)
-
-return {};
-
-if(typeof v==="object" && !Array.isArray(v))
-
-return v;
-
-if(typeof v==="string"){
-
-try{
-
-let parsed=JSON.parse(v);
-
-if(parsed && typeof parsed==="object")
-
-return parsed;
-
-}catch(e){}
-
-}
-
-return {};
+  window.__toastTimer = setTimeout(
+    () => toast.classList.remove("show"),
+    2500
+  );
 
 }
 
 
-/* =========================
-   VARIANT KEY
-========================= */
+function showError(error){
+
+  console.error(error);
+
+  showToast(
+    error?.message ||
+    "Une erreur est survenue."
+  );
+
+}
+
+
+/* =========================================================
+   SUPABASE CHECK
+========================================================= */
+
+function checkSupabase(){
+
+  if(
+    typeof supabaseClient === "undefined" ||
+    !supabaseClient
+  ){
+
+    $("loginScreen").style.display = "flex";
+
+    $("loginError").textContent =
+      "Supabase n'est pas disponible. Vérifiez config.js.";
+
+    return false;
+
+  }
+
+  return true;
+
+}
+
+
+/* =========================================================
+   AUTH
+========================================================= */
+
+async function checkAuth(){
+
+  if(!checkSupabase()) return;
+
+  try{
+
+    const result =
+      await supabaseClient.auth.getSession();
+
+    currentUser =
+      result.data?.session?.user || null;
+
+    if(currentUser){
+
+      showApp();
+
+    }else{
+
+      showLogin();
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+    showLogin();
+
+  }
+
+}
+
+
+function showLogin(){
+
+  $("loginScreen").style.display = "flex";
+  $("app").style.display = "none";
+
+}
+
+
+function showApp(){
+
+  $("loginScreen").style.display = "none";
+  $("app").style.display = "block";
+
+  const email =
+    currentUser?.email || "Admin";
+
+  $("userEmail").textContent = email;
+
+  $("settingsUser").textContent = email;
+
+  $("userAvatar").textContent =
+    email.charAt(0).toUpperCase();
+
+  loadInitialData();
+
+}
+
+
+$("loginForm").addEventListener(
+  "submit",
+  async function(e){
+
+    e.preventDefault();
+
+    $("loginError").textContent = "";
+
+    const email =
+      $("loginEmail").value.trim();
+
+    const password =
+      $("loginPassword").value;
+
+    try{
+
+      const result =
+        await supabaseClient.auth.signInWithPassword({
+          email,
+          password
+        });
+
+      if(result.error){
+        throw result.error;
+      }
+
+      currentUser =
+        result.data?.user || null;
+
+      showApp();
+
+    }catch(error){
+
+      console.error(error);
+
+      $("loginError").textContent =
+        error?.message ||
+        "Connexion impossible.";
+
+    }
+
+  }
+);
+
+
+$("logoutBtn").addEventListener(
+  "click",
+  async function(){
+
+    try{
+
+      await supabaseClient.auth.signOut();
+
+    }catch(e){}
+
+    currentUser = null;
+
+    showLogin();
+
+  }
+);
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+const sectionTitles = {
+
+  dashboard:"Dashboard",
+  products:"Produits",
+  stock:"Stock",
+  orders:"Commandes",
+  customers:"Clients",
+  categories:"Catégories",
+  reviews:"Avis clients",
+  settings:"Paramètres"
+
+};
+
+
+function navigate(section){
+
+  document
+    .querySelectorAll(".nav-btn")
+    .forEach(btn => {
+
+      btn.classList.toggle(
+        "active",
+        btn.dataset.section === section
+      );
+
+    });
+
+
+  document
+    .querySelectorAll(".section")
+    .forEach(el => {
+
+      el.classList.remove("active");
+
+    });
+
+
+  const target =
+    $("section-" + section);
+
+  if(target){
+    target.classList.add("active");
+  }
+
+
+  $("pageTitle").textContent =
+    sectionTitles[section] || section;
+
+
+  $("sidebar").classList.remove("open");
+
+
+  if(section === "dashboard"){
+    loadDashboard();
+  }
+
+  if(section === "products"){
+    loadProducts();
+  }
+
+  if(section === "stock"){
+    loadStock();
+  }
+
+  if(section === "orders"){
+    loadOrders();
+  }
+
+  if(section === "customers"){
+    loadCustomers();
+  }
+
+  if(section === "categories"){
+    loadCategories();
+  }
+
+  if(section === "reviews"){
+    loadReviews();
+  }
+
+}
+
+
+document
+  .querySelectorAll(".nav-btn")
+  .forEach(btn => {
+
+    btn.addEventListener(
+      "click",
+      () => navigate(btn.dataset.section)
+    );
+
+  });
+
+
+$("mobileMenu").addEventListener(
+  "click",
+  () => $("sidebar").classList.toggle("open")
+);
+
+
+/* =========================================================
+   LOAD INITIAL
+========================================================= */
+
+async function loadInitialData(){
+
+  await Promise.allSettled([
+    loadCategories(),
+    loadProducts(),
+    loadOrders(),
+    loadReviews()
+  ]);
+
+  await loadDashboard();
+
+}
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+async function loadDashboard(){
+
+  try{
+
+    const [
+      productsResult,
+      ordersResult,
+      reviewsResult
+    ] = await Promise.all([
+
+      supabaseClient
+        .from("products")
+        .select("id,name,price,stock,is_active,active"),
+
+      supabaseClient
+        .from("orders")
+        .select("id,status,total,created_at,customer_name,phone")
+        .order("created_at",{ascending:false})
+        .limit(1000),
+
+      supabaseClient
+        .from("reviews")
+        .select("id,rating")
+
+    ]);
+
+
+    if(productsResult.error)
+      throw productsResult.error;
+
+    if(ordersResult.error)
+      throw ordersResult.error;
+
+    if(reviewsResult.error)
+      throw reviewsResult.error;
+
+
+    products =
+      productsResult.data || [];
+
+    orders =
+      ordersResult.data || [];
+
+    reviews =
+      reviewsResult.data || [];
+
+
+    const confirmed =
+      orders.filter(
+        o => o.status === "confirmed" ||
+             o.status === "delivered" ||
+             o.status === "shipped" ||
+             o.status === "processing"
+      );
+
+
+    const revenue =
+      confirmed.reduce(
+        (sum,o) =>
+          sum + Number(o.total || 0),
+        0
+      );
+
+
+    const pending =
+      orders.filter(
+        o => o.status === "pending"
+      ).length;
+
+
+    const low =
+      products.filter(
+        p => Number(p.stock || 0) > 0 &&
+             Number(p.stock || 0) <= LOW_STOCK_LIMIT
+      ).length;
+
+
+    $("statRevenue").textContent =
+      formatPrice(revenue);
+
+    $("statOrders").textContent =
+      orders.length;
+
+    $("statPending").textContent =
+      pending + " en attente";
+
+    $("statProducts").textContent =
+      products.length;
+
+    $("statLowStock").textContent =
+      low + " stock faible";
+
+    $("statReviews").textContent =
+      reviews.length;
+
+
+    renderRecentOrders();
+
+  }catch(error){
+
+    showError(error);
+
+  }
+
+}
+
+
+function renderRecentOrders(){
+
+  const box = $("recentOrders");
+
+  const list =
+    orders.slice(0,6);
+
+  if(!list.length){
+
+    box.innerHTML =
+      '<div class="empty">Aucune commande.</div>';
+
+    return;
+
+  }
+
+
+  box.innerHTML = "";
+
+  list.forEach(order => {
+
+    const row =
+      document.createElement("div");
+
+    row.className = "mini-row";
+
+    row.innerHTML = `
+
+      <div style="min-width:0">
+
+        <div class="mini-name">
+          #${escapeHtml(
+            String(order.id).slice(0,8).toUpperCase()
+          )}
+        </div>
+
+        <div class="muted">
+          ${escapeHtml(
+            order.customer_name || "Client"
+          )}
+        </div>
+
+      </div>
+
+      <div style="text-align:right">
+
+        <div class="mini-value">
+          ${formatPrice(order.total)}
+        </div>
+
+        <div class="muted">
+          ${formatDate(order.created_at)}
+        </div>
+
+      </div>
+
+    `;
+
+    box.appendChild(row);
+
+  });
+
+}
+
+
+/* =========================================================
+   CATEGORIES
+========================================================= */
+
+async function loadCategories(){
+
+  try{
+
+    const result =
+      await supabaseClient
+        .from("categories")
+        .select("*")
+        .order("sort_order",{ascending:true})
+        .order("name",{ascending:true});
+
+
+    if(result.error)
+      throw result.error;
+
+
+    categories =
+      result.data || [];
+
+
+    renderCategories();
+
+    fillCategorySelects();
+
+  }catch(error){
+
+    console.error(error);
+
+  }
+
+}
+
+
+function fillCategorySelects(){
+
+  const selects = [
+    $("productCategory"),
+    $("productCategoryFilter")
+  ];
+
+
+  selects.forEach(select => {
+
+    if(!select) return;
+
+    const current =
+      select.value;
+
+    if(select.id === "productCategory"){
+
+      select.innerHTML =
+        '<option value="">Sans catégorie</option>';
+
+    }else{
+
+      select.innerHTML =
+        '<option value="">Toutes les catégories</option>';
+
+    }
+
+
+    categories.forEach(category => {
+
+      const option =
+        document.createElement("option");
+
+      option.value =
+        category.id;
+
+      option.textContent =
+        category.name;
+
+      select.appendChild(option);
+
+    });
+
+
+    if(current){
+      select.value = current;
+    }
+
+  });
+
+}
+
+
+function renderCategories(){
+
+  const grid =
+    $("categoriesGrid");
+
+  if(!categories.length){
+
+    grid.innerHTML =
+      '<div class="card empty" style="grid-column:1/-1"><strong>Aucune catégorie</strong>Créez votre première catégorie.</div>';
+
+    return;
+
+  }
+
+
+  grid.innerHTML = "";
+
+
+  categories.forEach(category => {
+
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "card category-card";
+
+
+    const image =
+      category.image_url ||
+      "https://placehold.co/100x100?text=JR";
+
+
+    card.innerHTML = `
+
+      <img
+        class="category-img"
+        src="${escapeHtml(image)}"
+        alt="">
+
+      <div class="category-info">
+
+        <div class="category-name">
+          ${escapeHtml(category.name)}
+        </div>
+
+        <div class="category-slug">
+          ${escapeHtml(category.slug)}
+        </div>
+
+        <div style="margin-top:6px">
+
+          ${
+            category.active
+              ? '<span class="badge badge-green">ACTIVE</span>'
+              : '<span class="badge badge-red">DÉSACTIVÉE</span>'
+          }
+
+        </div>
+
+      </div>
+
+      <div class="actions">
+
+        <button
+          class="icon-btn"
+          title="Modifier"
+          onclick="editCategory('${category.id}')">
+
+          ✏️
+
+        </button>
+
+        <button
+          class="icon-btn"
+          title="Supprimer"
+          onclick="deleteCategory('${category.id}')">
+
+          🗑️
+
+        </button>
+
+      </div>
+
+    `;
+
+    grid.appendChild(card);
+
+  });
+
+}
+
+
+function openCategoryModal(category=null){
+
+  editingCategoryId =
+    category?.id || null;
+
+  $("categoryModalTitle").textContent =
+    category
+      ? "Modifier la catégorie"
+      : "Nouvelle catégorie";
+
+  $("categoryId").value =
+    category?.id || "";
+
+  $("categoryName").value =
+    category?.name || "";
+
+  $("categorySlug").value =
+    category?.slug || "";
+
+  $("categoryImage").value =
+    category?.image_url || "";
+
+  $("categorySort").value =
+    category?.sort_order ?? 0;
+
+  $("categoryActive").value =
+    String(category?.active ?? true);
+
+  $("categoryModal").classList.add("open");
+
+}
+
+
+$("categoryName").addEventListener(
+  "input",
+  () => {
+
+    if(!editingCategoryId){
+
+      $("categorySlug").value =
+        slugify($("categoryName").value);
+
+    }
+
+  }
+);
+
+
+$("categoryForm").addEventListener(
+  "submit",
+  async function(e){
+
+    e.preventDefault();
+
+    const payload = {
+
+      name:
+        $("categoryName").value.trim(),
+
+      slug:
+        $("categorySlug").value.trim(),
+
+      image_url:
+        $("categoryImage").value.trim() || null,
+
+      sort_order:
+        Number($("categorySort").value || 0),
+
+      active:
+        $("categoryActive").value === "true"
+
+    };
+
+
+    if(!payload.name || !payload.slug){
+
+      showToast("Nom et slug obligatoires.");
+
+      return;
+
+    }
+
+
+    try{
+
+      let result;
+
+
+      if(editingCategoryId){
+
+        result =
+          await supabaseClient
+            .from("categories")
+            .update(payload)
+            .eq("id",editingCategoryId);
+
+      }else{
+
+        result =
+          await supabaseClient
+            .from("categories")
+            .insert(payload);
+
+      }
+
+
+      if(result.error)
+        throw result.error;
+
+
+      closeModal("categoryModal");
+
+      showToast("Catégorie enregistrée ✓");
+
+      await loadCategories();
+
+    }catch(error){
+
+      showError(error);
+
+    }
+
+  }
+);
+
+
+function editCategory(id){
+
+  const category =
+    categories.find(
+      x => String(x.id) === String(id)
+    );
+
+  if(category){
+    openCategoryModal(category);
+  }
+
+}
+
+
+async function deleteCategory(id){
+
+  const category =
+    categories.find(
+      x => String(x.id) === String(id)
+    );
+
+
+  if(!category) return;
+
+
+  if(
+    !confirm(
+      `Supprimer la catégorie "${category.name}" ?`
+    )
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    /*
+      On ne supprime pas automatiquement les produits.
+      On détache d'abord leur category_id.
+    */
+
+    const update =
+      await supabaseClient
+        .from("products")
+        .update({
+          category_id:null
+        })
+        .eq("category_id",id);
+
+
+    if(update.error)
+      throw update.error;
+
+
+    const result =
+      await supabaseClient
+        .from("categories")
+        .delete()
+        .eq("id",id);
+
+
+    if(result.error)
+      throw result.error;
+
+
+    showToast("Catégorie supprimée ✓");
+
+    await loadCategories();
+    await loadProducts();
+
+  }catch(error){
+
+    showError(error);
+
+  }
+
+}
+
+
+/* =========================================================
+   PRODUCTS
+========================================================= */
+
+async function loadProducts(){
+
+  try{
+
+    const result =
+      await supabaseClient
+        .from("products")
+        .select(`
+          *,
+          categories(
+            id,
+            name,
+            slug
+          )
+        `)
+        .order("created_at",{ascending:false});
+
+
+    if(result.error)
+      throw result.error;
+
+
+    products =
+      result.data || [];
+
+
+    renderProducts();
+
+  }catch(error){
+
+    showError(error);
+
+  }
+
+}
+
+
+function getProductCategory(product){
+
+  if(product.categories){
+    return product.categories.name || "";
+  }
+
+  const category =
+    categories.find(
+      c => String(c.id) === String(product.category_id)
+    );
+
+  return category?.name || "";
+
+}
+
+
+function getProductActive(product){
+
+  if(product.is_active === false)
+    return false;
+
+  if(product.active === false)
+    return false;
+
+  return true;
+
+}
+
+
+function getStockStatus(stock){
+
+  const n =
+    Number(stock || 0);
+
+  if(n <= 0){
+
+    return {
+      text:"RUPTURE",
+      class:"badge-red"
+    };
+
+  }
+
+  if(n <= LOW_STOCK_LIMIT){
+
+    return {
+      text:"STOCK FAIBLE",
+      class:"badge-orange"
+    };
+
+  }
+
+  return {
+    text:"EN STOCK",
+    class:"badge-green"
+  };
+
+}
+
+
+function getProductImage(product){
+
+  return (
+    product.image_url ||
+    product.image ||
+    "https://placehold.co/100x100?text=JR"
+  );
+
+}
+
+
+function renderProducts(){
+
+  const tbody =
+    $("productsTable");
+
+
+  const search =
+    $("productSearch").value
+      .trim()
+      .toLowerCase();
+
+
+  const category =
+    $("productCategoryFilter").value;
+
+
+  const stockFilter =
+    $("productStockFilter").value;
+
+
+  let list =
+    [...products];
+
+
+  if(search){
+
+    list =
+      list.filter(product => {
+
+        const text = [
+
+          product.name,
+
+          product.description,
+
+          product.id,
+
+          getProductCategory(product)
+
+        ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+        return text.includes(search);
+
+      });
+
+  }
+
+
+  if(category){
+
+    list =
+      list.filter(
+        p =>
+          String(p.category_id) ===
+          String(category)
+      );
+
+  }
+
+
+  if(stockFilter){
+
+    list =
+      list.filter(p => {
+
+        const stock =
+          Number(p.stock || 0);
+
+        if(stockFilter === "ok")
+          return stock > LOW_STOCK_LIMIT;
+
+        if(stockFilter === "low")
+          return stock > 0 &&
+                 stock <= LOW_STOCK_LIMIT;
+
+        if(stockFilter === "empty")
+          return stock <= 0;
+
+        return true;
+
+      });
+
+  }
+
+
+  if(!list.length){
+
+    tbody.innerHTML = `
+
+      <tr>
+
+        <td colspan="6">
+
+          <div class="empty">
+
+            <strong>Aucun produit</strong>
+
+            Aucun résultat pour votre recherche.
+
+          </div>
+
+        </td>
+
+      </tr>
+
+    `;
+
+    return;
+
+  }
+
+
+  tbody.innerHTML = "";
+
+
+  list.forEach(product => {
+
+    const stock =
+      Number(product.stock || 0);
+
+    const status =
+      getStockStatus(stock);
+
+    const active =
+      getProductActive(product);
+
+
+    const tr =
+      document.createElement("tr");
+
+
+    tr.innerHTML = `
+
+      <td>
+
+        <div class="product-cell">
+
+          <img
+            class="product-thumb"
+            src="${escapeHtml(
+              getProductImage(product)
+            )}"
+            alt="">
+
+          <div>
+
+            <div class="product-name">
+              ${escapeHtml(
+                product.name
+              )}
+            </div>
+
+            <div class="muted">
+              ${escapeHtml(
+                String(product.id).slice(0,8)
+              )}
+            </div>
+
+          </div>
+
+        </div>
+
+      </td>
+
+
+      <td>
+
+        ${escapeHtml(
+          getProductCategory(product) ||
+          "—"
+        )}
+
+      </td>
+
+
+      <td>
+
+        <div class="price">
+          ${formatPrice(product.price)}
+        </div>
+
+        ${
+          product.old_price
+            ? `<div class="muted" style="text-decoration:line-through">
+                ${formatPrice(product.old_price)}
+               </div>`
+            : ""
+        }
+
+      </td>
+
+
+      <td>
+
+        <strong>
+          ${stock}
+        </strong>
+
+      </td>
+
+
+      <td>
+
+        ${
+          active
+            ? `<span class="badge ${status.class}">
+                ${status.text}
+              </span>`
+            : `<span class="badge badge-red">
+                DÉSACTIVÉ
+              </span>`
+        }
+
+      </td>
+
+
+      <td>
+
+        <div class="actions">
+
+          <button
+            class="icon-btn"
+            title="Modifier"
+            onclick="editProduct('${product.id}')">
+
+            ✏️
+
+          </button>
+
+          <button
+            class="icon-btn"
+            title="Stock"
+            onclick="quickStock('${product.id}')">
+
+            📦
+
+          </button>
+
+          <button
+            class="icon-btn"
+            title="Voir"
+            onclick="viewProduct('${product.id}')">
+
+            👁️
+
+          </button>
+
+          <button
+            class="icon-btn"
+            title="Supprimer"
+            onclick="deleteProduct('${product.id}')">
+
+            🗑️
+
+          </button>
+
+        </div>
+
+      </td>
+
+    `;
+
+
+    tbody.appendChild(tr);
+
+  });
+
+}
+
+
+$("productSearch").addEventListener(
+  "input",
+  renderProducts
+);
+
+$("productCategoryFilter").addEventListener(
+  "change",
+  renderProducts
+);
+
+$("productStockFilter").addEventListener(
+  "change",
+  renderProducts
+);
+
+
+/* =========================================================
+   PRODUCT MODAL
+========================================================= */
+
+function openProductModal(product=null){
+
+  editingProductId =
+    product?.id || null;
+
+
+  $("productModalTitle").textContent =
+    product
+      ? "Modifier le produit"
+      : "Nouveau produit";
+
+
+  $("productId").value =
+    product?.id || "";
+
+  $("productName").value =
+    product?.name || "";
+
+  $("productCategory").value =
+    product?.category_id || "";
+
+  $("productPrice").value =
+    product?.price ?? 0;
+
+  $("productOldPrice").value =
+    product?.old_price ?? "";
+
+  $("productStock").value =
+    product?.stock ?? 0;
+
+  $("productImage").value =
+    product?.image_url ||
+    product?.image ||
+    "";
+
+  $("productImages").value =
+    parseJsonArray(
+      product?.image_urls
+    ).join(", ");
+
+
+  $("productDescription").value =
+    product?.description || "";
+
+
+  $("productColors").value =
+    parseJsonArray(
+      product?.colors
+    ).join(", ");
+
+
+  $("productSizes").value =
+    parseJsonArray(
+      product?.sizes
+    ).join(", ");
+
+
+  $("productActive").value =
+    String(
+      getProductActive(
+        product || {}
+      )
+    );
+
+
+  $("productModal").classList.add("open");
+
+
+  buildVariantEditor(
+    product?.variant_stock || {}
+  );
+
+}
+
+
+function editProduct(id){
+
+  const product =
+    products.find(
+      p => String(p.id) === String(id)
+    );
+
+  if(product){
+
+    openProductModal(product);
+
+  }
+
+}
+
+
+function closeModal(id){
+
+  $(id).classList.remove("open");
+
+}
+
+
+function viewProduct(id){
+
+  window.open(
+    "product-details.html?id=" +
+    encodeURIComponent(id),
+    "_blank"
+  );
+
+}
+
+
+/* =========================================================
+   VARIANT EDITOR
+========================================================= */
+
+function getFormColors(){
+
+  return $("productColors")
+    .value
+    .split(",")
+    .map(x => x.trim())
+    .filter(Boolean);
+
+}
+
+
+function getFormSizes(){
+
+  return $("productSizes")
+    .value
+    .split(",")
+    .map(x => x.trim())
+    .filter(Boolean);
+
+}
+
 
 function variantKey(color,size){
 
-return String(color||"").trim()+"|"+String(size||"").trim();
+  return String(color).trim() +
+    "|" +
+    String(size).trim();
 
 }
 
 
-/* =========================
-   GET SELECTED STOCK
-========================= */
+function buildVariantEditor(existing={}){
 
-function getSelectedVariantStock(){
+  const colors =
+    getFormColors();
 
-let variants=getVariantStockObject();
+  const sizes =
+    getFormSizes();
 
-let hasVariants=
+  const table =
+    $("variantTable");
 
-Object.keys(variants).length>0;
+
+  if(!colors.length && !sizes.length){
+
+    table.innerHTML = `
+
+      <div class="empty">
+
+        Ajoutez des couleurs et/ou des tailles
+        pour gérer le stock par variante.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
 
 
-/*
-  إذا عندنا variant_stock
-  لازم نستخدم اللون + المقاس
-*/
+  const variants =
+    parseJsonObject(existing);
 
-if(hasVariants){
 
-/*
-  المنتج فيه لون ومقاس
-*/
+  let html = `
 
-if(colorsList.length && sizesList.length){
+    <table>
 
-if(!selectedColor || !selectedSize)
+      <thead>
 
-return 0;
+        <tr>
 
-let key=variantKey(
+          <th>COULEUR</th>
 
-selectedColor,
+  `;
 
-selectedSize
 
+  if(sizes.length){
+
+    sizes.forEach(size => {
+
+      html += `
+        <th>
+          ${escapeHtml(size)}
+        </th>
+      `;
+
+    });
+
+  }else{
+
+    html += `
+      <th>STOCK</th>
+    `;
+
+  }
+
+
+  html += `
+        </tr>
+      </thead>
+      <tbody>
+  `;
+
+
+  if(colors.length){
+
+    colors.forEach(color => {
+
+      html += `
+
+        <tr>
+
+          <td>
+            <strong>
+              ${escapeHtml(color)}
+            </strong>
+          </td>
+
+      `;
+
+
+      if(sizes.length){
+
+        sizes.forEach(size => {
+
+          const key =
+            variantKey(color,size);
+
+          const value =
+            variants[key] ??
+            variants[
+              color + "_" + size
+            ] ??
+            0;
+
+
+          html += `
+
+            <td>
+
+              <input
+                class="variant-input"
+                type="number"
+                min="0"
+                data-variant-key="${escapeHtml(key)}"
+                value="${Number(value) || 0}">
+
+            </td>
+
+          `;
+
+        });
+
+      }else{
+
+        const value =
+          variants[color] ?? 0;
+
+
+        html += `
+
+          <td>
+
+            <input
+              class="variant-input"
+              type="number"
+              min="0"
+              data-variant-key="${escapeHtml(color)}"
+              value="${Number(value) || 0}">
+
+          </td>
+
+        `;
+
+      }
+
+
+      html += `
+        </tr>
+      `;
+
+    });
+
+  }else{
+
+    sizes.forEach(size => {
+
+      const value =
+        variants[size] ?? 0;
+
+
+      html += `
+
+        <tr>
+
+          <td>
+            ${escapeHtml(size)}
+          </td>
+
+          <td>
+
+            <input
+              class="variant-input"
+              type="number"
+              min="0"
+              data-variant-key="${escapeHtml(size)}"
+              value="${Number(value) || 0}">
+
+          </td>
+
+        </tr>
+
+      `;
+
+    });
+
+  }
+
+
+  html += `
+
+      </tbody>
+
+    </table>
+
+  `;
+
+
+  table.innerHTML = html;
+
+}
+
+
+$("productColors").addEventListener(
+  "input",
+  () => buildVariantEditor()
 );
 
-let value=variants[key];
-
-if(value===undefined){
-
-/*
-  نجرب format آخر
-*/
-
-value=variants[
-
-String(selectedColor).trim()+"_"+String(selectedSize).trim()
-
-];
-
-}
-
-if(value===undefined)
-
-return 0;
-
-let n=Number(value);
-
-return Number.isNaN(n)?0:n;
-
-}
+$("productSizes").addEventListener(
+  "input",
+  () => buildVariantEditor()
+);
 
 
-/*
-  فقط لون
-*/
+function collectVariantStock(){
 
-if(colorsList.length && !sizesList.length){
+  const object = {};
 
-if(!selectedColor)return 0;
+  document
+    .querySelectorAll(
+      "#variantTable [data-variant-key]"
+    )
+    .forEach(input => {
 
-let value=variants[selectedColor];
+      object[
+        input.dataset.variantKey
+      ] =
+        Math.max(
+          0,
+          Number(input.value || 0)
+        );
 
-let n=Number(value);
+    });
 
-return Number.isNaN(n)?0:n;
+
+  return object;
 
 }
 
 
-/*
-  فقط Taille
-*/
+function calculateVariantTotal(){
 
-if(sizesList.length && !colorsList.length){
+  const variants =
+    collectVariantStock();
 
-if(!selectedSize)return 0;
-
-let value=variants[selectedSize];
-
-let n=Number(value);
-
-return Number.isNaN(n)?0:n;
-
-}
-
-
-/*
-  بدون خيارات
-*/
-
-let simple=
-
-variants.stock??
-
-variants["default"]??
-
-variants["DEFAULT"];
-
-let n=Number(simple);
-
-return Number.isNaN(n)?0:n;
+  return Object
+    .values(variants)
+    .reduce(
+      (sum,value) =>
+        sum + Number(value || 0),
+      0
+    );
 
 }
 
 
-/*
-  المنتجات القديمة
-*/
+/* =========================================================
+   SAVE PRODUCT
+========================================================= */
 
-let global=getGlobalStock();
+$("productForm").addEventListener(
+  "submit",
+  async function(e){
 
-return global===null?0:global;
+    e.preventDefault();
+
+
+    const name =
+      $("productName").value.trim();
+
+    if(!name){
+
+      showToast("Le nom est obligatoire.");
+
+      return;
+
+    }
+
+
+    const colors =
+      getFormColors();
+
+    const sizes =
+      getFormSizes();
+
+
+    const variantStock =
+      collectVariantStock();
+
+
+    let globalStock =
+      Number(
+        $("productStock").value || 0
+      );
+
+
+    /*
+      Si variantes présentes,
+      le stock global est automatiquement
+      calculé à partir des variantes.
+    */
+
+    if(
+      Object.keys(variantStock).length
+    ){
+
+      globalStock =
+        calculateVariantTotal();
+
+      $("productStock").value =
+        globalStock;
+
+    }
+
+
+    const image =
+      $("productImage").value.trim();
+
+
+    const extraImages =
+      $("productImages")
+        .value
+        .split(",")
+        .map(x => x.trim())
+        .filter(Boolean);
+
+
+    const allImages =
+      [
+        ...new Set(
+          [
+            image,
+            ...extraImages
+          ].filter(Boolean)
+        )
+      ];
+
+
+    const payload = {
+
+      name,
+
+      description:
+        $("productDescription")
+          .value
+          .trim() || null,
+
+      price:
+        Number(
+          $("productPrice").value || 0
+        ),
+
+      old_price:
+        $("productOldPrice").value
+          ? Number(
+              $("productOldPrice").value
+            )
+          : null,
+
+      stock:
+        globalStock,
+
+      category_id:
+        $("productCategory").value ||
+        null,
+
+      image_url:
+        image || null,
+
+      image:
+        image || null,
+
+      /*
+        Le schema actuel n'affiche pas image_urls
+        dans products, donc on ne l'envoie pas.
+      */
+
+      colors,
+
+      sizes,
+
+      variant_stock:
+        variantStock,
+
+      is_active:
+        $("productActive").value === "true",
+
+      active:
+        $("productActive").value === "true",
+
+      updated_at:
+        new Date().toISOString()
+
+    };
+
+
+    const button =
+      $("saveProductBtn");
+
+    button.disabled = true;
+
+    button.textContent =
+      "Enregistrement...";
+
+
+    try{
+
+      let result;
+
+
+      if(editingProductId){
+
+        result =
+          await supabaseClient
+            .from("products")
+            .update(payload)
+            .eq(
+              "id",
+              editingProductId
+            );
+
+      }else{
+
+        result =
+          await supabaseClient
+            .from("products")
+            .insert(payload);
+
+      }
+
+
+      if(result.error)
+        throw result.error;
+
+
+      closeModal("productModal");
+
+      showToast(
+        editingProductId
+          ? "Produit modifié ✓"
+          : "Produit créé ✓"
+      );
+
+
+      await loadProducts();
+      await loadStock();
+      await loadDashboard();
+
+
+    }catch(error){
+
+      showError(error);
+
+    }finally{
+
+      button.disabled = false;
+
+      button.textContent =
+        "Enregistrer";
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   DELETE PRODUCT
+========================================================= */
+
+async function deleteProduct(id){
+
+  const product =
+    products.find(
+      p => String(p.id) === String(id)
+    );
+
+
+  if(!product) return;
+
+
+  if(
+    !confirm(
+      `Supprimer "${product.name}" ?\n\nCette action peut être impossible si le produit est utilisé dans des commandes.`
+    )
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    const result =
+      await supabaseClient
+        .from("products")
+        .delete()
+        .eq("id",id);
+
+
+    if(result.error)
+      throw result.error;
+
+
+    showToast(
+      "Produit supprimé ✓"
+    );
+
+
+    await loadProducts();
+    await loadDashboard();
+
+
+  }catch(error){
+
+    showError(error);
+
+  }
 
 }
 
 
-/* =========================
-   CURRENT STOCK
-========================= */
+/* =========================================================
+   QUICK STOCK
+========================================================= */
 
-function getCurrentAvailableStock(){
+async function quickStock(id){
 
-return getSelectedVariantStock();
+  const product =
+    products.find(
+      p => String(p.id) === String(id)
+    );
+
+
+  if(!product) return;
+
+
+  const current =
+    Number(product.stock || 0);
+
+
+  const value =
+    prompt(
+      `Nouveau stock pour "${product.name}"`,
+      current
+    );
+
+
+  if(value === null) return;
+
+
+  const stock =
+    Math.max(
+      0,
+      parseInt(value,10) || 0
+    );
+
+
+  try{
+
+    const result =
+      await supabaseClient
+        .from("products")
+        .update({
+          stock,
+          updated_at:
+            new Date().toISOString()
+        })
+        .eq("id",id);
+
+
+    if(result.error)
+      throw result.error;
+
+
+    showToast(
+      "Stock mis à jour ✓"
+    );
+
+
+    await loadProducts();
+    await loadStock();
+    await loadDashboard();
+
+
+  }catch(error){
+
+    showError(error);
+
+  }
 
 }
 
 
-/* =========================
-   UPDATE STOCK UI
-========================= */
+/* =========================================================
+   STOCK
+========================================================= */
 
-function updateStockUI(){
+async function loadStock(){
 
-if(!currentProduct)return;
+  if(!products.length){
 
-let variants=getVariantStockObject();
+    await loadProducts();
 
-let hasVariants=
-
-Object.keys(variants).length>0;
-
-let stock=getCurrentAvailableStock();
+  }
 
 
-/*
-  إذا variant stock موجود
-*/
+  const total =
+    products.reduce(
+      (sum,p) =>
+        sum + Number(p.stock || 0),
+      0
+    );
 
-if(hasVariants){
 
-if(
+  const low =
+    products.filter(
+      p =>
+        Number(p.stock || 0) > 0 &&
+        Number(p.stock || 0) <= LOW_STOCK_LIMIT
+    );
 
-(colorsList.length && !selectedColor)||
 
-(sizesList.length && !selectedSize)
+  const empty =
+    products.filter(
+      p =>
+        Number(p.stock || 0) <= 0
+    );
 
+
+  $("stockTotal").textContent =
+    total;
+
+  $("stockLow").textContent =
+    low.length;
+
+  $("stockEmpty").textContent =
+    empty.length;
+
+
+  renderStock();
+
+}
+
+
+function renderStock(){
+
+  const tbody =
+    $("stockTable");
+
+
+  const search =
+    $("stockSearch").value
+      .trim()
+      .toLowerCase();
+
+
+  const filter =
+    $("stockFilter").value;
+
+
+  let list =
+    [...products];
+
+
+  if(search){
+
+    list =
+      list.filter(
+        p =>
+          String(p.name || "")
+            .toLowerCase()
+            .includes(search)
+      );
+
+  }
+
+
+  if(filter === "low"){
+
+    list =
+      list.filter(
+        p =>
+          Number(p.stock || 0) > 0 &&
+          Number(p.stock || 0) <= LOW_STOCK_LIMIT
+      );
+
+  }
+
+
+  if(filter === "empty"){
+
+    list =
+      list.filter(
+        p =>
+          Number(p.stock || 0) <= 0
+      );
+
+  }
+
+
+  if(!list.length){
+
+    tbody.innerHTML = `
+
+      <tr>
+
+        <td colspan="5">
+
+          <div class="empty">
+            <strong>Aucun produit</strong>
+            Aucun résultat.
+          </div>
+
+        </td>
+
+      </tr>
+
+    `;
+
+    return;
+
+  }
+
+
+  tbody.innerHTML = "";
+
+
+  list.forEach(product => {
+
+    const stock =
+      Number(product.stock || 0);
+
+    const status =
+      getStockStatus(stock);
+
+    const variants =
+      parseJsonObject(
+        product.variant_stock
+      );
+
+    const variantCount =
+      Object.keys(variants).length;
+
+
+    const tr =
+      document.createElement("tr");
+
+
+    tr.innerHTML = `
+
+      <td>
+
+        <div class="product-cell">
+
+          <img
+            class="product-thumb"
+            src="${escapeHtml(
+              getProductImage(product)
+            )}">
+
+          <div class="product-name">
+            ${escapeHtml(product.name)}
+          </div>
+
+        </div>
+
+      </td>
+
+
+      <td>
+
+        <strong style="font-size:16px">
+          ${stock}
+        </strong>
+
+      </td>
+
+
+      <td>
+
+        ${
+          variantCount
+            ? `<span class="badge badge-blue">
+                ${variantCount} variantes
+              </span>`
+            : `<span class="muted">
+                Stock global
+              </span>`
+        }
+
+      </td>
+
+
+      <td>
+
+        <span class="badge ${status.class}">
+          ${status.text}
+        </span>
+
+      </td>
+
+
+      <td>
+
+        <button
+          class="btn btn-light"
+          onclick="editProduct('${product.id}')">
+
+          Gérer
+
+        </button>
+
+      </td>
+
+    `;
+
+
+    tbody.appendChild(tr);
+
+  });
+
+}
+
+
+$("stockSearch").addEventListener(
+  "input",
+  renderStock
+);
+
+$("stockFilter").addEventListener(
+  "change",
+  renderStock
+);
+
+
+/* =========================================================
+   ORDERS
+========================================================= */
+
+async function loadOrders(){
+
+  try{
+
+    const result =
+      await supabaseClient
+        .from("orders")
+        .select("*")
+        .order(
+          "created_at",
+          {ascending:false}
+        )
+        .limit(1000);
+
+
+    if(result.error)
+      throw result.error;
+
+
+    orders =
+      result.data || [];
+
+
+    renderOrders();
+
+    renderRecentOrders();
+
+
+  }catch(error){
+
+    showError(error);
+
+  }
+
+}
+
+
+function statusBadge(status){
+
+  const map = {
+
+    pending:["PENDING","badge-orange"],
+
+    confirmed:["CONFIRMÉE","badge-blue"],
+
+    processing:["PRÉPARATION","badge-blue"],
+
+    shipped:["EXPÉDIÉE","badge-blue"],
+
+    delivered:["LIVRÉE","badge-green"],
+
+    cancelled:["ANNULÉE","badge-red"]
+
+  };
+
+
+  const item =
+    map[status] ||
+    [
+      String(status || "UNKNOWN").toUpperCase(),
+      "badge-orange"
+    ];
+
+
+  return `
+    <span class="badge ${item[1]}">
+      ${escapeHtml(item[0])}
+    </span>
+  `;
+
+}
+
+
+function renderOrders(){
+
+  const tbody =
+    $("ordersTable");
+
+
+  const search =
+    $("orderSearch").value
+      .trim()
+      .toLowerCase();
+
+
+  const filter =
+    $("orderStatusFilter").value;
+
+
+  let list =
+    [...orders];
+
+
+  if(search){
+
+    list =
+      list.filter(order => {
+
+        const text = [
+
+          order.id,
+
+          order.customer_name,
+
+          order.phone,
+
+          order.wilaya,
+
+          order.commune
+
+        ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+        return text.includes(search);
+
+      });
+
+  }
+
+
+  if(filter){
+
+    list =
+      list.filter(
+        order =>
+          order.status === filter
+      );
+
+  }
+
+
+  if(!list.length){
+
+    tbody.innerHTML = `
+
+      <tr>
+
+        <td colspan="7">
+
+          <div class="empty">
+
+            <strong>Aucune commande</strong>
+
+            Aucun résultat.
+
+          </div>
+
+        </td>
+
+      </tr>
+
+    `;
+
+    return;
+
+  }
+
+
+  tbody.innerHTML = "";
+
+
+  list.forEach(order => {
+
+    const tr =
+      document.createElement("tr");
+
+
+    tr.innerHTML = `
+
+      <td>
+
+        <strong>
+          #${escapeHtml(
+            String(order.id)
+              .slice(0,8)
+              .toUpperCase()
+          )}
+        </strong>
+
+      </td>
+
+
+      <td>
+
+        <strong>
+          ${escapeHtml(
+            order.customer_name ||
+            "Client"
+          )}
+        </strong>
+
+      </td>
+
+
+      <td>
+
+        <div>
+          ${escapeHtml(
+            order.phone || "—"
+          )}
+        </div>
+
+        <div class="muted">
+          ${escapeHtml(
+            order.wilaya || ""
+          )}
+        </div>
+
+      </td>
+
+
+      <td>
+
+        <strong>
+          ${formatPrice(order.total)}
+        </strong>
+
+      </td>
+
+
+      <td>
+        ${formatDateTime(order.created_at)}
+      </td>
+
+
+      <td>
+
+        <select
+          class="order-status"
+          onchange="changeOrderStatus('${order.id}',this.value)">
+
+          ${renderStatusOptions(order.status)}
+
+        </select>
+
+      </td>
+
+
+      <td>
+
+        <button
+          class="icon-btn"
+          onclick="viewOrder('${order.id}')">
+
+          👁️
+
+        </button>
+
+      </td>
+
+    `;
+
+
+    tbody.appendChild(tr);
+
+  });
+
+}
+
+
+function renderStatusOptions(current){
+
+  const statuses = [
+
+    ["pending","Pending"],
+    ["confirmed","Confirmée"],
+    ["processing","En préparation"],
+    ["shipped","Expédiée"],
+    ["delivered","Livrée"],
+    ["cancelled","Annulée"]
+
+  ];
+
+
+  return statuses
+    .map(
+      ([value,label]) =>
+        `<option value="${value}" ${
+          value === current
+            ? "selected"
+            : ""
+        }>${label}</option>`
+    )
+    .join("");
+
+}
+
+
+async function changeOrderStatus(
+  id,
+  status
 ){
 
-stockPill.style.display="inline-flex";
+  try{
 
-stockPill.className="pill category";
-
-stockPill.textContent="Choisissez une variante";
-
-variantStockInfo.className="variant-stock-info";
-
-variantStockInfo.textContent="Sélectionnez la couleur et la taille.";
-
-addCartBtn.disabled=true;
-
-mobileCartBar.style.display="none";
-
-return;
-
-}
-
-}
+    const result =
+      await supabaseClient
+        .from("orders")
+        .update({status})
+        .eq("id",id);
 
 
-/*
-  Stock = 0
-*/
+    if(result.error)
+      throw result.error;
 
-if(stock<=0){
 
-stockPill.style.display="inline-flex";
+    showToast(
+      "Statut de commande mis à jour ✓"
+    );
 
-stockPill.className="pill stock-empty";
 
-stockPill.textContent="Rupture de stock";
+    const order =
+      orders.find(
+        o => String(o.id) === String(id)
+      );
 
-variantStockInfo.className="variant-stock-info empty";
 
-variantStockInfo.textContent="Cette combinaison est indisponible.";
+    if(order){
+      order.status = status;
+    }
 
-addCartBtn.disabled=true;
 
-mobileCartBar.style.display="none";
+    await loadDashboard();
 
-quantityInput.value=1;
 
-return;
+  }catch(error){
+
+    showError(error);
+
+    await loadOrders();
+
+  }
 
 }
 
 
-/*
-  Stock OK
-*/
+async function viewOrder(id){
 
-stockPill.style.display="inline-flex";
+  const order =
+    orders.find(
+      o => String(o.id) === String(id)
+    );
 
-stockPill.className="pill stock-ok";
 
-stockPill.textContent="En stock";
+  if(!order) return;
 
-variantStockInfo.className="variant-stock-info ok";
 
-variantStockInfo.textContent=
+  let items = [];
 
-stock+" unité"+(stock>1?"s":"")+" disponible"+(stock>1?"s":"");
 
-addCartBtn.disabled=false;
+  try{
 
-mobileCartBar.style.display="flex";
+    const result =
+      await supabaseClient
+        .from("order_items")
+        .select(`
+          *,
+          products(
+            id,
+            name,
+            image_url
+          )
+        `)
+        .eq("order_id",id);
 
 
-let q=
+    if(!result.error){
 
-parseInt(quantityInput.value,10)||1;
+      items =
+        result.data || [];
 
-if(q>stock){
+    }
 
-quantityInput.value=stock;
+  }catch(e){
 
-}
+    console.error(e);
 
-}
+  }
 
 
-/* =========================
-   ERROR
-========================= */
+  const itemsHtml =
+    items.length
 
-function showError(msg,details=""){
+      ? `
 
-loadingState.style.display="none";
+        <div style="margin-top:20px">
 
-productCard.style.display="none";
+          <h3 class="card-title">
+            Produits
+          </h3>
 
-mobileCartBar.style.display="none";
+          <div class="mini-list">
 
-errorState.style.display="block";
+            ${
+              items.map(item => {
 
-errorMessage.textContent=msg;
+                const name =
+                  item.products?.name ||
+                  "Produit";
 
-if(details){
+                const image =
+                  item.products?.image_url ||
+                  "https://placehold.co/60x60?text=JR";
 
-errorDetails.style.display="block";
+                const variant =
+                  [
+                    item.color,
+                    item.size
+                  ]
+                  .filter(Boolean)
+                  .join(" • ");
 
-errorDetails.textContent=details;
 
-}else{
+                return `
 
-errorDetails.style.display="none";
+                  <div class="mini-row">
 
-}
+                    <div
+                      style="
+                        display:flex;
+                        align-items:center;
+                        gap:10px;
+                      ">
 
-}
+                      <img
+                        src="${escapeHtml(image)}"
+                        style="
+                          width:45px;
+                          height:45px;
+                          object-fit:cover;
+                          border-radius:8px;
+                        ">
 
+                      <div>
 
-/* =========================
-   TOAST
-========================= */
+                        <div class="mini-name">
+                          ${escapeHtml(name)}
+                        </div>
 
-function showToast(msg){
+                        <div class="muted">
+                          Qté:
+                          ${Number(item.quantity || 0)}
+                          ${
+                            variant
+                              ? " • " +
+                                escapeHtml(variant)
+                              : ""
+                          }
+                        </div>
 
-let t=document.getElementById("toast");
+                      </div>
 
-t.textContent=msg;
+                    </div>
 
-t.classList.add("show");
+                    <strong>
+                      ${formatPrice(
+                        Number(item.price || 0) *
+                        Number(item.quantity || 0)
+                      )}
+                    </strong>
 
-clearTimeout(window._toast);
+                  </div>
 
-window._toast=setTimeout(()=>{
+                `;
 
-t.classList.remove("show");
+              }).join("")
+            }
 
-},2200);
+          </div>
 
-}
+        </div>
 
+      `
 
-/* =========================
-   SHOW PRODUCT
-========================= */
+      : "";
 
-function showProduct(p){
 
-currentProduct=p;
+  $("orderDetails").innerHTML = `
 
-let title=
+    <div class="order-detail">
 
-p.name||
+      <div class="detail-box">
 
-p.title||
+        <div class="detail-label">
+          COMMANDE
+        </div>
 
-p.product_name||
+        <div class="detail-value">
+          #${escapeHtml(
+            String(order.id)
+              .toUpperCase()
+          )}
+        </div>
 
-"Produit";
+      </div>
 
-productTitle.textContent=title;
 
-document.title=title+" - JR Shop";
+      <div class="detail-box">
 
+        <div class="detail-label">
+          DATE
+        </div>
 
-let price=
+        <div class="detail-value">
+          ${formatDateTime(
+            order.created_at
+          )}
+        </div>
 
-p.price??
+      </div>
 
-p.sale_price??
 
-p.product_price??
+      <div class="detail-box">
 
-0;
+        <div class="detail-label">
+          CLIENT
+        </div>
 
-productPrice.textContent=formatPrice(price);
+        <div class="detail-value">
+          ${escapeHtml(
+            order.customer_name ||
+            "—"
+          )}
+        </div>
 
-mobilePrice.textContent=formatPrice(price);
+      </div>
 
 
-let old=
+      <div class="detail-box">
 
-p.old_price??
+        <div class="detail-label">
+          TÉLÉPHONE
+        </div>
 
-p.compare_at_price??
+        <div class="detail-value">
+          ${escapeHtml(
+            order.phone || "—"
+          )}
+        </div>
 
-p.original_price??
+      </div>
 
-p.previous_price;
 
-if(old && Number(old)>Number(price)){
+      <div class="detail-box">
 
-oldPrice.style.display="inline";
+        <div class="detail-label">
+          WILAYA
+        </div>
 
-oldPrice.textContent=formatPrice(old);
+        <div class="detail-value">
+          ${escapeHtml(
+            order.wilaya || "—"
+          )}
+        </div>
 
-discountBadge.style.display="inline-block";
+      </div>
 
-discountBadge.textContent=
 
-"-"+
+      <div class="detail-box">
 
-Math.round(
+        <div class="detail-label">
+          COMMUNE
+        </div>
 
-(Number(old)-Number(price))/
+        <div class="detail-value">
+          ${escapeHtml(
+            order.commune || "—"
+          )}
+        </div>
 
-Number(old)*100
+      </div>
 
-)+"%";
 
-}else{
+      <div class="detail-box">
 
-oldPrice.style.display="none";
+        <div class="detail-label">
+          ADRESSE
+        </div>
 
-discountBadge.style.display="none";
+        <div class="detail-value">
+          ${escapeHtml(
+            order.address || "—"
+          )}
+        </div>
 
-}
+      </div>
 
 
-let desc=
+      <div class="detail-box">
 
-p.description||
+        <div class="detail-label">
+          TOTAL
+        </div>
 
-p.details||
+        <div class="detail-value">
+          ${formatPrice(order.total)}
+        </div>
 
-p.content||
+      </div>
 
-"";
 
-productDescription.textContent=
+      <div class="detail-box">
 
-desc||
+        <div class="detail-label">
+          STATUT
+        </div>
 
-"Aucune description disponible.";
+        <div class="detail-value">
+          ${statusBadge(order.status)}
+        </div>
 
-descriptionAccordion.textContent=
+      </div>
 
-desc||
 
-"Aucune description disponible.";
+      ${
+        order.notes
+          ? `
 
+            <div
+              class="detail-box"
+              style="grid-column:1/-1">
 
-let cat=
+              <div class="detail-label">
+                NOTES
+              </div>
 
-p.category||
+              <div class="detail-value">
+                ${escapeHtml(order.notes)}
+              </div>
 
-p.category_name||
+            </div>
 
-p.category_title||
+          `
+          : ""
+      }
 
-p.categories?.name||
+    </div>
 
-p.categories?.title||
 
-"";
+    ${itemsHtml}
 
-if(cat){
+  `;
 
-productCategory.style.display="inline-flex";
 
-productCategory.textContent=cat;
-
-}else{
-
-productCategory.style.display="none";
-
-}
-
-
-/*
-  IMPORTANT:
-  On ne fait PLUS:
-  stock=0 => rupture
-
-  avant de regarder variant_stock.
-*/
-
-
-productImages=getProductImages(p);
-
-if(!productImages.length)
-
-productImages=[
-
-"https://placehold.co/900x900?text=JR+Shop"
-
-];
-
-currentImageIndex=0;
-
-renderGallery();
-
-renderOptions(p);
-
-renderMeta(p,cat);
-
-updateWishlist();
-
-updateReviewLoginLink();
-
-loadReviews();
-
-prepareReviewSystem();
-
-loadRelatedProducts();
-
-updateStockUI();
-
-
-loadingState.style.display="none";
-
-errorState.style.display="none";
-
-productCard.style.display="block";
-
-}
-
-
-/* =========================
-   RENDER OPTIONS
-========================= */
-
-function renderOptions(p){
-
-colorsList=[
-
-...parseArray(
-
-p.colors||
-
-p.colours||
-
-p.color_options||
-
-p.color
-
-)
-
-].map(String).filter(Boolean);
-
-
-sizesList=[
-
-...parseArray(
-
-p.sizes||
-
-p.size_options||
-
-p.size
-
-)
-
-].map(String).filter(Boolean);
-
-
-/*
-  variants peuvent aussi contenir
-  colors + sizes
-*/
-
-if(p.variants){
-
-let vars=parseArray(p.variants);
-
-vars.forEach(v=>{
-
-if(typeof v==="object"){
-
-if(
-
-v.color &&
-
-!colorsList.includes(String(v.color))
-
-){
-
-colorsList.push(String(v.color));
-
-}
-
-if(
-
-v.size &&
-
-!sizesList.includes(String(v.size))
-
-){
-
-sizesList.push(String(v.size));
-
-}
-
-}
-
-});
+  $("orderModal").classList.add("open");
 
 }
 
 
-/*
-  valeurs uniques
-*/
+$("orderSearch").addEventListener(
+  "input",
+  renderOrders
+);
 
-colorsList=[...new Set(colorsList)];
-
-sizesList=[...new Set(sizesList)];
-
-
-/*
-  sélection initiale
-*/
-
-selectedColor=colorsList[0]||"";
-
-selectedSize=sizesList[0]||"";
-
-
-setupOption(
-
-"colorOption",
-
-"colorList",
-
-"selectedColor",
-
-colorsList,
-
-(value)=>{
-
-selectedColor=value;
-
-document.getElementById(
-
-"selectedColor"
-
-).textContent=value;
-
-updateVariantButtons();
-
-updateStockUI();
-
-}
-
+$("orderStatusFilter").addEventListener(
+  "change",
+  renderOrders
 );
 
 
-setupOption(
+/* =========================================================
+   CUSTOMERS
+========================================================= */
 
-"sizeOption",
+async function loadCustomers(){
 
-"sizeList",
+  if(!orders.length){
 
-"selectedSize",
+    await loadOrders();
 
-sizesList,
+  }
 
-(value)=>{
 
-selectedSize=value;
+  const map =
+    new Map();
 
-document.getElementById(
 
-"selectedSize"
+  orders.forEach(order => {
 
-).textContent=value;
+    const key =
+      order.customer_id ||
+      order.phone ||
+      order.customer_name ||
+      order.id;
 
-updateVariantButtons();
 
-updateStockUI();
+    if(!map.has(key)){
+
+      map.set(
+        key,
+        {
+          id:key,
+          name:
+            order.customer_name ||
+            "Client",
+          phone:
+            order.phone || "",
+          wilaya:
+            order.wilaya || "",
+          orders:0,
+          total:0,
+          lastOrder:
+            order.created_at
+        }
+      );
+
+    }
+
+
+    const customer =
+      map.get(key);
+
+
+    customer.orders++;
+
+    customer.total +=
+      Number(order.total || 0);
+
+
+    if(
+      new Date(order.created_at) >
+      new Date(customer.lastOrder)
+    ){
+
+      customer.lastOrder =
+        order.created_at;
+
+    }
+
+  });
+
+
+  window.customerList =
+    Array.from(map.values());
+
+
+  renderCustomers();
 
 }
 
+
+function renderCustomers(){
+
+  const tbody =
+    $("customersTable");
+
+
+  const search =
+    $("customerSearch").value
+      .trim()
+      .toLowerCase();
+
+
+  let list =
+    window.customerList || [];
+
+
+  if(search){
+
+    list =
+      list.filter(c => {
+
+        const text = [
+
+          c.name,
+          c.phone,
+          c.wilaya
+
+        ]
+        .join(" ")
+        .toLowerCase();
+
+        return text.includes(search);
+
+      });
+
+  }
+
+
+  if(!list.length){
+
+    tbody.innerHTML = `
+
+      <tr>
+
+        <td colspan="6">
+
+          <div class="empty">
+
+            <strong>Aucun client</strong>
+
+            Les clients apparaîtront ici
+            après leurs commandes.
+
+          </div>
+
+        </td>
+
+      </tr>
+
+    `;
+
+    return;
+
+  }
+
+
+  tbody.innerHTML = "";
+
+
+  list.forEach(customer => {
+
+    const tr =
+      document.createElement("tr");
+
+
+    tr.innerHTML = `
+
+      <td>
+
+        <strong>
+          ${escapeHtml(customer.name)}
+        </strong>
+
+      </td>
+
+
+      <td>
+        ${escapeHtml(
+          customer.phone || "—"
+        )}
+      </td>
+
+
+      <td>
+        ${escapeHtml(
+          customer.wilaya || "—"
+        )}
+      </td>
+
+
+      <td>
+        <strong>
+          ${customer.orders}
+        </strong>
+      </td>
+
+
+      <td>
+        <strong>
+          ${formatPrice(customer.total)}
+        </strong>
+      </td>
+
+
+      <td>
+        ${formatDate(
+          customer.lastOrder
+        )}
+      </td>
+
+    `;
+
+
+    tbody.appendChild(tr);
+
+  });
+
+}
+
+
+$("customerSearch").addEventListener(
+  "input",
+  renderCustomers
 );
 
 
-document.getElementById(
-
-"selectedColor"
-
-).textContent=selectedColor;
-
-
-document.getElementById(
-
-"selectedSize"
-
-).textContent=selectedSize;
-
-
-updateVariantButtons();
-
-
-}
-
-
-/* =========================
-   SETUP OPTION
-========================= */
-
-function setupOption(
-
-box,
-
-list,
-
-label,
-
-values,
-
-fn
-
-){
-
-let el=document.getElementById(box);
-
-let target=document.getElementById(list);
-
-target.innerHTML="";
-
-
-if(!values.length){
-
-el.style.display="none";
-
-return;
-
-}
-
-
-el.style.display="block";
-
-
-values.forEach((v,i)=>{
-
-let b=document.createElement("button");
-
-b.type="button";
-
-b.className=
-
-"option-btn"+
-
-(i===0?" selected":"");
-
-b.textContent=v;
-
-b.dataset.value=v;
-
-
-b.onclick=()=>{
-
-target
-
-.querySelectorAll(".option-btn")
-
-.forEach(x=>
-
-x.classList.remove("selected")
-
-);
-
-b.classList.add("selected");
-
-fn(String(v));
-
-};
-
-
-target.appendChild(b);
-
-});
-
-
-}
-
-
-/* =========================
-   DISABLE EMPTY VARIANTS
-========================= */
-
-function updateVariantButtons(){
-
-let variants=getVariantStockObject();
-
-if(!Object.keys(variants).length)
-
-return;
-
-
-/*
-  Disable colors that have no stock
-  with currently selected size
-*/
-
-document
-
-.querySelectorAll("#colorList .option-btn")
-
-.forEach(btn=>{
-
-let color=btn.dataset.value;
-
-let available=false;
-
-
-/*
-  Si taille sélectionnée
-*/
-
-if(sizesList.length){
-
-let key=variantKey(
-
-color,
-
-selectedSize
-
-);
-
-available=
-
-Number(variants[key]??0)>0;
-
-}else{
-
-available=
-
-Number(variants[color]??0)>0;
-
-}
-
-
-btn.classList.toggle(
-
-"disabled",
-
-!available
-
-);
-
-});
-
-
-/*
-  Disable sizes that have no stock
-  with currently selected color
-*/
-
-document
-
-.querySelectorAll("#sizeList .option-btn")
-
-.forEach(btn=>{
-
-let size=btn.dataset.value;
-
-let available=false;
-
-
-if(colorsList.length){
-
-let key=variantKey(
-
-selectedColor,
-
-size
-
-);
-
-available=
-
-Number(variants[key]??0)>0;
-
-}else{
-
-available=
-
-Number(variants[size]??0)>0;
-
-}
-
-
-btn.classList.toggle(
-
-"disabled",
-
-!available
-
-);
-
-});
-
-}
-
-
-/* =========================
-   META
-========================= */
-
-function renderMeta(p,cat){
-
-let a=[];
-
-if(p.brand)
-
-a.push("Marque : "+p.brand);
-
-if(p.sku)
-
-a.push("Référence : "+p.sku);
-
-if(cat)
-
-a.push("Catégorie : "+cat);
-
-if(p.material)
-
-a.push("Matière : "+p.material);
-
-if(p.gender)
-
-a.push("Genre : "+p.gender);
-
-productMeta.textContent=
-
-a.length
-
-?a.join("\n")
-
-:"Informations supplémentaires non disponibles.";
-
-}
-
-
-/* =========================
-   GALLERY
-========================= */
-
-function renderGallery(){
-
-mainImage.src=
-
-productImages[currentImageIndex];
-
-mainImage.alt=
-
-currentProduct?.name||
-
-"Produit";
-
-imageCounter.textContent=
-
-(currentImageIndex+1)+
-
-" / "+
-
-productImages.length;
-
-thumbnails.innerHTML="";
-
-
-productImages.forEach((src,i)=>{
-
-let b=document.createElement("button");
-
-b.className=
-
-"thumbnail"+
-
-(i===currentImageIndex?" active":"");
-
-b.type="button";
-
-
-b.onclick=()=>{
-
-currentImageIndex=i;
-
-renderGallery();
-
-};
-
-
-let im=document.createElement("img");
-
-im.src=src;
-
-im.alt="Image "+(i+1);
-
-im.onerror=()=>{
-
-im.style.display="none";
-
-};
-
-
-b.appendChild(im);
-
-thumbnails.appendChild(b);
-
-});
-
-}
-
-
-function nextImage(){
-
-if(productImages.length>1){
-
-currentImageIndex=
-
-(currentImageIndex+1)%productImages.length;
-
-renderGallery();
-
-}
-
-}
-
-
-function previousImage(){
-
-if(productImages.length>1){
-
-currentImageIndex=
-
-(currentImageIndex-1+
-
-productImages.length)%
-
-productImages.length;
-
-renderGallery();
-
-}
-
-}
-
-
-/* =========================
-   LIGHTBOX
-========================= */
-
-function openLightbox(){
-
-if(productImages.length){
-
-lightboxImage.src=
-
-productImages[currentImageIndex];
-
-lightbox.classList.add("open");
-
-document.body.style.overflow="hidden";
-
-}
-
-}
-
-
-function closeLightbox(){
-
-lightbox.classList.remove("open");
-
-document.body.style.overflow="";
-
-}
-
-
-/* =========================
-   ACCORDION
-========================= */
-
-function toggleAccordion(b){
-
-b.closest(".accordion")
-
-.classList.toggle("open");
-
-}
-
-
-/* =========================
-   QUANTITY
-========================= */
-
-function changeQuantity(amount){
-
-let stock=getCurrentAvailableStock();
-
-if(stock<=0){
-
-quantityInput.value=1;
-
-return;
-
-}
-
-
-let q=
-
-parseInt(quantityInput.value,10)||1;
-
-q=Math.max(1,q+amount);
-
-q=Math.min(q,stock);
-
-quantityInput.value=q;
-
-}
-
-
-quantityInput.addEventListener(
-
-"change",
-
-()=>{
-
-let stock=getCurrentAvailableStock();
-
-let q=
-
-parseInt(quantityInput.value,10)||1;
-
-q=Math.max(1,q);
-
-if(stock>0)
-
-q=Math.min(q,stock);
-
-quantityInput.value=q;
-
-}
-
-);
-
-
-/* =========================
-   CART
-========================= */
-
-function getCart(){
-
-try{
-
-let x=
-
-JSON.parse(
-
-localStorage.getItem("jr_cart")||
-
-"[]"
-
-);
-
-return Array.isArray(x)?x:[];
-
-}catch(e){
-
-return[];
-
-}
-
-}
-
-
-function saveCart(c){
-
-localStorage.setItem(
-
-"jr_cart",
-
-JSON.stringify(c)
-
-);
-
-}
-
-
-/* =========================
-   ADD TO CART
-========================= */
-
-function addToCart(){
-
-if(!currentProduct)
-
-return;
-
-
-let stock=getCurrentAvailableStock();
-
-
-/*
-  Vérifier variantes
-*/
-
-let variants=getVariantStockObject();
-
-if(Object.keys(variants).length){
-
-if(
-
-(colorsList.length && !selectedColor)||
-
-(sizesList.length && !selectedSize)
-
-){
-
-showCartMessage(
-
-"Veuillez choisir la couleur et la taille."
-
-);
-
-return;
-
-}
-
-}
-
-
-if(stock<=0){
-
-showCartMessage(
-
-"Cette combinaison est en rupture de stock."
-
-);
-
-return;
-
-}
-
-
-let q=
-
-Math.max(
-
-1,
-
-parseInt(quantityInput.value,10)||1
-
-);
-
-
-if(q>stock){
-
-q=stock;
-
-quantityInput.value=q;
-
-}
-
-
-let id=currentProduct.id;
-
-if(!id){
-
-showCartMessage(
-
-"ID du produit manquant."
-
-);
-
-return;
-
-}
-
-
-let cart=getCart();
-
-
-/*
-  IMPORTANT:
-  نفس product مع couleur/taille مختلفة
-  = panier différent
-*/
-
-let idx=cart.findIndex(x=>
-
-String(x.id)===String(id)&&
-
-String(x.color||"")===String(selectedColor||"")&&
-
-String(x.size||"")===String(selectedSize||"")
-
-);
-
-
-let cp={
-
-id:id,
-
-name:
-
-currentProduct.name||
-
-currentProduct.title||
-
-"Produit",
-
-title:
-
-currentProduct.title||
-
-currentProduct.name||
-
-"Produit",
-
-price:
-
-currentProduct.price??
-
-currentProduct.sale_price??
-
-currentProduct.product_price??
-
-0,
-
-image_url:
-
-currentProduct.image_url||
-
-productImages[0]||
-
-"",
-
-image_urls:
-
-currentProduct.image_urls||
-
-productImages,
-
-quantity:q
-
-};
-
-
-if(selectedColor)
-
-cp.color=selectedColor;
-
-
-if(selectedSize)
-
-cp.size=selectedSize;
-
-
-if(idx>-1){
-
-let newQty=
-
-(Number(cart[idx].quantity)||0)+q;
-
-cart[idx].quantity=
-
-Math.min(newQty,stock);
-
-}else{
-
-cart.push(cp);
-
-}
-
-
-saveCart(cart);
-
-updateCartCount();
-
-showCartMessage(
-
-"Produit ajouté au panier ✓"
-
-);
-
-showToast(
-
-"Ajouté au panier ✓"
-
-);
-
-}
-
-
-/* =========================
-   CART MESSAGE
-========================= */
-
-function showCartMessage(m){
-
-cartMessage.textContent=m;
-
-setTimeout(()=>{
-
-if(cartMessage.textContent===m)
-
-cartMessage.textContent="";
-
-},2500);
-
-}
-
-
-function updateCartCount(){
-
-let c=
-
-getCart().reduce(
-
-(a,x)=>
-
-a+(Number(x.quantity)||0),
-
-0
-
-);
-
-
-[
-
-"cartCount",
-
-"cart-count",
-
-"cartCounter",
-
-"cart-count-badge"
-
-].forEach(id=>{
-
-let e=document.getElementById(id);
-
-if(e){
-
-e.textContent=c;
-
-e.style.display=
-
-c>0?"":"none";
-
-}
-
-});
-
-
-document
-
-.querySelectorAll("[data-cart-count]")
-
-.forEach(e=>
-
-e.textContent=c
-
-);
-
-}
-
-
-/* =========================
-   WISHLIST
-========================= */
-
-function getWishlist(){
-
-try{
-
-let x=
-
-JSON.parse(
-
-localStorage.getItem("jr_wishlist")||
-
-"[]"
-
-);
-
-return Array.isArray(x)?x:[];
-
-}catch(e){
-
-return[];
-
-}
-
-}
-
-
-function toggleWishlist(){
-
-if(!currentProduct?.id)
-
-return;
-
-
-let a=getWishlist();
-
-let i=a.findIndex(
-
-x=>
-
-String(x)===
-
-String(currentProduct.id)
-
-);
-
-
-if(i>-1){
-
-a.splice(i,1);
-
-showToast(
-
-"Retiré des favoris"
-
-);
-
-}else{
-
-a.push(currentProduct.id);
-
-showToast(
-
-"Ajouté aux favoris ♥"
-
-);
-
-}
-
-
-localStorage.setItem(
-
-"jr_wishlist",
-
-JSON.stringify(a)
-
-);
-
-updateWishlist();
-
-}
-
-
-function updateWishlist(){
-
-let active=
-
-currentProduct&&
-
-getWishlist().some(
-
-x=>
-
-String(x)===
-
-String(currentProduct.id)
-
-);
-
-
-wishlistBtn.classList.toggle(
-
-"active",
-
-active
-
-);
-
-wishlistBtn.textContent=
-
-active
-
-?"♥ Dans les favoris"
-
-:"♡ Ajouter aux favoris";
-
-}
-
-
-/* =========================
-   SHARE
-========================= */
-
-async function shareProduct(){
-
-let url=location.href;
-
-try{
-
-if(navigator.share){
-
-await navigator.share({
-
-title:
-
-currentProduct?.name||
-
-"JR Shop",
-
-text:
-
-"Découvrez ce produit sur JR Shop",
-
-url
-
-});
-
-}else{
-
-await navigator.clipboard.writeText(url);
-
-showToast(
-
-"Lien du produit copié ✓"
-
-);
-
-}
-
-}catch(e){}
-
-}
-
-
-async function copyProductLink(){
-
-try{
-
-await navigator.clipboard.writeText(
-
-location.href
-
-);
-
-showToast(
-
-"Lien copié ✓"
-
-);
-
-}catch(e){
-
-showToast(
-
-"Impossible de copier le lien"
-
-);
-
-}
-
-}
-
-
-/* =========================
+/* =========================================================
    REVIEWS
-========================= */
-
-function makeStars(r){
-
-let n=Math.max(
-
-0,
-
-Math.min(
-
-5,
-
-Math.round(Number(r)||0
-
-)
-
-)
-
-);
-
-return "★".repeat(n)+
-
-"☆".repeat(5-n);
-
-}
-
-
-function formatReviewDate(d){
-
-try{
-
-return d
-
-?new Date(d).toLocaleDateString(
-
-"fr-FR",
-
-{
-
-day:"2-digit",
-
-month:"2-digit",
-
-year:"numeric"
-
-}
-
-)
-
-:"";
-
-}catch(e){
-
-return "";
-
-}
-
-}
-
-
-/* =========================
-   LOAD REVIEWS
-========================= */
+========================================================= */
 
 async function loadReviews(){
 
-if(!currentProduct?.id)
+  try{
 
-return;
+    const result =
+      await supabaseClient
+        .from("reviews")
+        .select(`
+          *,
+          products(
+            id,
+            name
+          )
+        `)
+        .order(
+          "created_at",
+          {ascending:false}
+        );
 
 
-reviewsList.innerHTML=
+    if(result.error)
+      throw result.error;
 
-'<div class="no-reviews">Chargement des avis...</div>';
+
+    reviews =
+      result.data || [];
 
 
-try{
+    renderReviews();
 
-let r=
 
-await supabaseClient
+  }catch(error){
 
-.from("reviews")
+    showError(error);
 
-.select(
+  }
 
-"id,product_id,order_id,order_item_id,customer_id,customer_name,rating,comment,created_at"
+}
 
-)
 
-.eq(
+function stars(rating){
 
-"product_id",
+  const n =
+    Math.max(
+      0,
+      Math.min(
+        5,
+        Number(rating || 0)
+      )
+    );
 
-currentProduct.id
+  return (
+    "★".repeat(n) +
+    "☆".repeat(5-n)
+  );
 
-)
+}
 
-.order(
 
-"created_at",
+function renderReviews(){
 
-{ascending:false}
+  const tbody =
+    $("reviewsTable");
 
+
+  const search =
+    $("reviewSearch").value
+      .trim()
+      .toLowerCase();
+
+
+  const rating =
+    $("reviewRatingFilter").value;
+
+
+  let list =
+    [...reviews];
+
+
+  if(search){
+
+    list =
+      list.filter(review => {
+
+        const text = [
+
+          review.customer_name,
+
+          review.comment,
+
+          review.products?.name
+
+        ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+        return text.includes(search);
+
+      });
+
+  }
+
+
+  if(rating){
+
+    list =
+      list.filter(
+        r =>
+          String(r.rating) ===
+          String(rating)
+      );
+
+  }
+
+
+  if(!list.length){
+
+    tbody.innerHTML = `
+
+      <tr>
+
+        <td colspan="6">
+
+          <div class="empty">
+
+            <strong>Aucun avis</strong>
+
+            Aucun avis trouvé.
+
+          </div>
+
+        </td>
+
+      </tr>
+
+    `;
+
+    return;
+
+  }
+
+
+  tbody.innerHTML = "";
+
+
+  list.forEach(review => {
+
+    const tr =
+      document.createElement("tr");
+
+
+    tr.innerHTML = `
+
+      <td>
+
+        <strong>
+          ${escapeHtml(
+            review.customer_name ||
+            "Client"
+          )}
+        </strong>
+
+      </td>
+
+
+      <td>
+
+        ${escapeHtml(
+          review.products?.name ||
+          "Produit supprimé"
+        )}
+
+      </td>
+
+
+      <td>
+
+        <span
+          style="
+            color:#f4b400;
+            letter-spacing:1px;
+          ">
+
+          ${stars(review.rating)}
+
+        </span>
+
+      </td>
+
+
+      <td>
+
+        <div
+          style="
+            max-width:350px;
+            white-space:normal;
+            line-height:1.5;
+          ">
+
+          ${escapeHtml(
+            review.comment ||
+            "—"
+          )}
+
+        </div>
+
+      </td>
+
+
+      <td>
+        ${formatDate(review.created_at)}
+      </td>
+
+
+      <td>
+
+        <button
+          class="icon-btn"
+          onclick="deleteReview('${review.id}')">
+
+          🗑️
+
+        </button>
+
+      </td>
+
+    `;
+
+
+    tbody.appendChild(tr);
+
+  });
+
+}
+
+
+async function deleteReview(id){
+
+  if(
+    !confirm(
+      "Supprimer cet avis définitivement ?"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    const result =
+      await supabaseClient
+        .from("reviews")
+        .delete()
+        .eq("id",id);
+
+
+    if(result.error)
+      throw result.error;
+
+
+    showToast(
+      "Avis supprimé ✓"
+    );
+
+
+    await loadReviews();
+    await loadDashboard();
+
+
+  }catch(error){
+
+    showError(error);
+
+  }
+
+}
+
+
+$("reviewSearch").addEventListener(
+  "input",
+  renderReviews
+);
+
+$("reviewRatingFilter").addEventListener(
+  "change",
+  renderReviews
 );
 
 
-if(r.error)
-
-throw r.error;
-
-
-let data=r.data||[];
-
-let n=data.length;
-
-
-reviewCountText.textContent=
-
-n
-
-?n+" avis client"+(n>1?"s":"")
-
-:"Aucun avis pour le moment";
-
-
-if(!n){
-
-reviewAverage.textContent="—";
-
-reviewAverageStars.textContent="☆☆☆☆☆";
-
-topStars.textContent="☆☆☆☆☆";
-
-topRatingText.textContent="Aucun avis";
-
-reviewsList.innerHTML=
-
-'<div class="no-reviews"><strong>Aucun avis pour le moment</strong>Soyez le premier client à partager votre expérience.</div>';
-
-return;
-
-}
-
-
-let avg=
-
-data.reduce(
-
-(a,x)=>
-
-a+(Number(x.rating)||0),
-
-0
-
-)/n;
-
-
-reviewAverage.textContent=
-
-avg.toFixed(1);
-
-reviewAverageStars.textContent=
-
-makeStars(avg);
-
-topStars.textContent=
-
-makeStars(avg);
-
-topRatingText.textContent=
-
-avg.toFixed(1)+
-
-" / 5 • "+
-
-n+
-
-" avis";
-
-
-reviewsList.innerHTML="";
-
-
-data.forEach(x=>{
-
-let c=document.createElement("div");
-
-c.className="review-card";
-
-
-c.innerHTML=
-
-'<div class="review-head">'+
-
-'<div class="reviewer">'+
-
-escapeHtml(
-
-x.customer_name||
-
-"Client"
-
-)+
-
-'</div>'+
-
-'<div class="review-date">'+
-
-formatReviewDate(
-
-x.created_at
-
-)+
-
-'</div>'+
-
-'</div>'+
-
-'<div class="review-card-stars">'+
-
-makeStars(x.rating)+
-
-'</div>'+
-
-'<div class="review-comment">'+
-
-escapeHtml(
-
-x.comment||
-
-"Aucun commentaire."
-
-)+
-
-'</div>';
-
-
-reviewsList.appendChild(c);
-
-});
-
-}catch(e){
-
-console.error(e);
-
-reviewsList.innerHTML=
-
-'<div class="no-reviews">Impossible de charger les avis.</div>';
-
-}
-
-}
-
-
-/* =========================
-   LOGIN REVIEW
-========================= */
-
-function updateReviewLoginLink(){
-
-let u=
-
-location.pathname+
-
-location.search;
-
-reviewLoginButton.href=
-
-"login.html?next="+
-
-encodeURIComponent(u);
-
-}
-
-
-/* =========================
-   REVIEW SYSTEM
-========================= */
-
-async function prepareReviewSystem(){
-
-reviewLoginArea.style.display="none";
-
-reviewFormArea.style.display="none";
-
-
-try{
-
-let r=
-
-await supabaseClient.auth.getUser();
-
-currentUser=
-
-r.data?.user||null;
-
-
-if(!currentUser){
-
-reviewFormMessage.textContent=
-
-"Connectez-vous pour laisser un avis après un achat confirmé.";
-
-reviewLoginArea.style.display="block";
-
-return;
-
-}
-
-
-await findVerifiedPurchases();
-
-}catch(e){
-
-reviewFormMessage.textContent=
-
-"Impossible de vérifier votre achat pour le moment.";
-
-reviewLoginArea.style.display="block";
-
-}
-
-}
-
-
-/* =========================
-   VERIFIED PURCHASES
-========================= */
-
-async function findVerifiedPurchases(){
-
-let r=
-
-await supabaseClient
-
-.from("orders")
-
-.select(
-
-"id,status,created_at,order_items(id,product_id,quantity,price)"
-
-)
-
-.eq(
-
-"customer_id",
-
-currentUser.id
-
-)
-
-.eq(
-
-"status",
-
-"confirmed"
-
-);
-
-
-if(r.error){
-
-reviewFormMessage.textContent=
-
-"Impossible de vérifier vos commandes.";
-
-return;
-
-}
-
-
-verifiedOrderItems=[];
-
-
-(r.data||[]).forEach(o=>
-
-(o.order_items||[]).forEach(i=>{
-
-if(
-
-String(i.product_id)===
-
-String(currentProduct.id)
-
-){
-
-verifiedOrderItems.push({
-
-orderId:o.id,
-
-orderItemId:i.id,
-
-createdAt:o.created_at
-
-});
-
-}
-
-})
-
-);
-
-
-if(!verifiedOrderItems.length){
-
-reviewFormMessage.textContent=
-
-"Aucun achat confirmé de ce produit n'a été trouvé sur votre compte.";
-
-return;
-
-}
-
-
-let er=
-
-await supabaseClient
-
-.from("reviews")
-
-.select("order_item_id")
-
-.eq(
-
-"product_id",
-
-currentProduct.id
-
-)
-
-.eq(
-
-"customer_id",
-
-currentUser.id
-
-);
-
-
-if(er.error)
-
-return;
-
-
-let done=
-
-new Set(
-
-(er.data||[])
-
-.map(
-
-x=>String(x.order_item_id)
-
-)
-
-);
-
-
-verifiedOrderItems=
-
-verifiedOrderItems.filter(
-
-x=>
-
-!done.has(
-
-String(x.orderItemId)
-
-)
-
-);
-
-
-if(!verifiedOrderItems.length){
-
-reviewFormMessage.textContent=
-
-"Vous avez déjà évalué ce produit pour toutes vos commandes confirmées.";
-
-return;
-
-}
-
-
-reviewFormMessage.textContent=
-
-"Merci pour votre achat ! Vous pouvez partager votre expérience.";
-
-reviewFormArea.style.display="block";
-
-
-if(verifiedOrderItems.length>1){
-
-reviewOrderBox.style.display="block";
-
-reviewOrderSelect.innerHTML="";
-
-
-verifiedOrderItems.forEach(x=>{
-
-let o=document.createElement("option");
-
-o.value=x.orderItemId;
-
-o.textContent=
-
-"Commande #"+
-
-String(x.orderId)
-
-.slice(0,8)
-
-.toUpperCase();
-
-reviewOrderSelect.appendChild(o);
-
-});
-
-}
-
-}
-
-
-/* =========================
-   REVIEW STARS
-========================= */
+/* =========================================================
+   MODAL OUTSIDE CLICK
+========================================================= */
 
 document
+  .querySelectorAll(".modal")
+  .forEach(modal => {
 
-.querySelectorAll(".rating-star-btn")
+    modal.addEventListener(
+      "click",
+      function(e){
 
-.forEach(b=>
+        if(e.target === modal){
 
-b.addEventListener(
+          modal.classList.remove("open");
 
-"click",
+        }
 
-()=>{
+      }
+    );
 
-selectedRating=
+  });
 
-Number(b.dataset.rating);
 
-
-document
-
-.querySelectorAll(
-
-".rating-star-btn"
-
-)
-
-.forEach(s=>
-
-s.classList.toggle(
-
-"selected",
-
-Number(s.dataset.rating)<=
-
-selectedRating
-
-)
-
-);
-
-}
-
-)
-
-);
-
-
-/* =========================
-   SUBMIT REVIEW
-========================= */
-
-async function submitReview(){
-
-if(!currentUser){
-
-setReviewStatus(
-
-"Vous devez être connecté.",
-
-"error"
-
-);
-
-return;
-
-}
-
-
-if(!selectedRating){
-
-setReviewStatus(
-
-"Veuillez sélectionner une note.",
-
-"error"
-
-);
-
-return;
-
-}
-
-
-let comment=
-
-reviewComment.value.trim();
-
-
-if(comment.length<3){
-
-setReviewStatus(
-
-"Veuillez écrire un commentaire.",
-
-"error"
-
-);
-
-return;
-
-}
-
-
-let item=
-
-verifiedOrderItems.find(
-
-x=>
-
-String(x.orderItemId)===
-
-String(
-
-reviewOrderSelect.value||
-
-verifiedOrderItems[0]?.orderItemId
-
-)
-
-);
-
-
-if(!item){
-
-setReviewStatus(
-
-"Aucun achat vérifié disponible.",
-
-"error"
-
-);
-
-return;
-
-}
-
-
-submitReviewBtn.disabled=true;
-
-submitReviewBtn.textContent=
-
-"Publication...";
-
-
-try{
-
-let v=
-
-await supabaseClient
-
-.from("orders")
-
-.select(
-
-"id,status,customer_id,order_items(id,product_id)"
-
-)
-
-.eq(
-
-"id",
-
-item.orderId
-
-)
-
-.eq(
-
-"customer_id",
-
-currentUser.id
-
-)
-
-.eq(
-
-"status",
-
-"confirmed"
-
-)
-
-.maybeSingle();
-
-
-if(v.error)
-
-throw v.error;
-
-
-let valid=
-
-v.data?.order_items?.some(
-
-x=>
-
-String(x.id)===
-
-String(item.orderItemId)&&
-
-String(x.product_id)===
-
-String(currentProduct.id)
-
-);
-
-
-if(!valid)
-
-throw new Error(
-
-"Achat invalide"
-
-);
-
-
-let ins=
-
-await supabaseClient
-
-.from("reviews")
-
-.insert({
-
-product_id:currentProduct.id,
-
-order_id:item.orderId,
-
-order_item_id:item.orderItemId,
-
-customer_id:currentUser.id,
-
-customer_name:
-
-currentUser.user_metadata?.full_name||
-
-currentUser.user_metadata?.name||
-
-currentUser.email||
-
-"Client",
-
-rating:selectedRating,
-
-comment
-
-});
-
-
-if(ins.error)
-
-throw ins.error;
-
-
-setReviewStatus(
-
-"Votre avis a été publié avec succès ✓",
-
-"success"
-
-);
-
-
-reviewComment.value="";
-
-selectedRating=0;
-
-
-document
-
-.querySelectorAll(
-
-".rating-star-btn"
-
-)
-
-.forEach(x=>
-
-x.classList.remove("selected")
-
-);
-
-
-await loadReviews();
-
-await findVerifiedPurchases();
-
-
-}catch(e){
-
-console.error(e);
-
-
-setReviewStatus(
-
-e?.code==="23505"
-
-?"Vous avez déjà publié un avis pour cet achat."
-
-:"Impossible de publier votre avis.",
-
-"error"
-
-);
-
-}finally{
-
-submitReviewBtn.disabled=false;
-
-submitReviewBtn.textContent=
-
-"Publier mon avis";
-
-}
-
-}
-
-
-function setReviewStatus(m,t){
-
-reviewStatus.textContent=m;
-
-reviewStatus.className=
-
-"review-status "+(t||"");
-
-}
-
-
-/* =========================
-   RELATED PRODUCTS
-========================= */
-
-async function loadRelatedProducts(){
-
-if(!currentProduct?.id)
-
-return;
-
-
-let q=
-
-supabaseClient
-
-.from("products")
-
-.select("*")
-
-.neq(
-
-"id",
-
-currentProduct.id
-
-)
-
-.limit(8);
-
-
-let cat=
-
-currentProduct.category||
-
-currentProduct.category_name;
-
-
-if(
-
-cat&&
-
-"category" in currentProduct
-
-)
-
-q=q.eq("category",cat);
-
-
-let r=await q;
-
-let data=r.data||[];
-
-
-if(!data.length){
-
-relatedGrid.innerHTML=
-
-'<div class="no-reviews" style="grid-column:1/-1">Aucun produit recommandé pour le moment.</div>';
-
-return;
-
-}
-
-
-relatedGrid.innerHTML="";
-
-
-data.slice(0,4).forEach(p=>{
-
-let a=document.createElement("a");
-
-a.className="related-card";
-
-a.href=
-
-"product-details.html?id="+
-
-encodeURIComponent(p.id);
-
-
-let img=
-
-p.image_url||
-
-parseArray(p.image_urls)[0]||
-
-p.image||
-
-"https://placehold.co/500x500?text=JR+Shop";
-
-
-let price=
-
-formatPrice(
-
-p.price??
-
-p.sale_price??
-
-p.product_price??
-
-0
-
-);
-
-
-a.innerHTML=
-
-'<img src="'+
-
-escapeHtml(img)+
-
-'" alt="'+
-
-escapeHtml(
-
-p.name||
-
-p.title||
-
-"Produit"
-
-)+
-
-'">'+
-
-'<div class="related-card-body">'+
-
-'<div class="related-name">'+
-
-escapeHtml(
-
-p.name||
-
-p.title||
-
-"Produit"
-
-)+
-
-'</div>'+
-
-'<div class="related-price">'+
-
-price+
-
-'</div>'+
-
-'</div>';
-
-
-relatedGrid.appendChild(a);
-
-});
-
-}
-
-
-/* =========================
-   LOAD PRODUCT
-========================= */
-
-async function loadProduct(){
-
-loadingState.style.display="block";
-
-errorState.style.display="none";
-
-productCard.style.display="none";
-
-mobileCartBar.style.display="none";
-
-
-if(
-
-typeof supabaseClient==="undefined"||
-
-!supabaseClient
-
-){
-
-showError(
-
-"Supabase n'est pas disponible.",
-
-"Vérifie config.js."
-
-);
-
-return;
-
-}
-
-
-let id=getProductId();
-
-
-if(!id){
-
-showError(
-
-"ID du produit manquant.",
-
-"Exemple : product-details.html?id=123"
-
-);
-
-return;
-
-}
-
-
-try{
-
-let r=
-
-await supabaseClient
-
-.from("products")
-
-.select("*")
-
-.eq("id",id)
-
-.maybeSingle();
-
-
-if(r.error)
-
-throw r.error;
-
-
-if(!r.data){
-
-showError(
-
-"Produit introuvable.",
-
-"Aucun produit ne correspond à l'ID : "+id
-
-);
-
-return;
-
-}
-
-
-showProduct(r.data);
-
-
-}catch(e){
-
-console.error(e);
-
-showError(
-
-"Erreur lors du chargement du produit.",
-
-e?.message||String(e)
-
-);
-
-}
-
-}
-
-
-/* =========================
-   TOUCH GALLERY
-========================= */
-
-let touchStartX=0;
-
-let touchStartY=0;
-
-
-mainImageBox.addEventListener(
-
-"touchstart",
-
-e=>{
-
-let t=e.changedTouches[0];
-
-touchStartX=t.clientX;
-
-touchStartY=t.clientY;
-
-},
-
-{passive:true}
-
-);
-
-
-mainImageBox.addEventListener(
-
-"touchend",
-
-e=>{
-
-let t=e.changedTouches[0];
-
-let dx=t.clientX-touchStartX;
-
-let dy=t.clientY-touchStartY;
-
-
-if(
-
-Math.abs(dx)>50&&
-
-Math.abs(dx)>Math.abs(dy)
-
-){
-
-dx<0
-
-?nextImage()
-
-:previousImage();
-
-}
-
-},
-
-{passive:true}
-
-);
-
-
-/* =========================
-   KEYBOARD
-========================= */
+/* =========================================================
+   ESCAPE
+========================================================= */
 
 document.addEventListener(
+  "keydown",
+  e => {
 
-"keydown",
+    if(e.key === "Escape"){
 
-e=>{
+      document
+        .querySelectorAll(".modal.open")
+        .forEach(modal =>
+          modal.classList.remove("open")
+        );
 
-if(e.key==="Escape")
+    }
 
-closeLightbox();
-
-if(e.key==="ArrowRight")
-
-nextImage();
-
-if(e.key==="ArrowLeft")
-
-previousImage();
-
-}
-
+  }
 );
 
 
-/* =========================
-   STORAGE
-========================= */
-
-window.addEventListener(
-
-"storage",
-
-e=>{
+/* =========================================================
+   AUTH STATE
+========================================================= */
 
 if(
-
-e.key==="jr_cart"||
-
-e.key==="jr_wishlist"
-
+  typeof supabaseClient !== "undefined" &&
+  supabaseClient
 ){
 
-updateCartCount();
+  supabaseClient.auth.onAuthStateChange(
+    (_event,session) => {
 
-updateWishlist();
+      currentUser =
+        session?.user || null;
+
+      if(currentUser){
+
+        if(
+          $("app").style.display !==
+          "block"
+        ){
+
+          showApp();
+
+        }
+
+      }else{
+
+        showLogin();
+
+      }
+
+    }
+  );
 
 }
 
-}
 
-);
-
-
-/* =========================
+/* =========================================================
    INIT
-========================= */
+========================================================= */
 
 document.addEventListener(
+  "DOMContentLoaded",
+  async () => {
 
-"DOMContentLoaded",
+    if(!checkSupabase()){
+      return;
+    }
 
-()=>{
+    await checkAuth();
 
-updateCartCount();
-
-loadProduct();
-
-}
-
+  }
 );
 
 </script>
