@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Connexion - JR Shop</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:#f6f6f4;
+    font-family:Arial,Helvetica,sans-serif;
+    color:#111;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.auth-container{
+    width:100%;
+    max-width:440px;
+}
+
+.auth-card{
+    background:#fff;
+    border:1px solid #e8e8e4;
+    border-radius:24px;
+    padding:32px;
+    box-shadow:0 18px 55px rgba(0,0,0,.08);
+}
+
+.logo{
+    text-align:center;
+    font-size:27px;
+    font-weight:900;
+    letter-spacing:3px;
+    margin-bottom:8px;
+}
+
+.subtitle{
+    text-align:center;
+    color:#777;
+    font-size:14px;
+    margin-bottom:28px;
+}
+
+.tabs{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:5px;
+    background:#f2f2ef;
+    padding:5px;
+    border-radius:12px;
+    margin-bottom:22px;
+}
+
+.tab{
+    border:0;
+    background:transparent;
+    padding:11px;
+    border-radius:9px;
+    cursor:pointer;
+    font-weight:700;
+    color:#777;
+}
+
+.tab.active{
+    background:#111;
+    color:#fff;
+}
+
+.social-btn{
+    width:100%;
+    min-height:50px;
+    border:1px solid #ddd;
+    background:#fff;
+    border-radius:12px;
+    margin-bottom:10px;
+    cursor:pointer;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    transition:.2s;
+}
+
+.social-btn:hover{
+    transform:translateY(-1px);
+    box-shadow:0 5px 15px rgba(0,0,0,.07);
+}
+
+.google-icon{
+    color:#4285f4;
+    font-size:20px;
+    font-weight:900;
+}
+
+.facebook-icon{
+    color:#1877f2;
+    font-size:20px;
+    font-weight:900;
+}
+
+.divider{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:20px 0;
+    color:#aaa;
+    font-size:12px;
+}
+
+.divider:before,
+.divider:after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:#e5e5e5;
+}
+
+.field{
+    margin-bottom:14px;
+}
+
+.field label{
+    display:block;
+    font-size:12px;
+    font-weight:800;
+    margin-bottom:7px;
+}
+
+.field input{
+    width:100%;
+    height:48px;
+    border:1px solid #ddd;
+    border-radius:11px;
+    padding:0 13px;
+    outline:none;
+    font-size:14px;
+    background:#fff;
+}
+
+.field input:focus{
+    border-color:#111;
+}
+
+.submit-btn{
+    width:100%;
+    min-height:50px;
+    border:0;
+    border-radius:12px;
+    background:#111;
+    color:#fff;
+    font-weight:800;
+    cursor:pointer;
+    margin-top:5px;
+}
+
+.submit-btn:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+.forgot{
+    display:block;
+    text-align:right;
+    color:#555;
+    font-size:12px;
+    margin:5px 0 15px;
+    cursor:pointer;
+    text-decoration:underline;
+}
+
+.message{
+    display:none;
+    margin-top:15px;
+    padding:12px;
+    border-radius:10px;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.message.error{
+    display:block;
+    background:#fff1f0;
+    color:#b42318;
+}
+
+.message.success{
+    display:block;
+    background:#edf9f2;
+    color:#138a4a;
+}
+
+.back{
+    display:block;
+    text-align:center;
+    margin-top:20px;
+    color:#666;
+    text-decoration:none;
+    font-size:13px;
+}
+
+.back:hover{
+    color:#111;
+}
+
+.small-note{
+    text-align:center;
+    color:#999;
+    font-size:11px;
+    line-height:1.6;
+    margin-top:18px;
+}
+
+.signup-only{
+    display:none;
+}
+
+@media(max-width:500px){
+    body{
+        padding:10px;
+    }
+
+    .auth-card{
+        padding:24px 18px;
+        border-radius:20px;
+    }
+
+    .logo{
+        font-size:24px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="auth-container">
+
+    <div class="auth-card">
+
+        <div class="logo">
+            JR SHOP
+        </div>
+
+        <div class="subtitle">
+            Connectez-vous pour continuer
+        </div>
+
+        <div class="tabs">
+
+            <button
+                id="loginTab"
+                class="tab active"
+                onclick="showLogin()">
+                Se connecter
+            </button>
+
+            <button
+                id="signupTab"
+                class="tab"
+                onclick="showSignup()">
+                Créer un compte
+            </button>
+
+        </div>
+
+        <!-- GOOGLE -->
+
+        <button
+            class="social-btn"
+            onclick="loginWithGoogle()">
+
+            <span class="google-icon">G</span>
+
+            Continuer avec Google
+
+        </button>
+
+        <!-- FACEBOOK -->
+
+        <button
+            class="social-btn"
+            onclick="loginWithFacebook()">
+
+            <span class="facebook-icon">f</span>
+
+            Continuer avec Facebook
+
+        </button>
+
+        <div class="divider">
+            OU
+        </div>
+
+        <!-- LOGIN -->
+
+        <div id="loginForm">
+
+            <div class="field">
+
+                <label for="loginEmail">
+                    Email
+                </label>
+
+                <input
+                    id="loginEmail"
+                    type="email"
+                    autocomplete="email"
+                    placeholder="exemple@gmail.com">
+
+            </div>
+
+            <div class="field">
+
+                <label for="loginPassword">
+                    Mot de passe
+                </label>
+
+                <input
+                    id="loginPassword"
+                    type="password"
+                    autocomplete="current-password"
+                    placeholder="Votre mot de passe">
+
+            </div>
+
+            <a
+                class="forgot"
+                onclick="forgotPassword()">
+
+                Mot de passe oublié ?
+
+            </a>
+
+            <button
+                id="loginButton"
+                class="submit-btn"
+                onclick="loginWithEmail()">
+
+                Se connecter
+
+            </button>
+
+        </div>
+
+        <!-- SIGNUP -->
+
+        <div id="signupForm" class="signup-only">
+
+            <div class="field">
+
+                <label for="signupName">
+                    Nom et prénom
+                </label>
+
+                <input
+                    id="signupName"
+                    type="text"
+                    autocomplete="name"
+                    placeholder="Votre nom et prénom">
+
+            </div>
+
+            <div class="field">
+
+                <label for="signupEmail">
+                    Email
+                </label>
+
+                <input
+                    id="signupEmail"
+                    type="email"
+                    autocomplete="email"
+                    placeholder="exemple@gmail.com">
+
+            </div>
+
+            <div class="field">
+
+                <label for="signupPassword">
+                    Mot de passe
+                </label>
+
+                <input
+                    id="signupPassword"
+                    type="password"
+                    autocomplete="new-password"
+                    placeholder="Minimum 6 caractères">
+
+            </div>
+
+            <div class="field">
+
+                <label for="signupPassword2">
+                    Confirmer le mot de passe
+                </label>
+
+                <input
+                    id="signupPassword2"
+                    type="password"
+                    autocomplete="new-password"
+                    placeholder="Retapez votre mot de passe">
+
+            </div>
+
+            <button
+                id="signupButton"
+                class="submit-btn"
+                onclick="signupWithEmail()">
+
+                Créer mon compte
+
+            </button>
+
+        </div>
+
+        <div id="message" class="message"></div>
+
+        <a
+            id="backLink"
+            href="index.html"
+            class="back">
+
+            ← Retour à la boutique
+
+        </a>
+
+        <div class="small-note">
+            Votre compte vous permettra également de laisser des avis
+            sur les produits que vous avez achetés.
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+let redirectAfterLogin = "index.html";
+
+/* =========================================
+   RETURN TO PRODUCT
+========================================= */
+
+function getReturnUrl(){
+
+    const params = new URLSearchParams(
+        window.location.search
+    );
+
+    const next = params.get("next");
+
+    if(next){
+        return next;
+    }
+
+    try{
+
+        const referrer = document.referrer;
+
+        if(
+            referrer &&
+            referrer.includes("product-details.html")
+        ){
+
+            const url = new URL(referrer);
+
+            return url.pathname.split("/").pop() +
+                   url.search;
+
+        }
+
+    }catch(error){
+
+        console.error(error);
+
+    }
+
+    return "index.html";
+}
+
+redirectAfterLogin = getReturnUrl();
+
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+function showMessage(text,type="error"){
+
+    const box = document.getElementById("message");
+
+    box.textContent = text;
+
+    box.className =
+        "message " + type;
+
+}
+
+
+/* =========================================
+   TABS
+========================================= */
+
+function showLogin(){
+
+    document.getElementById("loginForm").style.display="block";
+
+    document.getElementById("signupForm").style.display="none";
+
+    document.getElementById("loginTab").classList.add("active");
+
+    document.getElementById("signupTab").classList.remove("active");
+
+    document.getElementById("message").style.display="none";
+}
+
+
+function showSignup(){
+
+    document.getElementById("loginForm").style.display="none";
+
+    document.getElementById("signupForm").style.display="block";
+
+    document.getElementById("loginTab").classList.remove("active");
+
+    document.getElementById("signupTab").classList.add("active");
+
+    document.getElementById("message").style.display="none";
+}
+
+
+/* =========================================
+   GOOGLE
+========================================= */
+
+async function loginWithGoogle(){
+
+    try{
+
+        const { error } =
+            await supabaseClient.auth.signInWithOAuth({
+
+                provider:"google",
+
+                options:{
+                    redirectTo:
+                        window.location.origin +
+                        window.location.pathname +
+                        "?next=" +
+                        encodeURIComponent(
+                            redirectAfterLogin
+                        )
+                }
+
+            });
+
+        if(error){
+
+            showMessage(error.message);
+
+        }
+
+    }catch(error){
+
+        showMessage(
+            "Une erreur est survenue avec Google."
+        );
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* =========================================
+   FACEBOOK
+========================================= */
+
+async function loginWithFacebook(){
+
+    try{
+
+        const { error } =
+            await supabaseClient.auth.signInWithOAuth({
+
+                provider:"facebook",
+
+                options:{
+                    redirectTo:
+                        window.location.origin +
+                        window.location.pathname +
+                        "?next=" +
+                        encodeURIComponent(
+                            redirectAfterLogin
+                        )
+                }
+
+            });
+
+        if(error){
+
+            showMessage(error.message);
+
+        }
+
+    }catch(error){
+
+        showMessage(
+            "Une erreur est survenue avec Facebook."
+        );
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* =========================================
+   EMAIL LOGIN
+========================================= */
+
+async function loginWithEmail(){
+
+    const email =
+        document.getElementById("loginEmail")
+        .value.trim();
+
+    const password =
+        document.getElementById("loginPassword")
+        .value;
+
+    if(!email || !password){
+
+        showMessage(
+            "Veuillez remplir tous les champs."
+        );
+
+        return;
+    }
+
+    const button =
+        document.getElementById("loginButton");
+
+    button.disabled=true;
+
+    button.textContent="Connexion...";
+
+    try{
+
+        const { data,error } =
+            await supabaseClient.auth.signInWithPassword({
+
+                email:email,
+
+                password:password
+
+            });
+
+        if(error){
+
+            showMessage(
+                getAuthError(error),
+                "error"
+            );
+
+            button.disabled=false;
+
+            button.textContent="Se connecter";
+
+            return;
+        }
+
+        showMessage(
+            "Connexion réussie. Redirection...",
+            "success"
+        );
+
+        setTimeout(function(){
+
+            window.location.href =
+                redirectAfterLogin;
+
+        },500);
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+            "Impossible de se connecter."
+        );
+
+        button.disabled=false;
+
+        button.textContent="Se connecter";
+
+    }
+
+}
+
+
+/* =========================================
+   SIGNUP
+========================================= */
+
+async function signupWithEmail(){
+
+    const name =
+        document.getElementById("signupName")
+        .value.trim();
+
+    const email =
+        document.getElementById("signupEmail")
+        .value.trim();
+
+    const password =
+        document.getElementById("signupPassword")
+        .value;
+
+    const password2 =
+        document.getElementById("signupPassword2")
+        .value;
+
+    if(!name || !email || !password || !password2){
+
+        showMessage(
+            "Veuillez remplir tous les champs."
+        );
+
+        return;
+    }
+
+    if(password.length < 6){
+
+        showMessage(
+            "Le mot de passe doit contenir au moins 6 caractères."
+        );
+
+        return;
+    }
+
+    if(password !== password2){
+
+        showMessage(
+            "Les deux mots de passe ne correspondent pas."
+        );
+
+        return;
+    }
+
+    const button =
+        document.getElementById("signupButton");
+
+    button.disabled=true;
+
+    button.textContent="Création...";
+
+    try{
+
+        const { data,error } =
+            await supabaseClient.auth.signUp({
+
+                email:email,
+
+                password:password,
+
+                options:{
+                    data:{
+                        full_name:name,
+                        name:name
+                    },
+
+                    emailRedirectTo:
+                        window.location.origin +
+                        window.location.pathname +
+                        "?next=" +
+                        encodeURIComponent(
+                            redirectAfterLogin
+                        )
+                }
+
+            });
+
+        if(error){
+
+            showMessage(
+                getAuthError(error)
+            );
+
+            button.disabled=false;
+
+            button.textContent="Créer mon compte";
+
+            return;
+        }
+
+        /*
+          Si Supabase exige la confirmation
+          de l'email, user sera null.
+        */
+
+        if(data.user && data.session){
+
+            showMessage(
+                "Compte créé avec succès. Redirection...",
+                "success"
+            );
+
+            setTimeout(function(){
+
+                window.location.href =
+                    redirectAfterLogin;
+
+            },700);
+
+        }else{
+
+            showMessage(
+                "Compte créé ! Vérifiez votre email pour confirmer votre compte.",
+                "success"
+            );
+
+            button.disabled=false;
+
+            button.textContent="Créer mon compte";
+
+        }
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+            "Impossible de créer le compte."
+        );
+
+        button.disabled=false;
+
+        button.textContent="Créer mon compte";
+
+    }
+
+}
+
+
+/* =========================================
+   FORGOT PASSWORD
+========================================= */
+
+async function forgotPassword(){
+
+    const email =
+        document.getElementById("loginEmail")
+        .value.trim();
+
+    if(!email){
+
+        showMessage(
+            "Entrez votre email d'abord."
+        );
+
+        return;
+    }
+
+    try{
+
+        const { error } =
+            await supabaseClient.auth.resetPasswordForEmail(
+                email,
+                {
+                    redirectTo:
+                        window.location.origin +
+                        window.location.pathname
+                }
+            );
+
+        if(error){
+
+            showMessage(
+                getAuthError(error)
+            );
+
+            return;
+        }
+
+        showMessage(
+            "Un lien de réinitialisation a été envoyé à votre email.",
+            "success"
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+            "Impossible d'envoyer le lien."
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   AUTH ERRORS
+========================================= */
+
+function getAuthError(error){
+
+    const message =
+        String(error?.message || "")
+        .toLowerCase();
+
+    if(
+        message.includes("invalid login credentials")
+    ){
+
+        return "Email ou mot de passe incorrect.";
+
+    }
+
+    if(
+        message.includes("email not confirmed")
+    ){
+
+        return "Veuillez confirmer votre adresse email.";
+
+    }
+
+    if(
+        message.includes("user already registered")
+    ){
+
+        return "Un compte existe déjà avec cet email.";
+
+    }
+
+    if(
+        message.includes("password should be at least")
+    ){
+
+        return "Le mot de passe est trop court.";
+
+    }
+
+    return error?.message ||
+        "Une erreur est survenue.";
+
+}
+
+
+/* =========================================
+   OAUTH CALLBACK
+========================================= */
+
+async function checkExistingSession(){
+
+    try{
+
+        const { data } =
+            await supabaseClient.auth.getSession();
+
+        if(data?.session){
+
+            /*
+              Si l'utilisateur arrive déjà connecté
+              sur login.html, on le renvoie directement.
+            */
+
+            window.location.href =
+                redirectAfterLogin;
+
+        }
+
+    }catch(error){
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* =========================================
+   START
+========================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        checkExistingSession();
+
+    }
+);
+
+</script>
+
+</body>
+</html>
