@@ -1,2925 +1,2925 @@
+```html
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="fr">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="icon" href="data:,">
 
-<title>JR Shop — Admin V7.2</title>
+<title>Produit - JR Shop</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="style.css">
 
 <style>
-
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
 
 body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#f5f7f8;
-  color:#111;
+margin:0;
+background:#f6f6f4;
+color:#171717;
+font-family:Arial,Helvetica,sans-serif
+}
+
+button,input,textarea,select{font:inherit}
+button{-webkit-tap-highlight-color:transparent}
+
+.details-page{
+width:100%;
+max-width:1280px;
+margin:auto;
+padding:20px 16px 90px
+}
+
+.top-bar{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:10px;
+margin-bottom:16px
+}
+
+.back-btn,
+.share-btn{
+border:0;
+display:inline-flex;
+align-items:center;
+gap:7px;
+padding:11px 15px;
+border-radius:12px;
+background:#111;
+color:#fff;
+text-decoration:none;
+font-size:14px;
+font-weight:700;
+cursor:pointer
+}
+
+.brand-mini{
+font-size:13px;
+font-weight:800;
+letter-spacing:2px;
+color:#777
+}
+
+.product-details-card,
+.lower-section,
+.reviews-section{
+background:#fff;
+border:1px solid #ecece8;
+border-radius:22px;
+box-shadow:0 14px 45px rgba(0,0,0,.06)
+}
+
+.product-details-card{padding:24px}
+
+.product-layout{
+display:grid;
+grid-template-columns:minmax(0,1.08fr) minmax(340px,.92fr);
+gap:38px;
+align-items:start
+}
+
+.gallery{min-width:0}
+
+.main-image-box{
+position:relative;
+height:590px;
+background:#f4f4f1;
+border-radius:18px;
+overflow:hidden;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:zoom-in;
+touch-action:pan-y
+}
+
+.main-image{
+width:100%;
+height:100%;
+object-fit:contain;
+display:block;
+transition:.3s
 }
 
-button,input,textarea,select{
-  font:inherit;
+.main-image-box:hover .main-image{
+transform:scale(1.025)
 }
 
-button{
-  cursor:pointer;
+.gallery-arrow{
+position:absolute;
+top:50%;
+transform:translateY(-50%);
+width:42px;
+height:42px;
+border:0;
+border-radius:50%;
+background:rgba(255,255,255,.95);
+box-shadow:0 5px 20px #0002;
+cursor:pointer;
+font-size:22px;
+z-index:2
 }
 
-header{
-  background:#111;
-  color:#fff;
-  padding:15px;
-  position:sticky;
-  top:0;
-  z-index:20;
+.gallery-prev{left:14px}
+.gallery-next{right:14px}
+
+.image-counter,
+.zoom-label{
+position:absolute;
+bottom:14px;
+padding:8px 11px;
+border-radius:999px;
+font-size:12px;
+z-index:2
+}
+
+.image-counter{
+right:14px;
+background:#111d;
+color:#fff
+}
+
+.zoom-label{
+left:14px;
+background:#fffc;
+font-weight:700
+}
+
+.thumbnails{
+display:flex;
+gap:9px;
+overflow-x:auto;
+margin-top:12px;
+padding:2px 2px 6px
+}
+
+.thumbnail{
+width:78px;
+height:78px;
+min-width:78px;
+padding:0;
+border:2px solid transparent;
+border-radius:12px;
+overflow:hidden;
+background:#f2f2ef;
+cursor:pointer
+}
+
+.thumbnail.active{border-color:#111}
+
+.thumbnail img{
+width:100%;
+height:100%;
+object-fit:cover
+}
+
+.product-info{
+padding:4px;
+min-width:0
+}
+
+.category-row{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+margin-bottom:14px
+}
+
+.pill{
+display:inline-flex;
+align-items:center;
+padding:7px 11px;
+border-radius:999px;
+font-size:12px;
+font-weight:800
+}
+
+.category{
+background:#f1f1ee;
+color:#555
+}
+
+.stock-ok{
+background:#edf9f2;
+color:#138a4a
+}
+
+.stock-empty{
+background:#fff0f0;
+color:#c62828
+}
+
+.product-title{
+font-size:clamp(29px,4vw,44px);
+line-height:1.08;
+letter-spacing:-.8px;
+margin:0 0 12px
+}
+
+.rating-row{
+display:flex;
+align-items:center;
+gap:9px;
+margin-bottom:17px
+}
+
+.stars,
+.review-stars{
+color:#f4b400;
+letter-spacing:1px
+}
+
+.rating-text{
+color:#777;
+font-size:13px
+}
+
+.price-row{
+display:flex;
+align-items:baseline;
+flex-wrap:wrap;
+gap:10px;
+margin-bottom:15px
+}
+
+.product-price{
+font-size:30px;
+font-weight:900
 }
 
-.top{
-  max-width:1200px;
-  margin:auto;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:15px;
+.old-price{
+color:#999;
+text-decoration:line-through
 }
 
-.logo{
-  font-size:25px;
-  font-weight:900;
+.discount{
+display:none;
+padding:6px 9px;
+border-radius:8px;
+background:#111;
+color:#fff;
+font-size:11px;
+font-weight:800
 }
 
-.logo span{
-  color:#22c55e;
+.product-description{
+color:#666;
+line-height:1.75;
+font-size:15px;
+margin:0 0 20px;
+white-space:pre-line
 }
 
-.logout{
-  border:0;
-  background:#dc2626;
-  color:#fff;
-  padding:10px 15px;
-  border-radius:10px;
-  font-weight:bold;
+.option-box{
+display:none;
+margin:14px 0
 }
 
-.container{
-  max-width:1200px;
-  margin:auto;
-  padding:20px 15px 50px;
+.option-title{
+font-size:13px;
+font-weight:800;
+margin-bottom:8px
 }
 
-.login{
-  max-width:420px;
-  margin:70px auto;
-  background:#fff;
-  padding:25px;
-  border-radius:18px;
-  box-shadow:0 5px 25px #00000012;
+.option-list{
+display:flex;
+flex-wrap:wrap;
+gap:8px
 }
 
-.login h1{
-  text-align:center;
-  margin-top:0;
+.option-btn{
+border:1px solid #ddd;
+background:#fff;
+border-radius:10px;
+padding:9px 13px;
+cursor:pointer;
+font-weight:700
 }
 
-input,
-textarea,
-select{
-  width:100%;
-  padding:11px;
-  border:1px solid #ddd;
-  border-radius:9px;
-  background:#fff;
+.option-btn.selected{
+background:#111;
+color:#fff;
+border-color:#111
 }
 
-textarea{
-  min-height:90px;
-  resize:vertical;
+.option-btn.disabled{
+opacity:.45;
+cursor:not-allowed;
+text-decoration:line-through
 }
 
-label{
-  display:block;
-  font-weight:bold;
-  font-size:14px;
-  margin-bottom:6px;
+.variant-stock-info{
+margin-top:8px;
+font-size:12px;
+font-weight:800
 }
 
-.field{
-  margin-bottom:12px;
+.variant-stock-info.ok{
+color:#138a4a
 }
 
-.btn{
-  border:0;
-  border-radius:9px;
-  padding:11px 14px;
-  font-weight:bold;
+.variant-stock-info.empty{
+color:#c62828
 }
 
-.green{
-  background:#16a34a;
-  color:#fff;
+.purchase-box{
+border-top:1px solid #ecece8;
+border-bottom:1px solid #ecece8;
+padding:18px 0;
+margin-bottom:18px
 }
 
-.dark{
-  background:#111;
-  color:#fff;
+.quantity-title{
+font-size:13px;
+font-weight:800;
+margin-bottom:8px
 }
 
-.red{
-  background:#dc2626;
-  color:#fff;
+.quantity-box{
+display:inline-flex;
+border:1px solid #ddd;
+border-radius:11px;
+overflow:hidden;
+margin-bottom:13px
 }
 
-.gray{
-  background:#e5e7eb;
-  color:#111;
+.quantity-btn{
+width:43px;
+height:43px;
+border:0;
+background:#f5f5f3;
+cursor:pointer;
+font-size:20px
 }
 
-.blue{
-  background:#2563eb;
-  color:#fff;
+.quantity-input{
+width:54px;
+height:43px;
+border:0;
+text-align:center;
+font-weight:800;
+outline:0
 }
 
-.tabs{
-  display:flex;
-  gap:8px;
-  overflow:auto;
-  margin-bottom:18px;
+.add-cart-btn{
+width:100%;
+min-height:57px;
+border:0;
+border-radius:14px;
+background:#111;
+color:#fff;
+font-weight:900;
+cursor:pointer;
+box-shadow:0 8px 22px #0002
 }
 
-.tab{
-  border:0;
-  background:#fff;
-  padding:12px 18px;
-  border-radius:10px;
-  font-weight:bold;
-  white-space:nowrap;
+.add-cart-btn:disabled{
+background:#aaa;
+cursor:not-allowed
 }
 
-.tab.active{
-  background:#16a34a;
-  color:#fff;
+.cart-info{
+text-align:center;
+min-height:21px;
+margin-top:9px;
+color:#138a4a;
+font-size:13px;
+font-weight:800
 }
 
-.panel{
-  display:none;
+.action-row{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:9px;
+margin-bottom:16px
 }
 
-.panel.active{
-  display:block;
+.action-btn{
+min-height:45px;
+border:1px solid #ddd;
+border-radius:11px;
+background:#fff;
+font-weight:800;
+cursor:pointer
 }
 
-.grid{
-  display:grid;
-  grid-template-columns:1fr 1.6fr;
-  gap:18px;
+.action-btn.active{
+background:#fff4f4;
+border-color:#e55;
+color:#c22
 }
 
-.card{
-  background:#fff;
-  border-radius:16px;
-  padding:18px;
-  box-shadow:0 4px 18px #0000000b;
-  margin-bottom:18px;
+.trust-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:7px
 }
 
-.card h2{
-  margin-top:0;
+.trust-item{
+padding:11px 5px;
+text-align:center;
+border:1px solid #ecece8;
+border-radius:11px;
+background:#fafaf8
 }
 
-.products,
-.orders{
-  display:grid;
-  gap:12px;
+.trust-icon{font-size:18px}
+
+.trust-title{
+font-size:10px;
+font-weight:800;
+margin-top:4px
 }
 
-.item{
-  background:#fff;
-  border-radius:14px;
-  padding:12px;
-  display:flex;
-  gap:12px;
-  align-items:center;
-  box-shadow:0 3px 12px #0000000a;
+.trust-text{
+font-size:9px;
+color:#888;
+margin-top:2px
 }
 
-.item img{
-  width:75px;
-  height:75px;
-  object-fit:cover;
-  border-radius:10px;
-  background:#eee;
+.lower-section,
+.reviews-section{
+margin-top:25px;
+overflow:hidden
 }
 
-.item-main{
-  flex:1;
-  min-width:0;
+.accordion{
+border-bottom:1px solid #ecece8
 }
 
-.item-main h3{
-  margin:0 0 6px;
-  font-size:16px;
+.accordion:last-child{border:0}
+
+.accordion-btn{
+width:100%;
+padding:19px 20px;
+border:0;
+background:#fff;
+display:flex;
+justify-content:space-between;
+font-weight:800;
+text-align:left;
+cursor:pointer
 }
 
-.muted{
-  color:#777;
-  font-size:13px;
+.accordion-content{
+display:none;
+padding:0 20px 20px;
+color:#666;
+line-height:1.75;
+font-size:14px;
+white-space:pre-line
 }
 
-.actions{
-  display:flex;
-  gap:7px;
-  flex-wrap:wrap;
+.accordion.open .accordion-content{
+display:block
 }
 
-.badge{
-  display:inline-block;
-  padding:4px 8px;
-  border-radius:20px;
-  font-size:12px;
-  font-weight:bold;
-  background:#dcfce7;
-  color:#166534;
+.accordion-icon{
+transition:.2s
 }
 
-.badge.off{
-  background:#fee2e2;
-  color:#991b1b;
+.accordion.open .accordion-icon{
+transform:rotate(45deg)
 }
 
-/* VARIANTS */
+.reviews-section{
+padding:23px
+}
 
-.variant-section{
-  background:#f8fafc;
-  border:1px solid #e5e7eb;
-  border-radius:14px;
-  padding:14px;
-  margin:15px 0;
+.section-heading{
+margin:0 0 6px;
+font-size:22px
 }
 
-.variant-title{
-  font-size:16px;
-  font-weight:900;
-  margin-bottom:12px;
+.section-subtitle{
+color:#888;
+font-size:13px;
+margin-bottom:18px
 }
 
-.option-grid{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
+.review-summary{
+display:flex;
+gap:16px;
+align-items:center;
+background:#f8f8f5;
+padding:16px;
+border-radius:14px;
+margin-bottom:20px
 }
 
-.option{
-  position:relative;
+.review-number{
+font-size:36px;
+font-weight:900
 }
 
-.option input{
-  position:absolute;
-  opacity:0;
-  pointer-events:none;
+.review-list{
+display:flex;
+flex-direction:column;
+gap:12px
 }
 
-.option label{
-  display:block;
-  border:1px solid #d1d5db;
-  background:#fff;
-  padding:9px 13px;
-  border-radius:9px;
-  cursor:pointer;
-  margin:0;
-  font-weight:bold;
+.review-card{
+border:1px solid #ecece8;
+border-radius:14px;
+padding:15px
 }
 
-.option input:checked + label{
-  background:#16a34a;
-  border-color:#16a34a;
-  color:#fff;
+.review-head{
+display:flex;
+justify-content:space-between;
+gap:10px
 }
 
-.variant-table-wrap{
-  overflow:auto;
-  margin-top:15px;
+.reviewer{
+font-weight:800;
+font-size:14px
 }
 
-.variant-table{
-  width:100%;
-  border-collapse:collapse;
-  min-width:450px;
+.review-date{
+font-size:11px;
+color:#999
 }
 
-.variant-table th,
-.variant-table td{
-  border:1px solid #e5e7eb;
-  padding:9px;
-  text-align:center;
+.review-card-stars{
+color:#f4b400;
+margin:7px 0
 }
 
-.variant-table th{
-  background:#111;
-  color:#fff;
+.review-comment{
+color:#555;
+line-height:1.65;
+font-size:14px;
+white-space:pre-line
 }
 
-.variant-table td input{
-  min-width:90px;
-  text-align:center;
+.no-reviews{
+text-align:center;
+padding:25px;
+color:#888;
+border:1px dashed #ddd;
+border-radius:14px
 }
 
-.stock-total{
-  background:#ecfdf5;
-  color:#166534;
-  padding:12px;
-  border-radius:10px;
-  margin-top:12px;
-  font-weight:900;
-  text-align:center;
+.no-reviews strong{
+display:block;
+color:#333;
+margin-bottom:6px
 }
 
-/* DASHBOARD */
+.review-form-box{
+margin-top:22px;
+padding:20px;
+background:#f8f8f5;
+border:1px solid #ecece8;
+border-radius:15px
+}
 
-.stats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-  margin-bottom:18px;
+.review-form-title{
+margin:0 0 7px
 }
 
-.stat{
-  background:#fff;
-  padding:18px;
-  border-radius:14px;
-  box-shadow:0 3px 12px #00000008;
+.review-form-note{
+font-size:13px;
+color:#777;
+line-height:1.6;
+margin-bottom:15px
 }
 
-.stat b{
-  display:block;
-  font-size:25px;
-  margin-top:5px;
-  color:#16a34a;
+.review-login-btn,
+.review-submit-btn{
+display:inline-flex;
+justify-content:center;
+border:0;
+border-radius:10px;
+padding:12px 16px;
+background:#111;
+color:#fff;
+font-weight:800;
+text-decoration:none;
+cursor:pointer
 }
 
-/* ORDERS */
+.review-submit-btn{
+width:100%;
+margin-top:10px
+}
 
-.orders-summary{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px;
-  margin-bottom:15px;
+.review-submit-btn:disabled{
+background:#aaa
 }
 
-.order-summary-card{
-  background:#fff;
-  padding:14px;
-  border-radius:12px;
-  box-shadow:0 3px 12px #00000008;
-  text-align:center;
+.review-field{
+margin-bottom:13px
 }
 
-.order-summary-card strong{
-  display:block;
-  font-size:22px;
-  color:#16a34a;
-  margin-top:5px;
+.review-field label{
+display:block;
+font-size:12px;
+font-weight:800;
+margin-bottom:7px
 }
 
-.order{
-  background:#fff;
-  border-radius:16px;
-  padding:16px;
-  box-shadow:0 3px 14px #0000000a;
+.review-rating-input{
+display:flex;
+gap:5px
 }
 
-.order-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:12px;
-  flex-wrap:wrap;
+.rating-star-btn{
+width:38px;
+height:38px;
+border:1px solid #ddd;
+border-radius:9px;
+background:#fff;
+color:#bbb;
+cursor:pointer;
+font-size:19px
 }
 
-.order-title{
-  font-size:18px;
-  font-weight:900;
+.rating-star-btn.selected{
+color:#f4b400;
+border-color:#f4b400;
+background:#fffaf0
 }
 
-.order-date{
-  color:#777;
-  font-size:13px;
-  margin-top:4px;
+.review-textarea,
+.review-order-select{
+width:100%;
+border:1px solid #ddd;
+border-radius:10px;
+padding:11px;
+background:#fff;
+outline:0
 }
 
-.order-status{
-  min-width:145px;
+.review-textarea{
+min-height:105px;
+resize:vertical
 }
 
-.order-status select{
-  font-weight:bold;
+.review-status{
+margin-top:9px;
+font-size:13px;
+font-weight:800
 }
+
+.success{color:#138a4a}
+.error{color:#b42318}
 
-.status-pending{
-  border-right:4px solid #f59e0b;
+.related-section{
+margin-top:25px
 }
 
-.status-confirmed{
-  border-right:4px solid #2563eb;
+.related-title{
+font-size:22px;
+margin:0 0 13px
 }
 
-.status-shipped{
-  border-right:4px solid #8b5cf6;
+.related-grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:12px
 }
 
-.status-delivered{
-  border-right:4px solid #16a34a;
+.related-card{
+background:#fff;
+border:1px solid #ecece8;
+border-radius:15px;
+overflow:hidden;
+text-decoration:none;
+color:#111
 }
 
-.status-cancelled{
-  border-right:4px solid #dc2626;
+.related-card img{
+width:100%;
+aspect-ratio:1/1;
+object-fit:cover;
+background:#f2f2ef;
+display:block
 }
 
-.order hr{
-  border:0;
-  border-top:1px solid #eee;
-  margin:14px 0;
+.related-card-body{
+padding:10px
 }
 
-.order-meta{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:9px;
-  margin:10px 0;
+.related-name{
+font-size:13px;
+font-weight:800;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis
 }
 
-.order-meta div{
-  background:#f8fafc;
-  padding:11px;
-  border-radius:10px;
-  line-height:1.7;
+.related-price{
+font-size:14px;
+font-weight:900;
+margin-top:5px
 }
 
-.order-meta .full{
-  grid-column:1/-1;
+.state-box{
+background:#fff;
+border-radius:20px;
+padding:60px 20px;
+text-align:center
 }
 
-.order-items{
-  background:#f6f7f8;
-  border-radius:11px;
-  padding:13px;
-  margin:12px 0;
-  line-height:1.9;
+.error-box{
+color:#b42318
 }
 
-.order-item-line{
-  border-bottom:1px solid #e5e7eb;
-  padding:5px 0;
+.error-details{
+margin-top:12px;
+padding:12px;
+background:#fff3f2;
+text-align:left;
+border-radius:9px;
+font-size:12px;
+word-break:break-word
 }
 
-.order-item-line:last-child{
-  border-bottom:0;
+.retry-btn{
+margin-top:15px;
+padding:11px 17px;
+border:0;
+border-radius:10px;
+background:#111;
+color:#fff
 }
 
-.order-total{
-  background:#ecfdf5;
-  color:#166534;
-  border-radius:11px;
-  padding:13px;
-  font-size:19px;
-  font-weight:900;
-  text-align:center;
-  margin-top:10px;
+.lightbox{
+position:fixed;
+inset:0;
+z-index:9999;
+background:#000e;
+display:none;
+align-items:center;
+justify-content:center;
+padding:20px
 }
 
-.notes-box{
-  background:#fff7ed;
-  border:1px solid #fed7aa;
-  color:#9a3412;
-  border-radius:10px;
-  padding:11px;
-  margin-top:10px;
-  line-height:1.7;
+.lightbox.open{
+display:flex
 }
 
-.filters{
-  display:grid;
-  grid-template-columns:1.5fr 1fr 1fr;
-  gap:10px;
-  margin-top:14px;
+.lightbox-image{
+max-width:94vw;
+max-height:88vh;
+object-fit:contain
 }
 
-.filter-buttons{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-top:12px;
+.lightbox-close{
+position:fixed;
+right:18px;
+top:16px;
+width:43px;
+height:43px;
+border:0;
+border-radius:50%;
+background:#fff;
+font-size:24px;
+cursor:pointer
 }
 
-.empty{
-  background:#fff;
-  padding:30px;
-  border-radius:14px;
-  text-align:center;
-  color:#777;
+.mobile-cart-bar{
+display:none
 }
 
 .toast{
-  position:fixed;
-  bottom:20px;
-  left:20px;
-  right:20px;
-  max-width:420px;
-  margin:auto;
-  background:#111;
-  color:#fff;
-  padding:13px;
-  border-radius:10px;
-  text-align:center;
-  display:none;
-  z-index:100;
+position:fixed;
+left:50%;
+bottom:24px;
+transform:translateX(-50%) translateY(20px);
+background:#111;
+color:#fff;
+padding:12px 17px;
+border-radius:12px;
+font-size:13px;
+font-weight:800;
+opacity:0;
+pointer-events:none;
+transition:.25s;
+z-index:10000
 }
 
-.hidden{
-  display:none!important;
+.toast.show{
+opacity:1;
+transform:translateX(-50%) translateY(0)
 }
 
 @media(max-width:900px){
 
-  .grid{
-    grid-template-columns:1fr;
-  }
+.details-page{
+padding:12px 10px 92px
+}
 
-  .orders-summary{
-    grid-template-columns:repeat(2,1fr);
-  }
+.product-details-card{
+padding:12px
+}
+
+.product-layout{
+grid-template-columns:1fr;
+gap:20px
+}
+
+.main-image-box{
+height:500px
+}
+
+.related-grid{
+grid-template-columns:repeat(3,1fr)
+}
+
+.mobile-cart-bar{
+position:fixed;
+display:flex;
+align-items:center;
+gap:9px;
+left:9px;
+right:9px;
+bottom:9px;
+z-index:5000;
+padding:8px;
+background:#fffF;
+border:1px solid #ddd;
+border-radius:15px;
+box-shadow:0 10px 35px #0003
+}
+
+.mobile-price{
+flex:1;
+font-weight:900;
+font-size:14px
+}
+
+.mobile-cart-btn{
+border:0;
+border-radius:10px;
+background:#111;
+color:#fff;
+min-height:45px;
+padding:0 17px;
+font-weight:900
+}
 
 }
 
-@media(max-width:800px){
+@media(max-width:600px){
 
-  .stats{
-    grid-template-columns:1fr;
-  }
-
-  .order-meta{
-    grid-template-columns:1fr;
-  }
-
-  .order-meta .full{
-    grid-column:auto;
-  }
-
-  .filters{
-    grid-template-columns:1fr;
-  }
-
-  .item{
-    align-items:flex-start;
-  }
-
+.details-page{
+padding:8px 7px 85px
 }
 
-@media(max-width:550px){
-
-  .orders-summary{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .order-head{
-    flex-direction:column;
-  }
-
-  .order-status{
-    width:100%;
-  }
-
+.brand-mini{
+display:none
 }
 
+.back-btn,
+.share-btn{
+padding:9px 12px;
+font-size:13px
+}
+
+.product-details-card{
+padding:8px;
+border-radius:16px
+}
+
+.main-image-box{
+height:390px;
+border-radius:14px
+}
+
+.thumbnail{
+width:66px;
+height:66px;
+min-width:66px
+}
+
+.product-title{
+font-size:26px
+}
+
+.product-price{
+font-size:26px
+}
+
+.trust-title{
+font-size:9px
+}
+
+.trust-text{
+font-size:8px
+}
+
+.related-grid{
+grid-template-columns:repeat(2,1fr)
+}
+
+.reviews-section{
+padding:17px
+}
+
+.zoom-label{
+display:none
+}
+
+.gallery-arrow{
+width:36px;
+height:36px
+}
+
+.action-row{
+grid-template-columns:1fr 1fr
+}
+
+}
 </style>
 </head>
 
 <body>
 
-<header id="header" class="hidden">
+<main class="details-page">
 
-<div class="top">
+<div class="top-bar">
 
-<div class="logo">
-JR <span>Shop</span> — Admin V7.2
+<a href="index.html" class="back-btn">
+← Retour
+</a>
+
+<div class="brand-mini">
+JR SHOP
 </div>
 
-<button id="logoutBtn" class="logout">
-خروج
+<button class="share-btn" type="button" onclick="shareProduct()">
+↗ Partager
 </button>
 
 </div>
 
-</header>
+<div id="loadingState" class="state-box">
+Chargement du produit...
+</div>
 
+<div id="errorState" class="state-box error-box" style="display:none">
 
-<section id="loginBox" class="login">
+<h2>Impossible de charger le produit</h2>
 
-<h1>🔐 JR Shop Admin</h1>
-
-<p style="text-align:center;color:#777">
-دخول لوحة التحكم
+<p id="errorMessage">
+Une erreur est survenue.
 </p>
 
-<div class="field">
+<div id="errorDetails" class="error-details" style="display:none"></div>
 
-<label>Email</label>
-
-<input
-id="email"
-type="email"
-autocomplete="username"
-placeholder="admin@email.com"
->
+<button class="retry-btn" onclick="loadProduct()">
+Réessayer
+</button>
 
 </div>
 
-<div class="field">
 
-<label>كلمة المرور</label>
+<section id="productCard" class="product-details-card" style="display:none">
 
-<input
-id="password"
-type="password"
-autocomplete="current-password"
-placeholder="••••••••"
->
+<div class="product-layout">
 
-</div>
+<div class="gallery">
+
+<div id="mainImageBox"
+class="main-image-box"
+onclick="openLightbox()">
+
+<img id="mainImage"
+class="main-image"
+src=""
+alt="Produit">
 
 <button
-id="loginBtn"
-class="btn green"
-style="width:100%"
->
-دخول
+type="button"
+class="gallery-arrow gallery-prev"
+onclick="event.stopPropagation();previousImage()">
+‹
 </button>
 
-<p
-id="loginError"
-style="color:#dc2626;text-align:center;line-height:1.6"
-></p>
-
-</section>
-
-
-<main id="app" class="container hidden">
-
-<div class="stats">
-
-<div class="stat">
-المنتجات
-<b id="statProducts">0</b>
-</div>
-
-<div class="stat">
-الفئات
-<b id="statCategories">0</b>
-</div>
-
-<div class="stat">
-الطلبات
-<b id="statOrders">0</b>
-</div>
-
-</div>
-
-
-<div class="tabs">
-
-<button class="tab active" data-tab="productsTab">
-📦 المنتجات
+<button
+type="button"
+class="gallery-arrow gallery-next"
+onclick="event.stopPropagation();nextImage()">
+›
 </button>
 
-<button class="tab" data-tab="categoriesTab">
-🗂️ الفئات
+<div id="imageCounter" class="image-counter">
+1 / 1
+</div>
+
+<div class="zoom-label">
+🔍 Cliquer pour agrandir
+</div>
+
+</div>
+
+<div id="thumbnails" class="thumbnails"></div>
+
+</div>
+
+
+<div class="product-info">
+
+<div class="category-row">
+
+<div
+id="productCategory"
+class="pill category"
+style="display:none">
+</div>
+
+<div
+id="stockPill"
+class="pill stock-ok"
+style="display:none">
+</div>
+
+</div>
+
+
+<h1 id="productTitle" class="product-title"></h1>
+
+
+<div class="rating-row">
+
+<div id="topStars" class="stars">
+☆☆☆☆☆
+</div>
+
+<div id="topRatingText" class="rating-text">
+Aucun avis
+</div>
+
+</div>
+
+
+<div class="price-row">
+
+<div id="productPrice" class="product-price"></div>
+
+<div id="oldPrice"
+class="old-price"
+style="display:none">
+</div>
+
+<div id="discountBadge"
+class="discount"
+style="display:none">
+</div>
+
+</div>
+
+
+<p id="productDescription"
+class="product-description">
+</p>
+
+
+<!-- COULEURS -->
+
+<div id="colorOption" class="option-box">
+
+<div class="option-title">
+
+Couleur :
+
+<span id="selectedColor">
+</span>
+
+</div>
+
+<div id="colorList" class="option-list"></div>
+
+</div>
+
+
+<!-- TAILLES -->
+
+<div id="sizeOption" class="option-box">
+
+<div class="option-title">
+
+Taille :
+
+<span id="selectedSize">
+</span>
+
+</div>
+
+<div id="sizeList" class="option-list"></div>
+
+</div>
+
+
+<div
+id="variantStockInfo"
+class="variant-stock-info">
+</div>
+
+
+<div class="purchase-box">
+
+<div class="quantity-title">
+Quantité
+</div>
+
+<div class="quantity-box">
+
+<button
+class="quantity-btn"
+onclick="changeQuantity(-1)">
+−
 </button>
 
-<button class="tab" data-tab="ordersTab">
-📋 الطلبات
+<input
+id="quantityInput"
+class="quantity-input"
+type="number"
+min="1"
+value="1">
+
+<button
+class="quantity-btn"
+onclick="changeQuantity(1)">
++
 </button>
 
 </div>
 
 
-<section id="productsTab" class="panel active">
+<button
+id="addCartBtn"
+class="add-cart-btn"
+onclick="addToCart()">
 
-<div class="grid">
+Ajouter au panier
 
-<div class="card">
+</button>
 
-<h2 id="productFormTitle">
-➕ إضافة منتج
+<div
+id="cartMessage"
+class="cart-info">
+</div>
+
+</div>
+
+
+<div class="action-row">
+
+<button
+id="wishlistBtn"
+class="action-btn"
+onclick="toggleWishlist()">
+
+♡ Ajouter aux favoris
+
+</button>
+
+<button
+class="action-btn"
+onclick="copyProductLink()">
+
+🔗 Copier le lien
+
+</button>
+
+</div>
+
+
+<div class="trust-grid">
+
+<div class="trust-item">
+
+<div class="trust-icon">🚚</div>
+
+<div class="trust-title">
+Livraison rapide
+</div>
+
+<div class="trust-text">
+Expédition locale
+</div>
+
+</div>
+
+
+<div class="trust-item">
+
+<div class="trust-icon">🔒</div>
+
+<div class="trust-title">
+Paiement sécurisé
+</div>
+
+<div class="trust-text">
+Commande protégée
+</div>
+
+</div>
+
+
+<div class="trust-item">
+
+<div class="trust-icon">↩</div>
+
+<div class="trust-title">
+Retour facile
+</div>
+
+<div class="trust-text">
+Service client
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="lower-section">
+
+<div class="accordion open">
+
+<button
+class="accordion-btn"
+onclick="toggleAccordion(this)">
+
+<span>Description</span>
+
+<span class="accordion-icon">
++
+</span>
+
+</button>
+
+<div
+id="descriptionAccordion"
+class="accordion-content">
+</div>
+
+</div>
+
+
+<div class="accordion">
+
+<button
+class="accordion-btn"
+onclick="toggleAccordion(this)">
+
+<span>Livraison</span>
+
+<span class="accordion-icon">
++
+</span>
+
+</button>
+
+<div class="accordion-content">
+
+Livraison disponible selon les zones couvertes par JR Shop.
+
+<br><br>
+
+Les informations de livraison peuvent être confirmées lors de la commande.
+
+</div>
+
+</div>
+
+
+<div class="accordion">
+
+<button
+class="accordion-btn"
+onclick="toggleAccordion(this)">
+
+<span>
+Informations produit
+</span>
+
+<span class="accordion-icon">
++
+</span>
+
+</button>
+
+<div
+id="productMeta"
+class="accordion-content">
+</div>
+
+</div>
+
+</div>
+
+
+<div class="reviews-section">
+
+<h2 class="section-heading">
+Avis clients
 </h2>
 
-<input type="hidden" id="productId">
-
-<div class="field">
-
-<label>اسم المنتج</label>
-
-<input id="pName">
-
-</div>
-
-<div class="field">
-
-<label>الوصف</label>
-
-<textarea id="pDescription"></textarea>
-
-</div>
-
-<div class="field">
-
-<label>السعر</label>
-
-<input id="pPrice" type="number" min="0">
-
-</div>
-
-<div class="field">
-
-<label>السعر القديم</label>
-
-<input id="pOldPrice" type="number" min="0">
-
+<div class="section-subtitle">
+Découvrez l'expérience réelle de nos clients.
 </div>
 
 
-<!-- VARIANTS -->
+<div class="review-summary">
 
-<div class="variant-section">
-
-<div class="variant-title">
-🎨 Couleur
+<div id="reviewAverage"
+class="review-number">
+—
 </div>
-
-<div class="option-grid" id="colorOptions">
-
-<div class="option">
-<input type="checkbox" value="Noir" id="color-Noir">
-<label for="color-Noir">⚫ Noir</label>
-</div>
-
-<div class="option">
-<input type="checkbox" value="Blanc" id="color-Blanc">
-<label for="color-Blanc">⚪ Blanc</label>
-</div>
-
-<div class="option">
-<input type="checkbox" value="Rouge" id="color-Rouge">
-<label for="color-Rouge">🔴 Rouge</label>
-</div>
-
-<div class="option">
-<input type="checkbox" value="Bleu" id="color-Bleu">
-<label for="color-Bleu">🔵 Bleu</label>
-</div>
-
-<div class="option">
-<input type="checkbox" value="Vert" id="color-Vert">
-<label for="color-Vert">🟢 Vert</label>
-</div>
-
-<div class="option">
-<input type="checkbox" value="Jaune" id="color-Jaune">
-<label for="color-Jaune">🟡 Jaune</label>
-</div>
-
-<div class="option">
-<input type="checkbox" value="Rose" id="color-Rose">
-<label for="color-Rose">🌸 Rose</label>
-</div>
-
-<div class="option">
-<input type="checkbox" value="Beige" id="color-Beige">
-<label for="color-Beige">🟤 Beige</label>
-</div>
-
-<div class="option">
-<input type="checkbox" value="Gris" id="color-Gris">
-<label for="color-Gris">⚙️ Gris</label>
-</div>
-
-<div class="option">
-<input type="checkbox" value="Marron" id="color-Marron">
-<label for="color-Marron">🟫 Marron</label>
-</div>
-
-</div>
-
-</div>
-
-
-<div class="variant-section">
-
-<div class="variant-title">
-📏 Taille
-</div>
-
-<div class="option-grid">
-
-<div class="option">
-<input type="checkbox" value="XS" id="size-XS">
-<label for="size-XS">XS</label>
-</div>
-
-<div class="option">
-<input type="checkbox" value="S" id="size-S">
-<label for="size-S">S</label>
-</div>
-
-<div class="option">
-<input type="checkbox" value="M" id="size-M">
-<label for="size-M">M</label>
-</div>
-
-<div class="option">
-<input type="checkbox" value="L" id="size-L">
-<label for="size-L">L</label>
-</div>
-
-<div class="option">
-<input type="checkbox" value="XL" id="size-XL">
-<label for="size-XL">XL</label>
-</div>
-
-<div class="option">
-<input type="checkbox" value="XXL" id="size-XXL">
-<label for="size-XXL">XXL</label>
-</div>
-
-<div class="option">
-<input type="checkbox" value="3XL" id="size-3XL">
-<label for="size-3XL">3XL</label>
-</div>
-
-</div>
-
-</div>
-
-
-<div class="variant-section">
-
-<div class="variant-title">
-📦 Stock Couleur + Taille
-</div>
-
-<p class="muted">
-اختار Couleurs و Tailles باش يتولد الجدول تلقائيًا.
-</p>
-
-<div
-id="variantsTable"
-class="variant-table-wrap"
->
-</div>
-
-<div
-id="stockTotal"
-class="stock-total"
->
-Stock total: 0
-</div>
-
-</div>
-
-
-<div class="field">
-
-<label>الفئة</label>
-
-<select id="pCategory">
-
-<option value="">
-بدون فئة
-</option>
-
-</select>
-
-</div>
-
-
-<div class="field">
-
-<label>صورة المنتج</label>
-
-<input
-id="pImageFile"
-type="file"
-accept="image/*"
->
-
-<small style="color:#777">
-اختار صورة من الكمبيوتر، أو استعمل رابط الصورة.
-</small>
-
-</div>
-
-
-<div class="field">
-
-<label>رابط الصورة</label>
-
-<input
-id="pImage"
-placeholder="https://..."
->
-
-</div>
-
-
-<div class="field">
-
-<label>
-
-<input
-id="pActive"
-type="checkbox"
-checked
-style="width:auto"
->
-
-المنتج نشط
-
-</label>
-
-</div>
-
-
-<button
-id="saveProduct"
-class="btn green"
->
-حفظ المنتج
-</button>
-
-<button
-id="cancelProduct"
-class="btn gray"
->
-إلغاء
-</button>
-
-</div>
-
 
 <div>
 
-<div class="card">
-
-<h2>
-🔎 المنتجات
-</h2>
-
-<input
-id="productSearch"
-placeholder="ابحث باسم المنتج..."
->
-
+<div id="reviewAverageStars"
+class="review-stars">
+☆☆☆☆☆
 </div>
 
 <div
-id="productsList"
-class="products"
-></div>
-
+id="reviewCountText"
+class="review-note">
+Aucun avis pour le moment
 </div>
 
 </div>
 
-</section>
+</div>
 
 
-<section id="categoriesTab" class="panel">
+<div
+id="reviewsList"
+class="review-list">
 
-<div class="grid">
-
-<div class="card">
-
-<h2 id="categoryFormTitle">
-➕ إضافة فئة
-</h2>
-
-<input type="hidden" id="categoryId">
-
-<div class="field">
-
-<label>اسم الفئة</label>
-
-<input id="cName">
+<div class="no-reviews">
+Chargement des avis...
+</div>
 
 </div>
 
-<div class="field">
 
-<label>Slug</label>
+<div class="review-form-box">
 
-<input
-id="cSlug"
-placeholder="women"
->
+<h3 class="review-form-title">
+Donner votre avis
+</h3>
 
-</div>
+<div
+id="reviewFormMessage"
+class="review-form-note">
 
-<div class="field">
-
-<label>رابط الصورة</label>
-
-<input
-id="cImage"
-placeholder="https://..."
->
+Les avis sont réservés aux clients ayant acheté ce produit.
 
 </div>
 
-<div class="field">
 
-<label>ترتيب</label>
+<div id="reviewLoginArea">
 
-<input
-id="cOrder"
-type="number"
-value="0"
->
+<a
+id="reviewLoginButton"
+href="login.html"
+class="review-login-btn">
+
+Se connecter
+
+</a>
 
 </div>
 
-<div class="field">
+
+<div
+id="reviewFormArea"
+style="display:none">
+
+<div class="review-field">
 
 <label>
-
-<input
-id="cActive"
-type="checkbox"
-checked
-style="width:auto"
->
-
-الفئة نشطة
-
+Votre note
 </label>
 
-</div>
+<div class="review-rating-input">
 
 <button
-id="saveCategory"
-class="btn green"
->
-حفظ الفئة
+class="rating-star-btn"
+data-rating="1">
+★
 </button>
 
 <button
-id="cancelCategory"
-class="btn gray"
->
-إلغاء
-</button>
-
-</div>
-
-
-<div class="card">
-
-<h2>
-🗂️ الفئات
-</h2>
-
-<div id="categoriesList"></div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<section id="ordersTab" class="panel">
-
-<div class="orders-summary">
-
-<div class="order-summary-card">
-إجمالي الطلبات
-<strong id="ordersTotalCount">0</strong>
-</div>
-
-<div class="order-summary-card">
-Pending
-<strong id="ordersPendingCount">0</strong>
-</div>
-
-<div class="order-summary-card">
-Delivered
-<strong id="ordersDeliveredCount">0</strong>
-</div>
-
-<div class="order-summary-card">
-المبيعات
-<strong id="ordersTotalMoney">0 دج</strong>
-</div>
-
-</div>
-
-
-<div class="card">
-
-<h2>
-📋 الطلبات
-</h2>
-
-<p class="muted">
-عرض وإدارة الطلبات الموجودة في Supabase
-</p>
-
-<div class="filters">
-
-<input
-id="orderSearch"
-placeholder="ابحث بالاسم، الهاتف، الولاية، البلدية..."
->
-
-<select id="orderStatusFilter">
-
-<option value="">
-كل الحالات
-</option>
-
-<option value="pending">
-Pending
-</option>
-
-<option value="confirmed">
-Confirmed
-</option>
-
-<option value="shipped">
-Shipped
-</option>
-
-<option value="delivered">
-Delivered
-</option>
-
-<option value="cancelled">
-Cancelled
-</option>
-
-</select>
-
-<select id="orderSort">
-
-<option value="newest">
-الأحدث أولاً
-</option>
-
-<option value="oldest">
-الأقدم أولاً
-</option>
-
-<option value="highest">
-الأعلى سعراً
-</option>
-
-<option value="lowest">
-الأقل سعراً
-</option>
-
-</select>
-
-</div>
-
-<div class="filter-buttons">
-
-<button
-id="refreshOrders"
-class="btn green"
->
-🔄 تحديث
+class="rating-star-btn"
+data-rating="2">
+★
 </button>
 
 <button
-id="clearOrderFilters"
-class="btn gray"
->
-مسح الفلاتر
+class="rating-star-btn"
+data-rating="3">
+★
+</button>
+
+<button
+class="rating-star-btn"
+data-rating="4">
+★
+</button>
+
+<button
+class="rating-star-btn"
+data-rating="5">
+★
 </button>
 
 </div>
+
+</div>
+
+
+<div class="review-field">
+
+<label for="reviewComment">
+Votre commentaire
+</label>
+
+<textarea
+id="reviewComment"
+class="review-textarea"
+maxlength="1000"
+placeholder="Partagez votre expérience avec ce produit...">
+</textarea>
 
 </div>
 
 
 <div
-id="ordersList"
-class="orders"
-></div>
+id="reviewOrderBox"
+style="display:none"
+class="review-field">
+
+<label for="reviewOrderSelect">
+Commande / achat
+</label>
+
+<select
+id="reviewOrderSelect"
+class="review-order-select">
+</select>
+
+</div>
+
+
+<button
+id="submitReviewBtn"
+class="review-submit-btn"
+onclick="submitReview()">
+
+Publier mon avis
+
+</button>
+
+<div
+id="reviewStatus"
+class="review-status">
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="related-section">
+
+<h2 class="related-title">
+Vous aimerez peut-être aussi
+</h2>
+
+<div
+id="relatedGrid"
+class="related-grid">
+</div>
+
+</div>
 
 </section>
 
 </main>
 
 
+<div
+id="mobileCartBar"
+class="mobile-cart-bar"
+style="display:none">
+
+<div
+id="mobilePrice"
+class="mobile-price">
+</div>
+
+<button
+class="mobile-cart-btn"
+onclick="addToCart()">
+
+Ajouter
+
+</button>
+
+</div>
+
+
+<div
+id="lightbox"
+class="lightbox"
+onclick="closeLightbox()">
+
+<button
+class="lightbox-close"
+onclick="event.stopPropagation();closeLightbox()">
+
+×
+
+</button>
+
+<img
+id="lightboxImage"
+class="lightbox-image"
+src=""
+alt="Produit"
+onclick="event.stopPropagation()">
+
+</div>
+
+
 <div id="toast" class="toast"></div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="config.js"></script>
 
 
 <script>
 
-/* =====================================================
-SUPABASE
-===================================================== */
+let currentProduct=null;
 
-const SUPABASE_URL =
-"https://cstjgsuehmqcolajspqh.supabase.co";
+let productImages=[];
 
-const SUPABASE_KEY =
-"sb_publishable_e_wQxqCrx21Qq1kRYKjFMg_yR6TQfKX";
+let currentImageIndex=0;
 
-const supabaseClient =
-window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
-);
+let currentUser=null;
 
+let verifiedOrderItems=[];
 
-/* =====================================================
-ADMIN
-===================================================== */
+let selectedRating=0;
 
-const ADMIN_EMAIL =
-"ilyesdida@hotmail.fr";
+let selectedColor="";
+
+let selectedSize="";
+
+let colorsList=[];
+
+let sizesList=[];
 
 
-let products=[];
-let categories=[];
-let orders=[];
+/* =========================
+   PRODUCT ID
+========================= */
 
-let variants=[];
+function getProductId(){
 
-let appLoaded=false;
-
-
-/* =====================================================
-HELPERS
-===================================================== */
-
-const $ = id =>
-document.getElementById(id);
-
-
-function toast(msg){
-
-$("toast").textContent=msg;
-
-$("toast").style.display="block";
-
-clearTimeout(window.jrToastTimer);
-
-window.jrToastTimer=
-setTimeout(()=>{
-$("toast").style.display="none";
-},3000);
+return new URLSearchParams(location.search).get("id");
 
 }
 
 
-function esc(v){
+/* =========================
+   HTML SAFE
+========================= */
 
-return String(v ?? "")
+function escapeHtml(v){
+
+if(v==null)return "";
+
+return String(v)
+
 .replace(/&/g,"&amp;")
+
 .replace(/</g,"&lt;")
+
 .replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;");
+
+.replace(/"/g,"&quot;")
+
+.replace(/'/g,"&#039;");
 
 }
 
 
-function price(v){
+/* =========================
+   PRICE
+========================= */
 
-return Number(v||0)
-.toLocaleString("fr-FR")+" دج";
+function formatPrice(v){
 
-}
+if(v==null||v==="")return "";
 
+let n=Number(v);
 
-function showLogin(msg=""){
+return Number.isNaN(n)
 
-$("loginBox").classList.remove("hidden");
+?escapeHtml(v)
 
-$("app").classList.add("hidden");
-
-$("header").classList.add("hidden");
-
-$("loginError").textContent=msg;
+:n.toLocaleString("fr-FR")+" DA";
 
 }
 
 
-function showApp(){
+/* =========================
+   ARRAY PARSER
+========================= */
 
-$("loginBox").classList.add("hidden");
+function parseArray(v){
 
-$("app").classList.remove("hidden");
+if(!v)return [];
 
-$("header").classList.remove("hidden");
+if(Array.isArray(v))return v;
 
-if(!appLoaded){
+if(typeof v==="string"){
 
-appLoaded=true;
+let s=v.trim();
 
-loadAll();
-
-}
-
-}
-
-
-/* =====================================================
-AUTH
-===================================================== */
-
-async function checkSession(){
+if(!s)return [];
 
 try{
 
-const {
-data,
-error
-}=await supabaseClient.auth.getSession();
+let x=JSON.parse(s);
 
-if(error){
+if(Array.isArray(x))return x;
 
-showLogin(
-"تعذر الاتصال بـ Supabase: "+
-error.message
-);
+}catch(e){}
 
-return;
+return s
 
-}
+.split(/[,\n|]/)
 
-const session=data?.session;
+.map(x=>x.trim())
 
-if(!session){
-
-showLogin();
-
-return;
+.filter(Boolean);
 
 }
 
-const email=
-(session.user?.email||"")
-.trim()
-.toLowerCase();
-
-if(email!==ADMIN_EMAIL.toLowerCase()){
-
-await supabaseClient.auth.signOut();
-
-showLogin(
-"هذا الحساب غير مصرح له بالدخول إلى لوحة الإدارة."
-);
-
-return;
-
-}
-
-showApp();
-
-}catch(e){
-
-console.error(e);
-
-showLogin(
-"حدث خطأ أثناء التحقق من الدخول."
-);
-
-}
+return [];
 
 }
 
 
-supabaseClient.auth.onAuthStateChange(
-(event,session)=>{
+/* =========================
+   IMAGES
+========================= */
 
-setTimeout(async()=>{
+function getProductImages(p){
 
-if(event==="SIGNED_OUT"){
+let a=[
 
-appLoaded=false;
+...parseArray(p.image_urls),
 
-showLogin();
+...parseArray(p.images),
 
-return;
+...parseArray(p.gallery)
 
-}
+];
 
-if(
-event==="SIGNED_IN"||
-event==="INITIAL_SESSION"
-){
+if(p.image_url)a.push(p.image_url);
 
-if(session){
-
-const email=
-(session.user?.email||"")
-.trim()
-.toLowerCase();
-
-if(email===ADMIN_EMAIL.toLowerCase()){
-
-showApp();
-
-}else{
-
-await supabaseClient.auth.signOut();
-
-showLogin(
-"هذا الحساب غير مصرح له بالدخول إلى لوحة الإدارة."
-);
-
-}
-
-}else{
-
-showLogin();
-
-}
-
-}
-
-},0);
-
-});
-
-
-/* =====================================================
-LOGIN
-===================================================== */
-
-$("loginBtn").onclick=async()=>{
-
-$("loginError").textContent="";
-
-const email=
-$("email").value
-.trim()
-.toLowerCase();
-
-const password=
-$("password").value;
-
-if(!email||!password){
-
-$("loginError").textContent=
-"دخل Email وكلمة المرور.";
-
-return;
-
-}
-
-$("loginBtn").disabled=true;
-
-$("loginBtn").textContent=
-"جاري الدخول...";
-
-try{
-
-const {
-data,
-error
-}=
-await supabaseClient.auth.signInWithPassword({
-email,
-password
-});
-
-if(error){
-
-let msg=
-error.message||
-"فشل تسجيل الدخول";
-
-if(/invalid login credentials/i.test(msg)){
-
-msg=
-"Email أو كلمة المرور غير صحيحة.";
-
-}
-
-if(/email not confirmed/i.test(msg)){
-
-msg=
-"لازم تأكد Email الحساب من Supabase أولًا.";
-
-}
-
-$("loginError").textContent=msg;
-
-return;
-
-}
-
-const loggedEmail=
-(data?.user?.email||email)
-.trim()
-.toLowerCase();
-
-if(loggedEmail!==ADMIN_EMAIL.toLowerCase()){
-
-await supabaseClient.auth.signOut();
-
-$("loginError").textContent=
-"هذا الحساب غير مصرح له بالدخول إلى لوحة الإدارة.";
-
-return;
-
-}
-
-showApp();
-
-}catch(e){
-
-console.error(e);
-
-$("loginError").textContent=
-"تعذر تسجيل الدخول: "+
-(e.message||e);
-
-}finally{
-
-$("loginBtn").disabled=false;
-
-$("loginBtn").textContent="دخول";
-
-}
-
-};
-
-
-/* =====================================================
-LOGOUT
-===================================================== */
-
-$("logoutBtn").onclick=
-async()=>{
-
-await supabaseClient.auth.signOut();
-
-};
-
-
-/* =====================================================
-TABS
-===================================================== */
-
-document
-.querySelectorAll(".tab")
-.forEach(button=>{
-
-button.onclick=()=>{
-
-document
-.querySelectorAll(".tab")
-.forEach(x=>
-x.classList.remove("active")
-);
-
-document
-.querySelectorAll(".panel")
-.forEach(x=>
-x.classList.remove("active")
-);
-
-button.classList.add("active");
-
-$(button.dataset.tab)
-.classList.add("active");
-
-};
-
-});
-
-
-/* =====================================================
-LOAD ALL
-===================================================== */
-
-async function loadAll(){
-
-await Promise.all([
-loadCategories(),
-loadProducts(),
-loadOrders()
-]);
-
-}
-
-
-/* =====================================================
-CATEGORIES
-===================================================== */
-
-async function loadCategories(){
-
-const {
-data,
-error
-}=
-await supabaseClient
-.from("categories")
-.select("*")
-.order("sort_order",{ascending:true});
-
-if(error){
-
-toast(error.message);
-
-return;
-
-}
-
-categories=data||[];
-
-$("statCategories").textContent=
-categories.length;
-
-
-$("pCategory").innerHTML=
-'<option value="">بدون فئة</option>'+
-categories.map(c=>`
-<option value="${c.id}">
-${esc(c.name)}
-</option>
-`).join("");
-
-
-$("categoriesList").innerHTML=
-categories.map(c=>`
-
-<div
-class="item"
-style="margin-bottom:10px"
->
-
-<img
-src="${esc(
-c.image_url||
-"https://placehold.co/100x100?text=JR"
-)}"
-onerror="
-this.src='https://placehold.co/100x100?text=JR'
-">
-
-<div class="item-main">
-
-<h3>
-${esc(c.name)}
-</h3>
-
-<div class="muted">
-${esc(c.slug)}
-· ترتيب ${c.sort_order??0}
-</div>
-
-<span
-class="badge ${c.active?"":"off"}"
->
-${c.active?"نشطة":"موقوفة"}
-</span>
-
-</div>
-
-<div class="actions">
-
-<button
-class="btn dark"
-onclick="editCategory('${c.id}')"
->
-تعديل
-</button>
-
-<button
-class="btn red"
-onclick="deleteCategory('${c.id}')"
->
-حذف
-</button>
-
-</div>
-
-</div>
-
-`).join("")||
-'<p class="empty">لا توجد فئات.</p>';
-
-}
-
-
-/* =====================================================
-PRODUCTS
-===================================================== */
-
-async function loadProducts(){
-
-const {
-data,
-error
-}=
-await supabaseClient
-.from("products")
-.select("*")
-.order("created_at",{ascending:false});
-
-if(error){
-
-toast(error.message);
-
-return;
-
-}
-
-products=data||[];
-
-$("statProducts").textContent=
-products.length;
-
-renderProducts();
-
-}
-
-
-/* =====================================================
-RENDER PRODUCTS
-===================================================== */
-
-function renderProducts(){
-
-const q=
-$("productSearch")
-.value
-.trim()
-.toLowerCase();
-
-const list=
-products.filter(p=>
-(p.name||"")
-.toLowerCase()
-.includes(q)
-);
-
-
-$("productsList").innerHTML=
-list.map(p=>`
-
-<div class="item">
-
-<img
-src="${esc(
-p.image_url||
-p.image||
-"https://placehold.co/100x100?text=JR"
-)}"
-onerror="
-this.src='https://placehold.co/100x100?text=JR'
-">
-
-<div class="item-main">
-
-<h3>
-${esc(p.name)}
-</h3>
-
-<div class="muted">
-
-${price(p.price)}
-
-· Stock:
-${p.stock??0}
-
-</div>
-
-<span
-class="badge ${
-p.active===false||
-p.is_active===false
-?"off":""
-}"
->
-${
-p.active===false||
-p.is_active===false
-?"غير نشط":"نشط"
-}
-</span>
-
-</div>
-
-<div class="actions">
-
-<button
-class="btn dark"
-onclick="editProduct('${p.id}')"
->
-تعديل
-</button>
-
-<button
-class="btn red"
-onclick="deleteProduct('${p.id}')"
->
-حذف
-</button>
-
-</div>
-
-</div>
-
-`).join("")||
-'<p class="empty">لا توجد منتجات.</p>';
-
-}
-
-
-$("productSearch").oninput=
-renderProducts;
-
-
-/* =====================================================
-VARIANT HELPERS
-===================================================== */
-
-function getSelectedColors(){
+if(p.image)a.push(p.image);
 
 return [
-...document.querySelectorAll(
-'#colorOptions input[type="checkbox"]:checked'
-)
-].map(x=>x.value);
 
-}
+...new Set(
 
+a
 
-function getSelectedSizes(){
+.filter(Boolean)
 
-return [
-...document.querySelectorAll(
-'.variant-section:nth-of-type(2) input[type="checkbox"]:checked'
-)
-].map(x=>x.value);
+.map(String)
 
-}
+.map(x=>x.trim())
 
+.filter(Boolean)
 
-function clearVariantSelections(){
-
-document
-.querySelectorAll(
-'#colorOptions input[type="checkbox"], .variant-section:nth-of-type(2) input[type="checkbox"]'
-)
-.forEach(x=>x.checked=false);
-
-}
-
-
-function findVariant(color,size){
-
-return variants.find(v=>
-v.color===color&&
-v.size===size
-);
-
-}
-
-
-/* =====================================================
-BUILD VARIANT TABLE
-===================================================== */
-
-function buildVariantTable(){
-
-const colors=getSelectedColors();
-
-const sizes=getSelectedSizes();
-
-if(!colors.length||!sizes.length){
-
-$("variantsTable").innerHTML=
-`
-<div class="empty">
-اختار على الأقل Couleur و Taille
-</div>
-`;
-
-$("stockTotal").textContent=
-"Stock total: 0";
-
-return;
-
-}
-
-
-let html=`
-
-<table class="variant-table">
-
-<thead>
-
-<tr>
-
-<th>Couleur</th>
-
-<th>Taille</th>
-
-<th>Stock</th>
-
-</tr>
-
-</thead>
-
-<tbody>
-`;
-
-
-colors.forEach(color=>{
-
-sizes.forEach(size=>{
-
-const existing=
-findVariant(color,size);
-
-const stock=
-existing?
-Number(existing.stock||0):
-0;
-
-html+=`
-
-<tr>
-
-<td>
-<b>${esc(color)}</b>
-</td>
-
-<td>
-<b>${esc(size)}</b>
-</td>
-
-<td>
-
-<input
-type="number"
-min="0"
-class="variant-stock"
-data-color="${esc(color)}"
-data-size="${esc(size)}"
-value="${stock}"
->
-
-</td>
-
-</tr>
-
-`;
-
-});
-
-});
-
-
-html+=`
-</tbody>
-</table>
-`;
-
-$("variantsTable").innerHTML=html;
-
-document
-.querySelectorAll(".variant-stock")
-.forEach(input=>{
-
-input.addEventListener(
-"input",
-updateVariantTotal
-);
-
-});
-
-updateVariantTotal();
-
-}
-
-
-function updateVariantTotal(){
-
-let total=0;
-
-document
-.querySelectorAll(".variant-stock")
-.forEach(input=>{
-
-total+=Number(input.value||0);
-
-});
-
-$("stockTotal").textContent=
-"Stock total: "+
-total;
-
-}
-
-
-/* =====================================================
-VARIANT EVENTS
-===================================================== */
-
-document
-.querySelectorAll(
-'#colorOptions input,#colorOptions ~ * input'
-)
-.forEach(x=>{
-
-x.addEventListener(
-"change",
-buildVariantTable
-);
-
-});
-
-
-document
-.querySelectorAll(
-'.variant-section input[type="checkbox"]'
-)
-.forEach(x=>{
-
-x.addEventListener(
-"change",
-buildVariantTable
-);
-
-});
-
-
-/* =====================================================
-PRODUCT FORM
-===================================================== */
-
-function resetProduct(){
-
-$("productId").value="";
-
-$("pName").value="";
-
-$("pDescription").value="";
-
-$("pPrice").value="";
-
-$("pOldPrice").value="";
-
-$("pCategory").value="";
-
-$("pImage").value="";
-
-$("pImageFile").value="";
-
-$("pActive").checked=true;
-
-variants=[];
-
-clearVariantSelections();
-
-$("variantsTable").innerHTML=
-`
-<div class="empty">
-اختار Couleur و Taille
-</div>
-`;
-
-$("stockTotal").textContent=
-"Stock total: 0";
-
-$("productFormTitle").textContent=
-"➕ إضافة منتج";
-
-}
-
-
-$("cancelProduct").onclick=
-resetProduct;
-
-
-/* =====================================================
-GET VARIANTS FROM TABLE
-===================================================== */
-
-function getVariantsFromForm(){
-
-const rows=[];
-
-document
-.querySelectorAll(".variant-stock")
-.forEach(input=>{
-
-rows.push({
-
-color:input.dataset.color,
-
-size:input.dataset.size,
-
-stock:Math.max(
-0,
-Number(input.value||0)
 )
 
-});
-
-});
-
-return rows;
+];
 
 }
 
 
-/* =====================================================
-SAVE PRODUCT
-===================================================== */
+/* =========================
+   OLD STOCK
+========================= */
 
-$("saveProduct").onclick=
-async()=>{
+function getGlobalStock(){
 
-const id=
-$("productId").value;
+let s=
 
-const file=
-$("pImageFile").files[0];
+currentProduct?.stock??
 
-const name=
-$("pName").value.trim();
+currentProduct?.quantity??
 
-if(!name){
+currentProduct?.inventory;
 
-toast("اكتب اسم المنتج");
+if(s===null||s===undefined||s==="")
 
-return;
+return null;
+
+let n=Number(s);
+
+return Number.isNaN(n)?0:n;
 
 }
 
 
-let imageUrl=
-$("pImage").value.trim()||null;
+/* =========================
+   VARIANT STOCK
+========================= */
 
+function getVariantStockObject(){
+
+if(!currentProduct)
+
+return {};
+
+let v=currentProduct.variant_stock;
+
+if(!v)
+
+return {};
+
+if(typeof v==="object" && !Array.isArray(v))
+
+return v;
+
+if(typeof v==="string"){
 
 try{
 
-$("saveProduct").disabled=true;
+let parsed=JSON.parse(v);
 
-$("saveProduct").textContent=
-"جاري الحفظ...";
+if(parsed && typeof parsed==="object")
 
-
-/* IMAGE */
-
-if(file){
-
-if(file.size>5*1024*1024){
-
-toast(
-"الصورة لازم تكون أقل من 5MB"
-);
-
-return;
-
-}
-
-if(!file.type.startsWith("image/")){
-
-toast(
-"اختار ملف صورة فقط"
-);
-
-return;
-
-}
-
-const ext=
-(
-file.name.split(".").pop()||
-"jpg"
-)
-.toLowerCase()
-.replace(/[^a-z0-9]/gi,"")||
-"jpg";
-
-const fileName=
-`${crypto.randomUUID()}.${ext}`;
-
-
-$("saveProduct").textContent=
-"جاري رفع الصورة...";
-
-
-const upload=
-await supabaseClient
-.storage
-.from("product-images")
-.upload(
-fileName,
-file,
-{
-cacheControl:"3600",
-upsert:false,
-contentType:file.type
-}
-);
-
-
-if(upload.error){
-
-throw new Error(
-"فشل رفع الصورة: "+
-upload.error.message
-);
-
-}
-
-imageUrl=
-supabaseClient
-.storage
-.from("product-images")
-.getPublicUrl(fileName)
-.data
-.publicUrl;
-
-}
-
-
-/* VARIANTS */
-
-const variantRows=
-getVariantsFromForm();
-
-const totalStock=
-variantRows.reduce(
-(sum,v)=>sum+Number(v.stock||0),
-0
-);
-
-
-/* PRODUCT */
-
-const obj={
-
-name:name,
-
-description:
-$("pDescription").value.trim(),
-
-price:
-Number($("pPrice").value||0),
-
-old_price:
-Number($("pOldPrice").value||0),
-
-stock:
-totalStock,
-
-category_id:
-$("pCategory").value||null,
-
-image_url:
-imageUrl,
-
-active:
-$("pActive").checked,
-
-is_active:
-$("pActive").checked,
-
-updated_at:
-new Date().toISOString()
-
-};
-
-
-let productId=id;
-
-
-/* INSERT / UPDATE */
-
-if(id){
-
-const res=
-await supabaseClient
-.from("products")
-.update(obj)
-.eq("id",id);
-
-if(res.error)
-throw res.error;
-
-}else{
-
-const res=
-await supabaseClient
-.from("products")
-.insert(obj)
-.select("id")
-.single();
-
-if(res.error)
-throw res.error;
-
-productId=res.data.id;
-
-}
-
-
-/* DELETE OLD VARIANTS */
-
-const deleteOld=
-await supabaseClient
-.from("product_variants")
-.delete()
-.eq("product_id",productId);
-
-if(deleteOld.error)
-throw deleteOld.error;
-
-
-/* INSERT NEW VARIANTS */
-
-if(variantRows.length){
-
-const rows=
-variantRows.map(v=>({
-
-product_id:productId,
-
-color:v.color,
-
-size:v.size,
-
-stock:Number(v.stock||0)
-
-}));
-
-const insertVariants=
-await supabaseClient
-.from("product_variants")
-.insert(rows);
-
-if(insertVariants.error)
-throw insertVariants.error;
-
-}
-
-
-toast(
-id
-?"تم تعديل المنتج والـStock بنجاح ✅"
-:"تمت إضافة المنتج والـStock بنجاح ✅"
-);
-
-
-resetProduct();
-
-await loadProducts();
-
-}catch(error){
-
-console.error(error);
-
-toast(
-error.message||
-"حدث خطأ أثناء حفظ المنتج"
-);
-
-}finally{
-
-$("saveProduct").disabled=false;
-
-$("saveProduct").textContent=
-"حفظ المنتج";
-
-}
-
-};
-
-
-/* =====================================================
-EDIT PRODUCT
-===================================================== */
-
-window.editProduct=
-async id=>{
-
-const p=
-products.find(x=>x.id===id);
-
-if(!p)return;
-
-
-$("productId").value=p.id;
-
-$("pName").value=p.name||"";
-
-$("pDescription").value=
-p.description||"";
-
-$("pPrice").value=
-p.price??"";
-
-$("pOldPrice").value=
-p.old_price??"";
-
-$("pCategory").value=
-p.category_id||"";
-
-$("pImage").value=
-p.image_url||
-p.image||
-"";
-
-$("pImageFile").value="";
-
-$("pActive").checked=
-p.active!==false&&
-p.is_active!==false;
-
-
-$("productFormTitle").textContent=
-"✏️ تعديل المنتج";
-
-
-/* LOAD VARIANTS */
-
-const {
-data,
-error
-}=
-await supabaseClient
-.from("product_variants")
-.select("*")
-.eq("product_id",id);
-
-
-if(error){
-
-toast(
-"تعذر تحميل Variants: "+
-error.message
-);
-
-variants=[];
-
-}else{
-
-variants=data||[];
-
-}
-
-
-/* CHECK COLORS */
-
-clearVariantSelections();
-
-variants.forEach(v=>{
-
-const colorInput=
-document.querySelector(
-`#colorOptions input[value="${CSS.escape(v.color)}"]`
-);
-
-if(colorInput)
-colorInput.checked=true;
-
-
-/* SIZE */
-
-const sizeInput=
-[...document.querySelectorAll(
-'.variant-section input[type="checkbox"]'
-)]
-.find(
-x=>x.value===v.size
-);
-
-if(sizeInput)
-sizeInput.checked=true;
-
-});
-
-
-buildVariantTable();
-
-
-window.scrollTo({
-top:0,
-behavior:"smooth"
-});
-
-};
-
-
-/* =====================================================
-DELETE PRODUCT
-===================================================== */
-
-window.deleteProduct=
-async id=>{
-
-if(!confirm(
-"هل تريد حذف هذا المنتج؟"
-))return;
-
-
-const {
-error
-}=
-await supabaseClient
-.from("products")
-.delete()
-.eq("id",id);
-
-
-if(error){
-
-toast(error.message);
-
-return;
-
-}
-
-toast(
-"تم حذف المنتج وVariations التابعة له ✅"
-);
-
-loadProducts();
-
-};
-
-
-/* =====================================================
-CATEGORY FORM
-===================================================== */
-
-function resetCategory(){
-
-$("categoryId").value="";
-
-$("cName").value="";
-
-$("cSlug").value="";
-
-$("cImage").value="";
-
-$("cOrder").value=0;
-
-$("cActive").checked=true;
-
-$("categoryFormTitle").textContent=
-"➕ إضافة فئة";
-
-}
-
-
-$("cancelCategory").onclick=
-resetCategory;
-
-
-/* =====================================================
-SAVE CATEGORY
-===================================================== */
-
-$("saveCategory").onclick=
-async()=>{
-
-const id=
-$("categoryId").value;
-
-const obj={
-
-name:
-$("cName").value.trim(),
-
-slug:
-$("cSlug").value.trim(),
-
-image_url:
-$("cImage").value.trim()||null,
-
-sort_order:
-Number($("cOrder").value||0),
-
-active:
-$("cActive").checked
-
-};
-
-
-if(!obj.name||!obj.slug){
-
-toast(
-"أدخل اسم وSlug الفئة"
-);
-
-return;
-
-}
-
-
-const res=id
-
-?await supabaseClient
-.from("categories")
-.update(obj)
-.eq("id",id)
-
-:await supabaseClient
-.from("categories")
-.insert(obj);
-
-
-if(res.error){
-
-toast(res.error.message);
-
-return;
-
-}
-
-
-toast(
-id
-?"تم تعديل الفئة ✅"
-:"تمت إضافة الفئة ✅"
-);
-
-resetCategory();
-
-loadCategories();
-
-};
-
-
-/* =====================================================
-EDIT CATEGORY
-===================================================== */
-
-window.editCategory=
-id=>{
-
-const c=
-categories.find(
-x=>x.id===id
-);
-
-if(!c)return;
-
-
-$("categoryId").value=c.id;
-
-$("cName").value=c.name||"";
-
-$("cSlug").value=c.slug||"";
-
-$("cImage").value=
-c.image_url||"";
-
-$("cOrder").value=
-c.sort_order||0;
-
-$("cActive").checked=
-c.active!==false;
-
-
-$("categoryFormTitle").textContent=
-"✏️ تعديل الفئة";
-
-
-window.scrollTo({
-top:0,
-behavior:"smooth"
-});
-
-};
-
-
-/* =====================================================
-DELETE CATEGORY
-===================================================== */
-
-window.deleteCategory=
-async id=>{
-
-if(!confirm(
-"حذف الفئة؟ المنتجات المرتبطة بها ستصبح بدون فئة."
-))return;
-
-
-const {
-error
-}=
-await supabaseClient
-.from("categories")
-.delete()
-.eq("id",id);
-
-
-if(error){
-
-toast(error.message);
-
-}else{
-
-toast("تم الحذف");
-
-loadCategories();
-
-loadProducts();
-
-}
-
-};
-
-
-/* =====================================================
-ORDERS
-===================================================== */
-
-async function loadOrders(){
-
-const {
-data,
-error
-}=
-await supabaseClient
-.from("orders")
-.select("*")
-.order(
-"created_at",
-{ascending:false}
-);
-
-
-if(error){
-
-toast(
-"خطأ في تحميل الطلبات: "+
-error.message
-);
-
-return;
-
-}
-
-orders=data||[];
-
-$("statOrders").textContent=
-orders.length;
-
-updateOrderSummary();
-
-renderOrders();
-
-}
-
-
-function updateOrderSummary(){
-
-const total=orders.length;
-
-const pending=
-orders.filter(
-o=>
-String(
-o.status||"pending"
-).toLowerCase()==="pending"
-).length;
-
-const delivered=
-orders.filter(
-o=>
-String(
-o.status||""
-).toLowerCase()==="delivered"
-).length;
-
-const money=
-orders.reduce(
-(sum,o)=>
-sum+Number(o.total||0),
-0
-);
-
-
-$("ordersTotalCount").textContent=total;
-
-$("ordersPendingCount").textContent=pending;
-
-$("ordersDeliveredCount").textContent=delivered;
-
-$("ordersTotalMoney").textContent=
-price(money);
-
-}
-
-
-function orderStatusClass(status){
-
-const s=
-String(
-status||"pending"
-).toLowerCase();
-
-if([
-"pending",
-"confirmed",
-"shipped",
-"delivered",
-"cancelled"
-].includes(s)){
-
-return "status-"+s;
-
-}
-
-return "status-pending";
-
-}
-
-
-function statusLabel(status){
-
-const s=
-String(
-status||"pending"
-).toLowerCase();
-
-const labels={
-
-pending:"⏳ Pending",
-
-confirmed:"✅ Confirmed",
-
-shipped:"🚚 Shipped",
-
-delivered:"📦 Delivered",
-
-cancelled:"❌ Cancelled"
-
-};
-
-return labels[s]||
-status||
-"Pending";
-
-}
-
-
-function orderShortId(id){
-
-const value=
-String(id||"");
-
-return value?
-value.slice(0,8):
-"—";
-
-}
-
-
-function normalizeOrderItems(items){
-
-if(!items)return[];
-
-if(Array.isArray(items))
-return items;
-
-if(typeof items==="string"){
-
-try{
-
-const parsed=
-JSON.parse(items);
-
-if(Array.isArray(parsed))
 return parsed;
 
-if(
-parsed&&
-typeof parsed==="object"
-){
-
-return Object.values(parsed);
+}catch(e){}
 
 }
+
+return {};
+
+}
+
+
+/* =========================
+   VARIANT KEY
+========================= */
+
+function variantKey(color,size){
+
+return String(color||"").trim()+"|"+String(size||"").trim();
+
+}
+
+
+/* =========================
+   GET SELECTED STOCK
+========================= */
+
+function getSelectedVariantStock(){
+
+let variants=getVariantStockObject();
+
+let hasVariants=
+
+Object.keys(variants).length>0;
+
+
+/*
+  إذا عندنا variant_stock
+  لازم نستخدم اللون + المقاس
+*/
+
+if(hasVariants){
+
+/*
+  المنتج فيه لون ومقاس
+*/
+
+if(colorsList.length && sizesList.length){
+
+if(!selectedColor || !selectedSize)
+
+return 0;
+
+let key=variantKey(
+
+selectedColor,
+
+selectedSize
+
+);
+
+let value=variants[key];
+
+if(value===undefined){
+
+/*
+  نجرب format آخر
+*/
+
+value=variants[
+
+String(selectedColor).trim()+"_"+String(selectedSize).trim()
+
+];
+
+}
+
+if(value===undefined)
+
+return 0;
+
+let n=Number(value);
+
+return Number.isNaN(n)?0:n;
+
+}
+
+
+/*
+  فقط لون
+*/
+
+if(colorsList.length && !sizesList.length){
+
+if(!selectedColor)return 0;
+
+let value=variants[selectedColor];
+
+let n=Number(value);
+
+return Number.isNaN(n)?0:n;
+
+}
+
+
+/*
+  فقط Taille
+*/
+
+if(sizesList.length && !colorsList.length){
+
+if(!selectedSize)return 0;
+
+let value=variants[selectedSize];
+
+let n=Number(value);
+
+return Number.isNaN(n)?0:n;
+
+}
+
+
+/*
+  بدون خيارات
+*/
+
+let simple=
+
+variants.stock??
+
+variants["default"]??
+
+variants["DEFAULT"];
+
+let n=Number(simple);
+
+return Number.isNaN(n)?0:n;
+
+}
+
+
+/*
+  المنتجات القديمة
+*/
+
+let global=getGlobalStock();
+
+return global===null?0:global;
+
+}
+
+
+/* =========================
+   CURRENT STOCK
+========================= */
+
+function getCurrentAvailableStock(){
+
+return getSelectedVariantStock();
+
+}
+
+
+/* =========================
+   UPDATE STOCK UI
+========================= */
+
+function updateStockUI(){
+
+if(!currentProduct)return;
+
+let variants=getVariantStockObject();
+
+let hasVariants=
+
+Object.keys(variants).length>0;
+
+let stock=getCurrentAvailableStock();
+
+
+/*
+  إذا variant stock موجود
+*/
+
+if(hasVariants){
+
+if(
+
+(colorsList.length && !selectedColor)||
+
+(sizesList.length && !selectedSize)
+
+){
+
+stockPill.style.display="inline-flex";
+
+stockPill.className="pill category";
+
+stockPill.textContent="Choisissez une variante";
+
+variantStockInfo.className="variant-stock-info";
+
+variantStockInfo.textContent="Sélectionnez la couleur et la taille.";
+
+addCartBtn.disabled=true;
+
+mobileCartBar.style.display="none";
+
+return;
+
+}
+
+}
+
+
+/*
+  Stock = 0
+*/
+
+if(stock<=0){
+
+stockPill.style.display="inline-flex";
+
+stockPill.className="pill stock-empty";
+
+stockPill.textContent="Rupture de stock";
+
+variantStockInfo.className="variant-stock-info empty";
+
+variantStockInfo.textContent="Cette combinaison est indisponible.";
+
+addCartBtn.disabled=true;
+
+mobileCartBar.style.display="none";
+
+quantityInput.value=1;
+
+return;
+
+}
+
+
+/*
+  Stock OK
+*/
+
+stockPill.style.display="inline-flex";
+
+stockPill.className="pill stock-ok";
+
+stockPill.textContent="En stock";
+
+variantStockInfo.className="variant-stock-info ok";
+
+variantStockInfo.textContent=
+
+stock+" unité"+(stock>1?"s":"")+" disponible"+(stock>1?"s":"");
+
+addCartBtn.disabled=false;
+
+mobileCartBar.style.display="flex";
+
+
+let q=
+
+parseInt(quantityInput.value,10)||1;
+
+if(q>stock){
+
+quantityInput.value=stock;
+
+}
+
+}
+
+
+/* =========================
+   ERROR
+========================= */
+
+function showError(msg,details=""){
+
+loadingState.style.display="none";
+
+productCard.style.display="none";
+
+mobileCartBar.style.display="none";
+
+errorState.style.display="block";
+
+errorMessage.textContent=msg;
+
+if(details){
+
+errorDetails.style.display="block";
+
+errorDetails.textContent=details;
+
+}else{
+
+errorDetails.style.display="none";
+
+}
+
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+function showToast(msg){
+
+let t=document.getElementById("toast");
+
+t.textContent=msg;
+
+t.classList.add("show");
+
+clearTimeout(window._toast);
+
+window._toast=setTimeout(()=>{
+
+t.classList.remove("show");
+
+},2200);
+
+}
+
+
+/* =========================
+   SHOW PRODUCT
+========================= */
+
+function showProduct(p){
+
+currentProduct=p;
+
+let title=
+
+p.name||
+
+p.title||
+
+p.product_name||
+
+"Produit";
+
+productTitle.textContent=title;
+
+document.title=title+" - JR Shop";
+
+
+let price=
+
+p.price??
+
+p.sale_price??
+
+p.product_price??
+
+0;
+
+productPrice.textContent=formatPrice(price);
+
+mobilePrice.textContent=formatPrice(price);
+
+
+let old=
+
+p.old_price??
+
+p.compare_at_price??
+
+p.original_price??
+
+p.previous_price;
+
+if(old && Number(old)>Number(price)){
+
+oldPrice.style.display="inline";
+
+oldPrice.textContent=formatPrice(old);
+
+discountBadge.style.display="inline-block";
+
+discountBadge.textContent=
+
+"-"+
+
+Math.round(
+
+(Number(old)-Number(price))/
+
+Number(old)*100
+
+)+"%";
+
+}else{
+
+oldPrice.style.display="none";
+
+discountBadge.style.display="none";
+
+}
+
+
+let desc=
+
+p.description||
+
+p.details||
+
+p.content||
+
+"";
+
+productDescription.textContent=
+
+desc||
+
+"Aucune description disponible.";
+
+descriptionAccordion.textContent=
+
+desc||
+
+"Aucune description disponible.";
+
+
+let cat=
+
+p.category||
+
+p.category_name||
+
+p.category_title||
+
+p.categories?.name||
+
+p.categories?.title||
+
+"";
+
+if(cat){
+
+productCategory.style.display="inline-flex";
+
+productCategory.textContent=cat;
+
+}else{
+
+productCategory.style.display="none";
+
+}
+
+
+/*
+  IMPORTANT:
+  On ne fait PLUS:
+  stock=0 => rupture
+
+  avant de regarder variant_stock.
+*/
+
+
+productImages=getProductImages(p);
+
+if(!productImages.length)
+
+productImages=[
+
+"https://placehold.co/900x900?text=JR+Shop"
+
+];
+
+currentImageIndex=0;
+
+renderGallery();
+
+renderOptions(p);
+
+renderMeta(p,cat);
+
+updateWishlist();
+
+updateReviewLoginLink();
+
+loadReviews();
+
+prepareReviewSystem();
+
+loadRelatedProducts();
+
+updateStockUI();
+
+
+loadingState.style.display="none";
+
+errorState.style.display="none";
+
+productCard.style.display="block";
+
+}
+
+
+/* =========================
+   RENDER OPTIONS
+========================= */
+
+function renderOptions(p){
+
+colorsList=[
+
+...parseArray(
+
+p.colors||
+
+p.colours||
+
+p.color_options||
+
+p.color
+
+)
+
+].map(String).filter(Boolean);
+
+
+sizesList=[
+
+...parseArray(
+
+p.sizes||
+
+p.size_options||
+
+p.size
+
+)
+
+].map(String).filter(Boolean);
+
+
+/*
+  variants peuvent aussi contenir
+  colors + sizes
+*/
+
+if(p.variants){
+
+let vars=parseArray(p.variants);
+
+vars.forEach(v=>{
+
+if(typeof v==="object"){
+
+if(
+
+v.color &&
+
+!colorsList.includes(String(v.color))
+
+){
+
+colorsList.push(String(v.color));
+
+}
+
+if(
+
+v.size &&
+
+!sizesList.includes(String(v.size))
+
+){
+
+sizesList.push(String(v.size));
+
+}
+
+}
+
+});
+
+}
+
+
+/*
+  valeurs uniques
+*/
+
+colorsList=[...new Set(colorsList)];
+
+sizesList=[...new Set(sizesList)];
+
+
+/*
+  sélection initiale
+*/
+
+selectedColor=colorsList[0]||"";
+
+selectedSize=sizesList[0]||"";
+
+
+setupOption(
+
+"colorOption",
+
+"colorList",
+
+"selectedColor",
+
+colorsList,
+
+(value)=>{
+
+selectedColor=value;
+
+document.getElementById(
+
+"selectedColor"
+
+).textContent=value;
+
+updateVariantButtons();
+
+updateStockUI();
+
+}
+
+);
+
+
+setupOption(
+
+"sizeOption",
+
+"sizeList",
+
+"selectedSize",
+
+sizesList,
+
+(value)=>{
+
+selectedSize=value;
+
+document.getElementById(
+
+"selectedSize"
+
+).textContent=value;
+
+updateVariantButtons();
+
+updateStockUI();
+
+}
+
+);
+
+
+document.getElementById(
+
+"selectedColor"
+
+).textContent=selectedColor;
+
+
+document.getElementById(
+
+"selectedSize"
+
+).textContent=selectedSize;
+
+
+updateVariantButtons();
+
+
+}
+
+
+/* =========================
+   SETUP OPTION
+========================= */
+
+function setupOption(
+
+box,
+
+list,
+
+label,
+
+values,
+
+fn
+
+){
+
+let el=document.getElementById(box);
+
+let target=document.getElementById(list);
+
+target.innerHTML="";
+
+
+if(!values.length){
+
+el.style.display="none";
+
+return;
+
+}
+
+
+el.style.display="block";
+
+
+values.forEach((v,i)=>{
+
+let b=document.createElement("button");
+
+b.type="button";
+
+b.className=
+
+"option-btn"+
+
+(i===0?" selected":"");
+
+b.textContent=v;
+
+b.dataset.value=v;
+
+
+b.onclick=()=>{
+
+target
+
+.querySelectorAll(".option-btn")
+
+.forEach(x=>
+
+x.classList.remove("selected")
+
+);
+
+b.classList.add("selected");
+
+fn(String(v));
+
+};
+
+
+target.appendChild(b);
+
+});
+
+
+}
+
+
+/* =========================
+   DISABLE EMPTY VARIANTS
+========================= */
+
+function updateVariantButtons(){
+
+let variants=getVariantStockObject();
+
+if(!Object.keys(variants).length)
+
+return;
+
+
+/*
+  Disable colors that have no stock
+  with currently selected size
+*/
+
+document
+
+.querySelectorAll("#colorList .option-btn")
+
+.forEach(btn=>{
+
+let color=btn.dataset.value;
+
+let available=false;
+
+
+/*
+  Si taille sélectionnée
+*/
+
+if(sizesList.length){
+
+let key=variantKey(
+
+color,
+
+selectedSize
+
+);
+
+available=
+
+Number(variants[key]??0)>0;
+
+}else{
+
+available=
+
+Number(variants[color]??0)>0;
+
+}
+
+
+btn.classList.toggle(
+
+"disabled",
+
+!available
+
+);
+
+});
+
+
+/*
+  Disable sizes that have no stock
+  with currently selected color
+*/
+
+document
+
+.querySelectorAll("#sizeList .option-btn")
+
+.forEach(btn=>{
+
+let size=btn.dataset.value;
+
+let available=false;
+
+
+if(colorsList.length){
+
+let key=variantKey(
+
+selectedColor,
+
+size
+
+);
+
+available=
+
+Number(variants[key]??0)>0;
+
+}else{
+
+available=
+
+Number(variants[size]??0)>0;
+
+}
+
+
+btn.classList.toggle(
+
+"disabled",
+
+!available
+
+);
+
+});
+
+}
+
+
+/* =========================
+   META
+========================= */
+
+function renderMeta(p,cat){
+
+let a=[];
+
+if(p.brand)
+
+a.push("Marque : "+p.brand);
+
+if(p.sku)
+
+a.push("Référence : "+p.sku);
+
+if(cat)
+
+a.push("Catégorie : "+cat);
+
+if(p.material)
+
+a.push("Matière : "+p.material);
+
+if(p.gender)
+
+a.push("Genre : "+p.gender);
+
+productMeta.textContent=
+
+a.length
+
+?a.join("\n")
+
+:"Informations supplémentaires non disponibles.";
+
+}
+
+
+/* =========================
+   GALLERY
+========================= */
+
+function renderGallery(){
+
+mainImage.src=
+
+productImages[currentImageIndex];
+
+mainImage.alt=
+
+currentProduct?.name||
+
+"Produit";
+
+imageCounter.textContent=
+
+(currentImageIndex+1)+
+
+" / "+
+
+productImages.length;
+
+thumbnails.innerHTML="";
+
+
+productImages.forEach((src,i)=>{
+
+let b=document.createElement("button");
+
+b.className=
+
+"thumbnail"+
+
+(i===currentImageIndex?" active":"");
+
+b.type="button";
+
+
+b.onclick=()=>{
+
+currentImageIndex=i;
+
+renderGallery();
+
+};
+
+
+let im=document.createElement("img");
+
+im.src=src;
+
+im.alt="Image "+(i+1);
+
+im.onerror=()=>{
+
+im.style.display="none";
+
+};
+
+
+b.appendChild(im);
+
+thumbnails.appendChild(b);
+
+});
+
+}
+
+
+function nextImage(){
+
+if(productImages.length>1){
+
+currentImageIndex=
+
+(currentImageIndex+1)%productImages.length;
+
+renderGallery();
+
+}
+
+}
+
+
+function previousImage(){
+
+if(productImages.length>1){
+
+currentImageIndex=
+
+(currentImageIndex-1+
+
+productImages.length)%
+
+productImages.length;
+
+renderGallery();
+
+}
+
+}
+
+
+/* =========================
+   LIGHTBOX
+========================= */
+
+function openLightbox(){
+
+if(productImages.length){
+
+lightboxImage.src=
+
+productImages[currentImageIndex];
+
+lightbox.classList.add("open");
+
+document.body.style.overflow="hidden";
+
+}
+
+}
+
+
+function closeLightbox(){
+
+lightbox.classList.remove("open");
+
+document.body.style.overflow="";
+
+}
+
+
+/* =========================
+   ACCORDION
+========================= */
+
+function toggleAccordion(b){
+
+b.closest(".accordion")
+
+.classList.toggle("open");
+
+}
+
+
+/* =========================
+   QUANTITY
+========================= */
+
+function changeQuantity(amount){
+
+let stock=getCurrentAvailableStock();
+
+if(stock<=0){
+
+quantityInput.value=1;
+
+return;
+
+}
+
+
+let q=
+
+parseInt(quantityInput.value,10)||1;
+
+q=Math.max(1,q+amount);
+
+q=Math.min(q,stock);
+
+quantityInput.value=q;
+
+}
+
+
+quantityInput.addEventListener(
+
+"change",
+
+()=>{
+
+let stock=getCurrentAvailableStock();
+
+let q=
+
+parseInt(quantityInput.value,10)||1;
+
+q=Math.max(1,q);
+
+if(stock>0)
+
+q=Math.min(q,stock);
+
+quantityInput.value=q;
+
+}
+
+);
+
+
+/* =========================
+   CART
+========================= */
+
+function getCart(){
+
+try{
+
+let x=
+
+JSON.parse(
+
+localStorage.getItem("jr_cart")||
+
+"[]"
+
+);
+
+return Array.isArray(x)?x:[];
 
 }catch(e){
 
@@ -2929,536 +2929,1761 @@ return[];
 
 }
 
-if(typeof items==="object"){
 
-if(Array.isArray(items.items))
-return items.items;
+function saveCart(c){
 
-return Object.values(items);
+localStorage.setItem(
+
+"jr_cart",
+
+JSON.stringify(c)
+
+);
 
 }
+
+
+/* =========================
+   ADD TO CART
+========================= */
+
+function addToCart(){
+
+if(!currentProduct)
+
+return;
+
+
+let stock=getCurrentAvailableStock();
+
+
+/*
+  Vérifier variantes
+*/
+
+let variants=getVariantStockObject();
+
+if(Object.keys(variants).length){
+
+if(
+
+(colorsList.length && !selectedColor)||
+
+(sizesList.length && !selectedSize)
+
+){
+
+showCartMessage(
+
+"Veuillez choisir la couleur et la taille."
+
+);
+
+return;
+
+}
+
+}
+
+
+if(stock<=0){
+
+showCartMessage(
+
+"Cette combinaison est en rupture de stock."
+
+);
+
+return;
+
+}
+
+
+let q=
+
+Math.max(
+
+1,
+
+parseInt(quantityInput.value,10)||1
+
+);
+
+
+if(q>stock){
+
+q=stock;
+
+quantityInput.value=q;
+
+}
+
+
+let id=currentProduct.id;
+
+if(!id){
+
+showCartMessage(
+
+"ID du produit manquant."
+
+);
+
+return;
+
+}
+
+
+let cart=getCart();
+
+
+/*
+  IMPORTANT:
+  نفس product مع couleur/taille مختلفة
+  = panier différent
+*/
+
+let idx=cart.findIndex(x=>
+
+String(x.id)===String(id)&&
+
+String(x.color||"")===String(selectedColor||"")&&
+
+String(x.size||"")===String(selectedSize||"")
+
+);
+
+
+let cp={
+
+id:id,
+
+name:
+
+currentProduct.name||
+
+currentProduct.title||
+
+"Produit",
+
+title:
+
+currentProduct.title||
+
+currentProduct.name||
+
+"Produit",
+
+price:
+
+currentProduct.price??
+
+currentProduct.sale_price??
+
+currentProduct.product_price??
+
+0,
+
+image_url:
+
+currentProduct.image_url||
+
+productImages[0]||
+
+"",
+
+image_urls:
+
+currentProduct.image_urls||
+
+productImages,
+
+quantity:q
+
+};
+
+
+if(selectedColor)
+
+cp.color=selectedColor;
+
+
+if(selectedSize)
+
+cp.size=selectedSize;
+
+
+if(idx>-1){
+
+let newQty=
+
+(Number(cart[idx].quantity)||0)+q;
+
+cart[idx].quantity=
+
+Math.min(newQty,stock);
+
+}else{
+
+cart.push(cp);
+
+}
+
+
+saveCart(cart);
+
+updateCartCount();
+
+showCartMessage(
+
+"Produit ajouté au panier ✓"
+
+);
+
+showToast(
+
+"Ajouté au panier ✓"
+
+);
+
+}
+
+
+/* =========================
+   CART MESSAGE
+========================= */
+
+function showCartMessage(m){
+
+cartMessage.textContent=m;
+
+setTimeout(()=>{
+
+if(cartMessage.textContent===m)
+
+cartMessage.textContent="";
+
+},2500);
+
+}
+
+
+function updateCartCount(){
+
+let c=
+
+getCart().reduce(
+
+(a,x)=>
+
+a+(Number(x.quantity)||0),
+
+0
+
+);
+
+
+[
+
+"cartCount",
+
+"cart-count",
+
+"cartCounter",
+
+"cart-count-badge"
+
+].forEach(id=>{
+
+let e=document.getElementById(id);
+
+if(e){
+
+e.textContent=c;
+
+e.style.display=
+
+c>0?"":"none";
+
+}
+
+});
+
+
+document
+
+.querySelectorAll("[data-cart-count]")
+
+.forEach(e=>
+
+e.textContent=c
+
+);
+
+}
+
+
+/* =========================
+   WISHLIST
+========================= */
+
+function getWishlist(){
+
+try{
+
+let x=
+
+JSON.parse(
+
+localStorage.getItem("jr_wishlist")||
+
+"[]"
+
+);
+
+return Array.isArray(x)?x:[];
+
+}catch(e){
 
 return[];
 
 }
 
-
-function renderOrderItems(items){
-
-const list=
-normalizeOrderItems(items);
-
-if(!list.length){
-
-return`
-<div class="muted">
-لا توجد تفاصيل منتجات داخل هذا الطلب.
-</div>
-`;
-
 }
 
 
-return list
-.map((item,index)=>{
+function toggleWishlist(){
 
-const name=
-item?.name||
-item?.product_name||
-item?.title||
-"منتج";
+if(!currentProduct?.id)
 
-const quantity=
-Number(
-item?.quantity??
-item?.qty??
-1
+return;
+
+
+let a=getWishlist();
+
+let i=a.findIndex(
+
+x=>
+
+String(x)===
+
+String(currentProduct.id)
+
 );
 
-const itemPrice=
-Number(
-item?.price??
-item?.unit_price??
-0
+
+if(i>-1){
+
+a.splice(i,1);
+
+showToast(
+
+"Retiré des favoris"
+
 );
 
-const lineTotal=
-itemPrice*quantity;
+}else{
 
+a.push(currentProduct.id);
 
-return`
+showToast(
 
-<div class="order-item-line">
+"Ajouté aux favoris ♥"
 
-<b>
-${index+1}.
-${esc(name)}
-</b>
-
-<br>
-
-الكمية:
-<b>${quantity}</b>
-
-${
-itemPrice
-?` · السعر: ${price(itemPrice)}`
-:""
-}
-
-${
-lineTotal
-?` · المجموع: <b>${price(lineTotal)}</b>`
-:""
-}
-
-</div>
-
-`;
-
-})
-.join("");
+);
 
 }
 
 
-function renderOrders(){
+localStorage.setItem(
 
-const q=
-$("orderSearch")
-.value
-.trim()
-.toLowerCase();
+"jr_wishlist",
 
-const status=
-$("orderStatusFilter")
-.value;
+JSON.stringify(a)
 
-const sort=
-$("orderSort")
-.value;
+);
+
+updateWishlist();
+
+}
 
 
-let filtered=
-orders.filter(o=>{
+function updateWishlist(){
 
-const haystack=[
+let active=
 
-o.id,
-o.customer_id,
-o.customer_name,
-o.phone,
-o.wilaya,
-o.commune,
-o.address,
-o.notes,
-o.status
+currentProduct&&
 
-]
-.map(
-x=>String(x??"").toLowerCase()
+getWishlist().some(
+
+x=>
+
+String(x)===
+
+String(currentProduct.id)
+
+);
+
+
+wishlistBtn.classList.toggle(
+
+"active",
+
+active
+
+);
+
+wishlistBtn.textContent=
+
+active
+
+?"♥ Dans les favoris"
+
+:"♡ Ajouter aux favoris";
+
+}
+
+
+/* =========================
+   SHARE
+========================= */
+
+async function shareProduct(){
+
+let url=location.href;
+
+try{
+
+if(navigator.share){
+
+await navigator.share({
+
+title:
+
+currentProduct?.name||
+
+"JR Shop",
+
+text:
+
+"Découvrez ce produit sur JR Shop",
+
+url
+
+});
+
+}else{
+
+await navigator.clipboard.writeText(url);
+
+showToast(
+
+"Lien du produit copié ✓"
+
+);
+
+}
+
+}catch(e){}
+
+}
+
+
+async function copyProductLink(){
+
+try{
+
+await navigator.clipboard.writeText(
+
+location.href
+
+);
+
+showToast(
+
+"Lien copié ✓"
+
+);
+
+}catch(e){
+
+showToast(
+
+"Impossible de copier le lien"
+
+);
+
+}
+
+}
+
+
+/* =========================
+   REVIEWS
+========================= */
+
+function makeStars(r){
+
+let n=Math.max(
+
+0,
+
+Math.min(
+
+5,
+
+Math.round(Number(r)||0
+
 )
-.join(" ");
+
+)
+
+);
+
+return "★".repeat(n)+
+
+"☆".repeat(5-n);
+
+}
 
 
-if(q&&!haystack.includes(q))
-return false;
+function formatReviewDate(d){
+
+try{
+
+return d
+
+?new Date(d).toLocaleDateString(
+
+"fr-FR",
+
+{
+
+day:"2-digit",
+
+month:"2-digit",
+
+year:"numeric"
+
+}
+
+)
+
+:"";
+
+}catch(e){
+
+return "";
+
+}
+
+}
+
+
+/* =========================
+   LOAD REVIEWS
+========================= */
+
+async function loadReviews(){
+
+if(!currentProduct?.id)
+
+return;
+
+
+reviewsList.innerHTML=
+
+'<div class="no-reviews">Chargement des avis...</div>';
+
+
+try{
+
+let r=
+
+await supabaseClient
+
+.from("reviews")
+
+.select(
+
+"id,product_id,order_id,order_item_id,customer_id,customer_name,rating,comment,created_at"
+
+)
+
+.eq(
+
+"product_id",
+
+currentProduct.id
+
+)
+
+.order(
+
+"created_at",
+
+{ascending:false}
+
+);
+
+
+if(r.error)
+
+throw r.error;
+
+
+let data=r.data||[];
+
+let n=data.length;
+
+
+reviewCountText.textContent=
+
+n
+
+?n+" avis client"+(n>1?"s":"")
+
+:"Aucun avis pour le moment";
+
+
+if(!n){
+
+reviewAverage.textContent="—";
+
+reviewAverageStars.textContent="☆☆☆☆☆";
+
+topStars.textContent="☆☆☆☆☆";
+
+topRatingText.textContent="Aucun avis";
+
+reviewsList.innerHTML=
+
+'<div class="no-reviews"><strong>Aucun avis pour le moment</strong>Soyez le premier client à partager votre expérience.</div>';
+
+return;
+
+}
+
+
+let avg=
+
+data.reduce(
+
+(a,x)=>
+
+a+(Number(x.rating)||0),
+
+0
+
+)/n;
+
+
+reviewAverage.textContent=
+
+avg.toFixed(1);
+
+reviewAverageStars.textContent=
+
+makeStars(avg);
+
+topStars.textContent=
+
+makeStars(avg);
+
+topRatingText.textContent=
+
+avg.toFixed(1)+
+
+" / 5 • "+
+
+n+
+
+" avis";
+
+
+reviewsList.innerHTML="";
+
+
+data.forEach(x=>{
+
+let c=document.createElement("div");
+
+c.className="review-card";
+
+
+c.innerHTML=
+
+'<div class="review-head">'+
+
+'<div class="reviewer">'+
+
+escapeHtml(
+
+x.customer_name||
+
+"Client"
+
+)+
+
+'</div>'+
+
+'<div class="review-date">'+
+
+formatReviewDate(
+
+x.created_at
+
+)+
+
+'</div>'+
+
+'</div>'+
+
+'<div class="review-card-stars">'+
+
+makeStars(x.rating)+
+
+'</div>'+
+
+'<div class="review-comment">'+
+
+escapeHtml(
+
+x.comment||
+
+"Aucun commentaire."
+
+)+
+
+'</div>';
+
+
+reviewsList.appendChild(c);
+
+});
+
+}catch(e){
+
+console.error(e);
+
+reviewsList.innerHTML=
+
+'<div class="no-reviews">Impossible de charger les avis.</div>';
+
+}
+
+}
+
+
+/* =========================
+   LOGIN REVIEW
+========================= */
+
+function updateReviewLoginLink(){
+
+let u=
+
+location.pathname+
+
+location.search;
+
+reviewLoginButton.href=
+
+"login.html?next="+
+
+encodeURIComponent(u);
+
+}
+
+
+/* =========================
+   REVIEW SYSTEM
+========================= */
+
+async function prepareReviewSystem(){
+
+reviewLoginArea.style.display="none";
+
+reviewFormArea.style.display="none";
+
+
+try{
+
+let r=
+
+await supabaseClient.auth.getUser();
+
+currentUser=
+
+r.data?.user||null;
+
+
+if(!currentUser){
+
+reviewFormMessage.textContent=
+
+"Connectez-vous pour laisser un avis après un achat confirmé.";
+
+reviewLoginArea.style.display="block";
+
+return;
+
+}
+
+
+await findVerifiedPurchases();
+
+}catch(e){
+
+reviewFormMessage.textContent=
+
+"Impossible de vérifier votre achat pour le moment.";
+
+reviewLoginArea.style.display="block";
+
+}
+
+}
+
+
+/* =========================
+   VERIFIED PURCHASES
+========================= */
+
+async function findVerifiedPurchases(){
+
+let r=
+
+await supabaseClient
+
+.from("orders")
+
+.select(
+
+"id,status,created_at,order_items(id,product_id,quantity,price)"
+
+)
+
+.eq(
+
+"customer_id",
+
+currentUser.id
+
+)
+
+.eq(
+
+"status",
+
+"confirmed"
+
+);
+
+
+if(r.error){
+
+reviewFormMessage.textContent=
+
+"Impossible de vérifier vos commandes.";
+
+return;
+
+}
+
+
+verifiedOrderItems=[];
+
+
+(r.data||[]).forEach(o=>
+
+(o.order_items||[]).forEach(i=>{
 
 if(
-status&&
-String(
-o.status||"pending"
-).toLowerCase()!==status
-)
-return false;
 
-return true;
+String(i.product_id)===
 
-});
+String(currentProduct.id)
 
+){
 
-filtered.sort((a,b)=>{
+verifiedOrderItems.push({
 
-if(sort==="oldest"){
+orderId:o.id,
 
-return new Date(
-a.created_at||0
-)-
-new Date(
-b.created_at||0
-);
+orderItemId:i.id,
 
-}
-
-if(sort==="highest"){
-
-return Number(b.total||0)-
-Number(a.total||0);
-
-}
-
-if(sort==="lowest"){
-
-return Number(a.total||0)-
-Number(b.total||0);
-
-}
-
-return new Date(
-b.created_at||0
-)-
-new Date(
-a.created_at||0
-);
+createdAt:o.created_at
 
 });
 
-
-if(!filtered.length){
-
-$("ordersList").innerHTML=`
-
-<div class="empty">
-
-📋
-
-<br><br>
-
-لا توجد طلبات مطابقة.
-
-</div>
-
-`;
-
-return;
-
 }
-
-
-$("ordersList").innerHTML=
-filtered
-.map(o=>{
-
-const statusValue=
-String(
-o.status||"pending"
-).toLowerCase();
-
-const dateText=
-o.created_at
-?new Date(
-o.created_at
-).toLocaleString("ar-DZ")
-:"—";
-
-
-return`
-
-<article
-class="order ${orderStatusClass(statusValue)}"
->
-
-<div class="order-head">
-
-<div>
-
-<div class="order-title">
-
-📋 الطلب
-#${esc(
-orderShortId(o.id)
-)}
-
-</div>
-
-<div class="order-date">
-
-🕐 ${esc(dateText)}
-
-</div>
-
-</div>
-
-
-<div class="order-status">
-
-<label>
-حالة الطلب
-</label>
-
-<select
-onchange="
-changeStatus(
-'${esc(o.id)}',
-this.value
-)
-"
->
-
-<option
-value="pending"
-${statusValue==="pending"?"selected":""}
->
-⏳ Pending
-</option>
-
-<option
-value="confirmed"
-${statusValue==="confirmed"?"selected":""}
->
-✅ Confirmed
-</option>
-
-<option
-value="shipped"
-${statusValue==="shipped"?"selected":""}
->
-🚚 Shipped
-</option>
-
-<option
-value="delivered"
-${statusValue==="delivered"?"selected":""}
->
-📦 Delivered
-</option>
-
-<option
-value="cancelled"
-${statusValue==="cancelled"?"selected":""}
->
-❌ Cancelled
-</option>
-
-</select>
-
-</div>
-
-</div>
-
-
-<hr>
-
-
-<div class="order-meta">
-
-<div>
-
-👤 <b>الزبون</b>
-
-<br>
-
-${esc(
-o.customer_name||
-"غير معروف"
-)}
-
-</div>
-
-
-<div>
-
-📞 <b>الهاتف</b>
-
-<br>
-
-${
-o.phone
-?`
-<a
-href="tel:${esc(o.phone)}"
-style="
-color:#2563eb;
-font-weight:bold;
-text-decoration:none;
-"
->
-${esc(o.phone)}
-</a>
-`
-:"—"
-}
-
-</div>
-
-
-<div>
-
-📍 <b>الولاية</b>
-
-<br>
-
-${esc(o.wilaya||"—")}
-
-</div>
-
-
-<div>
-
-🏙️ <b>البلدية</b>
-
-<br>
-
-${esc(o.commune||"—")}
-
-</div>
-
-
-<div class="full">
-
-🏠 <b>العنوان</b>
-
-<br>
-
-${esc(o.address||"—")}
-
-</div>
-
-</div>
-
-
-${
-o.notes
-?`
-<div class="notes-box">
-
-📝 <b>ملاحظات:</b>
-
-<br>
-
-${esc(o.notes)}
-
-</div>
-`
-:""
-}
-
-
-<div class="order-items">
-
-<b>
-🛒 المنتجات
-</b>
-
-<br><br>
-
-${renderOrderItems(o.items)}
-
-</div>
-
-
-<div class="order-total">
-
-💰
-
-المجموع:
-
-${price(o.total)}
-
-</div>
-
-
-${
-o.customer_id
-?`
-<div
-class="muted"
-style="
-margin-top:10px;
-direction:ltr;
-text-align:left;
-"
->
-Customer ID:
-${esc(o.customer_id)}
-</div>
-`
-:""
-}
-
-</article>
-
-`;
 
 })
-.join("");
+
+);
+
+
+if(!verifiedOrderItems.length){
+
+reviewFormMessage.textContent=
+
+"Aucun achat confirmé de ce produit n'a été trouvé sur votre compte.";
+
+return;
 
 }
 
 
-/* =====================================================
-CHANGE ORDER STATUS
-===================================================== */
+let er=
 
-window.changeStatus=
-async(id,status)=>{
-
-const {
-error
-}=
 await supabaseClient
-.from("orders")
-.update({status})
-.eq("id",id);
 
-if(error){
+.from("reviews")
 
-toast(
-"فشل تحديث الحالة: "+
-error.message
+.select("order_item_id")
+
+.eq(
+
+"product_id",
+
+currentProduct.id
+
+)
+
+.eq(
+
+"customer_id",
+
+currentUser.id
+
+);
+
+
+if(er.error)
+
+return;
+
+
+let done=
+
+new Set(
+
+(er.data||[])
+
+.map(
+
+x=>String(x.order_item_id)
+
+)
+
+);
+
+
+verifiedOrderItems=
+
+verifiedOrderItems.filter(
+
+x=>
+
+!done.has(
+
+String(x.orderItemId)
+
+)
+
+);
+
+
+if(!verifiedOrderItems.length){
+
+reviewFormMessage.textContent=
+
+"Vous avez déjà évalué ce produit pour toutes vos commandes confirmées.";
+
+return;
+
+}
+
+
+reviewFormMessage.textContent=
+
+"Merci pour votre achat ! Vous pouvez partager votre expérience.";
+
+reviewFormArea.style.display="block";
+
+
+if(verifiedOrderItems.length>1){
+
+reviewOrderBox.style.display="block";
+
+reviewOrderSelect.innerHTML="";
+
+
+verifiedOrderItems.forEach(x=>{
+
+let o=document.createElement("option");
+
+o.value=x.orderItemId;
+
+o.textContent=
+
+"Commande #"+
+
+String(x.orderId)
+
+.slice(0,8)
+
+.toUpperCase();
+
+reviewOrderSelect.appendChild(o);
+
+});
+
+}
+
+}
+
+
+/* =========================
+   REVIEW STARS
+========================= */
+
+document
+
+.querySelectorAll(".rating-star-btn")
+
+.forEach(b=>
+
+b.addEventListener(
+
+"click",
+
+()=>{
+
+selectedRating=
+
+Number(b.dataset.rating);
+
+
+document
+
+.querySelectorAll(
+
+".rating-star-btn"
+
+)
+
+.forEach(s=>
+
+s.classList.toggle(
+
+"selected",
+
+Number(s.dataset.rating)<=
+
+selectedRating
+
+)
+
+);
+
+}
+
+)
+
+);
+
+
+/* =========================
+   SUBMIT REVIEW
+========================= */
+
+async function submitReview(){
+
+if(!currentUser){
+
+setReviewStatus(
+
+"Vous devez être connecté.",
+
+"error"
+
 );
 
 return;
 
 }
 
-toast(
-"تم تحديث حالة الطلب ✅"
+
+if(!selectedRating){
+
+setReviewStatus(
+
+"Veuillez sélectionner une note.",
+
+"error"
+
 );
 
-await loadOrders();
+return;
 
-};
-
-
-/* =====================================================
-ORDER EVENTS
-===================================================== */
-
-$("refreshOrders").onclick=
-loadOrders;
-
-$("orderSearch").oninput=
-renderOrders;
-
-$("orderStatusFilter").onchange=
-renderOrders;
-
-$("orderSort").onchange=
-renderOrders;
+}
 
 
-$("clearOrderFilters").onclick=
+let comment=
+
+reviewComment.value.trim();
+
+
+if(comment.length<3){
+
+setReviewStatus(
+
+"Veuillez écrire un commentaire.",
+
+"error"
+
+);
+
+return;
+
+}
+
+
+let item=
+
+verifiedOrderItems.find(
+
+x=>
+
+String(x.orderItemId)===
+
+String(
+
+reviewOrderSelect.value||
+
+verifiedOrderItems[0]?.orderItemId
+
+)
+
+);
+
+
+if(!item){
+
+setReviewStatus(
+
+"Aucun achat vérifié disponible.",
+
+"error"
+
+);
+
+return;
+
+}
+
+
+submitReviewBtn.disabled=true;
+
+submitReviewBtn.textContent=
+
+"Publication...";
+
+
+try{
+
+let v=
+
+await supabaseClient
+
+.from("orders")
+
+.select(
+
+"id,status,customer_id,order_items(id,product_id)"
+
+)
+
+.eq(
+
+"id",
+
+item.orderId
+
+)
+
+.eq(
+
+"customer_id",
+
+currentUser.id
+
+)
+
+.eq(
+
+"status",
+
+"confirmed"
+
+)
+
+.maybeSingle();
+
+
+if(v.error)
+
+throw v.error;
+
+
+let valid=
+
+v.data?.order_items?.some(
+
+x=>
+
+String(x.id)===
+
+String(item.orderItemId)&&
+
+String(x.product_id)===
+
+String(currentProduct.id)
+
+);
+
+
+if(!valid)
+
+throw new Error(
+
+"Achat invalide"
+
+);
+
+
+let ins=
+
+await supabaseClient
+
+.from("reviews")
+
+.insert({
+
+product_id:currentProduct.id,
+
+order_id:item.orderId,
+
+order_item_id:item.orderItemId,
+
+customer_id:currentUser.id,
+
+customer_name:
+
+currentUser.user_metadata?.full_name||
+
+currentUser.user_metadata?.name||
+
+currentUser.email||
+
+"Client",
+
+rating:selectedRating,
+
+comment
+
+});
+
+
+if(ins.error)
+
+throw ins.error;
+
+
+setReviewStatus(
+
+"Votre avis a été publié avec succès ✓",
+
+"success"
+
+);
+
+
+reviewComment.value="";
+
+selectedRating=0;
+
+
+document
+
+.querySelectorAll(
+
+".rating-star-btn"
+
+)
+
+.forEach(x=>
+
+x.classList.remove("selected")
+
+);
+
+
+await loadReviews();
+
+await findVerifiedPurchases();
+
+
+}catch(e){
+
+console.error(e);
+
+
+setReviewStatus(
+
+e?.code==="23505"
+
+?"Vous avez déjà publié un avis pour cet achat."
+
+:"Impossible de publier votre avis.",
+
+"error"
+
+);
+
+}finally{
+
+submitReviewBtn.disabled=false;
+
+submitReviewBtn.textContent=
+
+"Publier mon avis";
+
+}
+
+}
+
+
+function setReviewStatus(m,t){
+
+reviewStatus.textContent=m;
+
+reviewStatus.className=
+
+"review-status "+(t||"");
+
+}
+
+
+/* =========================
+   RELATED PRODUCTS
+========================= */
+
+async function loadRelatedProducts(){
+
+if(!currentProduct?.id)
+
+return;
+
+
+let q=
+
+supabaseClient
+
+.from("products")
+
+.select("*")
+
+.neq(
+
+"id",
+
+currentProduct.id
+
+)
+
+.limit(8);
+
+
+let cat=
+
+currentProduct.category||
+
+currentProduct.category_name;
+
+
+if(
+
+cat&&
+
+"category" in currentProduct
+
+)
+
+q=q.eq("category",cat);
+
+
+let r=await q;
+
+let data=r.data||[];
+
+
+if(!data.length){
+
+relatedGrid.innerHTML=
+
+'<div class="no-reviews" style="grid-column:1/-1">Aucun produit recommandé pour le moment.</div>';
+
+return;
+
+}
+
+
+relatedGrid.innerHTML="";
+
+
+data.slice(0,4).forEach(p=>{
+
+let a=document.createElement("a");
+
+a.className="related-card";
+
+a.href=
+
+"product-details.html?id="+
+
+encodeURIComponent(p.id);
+
+
+let img=
+
+p.image_url||
+
+parseArray(p.image_urls)[0]||
+
+p.image||
+
+"https://placehold.co/500x500?text=JR+Shop";
+
+
+let price=
+
+formatPrice(
+
+p.price??
+
+p.sale_price??
+
+p.product_price??
+
+0
+
+);
+
+
+a.innerHTML=
+
+'<img src="'+
+
+escapeHtml(img)+
+
+'" alt="'+
+
+escapeHtml(
+
+p.name||
+
+p.title||
+
+"Produit"
+
+)+
+
+'">'+
+
+'<div class="related-card-body">'+
+
+'<div class="related-name">'+
+
+escapeHtml(
+
+p.name||
+
+p.title||
+
+"Produit"
+
+)+
+
+'</div>'+
+
+'<div class="related-price">'+
+
+price+
+
+'</div>'+
+
+'</div>';
+
+
+relatedGrid.appendChild(a);
+
+});
+
+}
+
+
+/* =========================
+   LOAD PRODUCT
+========================= */
+
+async function loadProduct(){
+
+loadingState.style.display="block";
+
+errorState.style.display="none";
+
+productCard.style.display="none";
+
+mobileCartBar.style.display="none";
+
+
+if(
+
+typeof supabaseClient==="undefined"||
+
+!supabaseClient
+
+){
+
+showError(
+
+"Supabase n'est pas disponible.",
+
+"Vérifie config.js."
+
+);
+
+return;
+
+}
+
+
+let id=getProductId();
+
+
+if(!id){
+
+showError(
+
+"ID du produit manquant.",
+
+"Exemple : product-details.html?id=123"
+
+);
+
+return;
+
+}
+
+
+try{
+
+let r=
+
+await supabaseClient
+
+.from("products")
+
+.select("*")
+
+.eq("id",id)
+
+.maybeSingle();
+
+
+if(r.error)
+
+throw r.error;
+
+
+if(!r.data){
+
+showError(
+
+"Produit introuvable.",
+
+"Aucun produit ne correspond à l'ID : "+id
+
+);
+
+return;
+
+}
+
+
+showProduct(r.data);
+
+
+}catch(e){
+
+console.error(e);
+
+showError(
+
+"Erreur lors du chargement du produit.",
+
+e?.message||String(e)
+
+);
+
+}
+
+}
+
+
+/* =========================
+   TOUCH GALLERY
+========================= */
+
+let touchStartX=0;
+
+let touchStartY=0;
+
+
+mainImageBox.addEventListener(
+
+"touchstart",
+
+e=>{
+
+let t=e.changedTouches[0];
+
+touchStartX=t.clientX;
+
+touchStartY=t.clientY;
+
+},
+
+{passive:true}
+
+);
+
+
+mainImageBox.addEventListener(
+
+"touchend",
+
+e=>{
+
+let t=e.changedTouches[0];
+
+let dx=t.clientX-touchStartX;
+
+let dy=t.clientY-touchStartY;
+
+
+if(
+
+Math.abs(dx)>50&&
+
+Math.abs(dx)>Math.abs(dy)
+
+){
+
+dx<0
+
+?nextImage()
+
+:previousImage();
+
+}
+
+},
+
+{passive:true}
+
+);
+
+
+/* =========================
+   KEYBOARD
+========================= */
+
+document.addEventListener(
+
+"keydown",
+
+e=>{
+
+if(e.key==="Escape")
+
+closeLightbox();
+
+if(e.key==="ArrowRight")
+
+nextImage();
+
+if(e.key==="ArrowLeft")
+
+previousImage();
+
+}
+
+);
+
+
+/* =========================
+   STORAGE
+========================= */
+
+window.addEventListener(
+
+"storage",
+
+e=>{
+
+if(
+
+e.key==="jr_cart"||
+
+e.key==="jr_wishlist"
+
+){
+
+updateCartCount();
+
+updateWishlist();
+
+}
+
+}
+
+);
+
+
+/* =========================
+   INIT
+========================= */
+
+document.addEventListener(
+
+"DOMContentLoaded",
+
 ()=>{
 
-$("orderSearch").value="";
+updateCartCount();
 
-$("orderStatusFilter").value="";
+loadProduct();
 
-$("orderSort").value="newest";
+}
 
-renderOrders();
-
-};
-
-
-/* =====================================================
-START
-===================================================== */
-
-checkSession();
+);
 
 </script>
 
 </body>
 </html>
+```
