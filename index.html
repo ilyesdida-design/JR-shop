@@ -1,7 +1,5 @@
-<!doctype html>
-
+<!DOCTYPE html>
 <html lang="fr">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,77 +11,87 @@
 
 <body>
 
-<header class="site-header">
-  <div class="wrap nav">
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="wrap nav">
 
-<a class="logo" href="index.html">
-  JR <span>Shop</span>
-</a>
+      <a class="logo" href="index.html">
+        JR <span>Shop</span>
+      </a>
 
-<a class="cart-link" href="cart.html">
-  🛒 Panier
-  <b id="cartCount">0</b>
-</a>
+      <a class="cart-link" href="cart.html">
+        🛒 Panier
+        <b id="cartCount">0</b>
+      </a>
 
+    </div>
+  </header>
+
+
+  <!-- MAIN -->
+  <main class="wrap">
+
+    <!-- HERO -->
+    <section class="hero">
+      <h1>JR Shop</h1>
+      <p>Mode femme, homme et enfants</p>
+    </section>
+
+
+    <!-- CATEGORIES -->
+    <section class="categories-section">
+
+      <h2>Catégories</h2>
+
+      <div id="categories" class="categories">
+        <!-- Les catégories sont chargées depuis Supabase -->
+      </div>
+
+    </section>
+
+
+    <!-- PRODUCTS -->
+    <section class="products-section">
+
+      <div class="section-head">
+
+        <h2>Produits</h2>
+
+        <select id="sort" aria-label="Trier les produits">
+          <option value="new">Nouveautés</option>
+          <option value="priceAsc">Prix croissant</option>
+          <option value="priceDesc">Prix décroissant</option>
+        </select>
+
+      </div>
+
+
+      <div id="products" class="grid">
+        <!-- Les produits sont chargés depuis Supabase -->
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- TOAST / MESSAGE -->
+  <div
+    id="toast"
+    class="toast"
+    role="status"
+    aria-live="polite">
   </div>
-</header>
 
-<main class="wrap">
 
-  <!-- HERO -->
+  <!-- SUPABASE -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
-  <section class="hero">
-    <h1>JR Shop</h1>
-    <p>Mode femme, homme et enfants</p>
-  </section>
+  <!-- CONFIGURATION -->
+  <script src="config.js"></script>
 
-  <!-- CATEGORIES -->
-
-  <section>
-
-<h2>Catégories</h2>
-
-<div id="categories" class="categories">
-  <!-- Les catégories viennent de Supabase -->
-</div>
-
-  </section>
-
-  <!-- PRODUCTS -->
-
-  <section class="products-section">
-
-<div class="section-head">
-
-  <h2>Produits</h2>
-
-  <select id="sort">
-    <option value="new">Nouveautés</option>
-    <option value="priceAsc">Prix croissant</option>
-    <option value="priceDesc">Prix décroissant</option>
-  </select>
-
-</div>
-
-<div id="products" class="grid">
-  <!-- Les produits viennent de Supabase -->
-</div>
-
-  </section>
-
-</main>
-
-<!-- MESSAGE -->
-
-<div id="toast" class="toast"></div>
-
-<!-- SUPABASE -->
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  
-<script src="config.js"></script>
-
-<script src="app.js"></script>
+  <!-- APPLICATION -->
+  <script src="app.js"></script>
 
 </body>
 </html>
