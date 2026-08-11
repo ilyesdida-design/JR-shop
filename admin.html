@@ -1,478 +1,474 @@
+```html
 <!DOCTYPE html>
-
 <html lang="ar" dir="rtl">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>JR Shop — Admin V7</title>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <!-- config.js موجود في root -->
-
-  <script src="../config.js"></script>
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f7f8;
-      color: #111;
-    }
-
-    button,
-    input,
-    textarea,
-    select {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    header {
-      background: #111;
-      color: #fff;
-      padding: 15px;
-      position: sticky;
-      top: 0;
-      z-index: 20;
-    }
-
-    .top {
-      max-width: 1250px;
-      margin: auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-    }
-
-    .logo {
-      font-size: 25px;
-      font-weight: 900;
-    }
-
-    .logo span {
-      color: #22c55e;
-    }
-
-    .logout {
-      border: 0;
-      background: #dc2626;
-      color: #fff;
-      padding: 10px 15px;
-      border-radius: 10px;
-      font-weight: bold;
-    }
-
-    .container {
-      max-width: 1250px;
-      margin: auto;
-      padding: 20px 15px 60px;
-    }
-
-    .login {
-      max-width: 420px;
-      margin: 70px auto;
-      background: #fff;
-      padding: 25px;
-      border-radius: 18px;
-      box-shadow: 0 5px 25px #00000012;
-    }
-
-    .login h1 {
-      text-align: center;
-      margin-top: 0;
-    }
-
-    input,
-    textarea,
-    select {
-      width: 100%;
-      padding: 11px;
-      border: 1px solid #ddd;
-      border-radius: 9px;
-      background: #fff;
-    }
-
-    textarea {
-      min-height: 90px;
-      resize: vertical;
-    }
-
-    label {
-      display: block;
-      font-weight: bold;
-      font-size: 14px;
-      margin-bottom: 6px;
-    }
-
-    .field {
-      margin-bottom: 12px;
-    }
-
-    .btn {
-      border: 0;
-      border-radius: 9px;
-      padding: 11px 14px;
-      font-weight: bold;
-    }
-
-    .green {
-      background: #16a34a;
-      color: #fff;
-    }
-
-    .dark {
-      background: #111;
-      color: #fff;
-    }
-
-    .red {
-      background: #dc2626;
-      color: #fff;
-    }
-
-    .gray {
-      background: #e5e7eb;
-      color: #111;
-    }
-
-    .blue {
-      background: #2563eb;
-      color: #fff;
-    }
-
-    .orange {
-      background: #f59e0b;
-      color: #fff;
-    }
-
-    .tabs {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      margin-bottom: 18px;
-    }
-
-    .tab {
-      border: 0;
-      background: #fff;
-      padding: 12px 18px;
-      border-radius: 10px;
-      font-weight: bold;
-      white-space: nowrap;
-    }
-
-    .tab.active {
-      background: #16a34a;
-      color: #fff;
-    }
-
-    .panel {
-      display: none;
-    }
-
-    .panel.active {
-      display: block;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1.6fr;
-      gap: 18px;
-    }
-
-    .card {
-      background: #fff;
-      border-radius: 16px;
-      padding: 18px;
-      box-shadow: 0 4px 18px #0000000b;
-      margin-bottom: 18px;
-    }
-
-    .card h2 {
-      margin-top: 0;
-    }
-
-    /* DASHBOARD */
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 12px;
-      margin-bottom: 18px;
-    }
-
-    .stat {
-      background: #fff;
-      padding: 18px;
-      border-radius: 14px;
-      box-shadow: 0 3px 12px #00000008;
-    }
-
-    .stat small {
-      color: #777;
-    }
-
-    .stat b {
-      display: block;
-      font-size: 25px;
-      margin-top: 7px;
-      color: #16a34a;
-    }
-
-    .stat.warning b {
-      color: #f59e0b;
-    }
-
-    .stat.danger b {
-      color: #dc2626;
-    }
-
-    .products,
-    .orders {
-      display: grid;
-      gap: 12px;
-    }
-
-    .item {
-      background: #fff;
-      border-radius: 14px;
-      padding: 12px;
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      box-shadow: 0 3px 12px #0000000a;
-    }
-
-    .item img {
-      width: 75px;
-      height: 75px;
-      object-fit: cover;
-      border-radius: 10px;
-      background: #eee;
-    }
-
-    .item-main {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .item-main h3 {
-      margin: 0 0 6px;
-      font-size: 16px;
-    }
-
-    .muted {
-      color: #777;
-      font-size: 13px;
-    }
-
-    .actions {
-      display: flex;
-      gap: 7px;
-      flex-wrap: wrap;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: bold;
-      background: #dcfce7;
-      color: #166534;
-    }
-
-    .badge.off {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-
-    .badge.warning {
-      background: #fef3c7;
-      color: #92400e;
-    }
-
-    .stock-good {
-      color: #16a34a;
-      font-weight: bold;
-    }
-
-    .stock-low {
-      color: #f59e0b;
-      font-weight: bold;
-    }
-
-    .stock-zero {
-      color: #dc2626;
-      font-weight: bold;
-    }
-
-    .order {
-      background: #fff;
-      border-radius: 14px;
-      padding: 15px;
-      box-shadow: 0 3px 12px #0000000a;
-    }
-
-    .order-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .order-items {
-      background: #f6f7f8;
-      border-radius: 10px;
-      padding: 10px;
-      margin: 10px 0;
-    }
-
-    .order-meta {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-      margin: 10px 0;
-    }
-
-    .order-meta div {
-      background: #f8fafc;
-      padding: 9px;
-      border-radius: 9px;
-    }
-
-    .filters {
-      display: grid;
-      grid-template-columns: 1.5fr 1fr 1fr;
-      gap: 10px;
-      margin-top: 14px;
-    }
-
-    .empty {
-      background: #fff;
-      padding: 25px;
-      border-radius: 14px;
-      text-align: center;
-      color: #777;
-    }
-
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      right: 20px;
-      max-width: 420px;
-      margin: auto;
-      background: #111;
-      color: #fff;
-      padding: 13px;
-      border-radius: 10px;
-      text-align: center;
-      display: none;
-      z-index: 100;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .stock-box {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 8px;
-    }
-
-    .stock-box input {
-      width: 90px;
-      padding: 7px;
-    }
-
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-    }
-
-    @media (max-width: 1050px) {
-      .stats {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
-    @media (max-width: 800px) {
-      .grid,
-      .dashboard-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .stats {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .order-meta {
-        grid-template-columns: 1fr;
-      }
-
-      .filters {
-        grid-template-columns: 1fr;
-      }
-
-      .item {
-        align-items: flex-start;
-      }
-    }
-
-    @media (max-width: 500px) {
-      .stats {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .stat {
-        padding: 13px;
-      }
-
-      .stat b {
-        font-size: 21px;
-      }
-
-      .item {
-        flex-wrap: wrap;
-      }
-    }
-  </style>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JR Shop — Admin V7</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f5f7f8;
+  color:#111;
+}
+
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+
+header{
+  background:#111;
+  color:#fff;
+  padding:15px;
+  position:sticky;
+  top:0;
+  z-index:50;
+}
+
+.top{
+  max-width:1250px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+}
+
+.logo{
+  font-size:25px;
+  font-weight:900;
+}
+
+.logo span{color:#22c55e}
+
+.logout{
+  border:0;
+  background:#dc2626;
+  color:#fff;
+  padding:10px 15px;
+  border-radius:10px;
+  font-weight:bold;
+}
+
+.container{
+  max-width:1250px;
+  margin:auto;
+  padding:20px 15px 60px;
+}
+
+.hidden{display:none!important}
+
+.login{
+  max-width:420px;
+  margin:70px auto;
+  background:#fff;
+  padding:25px;
+  border-radius:18px;
+  box-shadow:0 5px 25px #00000012;
+}
+
+.login h1{
+  text-align:center;
+  margin-top:0;
+}
+
+input,textarea,select{
+  width:100%;
+  padding:11px;
+  border:1px solid #ddd;
+  border-radius:9px;
+  background:#fff;
+  outline:none;
+}
+
+input:focus,textarea:focus,select:focus{
+  border-color:#16a34a;
+}
+
+textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+label{
+  display:block;
+  font-weight:bold;
+  font-size:14px;
+  margin:0 0 6px;
+}
+
+.field{margin-bottom:12px}
+
+.btn{
+  border:0;
+  border-radius:9px;
+  padding:11px 14px;
+  font-weight:bold;
+}
+
+.green{background:#16a34a;color:#fff}
+.dark{background:#111;color:#fff}
+.red{background:#dc2626;color:#fff}
+.gray{background:#e5e7eb;color:#111}
+.blue{background:#2563eb;color:#fff}
+.orange{background:#f59e0b;color:#fff}
+
+.btn:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+
+/* DASHBOARD */
+
+.dashboard-title{
+  margin:0 0 15px;
+  font-size:24px;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.stat{
+  background:#fff;
+  padding:17px;
+  border-radius:14px;
+  box-shadow:0 4px 15px #00000008;
+}
+
+.stat-title{
+  color:#666;
+  font-size:14px;
+}
+
+.stat b{
+  display:block;
+  font-size:24px;
+  margin-top:7px;
+  color:#16a34a;
+}
+
+.stat.red-stat b{color:#dc2626}
+.stat.blue-stat b{color:#2563eb}
+.stat.orange-stat b{color:#f59e0b}
+
+/* TABS */
+
+.tabs{
+  display:flex;
+  gap:8px;
+  overflow:auto;
+  margin-bottom:18px;
+}
+
+.tab{
+  border:0;
+  background:#fff;
+  padding:12px 18px;
+  border-radius:10px;
+  font-weight:bold;
+  white-space:nowrap;
+}
+
+.tab.active{
+  background:#16a34a;
+  color:#fff;
+}
+
+/* PANELS */
+
+.panel{display:none}
+.panel.active{display:block}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1.6fr;
+  gap:18px;
+}
+
+.card{
+  background:#fff;
+  border-radius:16px;
+  padding:18px;
+  box-shadow:0 4px 18px #0000000b;
+  margin-bottom:18px;
+}
+
+.card h2{
+  margin-top:0;
+}
+
+/* PRODUCTS */
+
+.products,.orders{
+  display:grid;
+  gap:12px;
+}
+
+.item{
+  background:#fff;
+  border-radius:14px;
+  padding:12px;
+  display:flex;
+  gap:12px;
+  align-items:center;
+  box-shadow:0 3px 12px #0000000a;
+}
+
+.item img{
+  width:75px;
+  height:75px;
+  object-fit:cover;
+  border-radius:10px;
+  background:#eee;
+}
+
+.item-main{
+  flex:1;
+  min-width:0;
+}
+
+.item-main h3{
+  margin:0 0 6px;
+  font-size:16px;
+}
+
+.muted{
+  color:#777;
+  font-size:13px;
+}
+
+.actions{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+}
+
+.badge{
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:bold;
+  background:#dcfce7;
+  color:#166534;
+  margin-top:5px;
+}
+
+.badge.off{
+  background:#fee2e2;
+  color:#991b1b;
+}
+
+.badge.warn{
+  background:#fef3c7;
+  color:#92400e;
+}
+
+/* STOCK */
+
+.stock-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+
+.stock-card{
+  background:#fff;
+  border-radius:14px;
+  padding:15px;
+  box-shadow:0 3px 12px #00000009;
+}
+
+.stock-number{
+  font-size:27px;
+  font-weight:900;
+  margin:7px 0;
+}
+
+.stock-low{
+  border-right:5px solid #dc2626;
+}
+
+.stock-ok{
+  border-right:5px solid #16a34a;
+}
+
+.stock-zero{
+  border-right:5px solid #111;
+}
+
+/* ORDERS */
+
+.order{
+  background:#fff;
+  border-radius:14px;
+  padding:15px;
+  box-shadow:0 3px 12px #0000000a;
+}
+
+.order-head{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.order-items{
+  background:#f6f7f8;
+  border-radius:10px;
+  padding:10px;
+  margin:10px 0;
+}
+
+.order-meta{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+  margin:10px 0;
+}
+
+.order-meta div{
+  background:#f8fafc;
+  padding:9px;
+  border-radius:9px;
+}
+
+.filters{
+  display:grid;
+  grid-template-columns:1.5fr 1fr 1fr;
+  gap:10px;
+  margin-top:14px;
+}
+
+/* DASHBOARD LOWER */
+
+.dashboard-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+}
+
+.mini-order{
+  border-bottom:1px solid #eee;
+  padding:12px 0;
+}
+
+.mini-order:last-child{
+  border-bottom:0;
+}
+
+.low-stock-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:10px 0;
+  border-bottom:1px solid #eee;
+}
+
+.low-stock-row:last-child{
+  border-bottom:0;
+}
+
+.empty{
+  background:#fff;
+  padding:25px;
+  border-radius:14px;
+  text-align:center;
+  color:#777;
+}
+
+.toast{
+  position:fixed;
+  bottom:20px;
+  left:20px;
+  right:20px;
+  max-width:420px;
+  margin:auto;
+  background:#111;
+  color:#fff;
+  padding:13px;
+  border-radius:10px;
+  text-align:center;
+  display:none;
+  z-index:100;
+}
+
+/* MOBILE */
+
+@media(max-width:1050px){
+  .stats{
+    grid-template-columns:repeat(3,1fr);
+  }
+}
+
+@media(max-width:800px){
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .dashboard-grid{
+    grid-template-columns:1fr;
+  }
+
+  .stock-grid{
+    grid-template-columns:1fr;
+  }
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .order-meta{
+    grid-template-columns:1fr;
+  }
+
+  .filters{
+    grid-template-columns:1fr;
+  }
+
+  .item{
+    align-items:flex-start;
+  }
+}
+
+@media(max-width:500px){
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .top{
+    flex-direction:row;
+  }
+
+  .logo{
+    font-size:20px;
+  }
+}
+</style>
 </head>
 
 <body>
 
 <header id="header" class="hidden">
-
   <div class="top">
+    <div class="logo">
+      JR <span>Shop</span> — Admin V7
+    </div>
 
-```
-<div class="logo">
-  JR <span>Shop</span> — Admin V7
-</div>
-
-<button id="logoutBtn" class="logout">
-  خروج
-</button>
-```
-
+    <button id="logoutBtn" class="logout">
+      خروج
+    </button>
   </div>
-
 </header>
 
 <!-- LOGIN -->
@@ -482,7 +478,7 @@
   <h1>🔐 JR Shop Admin</h1>
 
   <p style="text-align:center;color:#777">
-    دخول لوحة التحكم
+    دخول لوحة التحكم V7
   </p>
 
   <div class="field">
@@ -505,17 +501,12 @@
     >
   </div>
 
-<button
-id="loginBtn"
-class="btn green"
-style="width:100%"
-
->
-
-```
-دخول
-```
-
+  <button
+    id="loginBtn"
+    class="btn green"
+    style="width:100%"
+  >
+    دخول
   </button>
 
   <p
@@ -533,75 +524,75 @@ style="width:100%"
 
   <section id="dashboardTab" class="panel active">
 
-```
-<div class="stats">
+    <h1 class="dashboard-title">
+      📊 Dashboard
+    </h1>
 
-  <div class="stat">
-    <small>📦 المنتجات</small>
-    <b id="statProducts">0</b>
-  </div>
+    <div class="stats">
 
-  <div class="stat">
-    <small>🗂️ الفئات</small>
-    <b id="statCategories">0</b>
-  </div>
-
-  <div class="stat">
-    <small>📋 الطلبات</small>
-    <b id="statOrders">0</b>
-  </div>
-
-  <div class="stat warning">
-    <small>⏳ قيد الانتظار</small>
-    <b id="statPending">0</b>
-  </div>
-
-  <div class="stat danger">
-    <small>🚨 Stock ضعيف</small>
-    <b id="statLowStock">0</b>
-  </div>
-
-  <div class="stat">
-    <small>💰 المبيعات</small>
-    <b id="statRevenue">0</b>
-  </div>
-
-</div>
-
-
-<div class="dashboard-grid">
-
-  <div class="card">
-
-    <h2>
-      🚨 منتجات Stock ضعيف
-    </h2>
-
-    <div id="lowStockList">
-      <div class="empty">
-        جاري التحميل...
+      <div class="stat">
+        <div class="stat-title">📦 المنتجات</div>
+        <b id="statProducts">0</b>
       </div>
+
+      <div class="stat">
+        <div class="stat-title">🗂️ الفئات</div>
+        <b id="statCategories">0</b>
+      </div>
+
+      <div class="stat">
+        <div class="stat-title">📋 الطلبات</div>
+        <b id="statOrders">0</b>
+      </div>
+
+      <div class="stat blue-stat">
+        <div class="stat-title">📦 كمية المخزون</div>
+        <b id="statStock">0</b>
+      </div>
+
+      <div class="stat red-stat">
+        <div class="stat-title">🔴 مخزون ناقص</div>
+        <b id="statLowStock">0</b>
+      </div>
+
+      <div class="stat orange-stat">
+        <div class="stat-title">💰 المبيعات</div>
+        <b id="statSales">0 دج</b>
+      </div>
+
     </div>
 
-  </div>
+    <div class="dashboard-grid">
 
+      <!-- LOW STOCK -->
 
-  <div class="card">
+      <div class="card">
 
-    <h2>
-      📋 آخر الطلبات
-    </h2>
+        <h2>🔴 منتجات تحتاج Stock</h2>
 
-    <div id="recentOrders">
-      <div class="empty">
-        جاري التحميل...
+        <div id="lowStockList">
+          <div class="empty">
+            لا توجد منتجات ناقصة المخزون.
+          </div>
+        </div>
+
       </div>
+
+      <!-- RECENT ORDERS -->
+
+      <div class="card">
+
+        <h2>📋 آخر الطلبات</h2>
+
+        <div id="recentOrdersList">
+          <div class="empty">
+            لا توجد طلبات.
+          </div>
+        </div>
+
+      </div>
+
     </div>
-
-  </div>
-
-</div>
-```
 
   </section>
 
@@ -609,403 +600,412 @@ style="width:100%"
 
   <div class="tabs">
 
-```
-<button
-  class="tab active"
-  data-tab="dashboardTab"
->
-  📊 Dashboard
-</button>
+    <button
+      class="tab"
+      data-tab="dashboardTab"
+    >
+      📊 Dashboard
+    </button>
 
-<button
-  class="tab"
-  data-tab="productsTab"
->
-  📦 المنتجات
-</button>
+    <button
+      class="tab active"
+      data-tab="productsTab"
+    >
+      📦 المنتجات
+    </button>
 
-<button
-  class="tab"
-  data-tab="categoriesTab"
->
-  🗂️ الفئات
-</button>
+    <button
+      class="tab"
+      data-tab="categoriesTab"
+    >
+      🗂️ الفئات
+    </button>
 
-<button
-  class="tab"
-  data-tab="ordersTab"
->
-  📋 الطلبات
-</button>
-```
+    <button
+      class="tab"
+      data-tab="stockTab"
+    >
+      📦 Stock
+    </button>
+
+    <button
+      class="tab"
+      data-tab="ordersTab"
+    >
+      📋 الطلبات
+    </button>
 
   </div>
 
   <!-- PRODUCTS -->
 
-  <section
-    id="productsTab"
-    class="panel"
-  >
+  <section id="productsTab" class="panel">
 
-```
-<div class="grid">
+    <div class="grid">
 
+      <div class="card">
 
-  <!-- FORM -->
+        <h2 id="productFormTitle">
+          ➕ إضافة منتج
+        </h2>
 
-  <div class="card">
+        <input type="hidden" id="productId">
 
-    <h2 id="productFormTitle">
-      ➕ إضافة منتج
-    </h2>
+        <div class="field">
+          <label>اسم المنتج</label>
+          <input id="pName">
+        </div>
 
-    <input
-      type="hidden"
-      id="productId"
-    >
+        <div class="field">
+          <label>الوصف</label>
+          <textarea id="pDescription"></textarea>
+        </div>
 
-    <div class="field">
-      <label>اسم المنتج</label>
-      <input id="pName">
-    </div>
+        <div class="field">
+          <label>السعر</label>
+          <input
+            id="pPrice"
+            type="number"
+            min="0"
+          >
+        </div>
 
-    <div class="field">
-      <label>الوصف</label>
-      <textarea id="pDescription"></textarea>
-    </div>
+        <div class="field">
+          <label>السعر القديم</label>
+          <input
+            id="pOldPrice"
+            type="number"
+            min="0"
+          >
+        </div>
 
-    <div class="field">
-      <label>السعر</label>
-      <input
-        id="pPrice"
-        type="number"
-        min="0"
-      >
-    </div>
+        <div class="field">
+          <label>المخزون</label>
+          <input
+            id="pStock"
+            type="number"
+            min="0"
+            value="0"
+          >
+        </div>
 
-    <div class="field">
-      <label>السعر القديم</label>
-      <input
-        id="pOldPrice"
-        type="number"
-        min="0"
-      >
-    </div>
+        <div class="field">
+          <label>الفئة</label>
 
-    <div class="field">
-      <label>المخزون</label>
-      <input
-        id="pStock"
-        type="number"
-        min="0"
-        value="0"
-      >
-    </div>
+          <select id="pCategory">
+            <option value="">
+              بدون فئة
+            </option>
+          </select>
+        </div>
 
-    <div class="field">
+        <div class="field">
+          <label>صورة المنتج</label>
 
-      <label>
-        الفئة
-      </label>
+          <input
+            id="pImageFile"
+            type="file"
+            accept="image/*"
+          >
 
-      <select id="pCategory">
-        <option value="">
-          بدون فئة
-        </option>
-      </select>
+          <small style="color:#777">
+            اختار صورة من الكمبيوتر.
+          </small>
+        </div>
 
-    </div>
+        <div class="field">
+          <label>
+            رابط الصورة (اختياري)
+          </label>
 
-    <div class="field">
+          <input
+            id="pImage"
+            placeholder="https://..."
+          >
+        </div>
 
-      <label>
-        صورة المنتج
-      </label>
+        <div class="field">
 
-      <input
-        id="pImageFile"
-        type="file"
-        accept="image/*"
-      >
+          <label>
+            <input
+              id="pActive"
+              type="checkbox"
+              checked
+              style="width:auto"
+            >
 
-    </div>
+            المنتج نشط
+          </label>
 
-    <div class="field">
+        </div>
 
-      <label>
-        رابط الصورة
-      </label>
-
-      <input
-        id="pImage"
-        placeholder="https://..."
-      >
-
-    </div>
-
-    <div class="field">
-
-      <label>
-
-        <input
-          id="pActive"
-          type="checkbox"
-          checked
-          style="width:auto"
+        <button
+          id="saveProduct"
+          class="btn green"
         >
+          حفظ المنتج
+        </button>
 
-        المنتج نشط
+        <button
+          id="cancelProduct"
+          class="btn gray"
+        >
+          إلغاء
+        </button>
 
-      </label>
+      </div>
 
-    </div>
+      <div>
 
-    <button
-      id="saveProduct"
-      class="btn green"
-    >
-      حفظ المنتج
-    </button>
+        <div class="card">
 
-    <button
-      id="cancelProduct"
-      class="btn gray"
-    >
-      إلغاء
-    </button>
+          <h2>🔎 المنتجات</h2>
 
-  </div>
+          <input
+            id="productSearch"
+            placeholder="ابحث باسم المنتج..."
+          >
 
+        </div>
 
-  <!-- LIST -->
+        <div
+          id="productsList"
+          class="products"
+        ></div>
 
-  <div>
-
-    <div class="card">
-
-      <h2>
-        🔎 المنتجات
-      </h2>
-
-      <input
-        id="productSearch"
-        placeholder="ابحث باسم المنتج..."
-      >
+      </div>
 
     </div>
-
-    <div
-      id="productsList"
-      class="products"
-    ></div>
-
-  </div>
-
-</div>
-```
 
   </section>
 
   <!-- CATEGORIES -->
 
-  <section
-    id="categoriesTab"
-    class="panel"
-  >
+  <section id="categoriesTab" class="panel">
 
-```
-<div class="grid">
+    <div class="grid">
 
+      <div class="card">
 
-  <div class="card">
-
-    <h2 id="categoryFormTitle">
-      ➕ إضافة فئة
-    </h2>
-
-    <input
-      type="hidden"
-      id="categoryId"
-    >
-
-    <div class="field">
-      <label>اسم الفئة</label>
-      <input id="cName">
-    </div>
-
-    <div class="field">
-      <label>Slug</label>
-      <input
-        id="cSlug"
-        placeholder="women"
-      >
-    </div>
-
-    <div class="field">
-      <label>رابط الصورة</label>
-      <input
-        id="cImage"
-        placeholder="https://..."
-      >
-    </div>
-
-    <div class="field">
-      <label>ترتيب</label>
-      <input
-        id="cOrder"
-        type="number"
-        value="0"
-      >
-    </div>
-
-    <div class="field">
-
-      <label>
+        <h2 id="categoryFormTitle">
+          ➕ إضافة فئة
+        </h2>
 
         <input
-          id="cActive"
-          type="checkbox"
-          checked
-          style="width:auto"
+          type="hidden"
+          id="categoryId"
         >
 
-        الفئة نشطة
+        <div class="field">
+          <label>اسم الفئة</label>
+          <input id="cName">
+        </div>
 
-      </label>
+        <div class="field">
+          <label>Slug</label>
+          <input
+            id="cSlug"
+            placeholder="women"
+          >
+        </div>
+
+        <div class="field">
+          <label>رابط الصورة</label>
+          <input
+            id="cImage"
+            placeholder="https://..."
+          >
+        </div>
+
+        <div class="field">
+          <label>ترتيب</label>
+          <input
+            id="cOrder"
+            type="number"
+            value="0"
+          >
+        </div>
+
+        <div class="field">
+
+          <label>
+
+            <input
+              id="cActive"
+              type="checkbox"
+              checked
+              style="width:auto"
+            >
+
+            الفئة نشطة
+
+          </label>
+
+        </div>
+
+        <button
+          id="saveCategory"
+          class="btn green"
+        >
+          حفظ الفئة
+        </button>
+
+        <button
+          id="cancelCategory"
+          class="btn gray"
+        >
+          إلغاء
+        </button>
+
+      </div>
+
+      <div class="card">
+
+        <h2>🗂️ الفئات</h2>
+
+        <div id="categoriesList"></div>
+
+      </div>
 
     </div>
 
-    <button
-      id="saveCategory"
-      class="btn green"
-    >
-      حفظ الفئة
-    </button>
+  </section>
 
-    <button
-      id="cancelCategory"
-      class="btn gray"
-    >
-      إلغاء
-    </button>
+  <!-- STOCK -->
 
-  </div>
+  <section id="stockTab" class="panel">
 
+    <div class="stats">
 
-  <div class="card">
+      <div class="stat">
+        <div class="stat-title">
+          📦 إجمالي Stock
+        </div>
+        <b id="stockTotal">0</b>
+      </div>
 
-    <h2>
-      🗂️ الفئات
-    </h2>
+      <div class="stat red-stat">
+        <div class="stat-title">
+          🔴 Stock = 0
+        </div>
+        <b id="stockZero">0</b>
+      </div>
 
-    <div id="categoriesList"></div>
+      <div class="stat orange-stat">
+        <div class="stat-title">
+          ⚠️ Stock ≤ 5
+        </div>
+        <b id="stockWarning">0</b>
+      </div>
 
-  </div>
+    </div>
 
-</div>
-```
+    <div class="card">
+
+      <h2>📦 إدارة المخزون</h2>
+
+      <input
+        id="stockSearch"
+        placeholder="ابحث عن منتج..."
+      >
+
+    </div>
+
+    <div
+      id="stockList"
+      class="stock-grid"
+    ></div>
 
   </section>
 
   <!-- ORDERS -->
 
-  <section
-    id="ordersTab"
-    class="panel"
-  >
+  <section id="ordersTab" class="panel">
 
-```
-<div class="card">
+    <div class="card">
 
-  <h2>
-    📋 الطلبات
-  </h2>
+      <h2>📋 الطلبات</h2>
 
-  <div class="filters">
+      <div class="filters">
 
-    <input
-      id="orderSearch"
-      placeholder="ابحث بالاسم، الهاتف، الولاية..."
-    >
+        <input
+          id="orderSearch"
+          placeholder="ابحث بالاسم، الهاتف، الولاية..."
+        >
 
-    <select id="orderStatusFilter">
+        <select id="orderStatusFilter">
 
-      <option value="">
-        كل الحالات
-      </option>
+          <option value="">
+            كل الحالات
+          </option>
 
-      <option value="pending">
-        Pending
-      </option>
+          <option value="pending">
+            Pending
+          </option>
 
-      <option value="confirmed">
-        Confirmed
-      </option>
+          <option value="confirmed">
+            Confirmed
+          </option>
 
-      <option value="shipped">
-        Shipped
-      </option>
+          <option value="shipped">
+            Shipped
+          </option>
 
-      <option value="delivered">
-        Delivered
-      </option>
+          <option value="delivered">
+            Delivered
+          </option>
 
-      <option value="cancelled">
-        Cancelled
-      </option>
+          <option value="cancelled">
+            Cancelled
+          </option>
 
-    </select>
+        </select>
 
+        <select id="orderDeliveryFilter">
 
-    <select id="orderDeliveryFilter">
+          <option value="">
+            كل طرق التوصيل
+          </option>
 
-      <option value="">
-        كل طرق التوصيل
-      </option>
+          <option value="home">
+            🏠 Domicile
+          </option>
 
-      <option value="home">
-        🏠 Domicile
-      </option>
+          <option value="stopdesk">
+            🏢 Stop Desk
+          </option>
 
-      <option value="stopdesk">
-        🏢 Stop Desk
-      </option>
+        </select>
 
-    </select>
+      </div>
 
-  </div>
+      <div
+        class="actions"
+        style="margin-top:12px"
+      >
 
+        <button
+          id="refreshOrders"
+          class="btn green"
+        >
+          🔄 تحديث
+        </button>
 
-  <div
-    class="actions"
-    style="margin-top:12px"
-  >
+        <button
+          id="clearOrderFilters"
+          class="btn gray"
+        >
+          مسح الفلاتر
+        </button>
 
-    <button
-      id="refreshOrders"
-      class="btn green"
-    >
-      🔄 تحديث
-    </button>
+      </div>
 
-    <button
-      id="clearOrderFilters"
-      class="btn gray"
-    >
-      مسح الفلاتر
-    </button>
+    </div>
 
-  </div>
-
-</div>
-
-
-<div
-  id="ordersList"
-  class="orders"
-></div>
-```
+    <div
+      id="ordersList"
+      class="orders"
+    ></div>
 
   </section>
 
@@ -1018,2202 +1018,2122 @@ style="width:100%"
 
 <script>
 
-  /* =========================
-     ADMIN CONFIG
-  ========================= */
+/* =========================
+   SUPABASE
+========================= */
 
-  const ADMIN_EMAIL = "ilyesdida@hotmail.fr";
+const SUPABASE_URL =
+"https://cstjgsuehmqcolajspqh.supabase.co";
 
-  let products = [];
-  let categories = [];
-  let orders = [];
+const SUPABASE_KEY =
+"sb_publishable_e_wQxqCrx21Qq1kRYKjFMg_yR6TQfKX";
 
-  let appLoaded = false;
+const supabaseClient =
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
+/* =========================
+   ADMIN
+========================= */
 
-  /* =========================
-     HELPERS
-  ========================= */
+const ADMIN_EMAIL =
+"ilyesdida@hotmail.fr";
 
-  const $ = id =>
-    document.getElementById(id);
+let products = [];
+let categories = [];
+let orders = [];
 
+let appLoaded = false;
 
-  function toast(message) {
+/* =========================
+   HELPERS
+========================= */
 
-    $("toast").textContent = message;
+const $ = id =>
+document.getElementById(id);
 
-    $("toast").style.display = "block";
+function toast(msg){
 
-    clearTimeout(window.jrToastTimer);
+  $("toast").textContent = msg;
 
-    window.jrToastTimer =
-      setTimeout(() => {
+  $("toast").style.display = "block";
 
-        $("toast").style.display = "none";
+  clearTimeout(window.jrToastTimer);
 
-      }, 3000);
+  window.jrToastTimer =
+  setTimeout(() => {
 
+    $("toast").style.display =
+    "none";
+
+  },3000);
+}
+
+function esc(v){
+
+  return String(v ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function price(v){
+
+  return Number(v || 0)
+    .toLocaleString("fr-FR") +
+    " دج";
+}
+
+function productStock(p){
+
+  const value =
+    p?.stock ??
+    p?.quantity ??
+    p?.inventory ??
+    0;
+
+  return Number(value || 0);
+}
+
+function productActive(p){
+
+  if(p?.active !== undefined)
+    return p.active !== false;
+
+  if(p?.is_active !== undefined)
+    return p.is_active !== false;
+
+  return true;
+}
+
+function orderTotal(o){
+
+  return Number(
+    o?.total ??
+    o?.total_amount ??
+    o?.amount ??
+    0
+  );
+}
+
+function orderStatus(o){
+
+  return String(
+    o?.status || "pending"
+  ).toLowerCase();
+}
+
+function orderNumber(o){
+
+  return (
+    o?.order_number ||
+    o?.order_code ||
+    String(o?.id || "").slice(0,8)
+  );
+}
+
+/* =========================
+   LOGIN UI
+========================= */
+
+function showLogin(msg=""){
+
+  $("loginBox")
+    .classList.remove("hidden");
+
+  $("app")
+    .classList.add("hidden");
+
+  $("header")
+    .classList.add("hidden");
+
+  $("loginError")
+    .textContent = msg;
+}
+
+function showApp(){
+
+  $("loginBox")
+    .classList.add("hidden");
+
+  $("app")
+    .classList.remove("hidden");
+
+  $("header")
+    .classList.remove("hidden");
+
+  if(!appLoaded){
+
+    appLoaded = true;
+
+    loadAll();
   }
+}
 
+/* =========================
+   SESSION
+========================= */
 
-  function esc(value) {
+async function checkSession(){
 
-    return String(value ?? "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;");
+  try{
 
-  }
+    const {
+      data,
+      error
+    } =
+    await supabaseClient.auth.getSession();
 
+    if(error){
 
-  function price(value) {
+      showLogin(
+        "تعذر الاتصال بـ Supabase: " +
+        error.message
+      );
 
-    return (
-      Number(value || 0)
-        .toLocaleString("fr-DZ")
-      + " DA"
-    );
-
-  }
-
-
-  function imageUrl(value) {
-
-    return value ||
-      "https://placehold.co/100x100?text=JR";
-
-  }
-
-
-  /* =========================
-     LOGIN UI
-  ========================= */
-
-  function showLogin(message = "") {
-
-    $("loginBox")
-      .classList
-      .remove("hidden");
-
-    $("app")
-      .classList
-      .add("hidden");
-
-    $("header")
-      .classList
-      .add("hidden");
-
-    $("loginError")
-      .textContent = message;
-
-  }
-
-
-  function showApp() {
-
-    $("loginBox")
-      .classList
-      .add("hidden");
-
-    $("app")
-      .classList
-      .remove("hidden");
-
-    $("header")
-      .classList
-      .remove("hidden");
-
-    if (!appLoaded) {
-
-      appLoaded = true;
-
-      loadAll();
-
+      return;
     }
 
+    const session =
+    data?.session;
+
+    if(!session){
+
+      showLogin();
+
+      return;
+    }
+
+    const email =
+    (session.user?.email || "")
+    .trim()
+    .toLowerCase();
+
+    if(
+      email !==
+      ADMIN_EMAIL.toLowerCase()
+    ){
+
+      await supabaseClient.auth.signOut();
+
+      showLogin(
+        "هذا الحساب غير مصرح له بالدخول إلى لوحة الإدارة."
+      );
+
+      return;
+    }
+
+    showApp();
+
+  }catch(e){
+
+    console.error(e);
+
+    showLogin(
+      "حدث خطأ أثناء التحقق من الدخول."
+    );
   }
+}
 
+supabaseClient.auth.onAuthStateChange(
+  (event,session)=>{
 
-  /* =========================
-     SESSION
-  ========================= */
+    setTimeout(async()=>{
 
-  async function checkSession() {
+      if(event === "SIGNED_OUT"){
 
-    try {
-
-      const {
-        data,
-        error
-      } =
-        await supabaseClient
-          .auth
-          .getSession();
-
-
-      if (error) {
-
-        showLogin(
-          "تعذر الاتصال بـ Supabase."
-        );
-
-        return;
-
-      }
-
-
-      const session =
-        data?.session;
-
-
-      if (!session) {
+        appLoaded = false;
 
         showLogin();
 
         return;
-
       }
 
+      if(
+        event === "SIGNED_IN" ||
+        event === "INITIAL_SESSION"
+      ){
 
-      const email =
-        (
-          session.user?.email || ""
-        )
+        if(session){
+
+          const email =
+          (session.user?.email || "")
           .trim()
           .toLowerCase();
 
+          if(
+            email ===
+            ADMIN_EMAIL.toLowerCase()
+          ){
 
-      if (
-        email !==
-        ADMIN_EMAIL.toLowerCase()
-      ) {
+            showApp();
 
-        await supabaseClient
-          .auth
-          .signOut();
+          }else{
 
-        showLogin(
-          "هذا الحساب غير مصرح له."
-        );
+            await supabaseClient.auth.signOut();
 
-        return;
+            showLogin(
+              "هذا الحساب غير مصرح له بالدخول إلى لوحة الإدارة."
+            );
+          }
 
+        }else{
+
+          showLogin();
+        }
       }
 
+    },0);
+  }
+);
 
-      showApp();
+/* =========================
+   LOGIN
+========================= */
 
+$("loginBtn").onclick =
+async()=>{
 
-    } catch (error) {
+  $("loginError")
+    .textContent = "";
 
-      console.error(error);
+  const email =
+  $("email").value
+  .trim()
+  .toLowerCase();
 
-      showLogin(
-        "حدث خطأ أثناء التحقق."
-      );
+  const password =
+  $("password").value;
 
-    }
+  if(!email || !password){
 
+    $("loginError")
+      .textContent =
+      "دخل Email وكلمة المرور.";
+
+    return;
   }
 
-
-  supabaseClient
-    .auth
-    .onAuthStateChange(
-      (event, session) => {
-
-        setTimeout(async () => {
-
-          if (
-            event ===
-            "SIGNED_OUT"
-          ) {
-
-            appLoaded = false;
-
-            showLogin();
-
-            return;
-
-          }
-
-
-          if (
-            event ===
-              "SIGNED_IN" ||
-            event ===
-              "INITIAL_SESSION"
-          ) {
-
-            if (!session) {
-
-              showLogin();
-
-              return;
-
-            }
-
-
-            const email =
-              (
-                session.user?.email ||
-                ""
-              )
-                .trim()
-                .toLowerCase();
-
-
-            if (
-              email ===
-              ADMIN_EMAIL.toLowerCase()
-            ) {
-
-              showApp();
-
-            } else {
-
-              await supabaseClient
-                .auth
-                .signOut();
-
-              showLogin(
-                "هذا الحساب غير مصرح له."
-              );
-
-            }
-
-          }
-
-        }, 0);
-
-      }
-    );
-
-
-  /* =========================
-     LOGIN
-  ========================= */
-
-  $("loginBtn").onclick =
-    async () => {
-
-      $("loginError")
-        .textContent = "";
-
-      const email =
-        $("email")
-          .value
-          .trim()
-          .toLowerCase();
-
-      const password =
-        $("password")
-          .value;
-
-
-      if (!email || !password) {
-
-        $("loginError")
-          .textContent =
-          "دخل Email وكلمة المرور.";
-
-        return;
-
-      }
-
-
-      $("loginBtn")
-        .disabled = true;
-
-      $("loginBtn")
-        .textContent =
-        "جاري الدخول...";
-
-
-      try {
-
-        const {
-          data,
-          error
-        } =
-          await supabaseClient
-            .auth
-            .signInWithPassword({
-              email,
-              password
-            });
-
-
-        if (error) {
-
-          $("loginError")
-            .textContent =
-            "Email أو كلمة المرور غير صحيحة.";
-
-          return;
-
-        }
-
-
-        const loggedEmail =
-          (
-            data?.user?.email ||
-            email
-          )
-            .trim()
-            .toLowerCase();
-
-
-        if (
-          loggedEmail !==
-          ADMIN_EMAIL.toLowerCase()
-        ) {
-
-          await supabaseClient
-            .auth
-            .signOut();
-
-          $("loginError")
-            .textContent =
-            "هذا الحساب غير مصرح له.";
-
-          return;
-
-        }
-
-
-        showApp();
-
-
-      } catch (error) {
-
-        console.error(error);
-
-        $("loginError")
-          .textContent =
-          "تعذر تسجيل الدخول.";
-
-      } finally {
-
-        $("loginBtn")
-          .disabled = false;
-
-        $("loginBtn")
-          .textContent = "دخول";
-
-      }
-
-    };
-
-
-  $("logoutBtn").onclick =
-    async () => {
-
-      await supabaseClient
-        .auth
-        .signOut();
-
-    };
-
-
-  /* =========================
-     TABS
-  ========================= */
-
-  document
-    .querySelectorAll(".tab")
-    .forEach(button => {
-
-      button.onclick = () => {
-
-        document
-          .querySelectorAll(".tab")
-          .forEach(
-            x =>
-              x.classList
-                .remove("active")
-          );
-
-
-        document
-          .querySelectorAll(".panel")
-          .forEach(
-            x =>
-              x.classList
-                .remove("active")
-          );
-
-
-        button
-          .classList
-          .add("active");
-
-
-        $(button.dataset.tab)
-          .classList
-          .add("active");
-
-      };
-
+  $("loginBtn").disabled = true;
+
+  $("loginBtn").textContent =
+  "جاري الدخول...";
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+    await supabaseClient.auth
+    .signInWithPassword({
+      email,
+      password
     });
 
+    if(error){
 
-  /* =========================
-     LOAD ALL
-  ========================= */
+      let msg =
+      error.message ||
+      "فشل تسجيل الدخول";
 
-  async function loadAll() {
+      if(
+        /invalid login credentials/i
+        .test(msg)
+      ){
 
-    await Promise.all([
-      loadCategories(),
-      loadProducts(),
-      loadOrders()
-    ]);
+        msg =
+        "Email أو كلمة المرور غير صحيحة.";
+      }
 
-    updateDashboard();
+      if(
+        /email not confirmed/i
+        .test(msg)
+      ){
 
-  }
+        msg =
+        "لازم تأكد Email الحساب من Supabase أولًا.";
+      }
 
-
-  /* =========================
-     CATEGORIES
-  ========================= */
-
-  async function loadCategories() {
-
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
-        .from("categories")
-        .select("*")
-        .order(
-          "sort_order",
-          {
-            ascending: true
-          }
-        );
-
-
-    if (error) {
-
-      console.error(error);
-
-      toast(
-        "خطأ في تحميل الفئات"
-      );
+      $("loginError")
+        .textContent = msg;
 
       return;
-
     }
 
-
-    categories =
-      data || [];
-
-
-    $("statCategories")
-      .textContent =
-      categories.length;
-
-
-    $("pCategory")
-      .innerHTML =
-      '<option value="">بدون فئة</option>' +
-
-      categories
-        .map(
-          category =>
-            `<option value="${category.id}">
-              ${esc(category.name)}
-            </option>`
-        )
-        .join("");
-
-
-    renderCategories();
-
-  }
-
-
-  function renderCategories() {
-
-    $("categoriesList")
-      .innerHTML =
-
-      categories
-        .map(category => {
-
-          return `
-
-            <div
-              class="item"
-              style="margin-bottom:10px"
-            >
-
-              <img
-                src="${esc(
-                  imageUrl(
-                    category.image_url
-                  )
-                )}"
-                onerror="
-                  this.src='https://placehold.co/100x100?text=JR'
-                "
-              >
-
-              <div class="item-main">
-
-                <h3>
-                  ${esc(category.name)}
-                </h3>
-
-                <div class="muted">
-                  ${esc(category.slug || "")}
-                  · ترتيب
-                  ${category.sort_order || 0}
-                </div>
-
-                <span
-                  class="badge ${
-                    category.active === false
-                      ? "off"
-                      : ""
-                  }"
-                >
-                  ${
-                    category.active === false
-                      ? "موقوفة"
-                      : "نشطة"
-                  }
-                </span>
-
-              </div>
-
-              <div class="actions">
-
-                <button
-                  class="btn dark"
-                  onclick="
-                    editCategory('${category.id}')
-                  "
-                >
-                  تعديل
-                </button>
-
-                <button
-                  class="btn red"
-                  onclick="
-                    deleteCategory('${category.id}')
-                  "
-                >
-                  حذف
-                </button>
-
-              </div>
-
-            </div>
-
-          `;
-
-        })
-        .join("") ||
-
-      '<p class="empty">لا توجد فئات.</p>';
-
-  }
-
-
-  /* =========================
-     PRODUCTS
-  ========================= */
-
-  async function loadProducts() {
-
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
-        .from("products")
-        .select("*")
-        .order(
-          "created_at",
-          {
-            ascending: false
-          }
-        );
-
-
-    if (error) {
-
-      console.error(error);
-
-      toast(
-        "خطأ في تحميل المنتجات"
-      );
-
-      return;
-
-    }
-
-
-    products =
-      data || [];
-
-
-    $("statProducts")
-      .textContent =
-      products.length;
-
-
-    renderProducts();
-
-    updateDashboard();
-
-  }
-
-
-  function stockClass(stock) {
-
-    if (stock <= 0)
-      return "stock-zero";
-
-    if (stock <= 5)
-      return "stock-low";
-
-    return "stock-good";
-
-  }
-
-
-  function stockLabel(stock) {
-
-    if (stock <= 0)
-      return "Rupture";
-
-    if (stock <= 5)
-      return "Stock faible";
-
-    return "Disponible";
-
-  }
-
-
-  function renderProducts() {
-
-    const query =
-      $("productSearch")
-        .value
-        .trim()
-        .toLowerCase();
-
-
-    const list =
-      products.filter(
-        product =>
-          (
-            product.name || ""
-          )
-            .toLowerCase()
-            .includes(query)
-      );
-
-
-    $("productsList")
-      .innerHTML =
-
-      list
-        .map(product => {
-
-          const stock =
-            Number(
-              product.stock || 0
-            );
-
-
-          const active =
-            product.active !== false &&
-            product.is_active !== false;
-
-
-          return `
-
-            <div class="item">
-
-              <img
-                src="${esc(
-                  imageUrl(
-                    product.image_url ||
-                    product.image
-                  )
-                )}"
-                onerror="
-                  this.src='https://placehold.co/100x100?text=JR'
-                "
-              >
-
-
-              <div class="item-main">
-
-                <h3>
-                  ${esc(product.name)}
-                </h3>
-
-                <div class="muted">
-                  ${price(product.price)}
-                </div>
-
-                <div
-                  class="${stockClass(stock)}"
-                >
-                  📦 Stock:
-                  ${stock}
-                  —
-                  ${stockLabel(stock)}
-                </div>
-
-                <span
-                  class="badge ${
-                    active ? "" : "off"
-                  }"
-                >
-                  ${
-                    active
-                      ? "نشط"
-                      : "غير نشط"
-                  }
-                </span>
-
-              </div>
-
-
-              <div class="actions">
-
-                <button
-                  class="btn dark"
-                  onclick="
-                    editProduct('${product.id}')
-                  "
-                >
-                  تعديل
-                </button>
-
-                <button
-                  class="btn red"
-                  onclick="
-                    deleteProduct('${product.id}')
-                  "
-                >
-                  حذف
-                </button>
-
-              </div>
-
-            </div>
-
-          `;
-
-        })
-        .join("") ||
-
-      '<p class="empty">لا توجد منتجات.</p>';
-
-  }
-
-
-  $("productSearch")
-    .oninput =
-    renderProducts;
-
-
-  /* =========================
-     PRODUCT FORM
-  ========================= */
-
-  function resetProduct() {
-
-    $("productId").value = "";
-
-    $("pName").value = "";
-
-    $("pDescription").value = "";
-
-    $("pPrice").value = "";
-
-    $("pOldPrice").value = "";
-
-    $("pStock").value = 0;
-
-    $("pCategory").value = "";
-
-    $("pImage").value = "";
-
-    $("pImageFile").value = "";
-
-    $("pActive").checked = true;
-
-    $("productFormTitle")
-      .textContent =
-      "➕ إضافة منتج";
-
-  }
-
-
-  $("cancelProduct")
-    .onclick =
-    resetProduct;
-
-
-  window.editProduct =
-    id => {
-
-      const product =
-        products.find(
-          x =>
-            String(x.id) ===
-            String(id)
-        );
-
-
-      if (!product)
-        return;
-
-
-      $("productId")
-        .value =
-        product.id;
-
-      $("pName")
-        .value =
-        product.name || "";
-
-      $("pDescription")
-        .value =
-        product.description || "";
-
-      $("pPrice")
-        .value =
-        product.price || 0;
-
-      $("pOldPrice")
-        .value =
-        product.old_price || 0;
-
-      $("pStock")
-        .value =
-        product.stock || 0;
-
-      $("pCategory")
-        .value =
-        product.category_id || "";
-
-      $("pImage")
-        .value =
-        product.image_url ||
-        product.image ||
-        "";
-
-      $("pActive")
-        .checked =
-        product.active !== false &&
-        product.is_active !== false;
-
-
-      $("productFormTitle")
+    const loggedEmail =
+    (data?.user?.email || email)
+    .trim()
+    .toLowerCase();
+
+    if(
+      loggedEmail !==
+      ADMIN_EMAIL.toLowerCase()
+    ){
+
+      await supabaseClient.auth.signOut();
+
+      $("loginError")
         .textContent =
-        "✏️ تعديل المنتج";
+        "هذا الحساب غير مصرح له بالدخول إلى لوحة الإدارة.";
 
+      return;
+    }
 
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
+    showApp();
 
-    };
+  }catch(e){
 
+    console.error(e);
+
+    $("loginError")
+      .textContent =
+      "تعذر تسجيل الدخول: " +
+      (e.message || e);
+
+  }finally{
+
+    $("loginBtn").disabled = false;
+
+    $("loginBtn").textContent =
+    "دخول";
+  }
+};
+
+/* =========================
+   LOGOUT
+========================= */
+
+$("logoutBtn").onclick =
+async()=>{
+
+  await supabaseClient.auth.signOut();
+};
+
+/* =========================
+   TABS
+========================= */
+
+document
+.querySelectorAll(".tab")
+.forEach(btn=>{
+
+  btn.onclick = ()=>{
+
+    document
+    .querySelectorAll(".tab")
+    .forEach(x =>
+      x.classList.remove("active")
+    );
+
+    document
+    .querySelectorAll(".panel")
+    .forEach(x =>
+      x.classList.remove("active")
+    );
+
+    btn.classList.add("active");
+
+    $(btn.dataset.tab)
+      .classList.add("active");
+
+  };
+
+});
+
+/* =========================
+   LOAD ALL
+========================= */
+
+async function loadAll(){
+
+  await Promise.all([
+    loadCategories(),
+    loadProducts(),
+    loadOrders()
+  ]);
+
+  updateDashboard();
+  renderStock();
+}
+
+/* =========================
+   CATEGORIES
+========================= */
+
+async function loadCategories(){
+
+  const {
+    data,
+    error
+  } =
+  await supabaseClient
+  .from("categories")
+  .select("*")
+  .order(
+    "sort_order",
+    {ascending:true}
+  );
+
+  if(error){
+
+    toast(
+      "خطأ الفئات: " +
+      error.message
+    );
+
+    return;
+  }
+
+  categories =
+  data || [];
+
+  $("statCategories")
+    .textContent =
+    categories.length;
+
+  $("pCategory").innerHTML =
+  '<option value="">بدون فئة</option>' +
+
+  categories.map(c=>`
+
+    <option value="${esc(c.id)}">
+      ${esc(c.name)}
+    </option>
+
+  `).join("");
+
+  $("categoriesList").innerHTML =
+
+  categories.length
+
+  ?
+
+  categories.map(c=>`
+
+    <div
+      class="item"
+      style="margin-bottom:10px"
+    >
+
+      <img
+        src="${esc(
+          c.image_url ||
+          "https://placehold.co/100x100?text=JR"
+        )}"
+        onerror="
+          this.src='https://placehold.co/100x100?text=JR'
+        "
+      >
+
+      <div class="item-main">
+
+        <h3>
+          ${esc(c.name)}
+        </h3>
+
+        <div class="muted">
+          ${esc(c.slug || "")}
+          · ترتيب ${c.sort_order ?? 0}
+        </div>
+
+        <span
+          class="badge ${
+            c.active === false
+            ? "off"
+            : ""
+          }"
+        >
+          ${
+            c.active === false
+            ? "موقوفة"
+            : "نشطة"
+          }
+        </span>
+
+      </div>
+
+      <div class="actions">
+
+        <button
+          class="btn dark"
+          onclick="editCategory('${esc(c.id)}')"
+        >
+          تعديل
+        </button>
+
+        <button
+          class="btn red"
+          onclick="deleteCategory('${esc(c.id)}')"
+        >
+          حذف
+        </button>
+
+      </div>
+
+    </div>
+
+  `).join("")
+
+  :
+
+  '<p class="empty">لا توجد فئات.</p>';
+}
+
+/* =========================
+   PRODUCTS
+========================= */
+
+async function loadProducts(){
+
+  const {
+    data,
+    error
+  } =
+  await supabaseClient
+  .from("products")
+  .select("*")
+  .order(
+    "created_at",
+    {ascending:false}
+  );
+
+  if(error){
+
+    toast(
+      "خطأ المنتجات: " +
+      error.message
+    );
+
+    return;
+  }
+
+  products =
+  data || [];
+
+  $("statProducts")
+    .textContent =
+    products.length;
+
+  renderProducts();
+  renderStock();
+  updateDashboard();
+}
+
+function renderProducts(){
+
+  const q =
+  $("productSearch")
+  .value
+  .trim()
+  .toLowerCase();
+
+  const list =
+  products.filter(p =>
+    String(p.name || "")
+    .toLowerCase()
+    .includes(q)
+  );
+
+  $("productsList").innerHTML =
+
+  list.length
+
+  ?
+
+  list.map(p=>{
+
+    const stock =
+    productStock(p);
+
+    const active =
+    productActive(p);
+
+    let stockBadge = "";
+
+    if(stock <= 0){
+
+      stockBadge =
+      `<span class="badge off">
+        Stock 0
+      </span>`;
+
+    }else if(stock <= 5){
+
+      stockBadge =
+      `<span class="badge warn">
+        Stock faible: ${stock}
+      </span>`;
+
+    }else{
+
+      stockBadge =
+      `<span class="badge">
+        Stock: ${stock}
+      </span>`;
+    }
+
+    return `
+
+      <div class="item">
+
+        <img
+          src="${esc(
+            p.image_url ||
+            p.image ||
+            "https://placehold.co/100x100?text=JR"
+          )}"
+          onerror="
+            this.src='https://placehold.co/100x100?text=JR'
+          "
+        >
+
+        <div class="item-main">
+
+          <h3>
+            ${esc(p.name)}
+          </h3>
+
+          <div class="muted">
+            ${price(p.price)}
+            · Stock: ${stock}
+          </div>
+
+          <span
+            class="badge ${
+              active ? "" : "off"
+            }"
+          >
+            ${
+              active
+              ? "نشط"
+              : "غير نشط"
+            }
+          </span>
+
+          ${stockBadge}
+
+        </div>
+
+        <div class="actions">
+
+          <button
+            class="btn dark"
+            onclick="editProduct('${esc(p.id)}')"
+          >
+            تعديل
+          </button>
+
+          <button
+            class="btn red"
+            onclick="deleteProduct('${esc(p.id)}')"
+          >
+            حذف
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+  }).join("")
+
+  :
+
+  '<p class="empty">لا توجد منتجات.</p>';
+}
+
+$("productSearch").oninput =
+renderProducts;
+
+/* =========================
+   PRODUCT FORM
+========================= */
+
+function resetProduct(){
+
+  $("productId").value = "";
+
+  $("pName").value = "";
+
+  $("pDescription").value = "";
+
+  $("pPrice").value = "";
+
+  $("pOldPrice").value = "";
+
+  $("pStock").value = 0;
+
+  $("pCategory").value = "";
+
+  $("pImage").value = "";
+
+  $("pImageFile").value = "";
+
+  $("pActive").checked = true;
+
+  $("productFormTitle")
+    .textContent =
+    "➕ إضافة منتج";
+}
+
+$("cancelProduct").onclick =
+resetProduct;
+
+/* =========================
+   EDIT PRODUCT
+========================= */
+
+window.editProduct =
+id=>{
+
+  const p =
+  products.find(x =>
+    String(x.id) === String(id)
+  );
+
+  if(!p) return;
+
+  $("productId").value =
+  p.id;
+
+  $("pName").value =
+  p.name || "";
+
+  $("pDescription").value =
+  p.description || "";
+
+  $("pPrice").value =
+  p.price ?? 0;
+
+  $("pOldPrice").value =
+  p.old_price ?? 0;
+
+  $("pStock").value =
+  productStock(p);
+
+  $("pCategory").value =
+  p.category_id || "";
+
+  $("pImage").value =
+  p.image_url ||
+  p.image ||
+  "";
+
+  $("pImageFile").value =
+  "";
+
+  $("pActive").checked =
+  productActive(p);
+
+  $("productFormTitle")
+    .textContent =
+    "✏️ تعديل المنتج";
+
+  document
+  .querySelector('[data-tab="productsTab"]')
+  ?.click();
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+};
+
+/* =========================
+   SAVE PRODUCT
+========================= */
+
+$("saveProduct").onclick =
+async()=>{
+
+  const id =
+  $("productId").value;
+
+  const file =
+  $("pImageFile").files[0];
+
+  if(
+    !$("pName")
+    .value
+    .trim()
+  ){
+
+    toast(
+      "اكتب اسم المنتج"
+    );
+
+    return;
+  }
+
+  let imageUrl =
+  $("pImage")
+  .value
+  .trim() || null;
 
   $("saveProduct")
-    .onclick =
-    async () => {
+    .disabled = true;
 
-      const id =
-        $("productId")
-          .value;
+  try{
 
+    if(file){
 
-      const file =
-        $("pImageFile")
-          .files[0];
-
-
-      const name =
-        $("pName")
-          .value
-          .trim();
-
-
-      if (!name) {
+      if(
+        file.size >
+        5 * 1024 * 1024
+      ){
 
         toast(
-          "اكتب اسم المنتج"
+          "الصورة لازم تكون أقل من 5MB"
         );
 
         return;
-
       }
 
+      if(
+        !file.type.startsWith("image/")
+      ){
 
-      let imageUrl =
-        $("pImage")
-          .value
-          .trim() ||
-        null;
+        toast(
+          "اختار ملف صورة فقط"
+        );
 
+        return;
+      }
 
       $("saveProduct")
-        .disabled = true;
-
-
-      try {
-
-        if (file) {
-
-          if (
-            file.size >
-            5 * 1024 * 1024
-          ) {
-
-            toast(
-              "الصورة لازم تكون أقل من 5MB"
-            );
-
-            return;
-
-          }
-
-
-          const extension =
-            (
-              file.name
-                .split(".")
-                .pop() ||
-              "jpg"
-            )
-              .toLowerCase();
-
-
-          const fileName =
-            `${crypto.randomUUID()}.${extension}`;
-
-
-          $("saveProduct")
-            .textContent =
-            "جاري رفع الصورة...";
-
-
-          const upload =
-            await supabaseClient
-              .storage
-              .from(
-                "product-images"
-              )
-              .upload(
-                fileName,
-                file,
-                {
-                  cacheControl:
-                    "3600",
-
-                  upsert:
-                    false,
-
-                  contentType:
-                    file.type
-                }
-              );
-
-
-          if (upload.error) {
-
-            toast(
-              "فشل رفع الصورة: " +
-              upload.error.message
-            );
-
-            return;
-
-          }
-
-
-          imageUrl =
-            supabaseClient
-              .storage
-              .from(
-                "product-images"
-              )
-              .getPublicUrl(
-                fileName
-              )
-              .data
-              .publicUrl;
-
-        }
-
-
-        const obj = {
-
-          name,
-
-          description:
-            $("pDescription")
-              .value
-              .trim(),
-
-          price:
-            Number(
-              $("pPrice")
-                .value || 0
-            ),
-
-          old_price:
-            Number(
-              $("pOldPrice")
-                .value || 0
-            ),
-
-          stock:
-            Number(
-              $("pStock")
-                .value || 0
-            ),
-
-          category_id:
-            $("pCategory")
-              .value ||
-            null,
-
-          image_url:
-            imageUrl,
-
-          active:
-            $("pActive")
-              .checked,
-
-          is_active:
-            $("pActive")
-              .checked,
-
-          updated_at:
-            new Date()
-              .toISOString()
-
-        };
-
-
-        let result;
-
-
-        if (id) {
-
-          result =
-            await supabaseClient
-              .from("products")
-              .update(obj)
-              .eq("id", id);
-
-        } else {
-
-          result =
-            await supabaseClient
-              .from("products")
-              .insert(obj);
-
-        }
-
-
-        if (result.error) {
-
-          throw result.error;
-
-        }
-
-
-        toast(
-          id
-            ? "تم تعديل المنتج ✅"
-            : "تمت إضافة المنتج ✅"
-        );
-
-
-        resetProduct();
-
-        await loadProducts();
-
-
-      } catch (error) {
-
-        console.error(error);
-
-        toast(
-          error.message ||
-          "حدث خطأ"
-        );
-
-      } finally {
-
-        $("saveProduct")
-          .disabled = false;
-
-        $("saveProduct")
-          .textContent =
-          "حفظ المنتج";
-
-      }
-
-    };
-
-
-  window.deleteProduct =
-    async id => {
-
-      if (
-        !confirm(
-          "هل تريد حذف هذا المنتج؟"
-        )
+        .textContent =
+        "جاري رفع الصورة...";
+
+      const ext =
+      (
+        file.name
+        .split(".")
+        .pop() ||
+        "jpg"
       )
-        return;
+      .toLowerCase()
+      .replace(
+        /[^a-z0-9]/gi,
+        ""
+      ) || "jpg";
 
+      const fileName =
+      `${crypto.randomUUID()}.${ext}`;
 
-      const {
-        error
-      } =
-        await supabaseClient
-          .from("products")
-          .delete()
-          .eq("id", id);
-
-
-      if (error) {
-
-        toast(
-          error.message
-        );
-
-        return;
-
-      }
-
-
-      toast(
-        "تم حذف المنتج"
+      const upload =
+      await supabaseClient
+      .storage
+      .from("product-images")
+      .upload(
+        fileName,
+        file,
+        {
+          cacheControl:"3600",
+          upsert:false,
+          contentType:file.type
+        }
       );
 
+      if(upload.error){
 
-      loadProducts();
+        toast(
+          "فشل رفع الصورة: " +
+          upload.error.message
+        );
 
+        return;
+      }
+
+      imageUrl =
+      supabaseClient
+      .storage
+      .from("product-images")
+      .getPublicUrl(fileName)
+      .data
+      .publicUrl;
+    }
+
+    const obj = {
+
+      name:
+      $("pName")
+      .value
+      .trim(),
+
+      description:
+      $("pDescription")
+      .value
+      .trim(),
+
+      price:
+      Number(
+        $("pPrice")
+        .value || 0
+      ),
+
+      old_price:
+      Number(
+        $("pOldPrice")
+        .value || 0
+      ),
+
+      stock:
+      Number(
+        $("pStock")
+        .value || 0
+      ),
+
+      category_id:
+      $("pCategory")
+      .value || null,
+
+      image_url:
+      imageUrl,
+
+      active:
+      $("pActive")
+      .checked,
+
+      is_active:
+      $("pActive")
+      .checked,
+
+      updated_at:
+      new Date()
+      .toISOString()
     };
 
-
-  /* =========================
-     CATEGORY FORM
-  ========================= */
-
-  function resetCategory() {
-
-    $("categoryId")
-      .value = "";
-
-    $("cName")
-      .value = "";
-
-    $("cSlug")
-      .value = "";
-
-    $("cImage")
-      .value = "";
-
-    $("cOrder")
-      .value = 0;
-
-    $("cActive")
-      .checked = true;
-
-    $("categoryFormTitle")
+    $("saveProduct")
       .textContent =
-      "➕ إضافة فئة";
+      "جاري الحفظ...";
 
+    const res =
+    id
+
+    ?
+
+    await supabaseClient
+    .from("products")
+    .update(obj)
+    .eq("id",id)
+
+    :
+
+    await supabaseClient
+    .from("products")
+    .insert(obj);
+
+    if(res.error){
+
+      toast(
+        res.error.message
+      );
+
+      return;
+    }
+
+    toast(
+      id
+      ? "تم تعديل المنتج ✅"
+      : "تمت إضافة المنتج ✅"
+    );
+
+    resetProduct();
+
+    await loadProducts();
+
+  }catch(e){
+
+    console.error(e);
+
+    toast(
+      "حدث خطأ: " +
+      (e.message || e)
+    );
+
+  }finally{
+
+    $("saveProduct")
+      .disabled = false;
+
+    $("saveProduct")
+      .textContent =
+      "حفظ المنتج";
+  }
+};
+
+/* =========================
+   DELETE PRODUCT
+========================= */
+
+window.deleteProduct =
+async id=>{
+
+  if(
+    !confirm(
+      "هل تريد حذف هذا المنتج؟"
+    )
+  ) return;
+
+  const {
+    error
+  } =
+  await supabaseClient
+  .from("products")
+  .delete()
+  .eq("id",id);
+
+  if(error){
+
+    toast(
+      "فشل الحذف: " +
+      error.message
+    );
+
+    return;
   }
 
+  toast(
+    "تم حذف المنتج ✅"
+  );
 
-  $("cancelCategory")
-    .onclick =
-    resetCategory;
+  await loadProducts();
+};
 
+/* =========================
+   CATEGORY FORM
+========================= */
+
+function resetCategory(){
+
+  $("categoryId").value = "";
+
+  $("cName").value = "";
+
+  $("cSlug").value = "";
+
+  $("cImage").value = "";
+
+  $("cOrder").value = 0;
+
+  $("cActive").checked = true;
+
+  $("categoryFormTitle")
+    .textContent =
+    "➕ إضافة فئة";
+}
+
+$("cancelCategory").onclick =
+resetCategory;
+
+/* =========================
+   SAVE CATEGORY
+========================= */
+
+$("saveCategory").onclick =
+async()=>{
+
+  const id =
+  $("categoryId").value;
+
+  const obj = {
+
+    name:
+    $("cName")
+    .value
+    .trim(),
+
+    slug:
+    $("cSlug")
+    .value
+    .trim(),
+
+    image_url:
+    $("cImage")
+    .value
+    .trim() || null,
+
+    sort_order:
+    Number(
+      $("cOrder")
+      .value || 0
+    ),
+
+    active:
+    $("cActive")
+    .checked
+  };
+
+  if(
+    !obj.name ||
+    !obj.slug
+  ){
+
+    toast(
+      "أدخل اسم وSlug الفئة"
+    );
+
+    return;
+  }
 
   $("saveCategory")
-    .onclick =
-    async () => {
+    .disabled = true;
 
-      const id =
-        $("categoryId")
-          .value;
+  try{
 
+    const res =
+    id
 
-      const obj = {
+    ?
 
-        name:
-          $("cName")
-            .value
-            .trim(),
+    await supabaseClient
+    .from("categories")
+    .update(obj)
+    .eq("id",id)
 
-        slug:
-          $("cSlug")
-            .value
-            .trim(),
+    :
 
-        image_url:
-          $("cImage")
-            .value
-            .trim() ||
-          null,
+    await supabaseClient
+    .from("categories")
+    .insert(obj);
 
-        sort_order:
-          Number(
-            $("cOrder")
-              .value || 0
-          ),
-
-        active:
-          $("cActive")
-            .checked
-
-      };
-
-
-      if (
-        !obj.name ||
-        !obj.slug
-      ) {
-
-        toast(
-          "أدخل اسم وSlug الفئة"
-        );
-
-        return;
-
-      }
-
-
-      const result =
-        id
-
-          ? await supabaseClient
-              .from("categories")
-              .update(obj)
-              .eq("id", id)
-
-          : await supabaseClient
-              .from("categories")
-              .insert(obj);
-
-
-      if (result.error) {
-
-        toast(
-          result.error.message
-        );
-
-        return;
-
-      }
-
+    if(res.error){
 
       toast(
-        id
-          ? "تم تعديل الفئة ✅"
-          : "تمت إضافة الفئة ✅"
-      );
-
-
-      resetCategory();
-
-      loadCategories();
-
-    };
-
-
-  window.editCategory =
-    id => {
-
-      const category =
-        categories.find(
-          x =>
-            String(x.id) ===
-            String(id)
-        );
-
-
-      if (!category)
-        return;
-
-
-      $("categoryId")
-        .value =
-        category.id;
-
-      $("cName")
-        .value =
-        category.name || "";
-
-      $("cSlug")
-        .value =
-        category.slug || "";
-
-      $("cImage")
-        .value =
-        category.image_url || "";
-
-      $("cOrder")
-        .value =
-        category.sort_order || 0;
-
-      $("cActive")
-        .checked =
-        category.active !== false;
-
-
-      $("categoryFormTitle")
-        .textContent =
-        "✏️ تعديل الفئة";
-
-
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
-
-    };
-
-
-  window.deleteCategory =
-    async id => {
-
-      if (
-        !confirm(
-          "حذف الفئة؟ المنتجات المرتبطة بها ستصبح بدون فئة."
-        )
-      )
-        return;
-
-
-      const {
-        error
-      } =
-        await supabaseClient
-          .from("categories")
-          .delete()
-          .eq("id", id);
-
-
-      if (error) {
-
-        toast(
-          error.message
-        );
-
-        return;
-
-      }
-
-
-      toast(
-        "تم حذف الفئة"
-      );
-
-
-      await loadCategories();
-
-      await loadProducts();
-
-    };
-
-
-  /* =========================
-     ORDERS
-  ========================= */
-
-  async function loadOrders() {
-
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
-        .from("orders")
-        .select("*")
-        .order(
-          "created_at",
-          {
-            ascending: false
-          }
-        );
-
-
-    if (error) {
-
-      console.error(error);
-
-      toast(
-        "خطأ في تحميل الطلبات"
+        res.error.message
       );
 
       return;
-
     }
 
+    toast(
+      id
+      ? "تم تعديل الفئة ✅"
+      : "تمت إضافة الفئة ✅"
+    );
 
-    orders =
-      data || [];
+    resetCategory();
 
+    await loadCategories();
 
-    $("statOrders")
-      .textContent =
-      orders.length;
+  }finally{
 
+    $("saveCategory")
+      .disabled = false;
+  }
+};
 
-    renderOrders();
+/* =========================
+   EDIT CATEGORY
+========================= */
 
-    updateDashboard();
+window.editCategory =
+id=>{
 
+  const c =
+  categories.find(x =>
+    String(x.id) === String(id)
+  );
+
+  if(!c) return;
+
+  $("categoryId").value =
+  c.id;
+
+  $("cName").value =
+  c.name || "";
+
+  $("cSlug").value =
+  c.slug || "";
+
+  $("cImage").value =
+  c.image_url || "";
+
+  $("cOrder").value =
+  c.sort_order || 0;
+
+  $("cActive").checked =
+  c.active !== false;
+
+  $("categoryFormTitle")
+    .textContent =
+    "✏️ تعديل الفئة";
+
+  document
+  .querySelector('[data-tab="categoriesTab"]')
+  ?.click();
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+};
+
+/* =========================
+   DELETE CATEGORY
+========================= */
+
+window.deleteCategory =
+async id=>{
+
+  if(
+    !confirm(
+      "حذف الفئة؟ المنتجات المرتبطة بها ستصبح بدون فئة."
+    )
+  ) return;
+
+  const {
+    error
+  } =
+  await supabaseClient
+  .from("categories")
+  .delete()
+  .eq("id",id);
+
+  if(error){
+
+    toast(
+      error.message
+    );
+
+  }else{
+
+    toast(
+      "تم حذف الفئة ✅"
+    );
+
+    await loadCategories();
+    await loadProducts();
+  }
+};
+
+/* =========================
+   STOCK
+========================= */
+
+function renderStock(){
+
+  const q =
+  $("stockSearch")
+  ? $("stockSearch")
+    .value
+    .trim()
+    .toLowerCase()
+  : "";
+
+  const list =
+  products.filter(p =>
+    String(p.name || "")
+    .toLowerCase()
+    .includes(q)
+  );
+
+  let total = 0;
+  let zero = 0;
+  let warning = 0;
+
+  products.forEach(p=>{
+
+    const stock =
+    productStock(p);
+
+    total += stock;
+
+    if(stock <= 0)
+      zero++;
+
+    else if(stock <= 5)
+      warning++;
+  });
+
+  $("stockTotal")
+    .textContent =
+    total;
+
+  $("stockZero")
+    .textContent =
+    zero;
+
+  $("stockWarning")
+    .textContent =
+    warning;
+
+  $("statStock")
+    .textContent =
+    total;
+
+  $("statLowStock")
+    .textContent =
+    zero + warning;
+
+  if(!list.length){
+
+    $("stockList").innerHTML =
+    '<div class="empty" style="grid-column:1/-1">لا توجد منتجات.</div>';
+
+    return;
   }
 
+  $("stockList").innerHTML =
+  list.map(p=>{
 
-  function deliveryLabel(order) {
+    const stock =
+    productStock(p);
 
-    const method =
+    let cls =
+    stock <= 0
+    ? "stock-zero"
+    : stock <= 5
+    ? "stock-low"
+    : "stock-ok";
+
+    let status =
+    stock <= 0
+    ? "❌ نفذ المخزون"
+    : stock <= 5
+    ? "⚠️ مخزون منخفض"
+    : "✅ متوفر";
+
+    return `
+
+      <div class="stock-card ${cls}">
+
+        <div class="muted">
+          ${esc(p.name)}
+        </div>
+
+        <div class="stock-number">
+          ${stock}
+        </div>
+
+        <div>
+          ${status}
+        </div>
+
+        <div
+          class="actions"
+          style="margin-top:12px"
+        >
+
+          <button
+            class="btn dark"
+            onclick="quickStock('${esc(p.id)}')"
+          >
+            تعديل Stock
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+  }).join("");
+}
+
+$("stockSearch").oninput =
+renderStock;
+
+/* =========================
+   QUICK STOCK
+========================= */
+
+window.quickStock =
+async id=>{
+
+  const p =
+  products.find(x =>
+    String(x.id) === String(id)
+  );
+
+  if(!p) return;
+
+  const current =
+  productStock(p);
+
+  const value =
+  prompt(
+    `Stock الحالي: ${current}\nأدخل Stock الجديد:`,
+    current
+  );
+
+  if(value === null)
+    return;
+
+  const stock =
+  Number(value);
+
+  if(
+    !Number.isFinite(stock) ||
+    stock < 0
+  ){
+
+    toast(
+      "أدخل رقم Stock صحيح."
+    );
+
+    return;
+  }
+
+  const {
+    error
+  } =
+  await supabaseClient
+  .from("products")
+  .update({
+    stock:Math.floor(stock),
+    updated_at:
+    new Date().toISOString()
+  })
+  .eq("id",id);
+
+  if(error){
+
+    toast(
+      "فشل تحديث Stock: " +
+      error.message
+    );
+
+    return;
+  }
+
+  toast(
+    "تم تحديث Stock ✅"
+  );
+
+  await loadProducts();
+};
+
+/* =========================
+   ORDERS
+========================= */
+
+async function loadOrders(){
+
+  const {
+    data,
+    error
+  } =
+  await supabaseClient
+  .from("orders")
+  .select("*")
+  .order(
+    "created_at",
+    {ascending:false}
+  );
+
+  if(error){
+
+    toast(
+      "خطأ الطلبات: " +
+      error.message
+    );
+
+    return;
+  }
+
+  orders =
+  data || [];
+
+  $("statOrders")
+    .textContent =
+    orders.length;
+
+  renderOrders();
+
+  updateDashboard();
+}
+
+function deliveryLabel(o){
+
+  const m =
+  String(
+    o.delivery_method ||
+    o.delivery_type ||
+    ""
+  )
+  .toLowerCase();
+
+  if(
+    m === "home" ||
+    m === "domicile"
+  )
+    return "🏠 Domicile";
+
+  if(
+    m === "stopdesk" ||
+    m === "stop_desk" ||
+    m === "stop desk"
+  )
+    return "🏢 Stop Desk";
+
+  return (
+    o.delivery_method ||
+    o.delivery_type ||
+    "—"
+  );
+}
+
+function renderOrders(){
+
+  const q =
+  $("orderSearch")
+  .value
+  .trim()
+  .toLowerCase();
+
+  const status =
+  $("orderStatusFilter")
+  .value;
+
+  const delivery =
+  $("orderDeliveryFilter")
+  .value;
+
+  const filtered =
+  orders.filter(o=>{
+
+    const hay = [
+
+      o.id,
+      o.order_number,
+      o.order_code,
+      o.customer_name,
+      o.name,
+      o.phone,
+      o.wilaya,
+      o.commune,
+      o.address
+
+    ]
+    .map(x =>
+      String(x ?? "")
+      .toLowerCase()
+    )
+    .join(" ");
+
+    if(
+      q &&
+      !hay.includes(q)
+    )
+      return false;
+
+    if(
+      status &&
+      orderStatus(o) !== status
+    )
+      return false;
+
+    if(delivery){
+
+      const m =
       String(
-        order.delivery_method ||
-        order.delivery_type ||
+        o.delivery_method ||
+        o.delivery_type ||
         ""
       )
-        .toLowerCase();
+      .toLowerCase();
 
+      const normalized =
+      m === "domicile"
+      ? "home"
+      :
+      (
+        m === "stop desk" ||
+        m === "stop_desk"
+      )
+      ? "stopdesk"
+      : m;
 
-    if (
-      method === "home" ||
-      method === "domicile"
-    )
-      return "🏠 Domicile";
-
-
-    if (
-      method === "stopdesk" ||
-      method === "stop_desk" ||
-      method === "stop desk"
-    )
-      return "🏢 Stop Desk";
-
-
-    return (
-      order.delivery_method ||
-      order.delivery_type ||
-      "—"
-    );
-
-  }
-
-
-  function renderOrderItems(items) {
-
-    if (
-      !Array.isArray(items)
-    ) {
-
-      return "لا توجد تفاصيل المنتجات";
-
+      if(
+        normalized !== delivery
+      )
+        return false;
     }
 
+    return true;
+  });
 
-    return items
-      .map(item => {
+  if(!filtered.length){
 
-        const quantity =
-          Number(
-            item.quantity || 1
-          );
+    $("ordersList").innerHTML =
+    '<div class="empty">لا توجد طلبات مطابقة.</div>';
 
-
-        const itemPrice =
-          Number(
-            item.price ||
-            item.unit_price ||
-            0
-          );
-
-
-        return `
-          • ${esc(
-            item.name ||
-            "منتج"
-          )}
-
-          × ${quantity}
-
-          = ${price(
-            itemPrice *
-            quantity
-          )}
-        `;
-
-      })
-      .join("<br>");
-
+    return;
   }
 
+  $("ordersList").innerHTML =
+  filtered.map(o=>`
 
-  function renderOrders() {
+    <article class="order">
 
-    const query =
-      $("orderSearch")
-        .value
-        .trim()
-        .toLowerCase();
+      <div class="order-head">
 
+        <div>
 
-    const status =
-      $("orderStatusFilter")
-        .value;
+          <b>
+            #${esc(orderNumber(o))}
+          </b>
 
+          <br>
 
-    const delivery =
-      $("orderDeliveryFilter")
-        .value;
+          <span class="muted">
 
+            ${
+              o.created_at
+              ? new Date(
+                  o.created_at
+                ).toLocaleString("ar-DZ")
+              : "—"
+            }
 
-    const filtered =
-      orders.filter(order => {
+          </span>
 
-        const searchable = [
+        </div>
 
-          order.id,
-
-          order.order_number,
-
-          order.order_code,
-
-          order.customer_name,
-
-          order.phone,
-
-          order.wilaya,
-
-          order.commune,
-
-          order.address
-
-        ]
-          .map(
-            x =>
-              String(
-                x ?? ""
-              )
-                .toLowerCase()
-          )
-          .join(" ");
-
-
-        if (
-          query &&
-          !searchable.includes(
-            query
-          )
-        )
-          return false;
-
-
-        if (
-          status &&
-          String(
-            order.status ||
-            "pending"
-          ) !== status
-        )
-          return false;
-
-
-        if (delivery) {
-
-          const method =
-            String(
-              order.delivery_method ||
-              order.delivery_type ||
-              ""
+        <select
+          onchange="
+            changeStatus(
+              '${esc(o.id)}',
+              this.value
             )
-              .toLowerCase();
-
-
-          const normalized =
-            method === "domicile"
-              ? "home"
-              : (
-                  method === "stop desk" ||
-                  method === "stop_desk"
-                )
-                  ? "stopdesk"
-                  : method;
-
-
-          if (
-            normalized !==
-            delivery
-          )
-            return false;
-
-        }
-
-
-        return true;
-
-      });
-
-
-    if (!filtered.length) {
-
-      $("ordersList")
-        .innerHTML =
-        `
-          <div class="empty">
-            لا توجد طلبات مطابقة.
-          </div>
-        `;
-
-      return;
-
-    }
-
-
-    $("ordersList")
-      .innerHTML =
-
-      filtered
-        .map(order => {
-
-          const orderNumber =
-            order.order_number ||
-            order.order_code ||
-            String(
-              order.id || ""
-            ).slice(0, 8);
-
-
-          return `
-
-            <article class="order">
-
-              <div class="order-head">
-
-                <div>
-
-                  <b>
-                    #${esc(orderNumber)}
-                  </b>
-
-                  <br>
-
-                  <span class="muted">
-
-                    ${
-                      order.created_at
-                        ? new Date(
-                            order.created_at
-                          )
-                            .toLocaleString(
-                              "ar-DZ"
-                            )
-                        : "—"
-                    }
-
-                  </span>
-
-                </div>
-
-
-                <select
-                  onchange="
-                    changeStatus(
-                      '${order.id}',
-                      this.value
-                    )
-                  "
-                >
-
-                  ${
-                    [
-                      "pending",
-                      "confirmed",
-                      "shipped",
-                      "delivered",
-                      "cancelled"
-                    ]
-                      .map(
-                        statusOption =>
-                          `
-                            <option
-                              value="${statusOption}"
-                              ${
-                                order.status ===
-                                statusOption
-                                  ? "selected"
-                                  : ""
-                              }
-                            >
-                              ${statusOption}
-                            </option>
-                          `
-                      )
-                      .join("")
-                  }
-
-                </select>
-
-              </div>
-
-
-              <hr>
-
-
-              <div class="order-meta">
-
-                <div>
-                  👤 <b>الزبون</b>
-                  <br>
-                  ${esc(
-                    order.customer_name ||
-                    "—"
-                  )}
-                </div>
-
-
-                <div>
-                  📞 <b>الهاتف</b>
-                  <br>
-                  ${esc(
-                    order.phone ||
-                    "—"
-                  )}
-                </div>
-
-
-                <div>
-                  📍 <b>الولاية</b>
-                  <br>
-                  ${esc(
-                    order.wilaya ||
-                    "—"
-                  )}
-                </div>
-
-
-                <div>
-                  🏙️ <b>البلدية</b>
-                  <br>
-                  ${esc(
-                    order.commune ||
-                    "—"
-                  )}
-                </div>
-
-
-                <div>
-                  🏠 <b>العنوان</b>
-                  <br>
-                  ${esc(
-                    order.address ||
-                    "—"
-                  )}
-                </div>
-
-
-                <div>
-                  🚚 <b>التوصيل</b>
-                  <br>
-                  ${esc(
-                    deliveryLabel(
-                      order
-                    )
-                  )}
-                </div>
-
-              </div>
-
-
-              <div class="order-items">
-
-                <b>
-                  المنتجات:
-                </b>
-
-                <br>
-
-                ${renderOrderItems(
-                  order.items
-                )}
-
-              </div>
-
-
-              <b>
-                💰
-                ${price(
-                  order.total
-                )}
-              </b>
-
-            </article>
-
-          `;
-
-        })
-        .join("");
-
-  }
-
-
-  window.changeStatus =
-    async (
-      id,
-      status
-    ) => {
-
-      const {
-        error
-      } =
-        await supabaseClient
-          .from("orders")
-          .update({
-            status
-          })
-          .eq(
-            "id",
-            id
-          );
-
-
-      if (error) {
-
-        toast(
-          error.message
+          "
+          style="width:auto"
+        >
+
+          ${
+            [
+              "pending",
+              "confirmed",
+              "shipped",
+              "delivered",
+              "cancelled"
+            ]
+            .map(s=>`
+
+              <option
+                value="${s}"
+                ${
+                  orderStatus(o) === s
+                  ? "selected"
+                  : ""
+                }
+              >
+                ${s}
+              </option>
+
+            `)
+            .join("")
+          }
+
+        </select>
+
+      </div>
+
+      <hr>
+
+      <div class="order-meta">
+
+        <div>
+          👤 <b>الزبون</b>
+          <br>
+          ${esc(
+            o.customer_name ||
+            o.name ||
+            "—"
+          )}
+        </div>
+
+        <div>
+          📞 <b>الهاتف</b>
+          <br>
+          ${esc(o.phone || "—")}
+        </div>
+
+        <div>
+          📍 <b>الولاية</b>
+          <br>
+          ${esc(o.wilaya || "—")}
+        </div>
+
+        <div>
+          🏙️ <b>البلدية</b>
+          <br>
+          ${esc(o.commune || "—")}
+        </div>
+
+        <div>
+          🏠 <b>العنوان</b>
+          <br>
+          ${esc(o.address || "—")}
+        </div>
+
+        <div>
+          🚚 <b>التوصيل</b>
+          <br>
+          ${esc(deliveryLabel(o))}
+        </div>
+
+      </div>
+
+      <div class="order-items">
+
+        <b>المنتجات:</b>
+
+        <br>
+
+        ${renderOrderItems(o.items)}
+
+      </div>
+
+      <b>
+        💰 ${price(orderTotal(o))}
+      </b>
+
+    </article>
+
+  `).join("");
+}
+
+/* =========================
+   ORDER ITEMS
+========================= */
+
+function renderOrderItems(items){
+
+  if(!items)
+    return "—";
+
+  if(
+    !Array.isArray(items)
+  ){
+
+    try{
+
+      const parsed =
+      typeof items === "string"
+      ? JSON.parse(items)
+      : items;
+
+      if(
+        Array.isArray(parsed)
+      )
+        items = parsed;
+      else
+        return esc(
+          JSON.stringify(parsed)
         );
 
-        return;
+    }catch{
 
-      }
+      return esc(items);
+    }
+  }
 
+  if(!items.length)
+    return "—";
 
-      toast(
-        "تم تحديث حالة الطلب ✅"
-      );
+  return items.map(i=>{
 
+    const quantity =
+    Number(
+      i.quantity ||
+      i.qty ||
+      1
+    );
 
-      loadOrders();
+    const itemPrice =
+    Number(
+      i.price ||
+      i.unit_price ||
+      0
+    );
 
-    };
+    return `
+      • ${esc(
+        i.name ||
+        i.product_name ||
+        "منتج"
+      )}
+      × ${quantity}
+      = ${price(
+        itemPrice * quantity
+      )}
+    `;
 
+  }).join("<br>");
+}
 
-  $("refreshOrders")
-    .onclick =
-    loadOrders;
+/* =========================
+   CHANGE STATUS
+========================= */
 
+window.changeStatus =
+async(id,status)=>{
 
-  $("orderSearch")
-    .oninput =
-    renderOrders;
+  const {
+    error
+  } =
+  await supabaseClient
+  .from("orders")
+  .update({
+    status
+  })
+  .eq("id",id);
 
+  if(error){
+
+    toast(
+      "فشل تحديث الحالة: " +
+      error.message
+    );
+
+    return;
+  }
+
+  toast(
+    "تم تحديث الحالة ✅"
+  );
+
+  await loadOrders();
+};
+
+/* =========================
+   ORDER FILTERS
+========================= */
+
+$("refreshOrders").onclick =
+loadOrders;
+
+$("orderSearch").oninput =
+renderOrders;
+
+$("orderStatusFilter").onchange =
+renderOrders;
+
+$("orderDeliveryFilter").onchange =
+renderOrders;
+
+$("clearOrderFilters").onclick =
+()=>{
+
+  $("orderSearch").value = "";
 
   $("orderStatusFilter")
-    .onchange =
-    renderOrders;
-
+    .value = "";
 
   $("orderDeliveryFilter")
-    .onchange =
-    renderOrders;
+    .value = "";
 
+  renderOrders();
+};
 
-  $("clearOrderFilters")
-    .onclick =
-    () => {
+/* =========================
+   DASHBOARD
+========================= */
 
-      $("orderSearch")
-        .value = "";
+function updateDashboard(){
 
-      $("orderStatusFilter")
-        .value = "";
+  let totalStock = 0;
+  let lowStock = 0;
 
-      $("orderDeliveryFilter")
-        .value = "";
+  products.forEach(p=>{
 
-      renderOrders();
+    const stock =
+    productStock(p);
 
-    };
+    totalStock += stock;
 
+    if(stock <= 5)
+      lowStock++;
+  });
 
-  /* =========================
-     DASHBOARD
-  ========================= */
+  $("statProducts")
+    .textContent =
+    products.length;
 
-  function updateDashboard() {
+  $("statCategories")
+    .textContent =
+    categories.length;
 
-    const pending =
-      orders.filter(
-        order =>
-          String(
-            order.status ||
-            "pending"
-          ) === "pending"
-      ).length;
+  $("statOrders")
+    .textContent =
+    orders.length;
 
+  $("statStock")
+    .textContent =
+    totalStock;
 
-    const lowStock =
-      products.filter(
-        product =>
-          Number(
-            product.stock || 0
-          ) <= 5
-      );
+  $("statLowStock")
+    .textContent =
+    lowStock;
 
+  let sales = 0;
 
-    const revenue =
-      orders
-        .filter(
-          order =>
-            String(
-              order.status ||
-              ""
-            ) !== "cancelled"
-        )
-        .reduce(
-          (
-            total,
-            order
-          ) =>
-            total +
-            Number(
-              order.total || 0
-            ),
-          0
-        );
+  orders.forEach(o=>{
 
+    const status =
+    orderStatus(o);
 
-    $("statPending")
-      .textContent =
-      pending;
+    if(
+      status !== "cancelled"
+    ){
 
-
-    $("statLowStock")
-      .textContent =
-      lowStock.length;
-
-
-    $("statRevenue")
-      .textContent =
-      price(revenue);
-
-
-    renderLowStock(
-      lowStock
-    );
-
-
-    renderRecentOrders();
-
-  }
-
-
-  function renderLowStock(
-    lowStock
-  ) {
-
-    if (
-      !lowStock.length
-    ) {
-
-      $("lowStockList")
-        .innerHTML =
-        `
-          <div class="empty">
-            ✅ المخزون مليح، ما كاين حتى منتج ناقص.
-          </div>
-        `;
-
-      return;
-
+      sales +=
+      orderTotal(o);
     }
+  });
 
+  $("statSales")
+    .textContent =
+    price(sales);
 
-    $("lowStockList")
-      .innerHTML =
+  renderLowStock();
+  renderRecentOrders();
+}
 
-      lowStock
-        .slice(0, 10)
-        .map(product => {
+function renderLowStock(){
 
-          const stock =
-            Number(
-              product.stock || 0
-            );
+  const low =
+  products
+  .filter(p =>
+    productStock(p) <= 5
+  )
+  .sort(
+    (a,b)=>
+      productStock(a) -
+      productStock(b)
+  )
+  .slice(0,10);
 
+  if(!low.length){
 
-          return `
+    $("lowStockList").innerHTML =
+    '<div class="empty">✅ كل المنتجات عندها Stock مليح.</div>';
 
-            <div
-              class="item"
-              style="margin-bottom:8px"
-            >
-
-              <img
-                src="${esc(
-                  imageUrl(
-                    product.image_url
-                  )
-                )}"
-              >
-
-              <div class="item-main">
-
-                <h3>
-                  ${esc(
-                    product.name
-                  )}
-                </h3>
-
-                <span
-                  class="${stockClass(
-                    stock
-                  )}"
-                >
-                  Stock: ${stock}
-                </span>
-
-              </div>
-
-              <button
-                class="btn orange"
-                onclick="
-                  editProduct(
-                    '${product.id}'
-                  )
-                "
-              >
-                تعديل
-              </button>
-
-            </div>
-
-          `;
-
-        })
-        .join("");
-
+    return;
   }
 
+  $("lowStockList").innerHTML =
+  low.map(p=>`
 
-  function renderRecentOrders() {
+    <div class="low-stock-row">
 
-    const recent =
-      orders.slice(
-        0,
-        5
-      );
+      <div>
 
+        <b>
+          ${esc(p.name)}
+        </b>
 
-    if (!recent.length) {
+        <br>
 
-      $("recentOrders")
-        .innerHTML =
-        `
-          <div class="empty">
-            لا توجد طلبات.
-          </div>
-        `;
+        <span class="muted">
+          ${price(p.price)}
+        </span>
 
-      return;
+      </div>
 
-    }
+      <span
+        class="badge ${
+          productStock(p) <= 0
+          ? "off"
+          : "warn"
+        }"
+      >
 
+        ${
+          productStock(p) <= 0
+          ? "نفذ"
+          : "Stock: " +
+            productStock(p)
+        }
 
-    $("recentOrders")
-      .innerHTML =
+      </span>
 
-      recent
-        .map(order => {
+    </div>
 
-          const number =
-            order.order_number ||
-            order.order_code ||
-            String(
-              order.id || ""
-            ).slice(0, 8);
+  `).join("");
+}
 
+function renderRecentOrders(){
 
-          return `
+  const recent =
+  orders.slice(0,8);
 
-            <div
-              class="item"
-              style="margin-bottom:8px"
-            >
+  if(!recent.length){
 
-              <div class="item-main">
+    $("recentOrdersList").innerHTML =
+    '<div class="empty">لا توجد طلبات.</div>';
 
-                <h3>
-                  #${esc(number)}
-                </h3>
-
-                <div class="muted">
-                  ${esc(
-                    order.customer_name ||
-                    "زبون"
-                  )}
-                </div>
-
-                <div>
-                  ${price(
-                    order.total
-                  )}
-                </div>
-
-              </div>
-
-              <span class="badge">
-
-                ${esc(
-                  order.status ||
-                  "pending"
-                )}
-
-              </span>
-
-            </div>
-
-          `;
-
-        })
-        .join("");
-
+    return;
   }
 
+  $("recentOrdersList").innerHTML =
+  recent.map(o=>`
 
-  /* =========================
-     START
-  ========================= */
+    <div class="mini-order">
 
-  checkSession();
+      <div
+        style="
+          display:flex;
+          justify-content:space-between;
+          gap:10px;
+        "
+      >
+
+        <b>
+          #${esc(orderNumber(o))}
+        </b>
+
+        <span class="badge">
+          ${esc(orderStatus(o))}
+        </span>
+
+      </div>
+
+      <div class="muted">
+
+        ${esc(
+          o.customer_name ||
+          o.name ||
+          "زبون"
+        )}
+
+        ·
+
+        ${esc(
+          o.phone ||
+          "—"
+        )}
+
+      </div>
+
+      <div
+        style="
+          margin-top:5px;
+          font-weight:bold;
+        "
+      >
+        💰 ${price(orderTotal(o))}
+      </div>
+
+    </div>
+
+  `).join("");
+}
+
+/* =========================
+   START
+========================= */
+
+checkSession();
 
 </script>
 
 </body>
 </html>
+```
