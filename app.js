@@ -26,26 +26,34 @@ function toast(message) {
 
 function getCart() {
   try {
-    return JSON.parse(localStorage.getItem("jr_cart") || "[]");
-  } catch {
+    return JSON.parse(
+      localStorage.getItem("jr_cart") || "[]"
+    );
+  } catch (error) {
     return [];
   }
 }
 
 function saveCart(cart) {
-  localStorage.setItem("jr_cart", JSON.stringify(cart));
+  localStorage.setItem(
+    "jr_cart",
+    JSON.stringify(cart)
+  );
+
   updateCartCount();
 }
 
 function updateCartCount() {
-  const cartCount = document.querySelector("#cartCount");
+  const cartCount =
+    document.querySelector("#cartCount");
 
   if (!cartCount) return;
 
   const cart = getCart();
 
   const count = cart.reduce(
-    (total, item) => total + Number(item.qty || 0),
+    (total, item) =>
+      total + Number(item.qty || 0),
     0
   );
 
@@ -69,7 +77,9 @@ function addToCart(product) {
   const cart = getCart();
 
   const existingProduct = cart.find(
-    (item) => String(item.id) === String(product.id)
+    (item) =>
+      String(item.id) ===
+      String(product.id)
   );
 
   if (existingProduct) {
@@ -119,7 +129,11 @@ function escapeHtml(value) {
 function money(value) {
   const number = Number(value || 0);
 
-  return `${number.toLocaleString("fr-FR")} DA`;
+  return (
+    new Intl.NumberFormat("fr-DZ").format(
+      number
+    ) + " DA"
+  );
 }
 
 /* =========================
@@ -131,7 +145,9 @@ function productCard(product) {
     product.image_url ||
     "https://placehold.co/600x700?text=JR+Shop";
 
-  const stock = Number(product.stock || 0);
+  const stock = Number(
+    product.stock || 0
+  );
 
   const stockText =
     stock > 0
@@ -166,7 +182,11 @@ function productCard(product) {
           data-id="${escapeHtml(product.id)}"
           ${stock <= 0 ? "disabled" : ""}
         >
-          ${stock > 0 ? "Ajouter au panier" : "Rupture de stock"}
+          ${
+            stock > 0
+              ? "Ajouter au panier"
+              : "Rupture de stock"
+          }
         </button>
 
       </div>
@@ -180,7 +200,8 @@ function productCard(product) {
 ========================= */
 
 async function loadCategories() {
-  const categoriesBox = document.querySelector("#categories");
+  const categoriesBox =
+    document.querySelector("#categories");
 
   if (!categoriesBox) return;
 
@@ -189,16 +210,24 @@ async function loadCategories() {
   `;
 
   try {
-    const { data, error } = await supabaseClient
-      .from("categories")
-      .select("*")
-      .order("name", { ascending: true });
+    const { data, error } =
+      await supabaseClient
+        .from("categories")
+        .select("*")
+        .order("name", {
+          ascending: true
+        });
 
     if (error) {
-      console.error("Categories error:", error);
+      console.error(
+        "Categories error:",
+        error
+      );
 
       categoriesBox.innerHTML = `
-        <p>Impossible de charger les catégories.</p>
+        <p>
+          Impossible de charger les catégories.
+        </p>
       `;
 
       return;
@@ -223,17 +252,23 @@ async function loadCategories() {
           return `
             <button
               class="cat"
-              data-cat="${escapeHtml(category.id)}"
+              data-cat="${escapeHtml(
+                category.id
+              )}"
             >
 
               <img
                 src="${escapeHtml(image)}"
-                alt="${escapeHtml(category.name)}"
+                alt="${escapeHtml(
+                  category.name
+                )}"
                 loading="lazy"
               >
 
               <span>
-                ${escapeHtml(category.name)}
+                ${escapeHtml(
+                  category.name
+                )}
               </span>
 
             </button>
@@ -245,25 +280,37 @@ async function loadCategories() {
     document
       .querySelectorAll(".cat")
       .forEach((button) => {
-        button.addEventListener("click", () => {
-          selectedCategory = button.dataset.cat || null;
+        button.addEventListener(
+          "click",
+          () => {
+            selectedCategory =
+              button.dataset.cat || null;
 
-          document
-            .querySelectorAll(".cat")
-            .forEach((item) => {
-              item.classList.remove("active");
-            });
+            document
+              .querySelectorAll(".cat")
+              .forEach((item) => {
+                item.classList.remove(
+                  "active"
+                );
+              });
 
-          button.classList.add("active");
+            button.classList.add("active");
 
-          renderProducts();
-        });
+            renderProducts();
+          }
+        );
       });
   } catch (error) {
-    console.error("Categories JavaScript error:", error);
+    console.error(
+      "Categories JavaScript error:",
+      error
+    );
 
     categoriesBox.innerHTML = `
-      <p>Erreur lors du chargement des catégories.</p>
+      <p>
+        Erreur lors du chargement
+        des catégories.
+      </p>
     `;
   }
 }
@@ -273,7 +320,8 @@ async function loadCategories() {
 ========================= */
 
 async function loadProducts() {
-  const productsBox = document.querySelector("#products");
+  const productsBox =
+    document.querySelector("#products");
 
   if (!productsBox) return;
 
@@ -282,16 +330,20 @@ async function loadProducts() {
   `;
 
   try {
-    const { data, error } = await supabaseClient
-      .from("products")
-      .select("*")
-      .eq("is_active", true)
-      .order("created_at", {
-        ascending: false
-      });
+    const { data, error } =
+      await supabaseClient
+        .from("products")
+        .select("*")
+        .eq("is_active", true)
+        .order("created_at", {
+          ascending: false
+        });
 
     if (error) {
-      console.error("Products error:", error);
+      console.error(
+        "Products error:",
+        error
+      );
 
       productsBox.innerHTML = `
         <p>
@@ -306,7 +358,10 @@ async function loadProducts() {
 
     renderProducts();
   } catch (error) {
-    console.error("Products JavaScript error:", error);
+    console.error(
+      "Products JavaScript error:",
+      error
+    );
 
     productsBox.innerHTML = `
       <p>
@@ -321,11 +376,14 @@ async function loadProducts() {
 ========================= */
 
 function renderProducts() {
-  const productsBox = document.querySelector("#products");
+  const productsBox =
+    document.querySelector("#products");
 
   if (!productsBox) return;
 
-  let products = [...allProducts];
+  let products = [
+    ...allProducts
+  ];
 
   /* CATEGORY FILTER */
 
@@ -339,7 +397,8 @@ function renderProducts() {
 
   /* SORT */
 
-  const sort = document.querySelector("#sort")?.value;
+  const sort =
+    document.querySelector("#sort")?.value;
 
   if (sort === "priceAsc") {
     products.sort(
@@ -362,8 +421,16 @@ function renderProducts() {
   if (!products.length) {
     productsBox.innerHTML = `
       <div class="card empty">
-        <h3>Aucun produit trouvé</h3>
-        <p>Cette catégorie ne contient aucun produit.</p>
+
+        <h3>
+          Aucun produit trouvé
+        </h3>
+
+        <p>
+          Cette catégorie ne contient
+          aucun produit.
+        </p>
+
       </div>
     `;
 
@@ -372,24 +439,31 @@ function renderProducts() {
 
   /* PRODUCTS */
 
-  productsBox.innerHTML = products
-    .map(productCard)
-    .join("");
+  productsBox.innerHTML =
+    products
+      .map(productCard)
+      .join("");
 
   /* ADD BUTTONS */
 
   document
     .querySelectorAll(".add")
     .forEach((button) => {
-      button.addEventListener("click", () => {
-        const product = allProducts.find(
-          (item) =>
-            String(item.id) ===
-            String(button.dataset.id)
-        );
+      button.addEventListener(
+        "click",
+        () => {
+          const product =
+            allProducts.find(
+              (item) =>
+                String(item.id) ===
+                String(
+                  button.dataset.id
+                )
+            );
 
-        addToCart(product);
-      });
+          addToCart(product);
+        }
+      );
     });
 }
 
@@ -397,7 +471,8 @@ function renderProducts() {
    SORT
 ========================= */
 
-const sortSelect = document.querySelector("#sort");
+const sortSelect =
+  document.querySelector("#sort");
 
 if (sortSelect) {
   sortSelect.addEventListener(
