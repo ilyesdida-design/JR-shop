@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Produit - JR Shop</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+
+    .details-page {
+      padding: 50px 0 80px;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 25px;
+      color: #111;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .product-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 45px;
+      background: #fff;
+      border-radius: 22px;
+      padding: 25px;
+      box-shadow: 0 10px 35px rgba(0,0,0,.08);
+    }
+
+    .details-image {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 18px;
+      background: #f1f1f1;
+    }
+
+    .details-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .details-info h1 {
+      font-size: 38px;
+      margin: 0 0 15px;
+    }
+
+    .details-price {
+      font-size: 30px;
+      font-weight: 800;
+      margin: 15px 0;
+    }
+
+    .details-old-price {
+      color: #999;
+      text-decoration: line-through;
+      margin-left: 10px;
+    }
+
+    .details-stock {
+      margin: 10px 0 25px;
+      font-weight: 600;
+    }
+
+    .details-description {
+      color: #666;
+      line-height: 1.8;
+      margin-bottom: 30px;
+      white-space: pre-line;
+    }
+
+    .details-add {
+      width: 100%;
+      max-width: 400px;
+      padding: 16px 20px;
+      border: 0;
+      border-radius: 12px;
+      background: #111;
+      color: white;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .details-add:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    .loading-details {
+      text-align: center;
+      padding: 80px 20px;
+      font-size: 20px;
+    }
+
+    @media (max-width: 800px) {
+
+      .product-details {
+        grid-template-columns: 1fr;
+        gap: 25px;
+        padding: 15px;
+      }
+
+      .details-info h1 {
+        font-size: 28px;
+      }
+
+      .details-price {
+        font-size: 25px;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<header class="site-header">
+
+  <div class="wrap nav">
+
+    <a
+      class="logo"
+      href="index.html"
+    >
+      JR <span>Shop</span>
+    </a>
+
+    <a
+      class="cart-link"
+      href="cart.html"
+    >
+      🛒 Panier
+      <b id="cartCount">0</b>
+    </a>
+
+  </div>
+
+</header>
+
+
+<main class="wrap details-page">
+
+  <a
+    href="index.html"
+    class="back-link"
+  >
+    ← Retour aux produits
+  </a>
+
+  <div id="productDetails">
+
+    <div class="loading-details">
+      Chargement du produit...
+    </div>
+
+  </div>
+
+</main>
+
+
+<div
+  id="toast"
+  class="toast"
+></div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="config.js"></script>
+
+
+<script>
+
+  /* =========================
+     CART
+  ========================= */
+
+  function getCart() {
+
+    try {
+
+      return JSON.parse(
+        localStorage.getItem("jr_cart") || "[]"
+      );
+
+    } catch (error) {
+
+      return [];
+
+    }
+
+  }
+
+
+  function saveCart(cart) {
+
+    localStorage.setItem(
+      "jr_cart",
+      JSON.stringify(cart)
+    );
+
+    updateCartCount();
+
+  }
+
+
+  function updateCartCount() {
+
+    const cartCount =
+      document.querySelector("#cartCount");
+
+    if (!cartCount) return;
+
+    const cart = getCart();
+
+    const count = cart.reduce(
+      (total, item) =>
+        total + Number(item.qty || 0),
+      0
+    );
+
+    cartCount.textContent = count;
+
+  }
+
+
+  /* =========================
+     TOAST
+  ========================= */
+
+  function toast(message) {
+
+    const box =
+      document.querySelector("#toast");
+
+    if (!box) return;
+
+    box.textContent = message;
+
+    box.classList.add("show");
+
+    setTimeout(() => {
+
+      box.classList.remove("show");
+
+    }, 2500);
+
+  }
+
+
+  /* =========================
+     MONEY
+  ========================= */
+
+  function money(value) {
+
+    return (
+      new Intl.NumberFormat("fr-DZ").format(
+        Number(value || 0)
+      ) + " DA"
+    );
+
+  }
+
+
+  /* =========================
+     ESCAPE
+  ========================= */
+
+  function escapeHtml(value) {
+
+    return String(value ?? "").replace(
+      /[&<>"']/g,
+      (character) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      })[character]
+    );
+
+  }
+
+
+  /* =========================
+     ADD TO CART
+  ========================= */
+
+  function addToCart(product) {
+
+    if (!product) return;
+
+    const stock =
+      Number(product.stock || 0);
+
+    if (stock <= 0) {
+
+      toast(
+        "Produit en rupture de stock"
+      );
+
+      return;
+
+    }
+
+    const cart = getCart();
+
+    const existing =
+      cart.find(
+        item =>
+          String(item.id) ===
+          String(product.id)
+      );
+
+    if (existing) {
+
+      if (existing.qty >= stock) {
+
+        toast("Stock insuffisant");
+
+        return;
+
+      }
+
+      existing.qty++;
+
+    } else {
+
+      cart.push({
+
+        id: product.id,
+
+        name: product.name,
+
+        price:
+          Number(product.price || 0),
+
+        image_url:
+          product.image_url || "",
+
+        qty: 1,
+
+        stock: stock
+
+      });
+
+    }
+
+    saveCart(cart);
+
+    toast(
+      "Produit ajouté au panier"
+    );
+
+  }
+
+
+  /* =========================
+     LOAD PRODUCT
+  ========================= */
+
+  async function loadProduct() {
+
+    const box =
+      document.querySelector(
+        "#productDetails"
+      );
+
+    const params =
+      new URLSearchParams(
+        window.location.search
+      );
+
+    const productId =
+      params.get("id");
+
+    if (!productId) {
+
+      box.innerHTML = `
+        <div class="loading-details">
+          Produit introuvable.
+        </div>
+      `;
+
+      return;
+
+    }
+
+    try {
+
+      const { data, error } =
+        await supabaseClient
+          .from("products")
+          .select("*")
+          .eq("id", productId)
+          .eq("is_active", true)
+          .single();
+
+      if (error || !data) {
+
+        console.error(
+          "Product details error:",
+          error
+        );
+
+        box.innerHTML = `
+          <div class="loading-details">
+            Produit introuvable.
+          </div>
+        `;
+
+        return;
+
+      }
+
+      const product = data;
+
+      const image =
+        product.image_url ||
+        "https://placehold.co/800x800?text=JR+Shop";
+
+      const stock =
+        Number(product.stock || 0);
+
+      const oldPrice =
+        Number(product.old_price || 0);
+
+      box.innerHTML = `
+
+        <section class="product-details">
+
+          <img
+            class="details-image"
+            src="${escapeHtml(image)}"
+            alt="${escapeHtml(product.name)}"
+          >
+
+          <div class="details-info">
+
+            <h1>
+              ${escapeHtml(product.name)}
+            </h1>
+
+            <div class="details-price">
+
+              ${money(product.price)}
+
+              ${
+                oldPrice > 0
+                  ? `
+                    <span class="details-old-price">
+                      ${money(oldPrice)}
+                    </span>
+                  `
+                  : ""
+              }
+
+            </div>
+
+            <div class="details-stock">
+
+              ${
+                stock > 0
+                  ? `Stock disponible : ${stock}`
+                  : "Rupture de stock"
+              }
+
+            </div>
+
+            ${
+              product.description
+                ? `
+                  <div class="details-description">
+                    ${escapeHtml(
+                      product.description
+                    )}
+                  </div>
+                `
+                : `
+                  <div class="details-description">
+                    Aucun description disponible
+                    pour ce produit.
+                  </div>
+                `
+            }
+
+            <button
+              id="detailsAdd"
+              class="details-add"
+              ${stock <= 0 ? "disabled" : ""}
+            >
+              ${
+                stock > 0
+                  ? "Ajouter au panier"
+                  : "Rupture de stock"
+              }
+            </button>
+
+          </div>
+
+        </section>
+
+      `;
+
+
+      const addButton =
+        document.querySelector(
+          "#detailsAdd"
+        );
+
+      if (addButton) {
+
+        addButton.addEventListener(
+          "click",
+          () => {
+
+            addToCart(product);
+
+          }
+        );
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        "Product details JavaScript error:",
+        error
+      );
+
+      box.innerHTML = `
+        <div class="loading-details">
+          Erreur lors du chargement du produit.
+        </div>
+      `;
+
+    }
+
+  }
+
+
+  /* =========================
+     START
+  ========================= */
+
+  updateCartCount();
+
+  loadProduct();
+
+</script>
+
+</body>
+
+</html>
