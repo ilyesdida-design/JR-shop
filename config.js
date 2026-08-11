@@ -1,10 +1,9 @@
 const SUPABASE_URL = "https://cstjgsuehmqcolajspqh.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_e_wQxqCrx21Qq1kRYKjFMg_yR6TQfKX";
+
+const SUPABASE_ANON_KEY =
+  "sb_publishable_e_wQxqCrx21Qq1kRYKjFMg_yR6TQfKX";
 
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
 );
-
-const money = (n) =>
-  new Intl.NumberFormat("fr-DZ").format(Number(n || 0)) + " DA";
