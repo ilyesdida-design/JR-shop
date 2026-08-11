@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -12,9 +13,7 @@
 <script src="config.js"></script>
 
 <style>
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 :root{
   --bg:#f5f6f8;
@@ -31,38 +30,18 @@
   --radius:18px;
 }
 
-html{
-  scroll-behavior:smooth;
-}
+html{scroll-behavior:smooth}
 
 body{
   margin:0;
   background:var(--bg);
   color:var(--text);
-  font-family:
-    Arial,
-    Tahoma,
-    sans-serif;
+  font-family:Arial,Tahoma,sans-serif;
 }
 
-button,
-input,
-textarea,
-select{
-  font:inherit;
-}
-
-button{
-  cursor:pointer;
-}
-
-.hidden{
-  display:none!important;
-}
-
-/* =========================
-   LOGIN
-========================= */
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
 
 .login-screen{
   min-height:100vh;
@@ -97,14 +76,8 @@ button{
   font-weight:900;
 }
 
-.login-card h1{
-  margin:0 0 8px;
-}
-
-.login-card p{
-  color:var(--muted);
-  margin:0 0 25px;
-}
+.login-card h1{margin:0 0 8px}
+.login-card p{color:var(--muted);margin:0 0 25px}
 
 .login-btn{
   width:100%;
@@ -116,13 +89,7 @@ button{
   font-weight:800;
 }
 
-/* =========================
-   APP
-========================= */
-
-.app{
-  min-height:100vh;
-}
+.app{min-height:100vh}
 
 .header{
   position:sticky;
@@ -137,22 +104,14 @@ button{
   padding:0 24px;
 }
 
-.header-right,
-.header-left{
+.header-right,.header-left{
   display:flex;
   align-items:center;
   gap:12px;
 }
 
-.header-logo{
-  font-size:21px;
-  font-weight:900;
-}
-
-.header-sub{
-  color:#999;
-  font-size:12px;
-}
+.header-logo{font-size:21px;font-weight:900}
+.header-sub{color:#999;font-size:12px}
 
 .user-email{
   font-size:12px;
@@ -170,10 +129,6 @@ button{
   padding:9px 13px;
   font-weight:800;
 }
-
-/* =========================
-   SIDEBAR
-========================= */
 
 .layout{
   display:grid;
@@ -214,20 +169,12 @@ button{
   font-weight:700;
 }
 
-.nav-btn:hover,
-.nav-btn.active{
+.nav-btn:hover,.nav-btn.active{
   background:#fff;
   color:#111;
 }
 
-.nav-icon{
-  width:23px;
-  text-align:center;
-}
-
-/* =========================
-   CONTENT
-========================= */
+.nav-icon{width:23px;text-align:center}
 
 .content{
   direction:rtl;
@@ -235,13 +182,8 @@ button{
   padding:25px;
 }
 
-.page{
-  display:none;
-}
-
-.page.active{
-  display:block;
-}
+.page{display:none}
+.page.active{display:block}
 
 .page-header{
   display:flex;
@@ -251,16 +193,8 @@ button{
   margin-bottom:22px;
 }
 
-.page-title{
-  margin:0;
-  font-size:28px;
-}
-
-.page-description{
-  margin:5px 0 0;
-  color:var(--muted);
-  font-size:13px;
-}
+.page-title{margin:0;font-size:28px}
+.page-description{margin:5px 0 0;color:var(--muted);font-size:13px}
 
 .primary-btn{
   border:0;
@@ -298,10 +232,6 @@ button{
   font-weight:800;
 }
 
-/* =========================
-   DASHBOARD
-========================= */
-
 .stats-grid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
@@ -335,17 +265,8 @@ button{
   font-size:20px;
 }
 
-.stat-label{
-  color:#777;
-  font-size:12px;
-  font-weight:700;
-}
-
-.stat-value{
-  margin-top:12px;
-  font-size:28px;
-  font-weight:900;
-}
+.stat-label{color:#777;font-size:12px;font-weight:700}
+.stat-value{margin-top:12px;font-size:28px;font-weight:900}
 
 .dashboard-grid{
   display:grid;
@@ -361,10 +282,7 @@ button{
   box-shadow:var(--shadow);
 }
 
-.panel-title{
-  margin:0 0 15px;
-  font-size:17px;
-}
+.panel-title{margin:0 0 15px;font-size:17px}
 
 .quick-grid{
   display:grid;
@@ -380,10 +298,6 @@ button{
   text-align:right;
   font-weight:800;
 }
-
-/* =========================
-   TOOLBAR
-========================= */
 
 .toolbar{
   display:flex;
@@ -413,10 +327,6 @@ button{
   background:#fff;
   outline:none;
 }
-
-/* =========================
-   TABLE
-========================= */
 
 .table-wrap{
   background:#fff;
@@ -448,9 +358,7 @@ td{
   vertical-align:middle;
 }
 
-tr:last-child td{
-  border-bottom:0;
-}
+tr:last-child td{border-bottom:0}
 
 .product-cell{
   display:flex;
@@ -467,15 +375,8 @@ tr:last-child td{
   background:#f1f1ef;
 }
 
-.product-name{
-  font-weight:800;
-}
-
-.product-id{
-  color:#aaa;
-  font-size:10px;
-  margin-top:3px;
-}
+.product-name{font-weight:800}
+.product-id{color:#aaa;font-size:10px;margin-top:3px}
 
 .badge{
   display:inline-flex;
@@ -486,25 +387,10 @@ tr:last-child td{
   font-weight:800;
 }
 
-.badge-green{
-  color:#12834a;
-  background:#edf9f2;
-}
-
-.badge-red{
-  color:#c62828;
-  background:#fff0ef;
-}
-
-.badge-orange{
-  color:#a86300;
-  background:#fff6df;
-}
-
-.badge-gray{
-  color:#666;
-  background:#f0f0ef;
-}
+.badge-green{color:#12834a;background:#edf9f2}
+.badge-red{color:#c62828;background:#fff0ef}
+.badge-orange{color:#a86300;background:#fff6df}
+.badge-gray{color:#666;background:#f0f0ef}
 
 .actions{
   display:flex;
@@ -520,10 +406,6 @@ tr:last-child td{
   border-radius:8px;
 }
 
-/* =========================
-   MODAL
-========================= */
-
 .modal{
   position:fixed;
   inset:0;
@@ -535,13 +417,11 @@ tr:last-child td{
   padding:15px;
 }
 
-.modal.open{
-  display:flex;
-}
+.modal.open{display:flex}
 
 .modal-card{
   width:100%;
-  max-width:920px;
+  max-width:1000px;
   max-height:94vh;
   overflow:auto;
   background:#fff;
@@ -561,10 +441,7 @@ tr:last-child td{
   border-bottom:1px solid var(--border);
 }
 
-.modal-title{
-  margin:0;
-  font-size:20px;
-}
+.modal-title{margin:0;font-size:20px}
 
 .close-btn{
   border:0;
@@ -575,9 +452,7 @@ tr:last-child td{
   font-size:20px;
 }
 
-.modal-body{
-  padding:20px;
-}
+.modal-body{padding:20px}
 
 .form-grid{
   display:grid;
@@ -585,13 +460,8 @@ tr:last-child td{
   gap:15px;
 }
 
-.form-group{
-  margin-bottom:14px;
-}
-
-.form-group.full{
-  grid-column:1/-1;
-}
+.form-group{margin-bottom:14px}
+.form-group.full{grid-column:1/-1}
 
 .form-label{
   display:block;
@@ -600,9 +470,7 @@ tr:last-child td{
   font-weight:800;
 }
 
-.form-input,
-.form-select,
-.form-textarea{
+.form-input,.form-select,.form-textarea{
   width:100%;
   border:1px solid #ddd;
   border-radius:10px;
@@ -616,9 +484,7 @@ tr:last-child td{
   resize:vertical;
 }
 
-.form-input:focus,
-.form-select:focus,
-.form-textarea:focus{
+.form-input:focus,.form-select:focus,.form-textarea:focus{
   border-color:#111;
 }
 
@@ -629,10 +495,6 @@ tr:last-child td{
   padding:17px 20px;
   border-top:1px solid var(--border);
 }
-
-/* =========================
-   OPTION PICKER
-========================= */
 
 .option-picker{
   border:1px solid var(--border);
@@ -697,10 +559,6 @@ tr:last-child td{
   font-weight:800;
 }
 
-/* =========================
-   VARIANT STOCK
-========================= */
-
 .variant-section{
   margin-top:20px;
   border:1px solid var(--border);
@@ -714,10 +572,7 @@ tr:last-child td{
   border-bottom:1px solid var(--border);
 }
 
-.variant-head h3{
-  margin:0;
-  font-size:15px;
-}
+.variant-head h3{margin:0;font-size:15px}
 
 .variant-help{
   margin:5px 0 0;
@@ -725,18 +580,15 @@ tr:last-child td{
   font-size:11px;
 }
 
-.variant-table-wrap{
-  overflow:auto;
-}
+.variant-table-wrap{overflow:auto}
 
 .variant-table{
-  min-width:500px;
+  min-width:700px;
   width:100%;
   border-collapse:collapse;
 }
 
-.variant-table th,
-.variant-table td{
+.variant-table th,.variant-table td{
   padding:10px;
   border-bottom:1px solid #eee;
   text-align:center;
@@ -748,11 +600,31 @@ tr:last-child td{
 }
 
 .variant-stock-input{
-  width:80px;
+  width:75px;
   border:1px solid #ddd;
   border-radius:8px;
   padding:8px;
   text-align:center;
+}
+
+.variant-image-input{
+  width:220px;
+  max-width:100%;
+  border:1px solid #ddd;
+  border-radius:8px;
+  padding:8px;
+  direction:ltr;
+  text-align:left;
+}
+
+.variant-preview{
+  width:42px;
+  height:42px;
+  object-fit:cover;
+  border-radius:8px;
+  background:#f1f1ef;
+  display:block;
+  margin:auto;
 }
 
 .total-stock-box{
@@ -771,10 +643,6 @@ tr:last-child td{
   font-weight:900;
 }
 
-/* =========================
-   ORDERS
-========================= */
-
 .order-items{
   margin-top:7px;
   color:#777;
@@ -789,10 +657,6 @@ tr:last-child td{
   background:#fff;
 }
 
-/* =========================
-   REVIEWS
-========================= */
-
 .stars{
   color:#f4b400;
   letter-spacing:1px;
@@ -803,10 +667,6 @@ tr:last-child td{
   white-space:pre-wrap;
   color:#555;
 }
-
-/* =========================
-   CATEGORY
-========================= */
 
 .category-list{
   display:grid;
@@ -832,23 +692,9 @@ tr:last-child td{
   background:#f1f1ef;
 }
 
-.category-info{
-  flex:1;
-}
-
-.category-name{
-  font-weight:900;
-}
-
-.category-slug{
-  color:#999;
-  font-size:11px;
-  margin-top:3px;
-}
-
-/* =========================
-   EMPTY / LOADING
-========================= */
+.category-info{flex:1}
+.category-name{font-weight:900}
+.category-slug{color:#999;font-size:11px;margin-top:3px}
 
 .empty{
   padding:45px 20px;
@@ -861,10 +707,6 @@ tr:last-child td{
   text-align:center;
   color:#777;
 }
-
-/* =========================
-   TOAST
-========================= */
 
 .toast{
   position:fixed;
@@ -888,13 +730,7 @@ tr:last-child td{
   transform:translateX(-50%) translateY(0);
 }
 
-.toast.error{
-  background:#b42318;
-}
-
-/* =========================
-   MOBILE
-========================= */
+.toast.error{background:#b42318}
 
 .mobile-menu-btn{
   display:none;
@@ -907,1287 +743,941 @@ tr:last-child td{
 }
 
 @media(max-width:1100px){
-
-.stats-grid{
-  grid-template-columns:repeat(2,1fr);
-}
-
-.dashboard-grid{
-  grid-template-columns:1fr;
-}
-
-.category-list{
-  grid-template-columns:repeat(2,1fr);
-}
-
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .dashboard-grid{grid-template-columns:1fr}
+  .category-list{grid-template-columns:repeat(2,1fr)}
 }
 
 @media(max-width:800px){
+  .header{padding:0 12px}
+  .mobile-menu-btn{display:block}
+  .layout{display:block}
 
-.header{
-  padding:0 12px;
-}
+  .sidebar{
+    position:fixed;
+    top:72px;
+    right:-260px;
+    width:240px;
+    height:calc(100vh - 72px);
+    z-index:90;
+    transition:.25s;
+  }
 
-.mobile-menu-btn{
-  display:block;
-}
+  .sidebar.open{right:0}
+  .content{padding:15px}
 
-.layout{
-  display:block;
-}
+  .form-grid{grid-template-columns:1fr}
+  .form-group.full{grid-column:auto}
 
-.sidebar{
-  position:fixed;
-  top:72px;
-  right:-260px;
-  width:240px;
-  height:calc(100vh - 72px);
-  z-index:90;
-  transition:.25s;
-}
+  .page-header{
+    align-items:flex-start;
+    flex-direction:column;
+  }
 
-.sidebar.open{
-  right:0;
-}
-
-.content{
-  padding:15px;
-}
-
-.form-grid{
-  grid-template-columns:1fr;
-}
-
-.form-group.full{
-  grid-column:auto;
-}
-
-.page-header{
-  align-items:flex-start;
-  flex-direction:column;
-}
-
-.user-email{
-  display:none;
-}
-
+  .user-email{display:none}
 }
 
 @media(max-width:600px){
+  .stats-grid{
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+  }
 
-.stats-grid{
-  grid-template-columns:1fr 1fr;
-  gap:9px;
-}
+  .stat-card{padding:13px}
+  .stat-value{font-size:22px}
+  .quick-grid{grid-template-columns:1fr}
+  .category-list{grid-template-columns:1fr}
+  .modal-body{padding:14px}
 
-.stat-card{
-  padding:13px;
-}
+  .modal-footer{
+    flex-direction:column;
+  }
 
-.stat-value{
-  font-size:22px;
-}
-
-.quick-grid{
-  grid-template-columns:1fr;
-}
-
-.category-list{
-  grid-template-columns:1fr;
-}
-
-.modal-body{
-  padding:14px;
-}
-
-.modal-footer{
-  flex-direction:column;
-}
-
-.modal-footer button{
-  width:100%;
-}
-
-.page-title{
-  font-size:23px;
-}
-
+  .modal-footer button{width:100%}
+  .page-title{font-size:23px}
 }
 </style>
 </head>
 
 <body>
 
-<!-- =========================
-     LOGIN SCREEN
-========================= -->
-
 <div id="loginScreen" class="login-screen">
-
-<div class="login-card">
-
-<div class="logo">JR</div>
-
-<h1>لوحة إدارة JR Shop</h1>
-
-<p>
-يجب تسجيل الدخول للوصول إلى لوحة الإدارة.
-</p>
-
-<button
-class="login-btn"
-onclick="goLogin()">
-تسجيل الدخول
-</button>
-
+  <div class="login-card">
+    <div class="logo">JR</div>
+    <h1>لوحة إدارة JR Shop</h1>
+    <p>يجب تسجيل الدخول للوصول إلى لوحة الإدارة.</p>
+    <button class="login-btn" onclick="goLogin()">تسجيل الدخول</button>
+  </div>
 </div>
-
-</div>
-
-
-<!-- =========================
-     APP
-========================= -->
 
 <div id="app" class="app hidden">
 
 <header class="header">
 
-<div class="header-right">
+  <div class="header-right">
 
-<button
-class="mobile-menu-btn"
-onclick="toggleSidebar()">
-☰
-</button>
+    <button
+      class="mobile-menu-btn"
+      onclick="toggleSidebar()">
+      ☰
+    </button>
 
-<div>
-<div class="header-logo">
-JR SHOP
-</div>
+    <div>
+      <div class="header-logo">JR SHOP</div>
+      <div class="header-sub">لوحة الإدارة</div>
+    </div>
 
-<div class="header-sub">
-لوحة الإدارة
-</div>
-</div>
+  </div>
 
-</div>
+  <div class="header-left">
 
+    <div id="userEmail" class="user-email"></div>
 
-<div class="header-left">
+    <button
+      class="logout-btn"
+      onclick="logout()">
+      خروج
+    </button>
 
-<div
-id="userEmail"
-class="user-email">
-</div>
-
-<button
-class="logout-btn"
-onclick="logout()">
-خروج
-</button>
-
-</div>
+  </div>
 
 </header>
 
-
 <div class="layout">
-
-<!-- =========================
-     SIDEBAR
-========================= -->
 
 <aside id="sidebar" class="sidebar">
 
-<div class="nav-title">
-الرئيسية
-</div>
+  <div class="nav-title">الرئيسية</div>
 
-<button
-class="nav-btn active"
-data-page="dashboard"
-onclick="showPage('dashboard')">
+  <button
+    class="nav-btn active"
+    data-page="dashboard"
+    onclick="showPage('dashboard')">
+    <span class="nav-icon">📊</span>
+    لوحة التحكم
+  </button>
 
-<span class="nav-icon">📊</span>
-لوحة التحكم
+  <div class="nav-title">المتجر</div>
 
-</button>
+  <button
+    class="nav-btn"
+    data-page="products"
+    onclick="showPage('products')">
+    <span class="nav-icon">📦</span>
+    المنتجات
+  </button>
 
+  <button
+    class="nav-btn"
+    data-page="categories"
+    onclick="showPage('categories')">
+    <span class="nav-icon">🗂️</span>
+    التصنيفات
+  </button>
 
-<div class="nav-title">
-المتجر
-</div>
+  <button
+    class="nav-btn"
+    data-page="orders"
+    onclick="showPage('orders')">
+    <span class="nav-icon">🛒</span>
+    الطلبات
+  </button>
 
-<button
-class="nav-btn"
-data-page="products"
-onclick="showPage('products')">
-
-<span class="nav-icon">📦</span>
-المنتجات
-
-</button>
-
-
-<button
-class="nav-btn"
-data-page="categories"
-onclick="showPage('categories')">
-
-<span class="nav-icon">🗂️</span>
-التصنيفات
-
-</button>
-
-
-<button
-class="nav-btn"
-data-page="orders"
-onclick="showPage('orders')">
-
-<span class="nav-icon">🛒</span>
-الطلبات
-
-</button>
-
-
-<button
-class="nav-btn"
-data-page="reviews"
-onclick="showPage('reviews')">
-
-<span class="nav-icon">⭐</span>
-التقييمات
-
-</button>
+  <button
+    class="nav-btn"
+    data-page="reviews"
+    onclick="showPage('reviews')">
+    <span class="nav-icon">⭐</span>
+    التقييمات
+  </button>
 
 </aside>
 
-
-<!-- =========================
-     CONTENT
-========================= -->
-
 <main class="content">
 
-<!-- =========================
-     DASHBOARD
-========================= -->
+<section id="page-dashboard" class="page active">
 
-<section
-id="page-dashboard"
-class="page active">
+  <div class="page-header">
 
-<div class="page-header">
+    <div>
+      <h1 class="page-title">لوحة التحكم</h1>
+      <p class="page-description">
+        نظرة عامة على المتجر والمخزون والطلبات.
+      </p>
+    </div>
 
-<div>
-<h1 class="page-title">
-لوحة التحكم
-</h1>
+    <button
+      class="primary-btn"
+      onclick="refreshAll()">
+      ↻ تحديث
+    </button>
 
-<p class="page-description">
-نظرة عامة على المتجر والمخزون والطلبات.
-</p>
-</div>
+  </div>
 
-<button
-class="primary-btn"
-onclick="refreshAll()">
-↻ تحديث
-</button>
+  <div class="stats-grid">
 
-</div>
+    <div class="stat-card">
+      <div class="stat-top">
+        <div class="stat-label">المنتجات</div>
+        <div class="stat-icon">📦</div>
+      </div>
+      <div id="statProducts" class="stat-value">0</div>
+    </div>
 
+    <div class="stat-card">
+      <div class="stat-top">
+        <div class="stat-label">المخزون</div>
+        <div class="stat-icon">📊</div>
+      </div>
+      <div id="statStock" class="stat-value">0</div>
+    </div>
 
-<div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-top">
+        <div class="stat-label">الطلبات</div>
+        <div class="stat-icon">🛒</div>
+      </div>
+      <div id="statOrders" class="stat-value">0</div>
+    </div>
 
-<div class="stat-card">
+    <div class="stat-card">
+      <div class="stat-top">
+        <div class="stat-label">مبيعات مؤكدة</div>
+        <div class="stat-icon">💰</div>
+      </div>
+      <div id="statSales" class="stat-value">0 DA</div>
+    </div>
 
-<div class="stat-top">
+  </div>
 
-<div class="stat-label">
-المنتجات
-</div>
+  <div class="dashboard-grid">
 
-<div class="stat-icon">
-📦
-</div>
+    <div class="panel">
+      <h2 class="panel-title">آخر الطلبات</h2>
+      <div id="recentOrders">
+        <div class="loading">جاري التحميل...</div>
+      </div>
+    </div>
 
-</div>
+    <div class="panel">
+      <h2 class="panel-title">اختصارات</h2>
 
-<div
-id="statProducts"
-class="stat-value">
-0
-</div>
+      <div class="quick-grid">
 
-</div>
+        <button
+          class="quick-btn"
+          onclick="openProductModal()">
+          ➕ إضافة منتج
+        </button>
 
+        <button
+          class="quick-btn"
+          onclick="showPage('orders')">
+          🛒 إدارة الطلبات
+        </button>
 
-<div class="stat-card">
+        <button
+          class="quick-btn"
+          onclick="showPage('categories')">
+          🗂️ التصنيفات
+        </button>
 
-<div class="stat-top">
+        <button
+          class="quick-btn"
+          onclick="showPage('reviews')">
+          ⭐ مراجعة التقييمات
+        </button>
 
-<div class="stat-label">
-المخزون
-</div>
+      </div>
+    </div>
 
-<div class="stat-icon">
-📊
-</div>
-
-</div>
-
-<div
-id="statStock"
-class="stat-value">
-0
-</div>
-
-</div>
-
-
-<div class="stat-card">
-
-<div class="stat-top">
-
-<div class="stat-label">
-الطلبات
-</div>
-
-<div class="stat-icon">
-🛒
-</div>
-
-</div>
-
-<div
-id="statOrders"
-class="stat-value">
-0
-</div>
-
-</div>
-
-
-<div class="stat-card">
-
-<div class="stat-top">
-
-<div class="stat-label">
-مبيعات مؤكدة
-</div>
-
-<div class="stat-icon">
-💰
-</div>
-
-</div>
-
-<div
-id="statSales"
-class="stat-value">
-0 DA
-</div>
-
-</div>
-
-</div>
-
-
-<div class="dashboard-grid">
-
-<div class="panel">
-
-<h2 class="panel-title">
-آخر الطلبات
-</h2>
-
-<div id="recentOrders">
-<div class="loading">
-جاري التحميل...
-</div>
-</div>
-
-</div>
-
-
-<div class="panel">
-
-<h2 class="panel-title">
-اختصارات
-</h2>
-
-<div class="quick-grid">
-
-<button
-class="quick-btn"
-onclick="openProductModal()">
-➕ إضافة منتج
-</button>
-
-<button
-class="quick-btn"
-onclick="showPage('orders')">
-🛒 إدارة الطلبات
-</button>
-
-<button
-class="quick-btn"
-onclick="showPage('categories')">
-🗂️ التصنيفات
-</button>
-
-<button
-class="quick-btn"
-onclick="showPage('reviews')">
-⭐ مراجعة التقييمات
-</button>
-
-</div>
-
-</div>
-
-</div>
+  </div>
 
 </section>
 
+<section id="page-products" class="page">
 
-<!-- =========================
-     PRODUCTS
-========================= -->
+  <div class="page-header">
 
-<section
-id="page-products"
-class="page">
+    <div>
+      <h1 class="page-title">المنتجات</h1>
+      <p class="page-description">
+        إضافة وتعديل وإدارة المنتجات والمخزون والـVariants.
+      </p>
+    </div>
 
-<div class="page-header">
+    <button
+      class="primary-btn"
+      onclick="openProductModal()">
+      ＋ إضافة منتج
+    </button>
 
-<div>
-<h1 class="page-title">
-المنتجات
-</h1>
+  </div>
 
-<p class="page-description">
-إضافة وتعديل وإدارة المنتجات والمخزون.
-</p>
-</div>
+  <div class="toolbar">
 
-<button
-class="primary-btn"
-onclick="openProductModal()">
-＋ إضافة منتج
-</button>
+    <input
+      id="productSearch"
+      class="search"
+      placeholder="🔍 ابحث عن منتج..."
+      oninput="renderProducts()">
 
-</div>
+    <select
+      id="productCategoryFilter"
+      class="filter"
+      onchange="renderProducts()">
+      <option value="">كل التصنيفات</option>
+    </select>
 
+    <select
+      id="productStockFilter"
+      class="filter"
+      onchange="renderProducts()">
 
-<div class="toolbar">
+      <option value="">كل المنتجات</option>
+      <option value="available">متوفر</option>
+      <option value="low">مخزون منخفض</option>
+      <option value="empty">نافد</option>
 
-<input
-id="productSearch"
-class="search"
-placeholder="🔍 ابحث عن منتج..."
-oninput="renderProducts()">
+    </select>
 
+  </div>
 
-<select
-id="productCategoryFilter"
-class="filter"
-onchange="renderProducts()">
+  <div class="table-wrap">
 
-<option value="">
-كل التصنيفات
-</option>
+    <table>
 
-</select>
+      <thead>
+        <tr>
+          <th>المنتج</th>
+          <th>السعر</th>
+          <th>المخزون</th>
+          <th>التصنيف</th>
+          <th>الحالة</th>
+          <th>الإجراءات</th>
+        </tr>
+      </thead>
 
+      <tbody id="productsTable">
+        <tr>
+          <td colspan="6">
+            <div class="loading">
+              جاري تحميل المنتجات...
+            </div>
+          </td>
+        </tr>
+      </tbody>
 
-<select
-id="productStockFilter"
-class="filter"
-onchange="renderProducts()">
+    </table>
 
-<option value="">
-كل المنتجات
-</option>
-
-<option value="available">
-متوفر
-</option>
-
-<option value="low">
-مخزون منخفض
-</option>
-
-<option value="empty">
-نافد
-</option>
-
-</select>
-
-</div>
-
-
-<div class="table-wrap">
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>المنتج</th>
-<th>السعر</th>
-<th>المخزون</th>
-<th>التصنيف</th>
-<th>الحالة</th>
-<th>الإجراءات</th>
-
-</tr>
-
-</thead>
-
-<tbody id="productsTable">
-
-<tr>
-<td colspan="6">
-<div class="loading">
-جاري تحميل المنتجات...
-</div>
-</td>
-</tr>
-
-</tbody>
-
-</table>
-
-</div>
+  </div>
 
 </section>
 
+<section id="page-categories" class="page">
 
-<!-- =========================
-     CATEGORIES
-========================= -->
+  <div class="page-header">
 
-<section
-id="page-categories"
-class="page">
+    <div>
+      <h1 class="page-title">التصنيفات</h1>
+      <p class="page-description">
+        إدارة تصنيفات المنتجات.
+      </p>
+    </div>
 
-<div class="page-header">
+    <button
+      class="primary-btn"
+      onclick="openCategoryModal()">
+      ＋ إضافة تصنيف
+    </button>
 
-<div>
+  </div>
 
-<h1 class="page-title">
-التصنيفات
-</h1>
-
-<p class="page-description">
-إدارة تصنيفات المنتجات.
-</p>
-
-</div>
-
-<button
-class="primary-btn"
-onclick="openCategoryModal()">
-＋ إضافة تصنيف
-</button>
-
-</div>
-
-
-<div
-id="categoriesGrid"
-class="category-list">
-
-<div class="loading">
-جاري تحميل التصنيفات...
-</div>
-
-</div>
+  <div
+    id="categoriesGrid"
+    class="category-list">
+    <div class="loading">
+      جاري تحميل التصنيفات...
+    </div>
+  </div>
 
 </section>
 
+<section id="page-orders" class="page">
 
-<!-- =========================
-     ORDERS
-========================= -->
+  <div class="page-header">
 
-<section
-id="page-orders"
-class="page">
+    <div>
+      <h1 class="page-title">الطلبات</h1>
+      <p class="page-description">
+        متابعة ومعالجة طلبات الزبائن.
+      </p>
+    </div>
 
-<div class="page-header">
+    <button
+      class="primary-btn"
+      onclick="loadOrders()">
+      ↻ تحديث
+    </button>
 
-<div>
+  </div>
 
-<h1 class="page-title">
-الطلبات
-</h1>
+  <div class="toolbar">
 
-<p class="page-description">
-متابعة ومعالجة طلبات الزبائن.
-</p>
+    <input
+      id="orderSearch"
+      class="search"
+      placeholder="🔍 اسم الزبون أو الهاتف..."
+      oninput="renderOrders()">
 
-</div>
+    <select
+      id="orderStatusFilter"
+      class="filter"
+      onchange="renderOrders()">
 
-<button
-class="primary-btn"
-onclick="loadOrders()">
-↻ تحديث
-</button>
+      <option value="">كل الحالات</option>
+      <option value="pending">قيد الانتظار</option>
+      <option value="confirmed">مؤكد</option>
+      <option value="processing">قيد المعالجة</option>
+      <option value="shipped">تم الشحن</option>
+      <option value="completed">مكتمل</option>
+      <option value="cancelled">ملغى</option>
 
-</div>
+    </select>
 
+  </div>
 
-<div class="toolbar">
+  <div class="table-wrap">
 
-<input
-id="orderSearch"
-class="search"
-placeholder="🔍 اسم الزبون أو الهاتف..."
-oninput="renderOrders()">
+    <table>
 
+      <thead>
+        <tr>
+          <th>الطلب</th>
+          <th>الزبون</th>
+          <th>الهاتف</th>
+          <th>الموقع</th>
+          <th>المجموع</th>
+          <th>الحالة</th>
+          <th>التاريخ</th>
+          <th>تفاصيل</th>
+        </tr>
+      </thead>
 
-<select
-id="orderStatusFilter"
-class="filter"
-onchange="renderOrders()">
+      <tbody id="ordersTable">
+        <tr>
+          <td colspan="8">
+            <div class="loading">
+              جاري تحميل الطلبات...
+            </div>
+          </td>
+        </tr>
+      </tbody>
 
-<option value="">
-كل الحالات
-</option>
+    </table>
 
-<option value="pending">
-قيد الانتظار
-</option>
-
-<option value="confirmed">
-مؤكد
-</option>
-
-<option value="processing">
-قيد المعالجة
-</option>
-
-<option value="shipped">
-تم الشحن
-</option>
-
-<option value="completed">
-مكتمل
-</option>
-
-<option value="cancelled">
-ملغى
-</option>
-
-</select>
-
-</div>
-
-
-<div class="table-wrap">
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>الطلب</th>
-<th>الزبون</th>
-<th>الهاتف</th>
-<th>الموقع</th>
-<th>المجموع</th>
-<th>الحالة</th>
-<th>التاريخ</th>
-<th>تفاصيل</th>
-
-</tr>
-
-</thead>
-
-<tbody id="ordersTable">
-
-<tr>
-<td colspan="8">
-<div class="loading">
-جاري تحميل الطلبات...
-</div>
-</td>
-</tr>
-
-</tbody>
-
-</table>
-
-</div>
+  </div>
 
 </section>
 
+<section id="page-reviews" class="page">
 
-<!-- =========================
-     REVIEWS
-========================= -->
+  <div class="page-header">
 
-<section
-id="page-reviews"
-class="page">
+    <div>
+      <h1 class="page-title">التقييمات</h1>
+      <p class="page-description">
+        آراء العملاء حول المنتجات.
+      </p>
+    </div>
 
-<div class="page-header">
+    <button
+      class="primary-btn"
+      onclick="loadReviewsAdmin()">
+      ↻ تحديث
+    </button>
 
-<div>
+  </div>
 
-<h1 class="page-title">
-التقييمات
-</h1>
+  <div class="table-wrap">
 
-<p class="page-description">
-آراء العملاء حول المنتجات.
-</p>
+    <table>
 
-</div>
+      <thead>
+        <tr>
+          <th>العميل</th>
+          <th>المنتج</th>
+          <th>التقييم</th>
+          <th>التعليق</th>
+          <th>التاريخ</th>
+        </tr>
+      </thead>
 
-<button
-class="primary-btn"
-onclick="loadReviewsAdmin()">
-↻ تحديث
-</button>
+      <tbody id="reviewsTable">
+        <tr>
+          <td colspan="5">
+            <div class="loading">
+              جاري تحميل التقييمات...
+            </div>
+          </td>
+        </tr>
+      </tbody>
 
-</div>
+    </table>
 
-
-<div class="table-wrap">
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>العميل</th>
-<th>المنتج</th>
-<th>التقييم</th>
-<th>التعليق</th>
-<th>التاريخ</th>
-
-</tr>
-
-</thead>
-
-<tbody id="reviewsTable">
-
-<tr>
-<td colspan="5">
-<div class="loading">
-جاري تحميل التقييمات...
-</div>
-</td>
-</tr>
-
-</tbody>
-
-</table>
-
-</div>
+  </div>
 
 </section>
 
 </main>
+</div>
+</div>
+
+<!-- PRODUCT MODAL -->
+
+<div id="productModal" class="modal">
+
+  <div class="modal-card">
+
+    <div class="modal-header">
+
+      <h2
+        id="productModalTitle"
+        class="modal-title">
+        إضافة منتج
+      </h2>
+
+      <button
+        class="close-btn"
+        onclick="closeProductModal()">
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <input
+        type="hidden"
+        id="editProductId">
+
+      <div class="form-grid">
+
+        <div class="form-group">
+
+          <label class="form-label">
+            اسم المنتج *
+          </label>
+
+          <input
+            id="productName"
+            class="form-input"
+            placeholder="مثال: T-shirt homme">
+
+        </div>
+
+        <div class="form-group">
+
+          <label class="form-label">
+            التصنيف
+          </label>
+
+          <select
+            id="productCategory"
+            class="form-select">
+
+            <option value="">
+              بدون تصنيف
+            </option>
+
+          </select>
+
+        </div>
+
+        <div class="form-group">
+
+          <label class="form-label">
+            السعر *
+          </label>
+
+          <input
+            id="productPrice"
+            class="form-input"
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="3500">
+
+        </div>
+
+        <div class="form-group">
+
+          <label class="form-label">
+            السعر القديم
+          </label>
+
+          <input
+            id="productOldPrice"
+            class="form-input"
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="4500">
+
+        </div>
+
+        <div class="form-group full">
+
+          <label class="form-label">
+            الوصف
+          </label>
+
+          <textarea
+            id="productDescription"
+            class="form-textarea"
+            placeholder="وصف المنتج..."></textarea>
+
+        </div>
+
+        <div class="form-group full">
+
+          <label class="form-label">
+            رابط الصورة الرئيسية
+          </label>
+
+          <input
+            id="productImage"
+            class="form-input"
+            placeholder="https://...">
+
+        </div>
+
+        <div class="form-group full">
+
+          <label class="form-label">
+            صور إضافية
+          </label>
+
+          <textarea
+            id="productImages"
+            class="form-textarea"
+            placeholder="ضع كل رابط صورة في سطر منفصل"></textarea>
+
+        </div>
+
+        <div class="form-group">
+
+          <label class="form-label">
+            🎨 الألوان
+          </label>
+
+          <div class="option-picker">
+
+            <div
+              id="colorsPicker"
+              class="option-list"></div>
+
+            <div class="add-custom">
+
+              <input
+                id="customColor"
+                placeholder="إضافة لون جديد">
+
+              <button
+                type="button"
+                onclick="addCustomOption('color')">
+                +
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="form-group">
+
+          <label class="form-label">
+            📏 المقاسات
+          </label>
+
+          <div class="option-picker">
+
+            <div
+              id="sizesPicker"
+              class="option-list"></div>
+
+            <div class="add-custom">
+
+              <input
+                id="customSize"
+                placeholder="إضافة مقاس جديد">
+
+              <button
+                type="button"
+                onclick="addCustomOption('size')">
+                +
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div
+        id="variantSection"
+        class="variant-section">
+
+        <div class="variant-head">
+
+          <h3>
+            📊 مخزون الألوان والمقاسات
+          </h3>
+
+          <p class="variant-help">
+            كل تركيبة يتم حفظها داخل product_variants.
+            ويمكن وضع صورة مستقلة لكل Variant.
+          </p>
+
+        </div>
+
+        <div
+          id="variantTable"
+          class="variant-table-wrap">
+
+          <div class="empty">
+            اختر لونًا أو مقاسًا أولًا.
+          </div>
+
+        </div>
+
+      </div>
+
+      <div
+        class="form-group"
+        style="margin-top:15px">
+
+        <label class="form-label">
+          حالة المنتج
+        </label>
+
+        <select
+          id="productActive"
+          class="form-select">
+
+          <option value="true">
+            نشط ويظهر في المتجر
+          </option>
+
+          <option value="false">
+            غير نشط
+          </option>
+
+        </select>
+
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+
+      <button
+        id="saveProductBtn"
+        class="primary-btn"
+        onclick="saveProduct()">
+        💾 حفظ المنتج
+      </button>
+
+      <button
+        class="secondary-btn"
+        onclick="closeProductModal()">
+        إلغاء
+      </button>
+
+    </div>
+
+  </div>
 
 </div>
 
-</div>
+<!-- CATEGORY MODAL -->
 
+<div id="categoryModal" class="modal">
 
-<!-- =========================
-     PRODUCT MODAL
-========================= -->
+  <div
+    class="modal-card"
+    style="max-width:550px">
 
-<div
-id="productModal"
-class="modal">
+    <div class="modal-header">
 
-<div class="modal-card">
+      <h2
+        id="categoryModalTitle"
+        class="modal-title">
+        إضافة تصنيف
+      </h2>
 
-<div class="modal-header">
+      <button
+        class="close-btn"
+        onclick="closeCategoryModal()">
+        ×
+      </button>
 
-<h2
-id="productModalTitle"
-class="modal-title">
-إضافة منتج
-</h2>
+    </div>
 
-<button
-class="close-btn"
-onclick="closeProductModal()">
-×
-</button>
+    <div class="modal-body">
 
-</div>
+      <input
+        type="hidden"
+        id="editCategoryId">
 
+      <div class="form-group">
 
-<div class="modal-body">
+        <label class="form-label">
+          اسم التصنيف *
+        </label>
 
-<input
-type="hidden"
-id="editProductId">
+        <input
+          id="categoryName"
+          class="form-input"
+          placeholder="مثال: ملابس رجالية">
 
+      </div>
 
-<div class="form-grid">
+      <div class="form-group">
 
-<div class="form-group">
+        <label class="form-label">
+          Slug
+        </label>
 
-<label class="form-label">
-اسم المنتج *
-</label>
+        <input
+          id="categorySlug"
+          class="form-input"
+          placeholder="hommes">
 
-<input
-id="productName"
-class="form-input"
-placeholder="مثال: T-shirt homme">
+      </div>
 
-</div>
+      <div class="form-group">
 
+        <label class="form-label">
+          رابط الصورة
+        </label>
 
-<div class="form-group">
+        <input
+          id="categoryImage"
+          class="form-input"
+          placeholder="https://...">
 
-<label class="form-label">
-التصنيف
-</label>
+      </div>
 
-<select
-id="productCategory"
-class="form-select">
+      <div class="form-group">
 
-<option value="">
-بدون تصنيف
-</option>
+        <label class="form-label">
+          الترتيب
+        </label>
 
-</select>
+        <input
+          id="categorySort"
+          class="form-input"
+          type="number"
+          value="0">
 
-</div>
+      </div>
 
+      <div class="form-group">
 
-<div class="form-group">
+        <label class="form-label">
+          الحالة
+        </label>
 
-<label class="form-label">
-السعر *
-</label>
+        <select
+          id="categoryActive"
+          class="form-select">
 
-<input
-id="productPrice"
-class="form-input"
-type="number"
-min="0"
-step="0.01"
-placeholder="3500">
+          <option value="true">نشط</option>
+          <option value="false">غير نشط</option>
 
-</div>
+        </select>
 
+      </div>
 
-<div class="form-group">
+    </div>
 
-<label class="form-label">
-السعر القديم
-</label>
+    <div class="modal-footer">
 
-<input
-id="productOldPrice"
-class="form-input"
-type="number"
-min="0"
-step="0.01"
-placeholder="4500">
+      <button
+        class="primary-btn"
+        onclick="saveCategory()">
+        💾 حفظ
+      </button>
 
-</div>
+      <button
+        class="secondary-btn"
+        onclick="closeCategoryModal()">
+        إلغاء
+      </button>
 
+    </div>
 
-<div class="form-group full">
-
-<label class="form-label">
-الوصف
-</label>
-
-<textarea
-id="productDescription"
-class="form-textarea"
-placeholder="وصف المنتج..."></textarea>
-
-</div>
-
-
-<div class="form-group full">
-
-<label class="form-label">
-رابط الصورة الرئيسية
-</label>
-
-<input
-id="productImage"
-class="form-input"
-placeholder="https://...">
+  </div>
 
 </div>
 
+<!-- ORDER MODAL -->
 
-<div class="form-group full">
+<div id="orderModal" class="modal">
 
-<label class="form-label">
-صور إضافية
-</label>
+  <div
+    class="modal-card"
+    style="max-width:700px">
 
-<textarea
-id="productImages"
-class="form-textarea"
-placeholder="ضع كل رابط صورة في سطر منفصل"></textarea>
+    <div class="modal-header">
 
-</div>
+      <h2 class="modal-title">
+        تفاصيل الطلب
+      </h2>
 
+      <button
+        class="close-btn"
+        onclick="closeOrderModal()">
+        ×
+      </button>
 
-<!-- COLORS -->
+    </div>
 
-<div class="form-group">
+    <div
+      id="orderDetails"
+      class="modal-body"></div>
 
-<label class="form-label">
-🎨 الألوان
-</label>
-
-<div class="option-picker">
-
-<div
-id="colorsPicker"
-class="option-list">
-</div>
-
-<div class="add-custom">
-
-<input
-id="customColor"
-placeholder="إضافة لون جديد">
-
-<button
-type="button"
-onclick="addCustomOption('color')">
-+
-</button>
+  </div>
 
 </div>
 
+<div id="toast" class="toast">
+  تمت العملية بنجاح
 </div>
-
-</div>
-
-
-<!-- SIZES -->
-
-<div class="form-group">
-
-<label class="form-label">
-📏 المقاسات
-</label>
-
-<div class="option-picker">
-
-<div
-id="sizesPicker"
-class="option-list">
-</div>
-
-<div class="add-custom">
-
-<input
-id="customSize"
-placeholder="إضافة مقاس جديد">
-
-<button
-type="button"
-onclick="addCustomOption('size')">
-+
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-
-<!-- VARIANT STOCK -->
-
-<div
-id="variantSection"
-class="variant-section">
-
-<div class="variant-head">
-
-<h3>
-📊 مخزون الألوان والمقاسات
-</h3>
-
-<p class="variant-help">
-أدخل الكمية المتوفرة لكل تركيبة. المجموع يتحسب تلقائيًا.
-</p>
-
-</div>
-
-<div
-id="variantTable"
-class="variant-table-wrap">
-
-<div class="empty">
-اختر لونًا أو مقاسًا أولًا.
-</div>
-
-</div>
-
-</div>
-
-
-<div class="form-group" style="margin-top:15px">
-
-<label class="form-label">
-حالة المنتج
-</label>
-
-<select
-id="productActive"
-class="form-select">
-
-<option value="true">
-نشط ويظهر في المتجر
-</option>
-
-<option value="false">
-غير نشط
-</option>
-
-</select>
-
-</div>
-
-</div>
-
-
-<div class="modal-footer">
-
-<button
-class="primary-btn"
-onclick="saveProduct()">
-💾 حفظ المنتج
-</button>
-
-<button
-class="secondary-btn"
-onclick="closeProductModal()">
-إلغاء
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-
-<!-- =========================
-     CATEGORY MODAL
-========================= -->
-
-<div
-id="categoryModal"
-class="modal">
-
-<div class="modal-card" style="max-width:550px">
-
-<div class="modal-header">
-
-<h2
-id="categoryModalTitle"
-class="modal-title">
-إضافة تصنيف
-</h2>
-
-<button
-class="close-btn"
-onclick="closeCategoryModal()">
-×
-</button>
-
-</div>
-
-<div class="modal-body">
-
-<input
-type="hidden"
-id="editCategoryId">
-
-<div class="form-group">
-
-<label class="form-label">
-اسم التصنيف *
-</label>
-
-<input
-id="categoryName"
-class="form-input"
-placeholder="مثال: ملابس رجالية">
-
-</div>
-
-<div class="form-group">
-
-<label class="form-label">
-Slug
-</label>
-
-<input
-id="categorySlug"
-class="form-input"
-placeholder="hommes">
-
-</div>
-
-<div class="form-group">
-
-<label class="form-label">
-رابط الصورة
-</label>
-
-<input
-id="categoryImage"
-class="form-input"
-placeholder="https://...">
-
-</div>
-
-<div class="form-group">
-
-<label class="form-label">
-الترتيب
-</label>
-
-<input
-id="categorySort"
-class="form-input"
-type="number"
-value="0">
-
-</div>
-
-<div class="form-group">
-
-<label class="form-label">
-الحالة
-</label>
-
-<select
-id="categoryActive"
-class="form-select">
-
-<option value="true">
-نشط
-</option>
-
-<option value="false">
-غير نشط
-</option>
-
-</select>
-
-</div>
-
-</div>
-
-<div class="modal-footer">
-
-<button
-class="primary-btn"
-onclick="saveCategory()">
-💾 حفظ
-</button>
-
-<button
-class="secondary-btn"
-onclick="closeCategoryModal()">
-إلغاء
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-
-<!-- =========================
-     ORDER MODAL
-========================= -->
-
-<div
-id="orderModal"
-class="modal">
-
-<div class="modal-card" style="max-width:700px">
-
-<div class="modal-header">
-
-<h2 class="modal-title">
-تفاصيل الطلب
-</h2>
-
-<button
-class="close-btn"
-onclick="closeOrderModal()">
-×
-</button>
-
-</div>
-
-<div
-id="orderDetails"
-class="modal-body">
-</div>
-
-</div>
-
-</div>
-
-
-<div
-id="toast"
-class="toast">
-تمت العملية بنجاح
-</div>
-
 
 <script>
-
-/* =========================================================
-   GLOBALS
-========================================================= */
 
 let currentUser=null;
 
 let products=[];
-
 let categories=[];
-
 let orders=[];
-
 let reviews=[];
 
 let customColors=[];
-
 let customSizes=[];
 
 let editingProduct=null;
+
+/*
+  Variants الموجودة فعلياً في product_variants
+  للمنتج الذي نقوم بتعديله.
+*/
+let editingVariants=[];
 
 
 /* =========================================================
@@ -2195,42 +1685,40 @@ let editingProduct=null;
 ========================================================= */
 
 const DEFAULT_COLORS=[
-"أسود",
-"أبيض",
-"أحمر",
-"أزرق",
-"أخضر",
-"أصفر",
-"وردي",
-"بنفسجي",
-"برتقالي",
-"بني",
-"رمادي",
-"بيج",
-"كحلي",
-"ذهبي",
-"فضي"
+  "أحمر",
+  "أسود",
+  "أبيض",
+  "أزرق",
+  "أخضر",
+  "أصفر",
+  "بنفسجي",
+  "وردي",
+  "بني",
+  "رمادي",
+  "برتقالي",
+  "كحلي",
+  "سماوي",
+  "بيج"
 ];
 
 const DEFAULT_SIZES=[
-"XS",
-"S",
-"M",
-"L",
-"XL",
-"XXL",
-"XXXL",
-"36",
-"37",
-"38",
-"39",
-"40",
-"41",
-"42",
-"43",
-"44",
-"45",
-"46"
+  "XS",
+  "S",
+  "M",
+  "L",
+  "XL",
+  "XXL",
+  "XXXL",
+  "28",
+  "30",
+  "32",
+  "34",
+  "36",
+  "38",
+  "40",
+  "42",
+  "44",
+  "46"
 ];
 
 
@@ -2295,6 +1783,10 @@ function showToast(message,error=false){
 
   let t=$("toast");
 
+  if(!t){
+    return;
+  }
+
   t.textContent=message;
 
   t.classList.toggle("error",error);
@@ -2348,7 +1840,10 @@ function parseVariantStock(value){
     return {};
   }
 
-  if(typeof value==="object" && !Array.isArray(value)){
+  if(
+    typeof value==="object" &&
+    !Array.isArray(value)
+  ){
     return value;
   }
 
@@ -2401,14 +1896,15 @@ async function checkAuth(){
       <div class="login-card">
         <div class="logo">JR</div>
         <h1>خطأ في Supabase</h1>
-        <p>لم يتم العثور على supabaseClient. تحقق من config.js</p>
+        <p>
+          لم يتم العثور على supabaseClient.
+          تحقق من config.js
+        </p>
       </div>
     `;
 
     return;
-
   }
-
 
   try{
 
@@ -2418,22 +1914,19 @@ async function checkAuth(){
     currentUser=
       result.data?.user || null;
 
-
     if(!currentUser){
 
       $("loginScreen").classList.remove("hidden");
       $("app").classList.add("hidden");
+
       return;
-
     }
-
 
     $("loginScreen").classList.add("hidden");
     $("app").classList.remove("hidden");
 
     $("userEmail").textContent=
       currentUser.email || "";
-
 
     await loadAll();
 
@@ -2452,9 +1945,7 @@ function goLogin(){
 
   location.href=
     "login.html?next="+
-    encodeURIComponent(
-      location.pathname
-    );
+    encodeURIComponent(location.pathname);
 
 }
 
@@ -2488,13 +1979,11 @@ function showPage(page){
       p.classList.remove("active");
     });
 
-
   let target=$("page-"+page);
 
   if(target){
     target.classList.add("active");
   }
-
 
   document
     .querySelectorAll(".nav-btn")
@@ -2505,9 +1994,7 @@ function showPage(page){
       );
     });
 
-
   $("sidebar").classList.remove("open");
-
 
   if(page==="products"){
     renderProducts();
@@ -2565,7 +2052,6 @@ async function loadProducts(){
       .select("*")
       .order("created_at",{ascending:false});
 
-
   if(result.error){
 
     console.error(result.error);
@@ -2576,9 +2062,7 @@ async function loadProducts(){
     );
 
     return;
-
   }
-
 
   products=result.data || [];
 
@@ -2597,19 +2081,20 @@ function renderProducts(){
 
   let tbody=$("productsTable");
 
+  if(!tbody){
+    return;
+  }
+
   let search=
     ($("productSearch")?.value||"")
       .trim()
       .toLowerCase();
 
-
   let cat=
     $("productCategoryFilter")?.value||"";
 
-
   let stockFilter=
     $("productStockFilter")?.value||"";
-
 
   let list=
     products.filter(p=>{
@@ -2622,18 +2107,14 @@ function renderProducts(){
         !search ||
         name.includes(search);
 
-
       let matchCat=
         !cat ||
         String(p.category_id||"")===String(cat);
 
-
       let stock=
         Number(p.stock||0);
 
-
       let matchStock=true;
-
 
       if(stockFilter==="available"){
         matchStock=stock>0;
@@ -2647,7 +2128,6 @@ function renderProducts(){
         matchStock=stock<=0;
       }
 
-
       return(
         matchSearch &&
         matchCat &&
@@ -2655,7 +2135,6 @@ function renderProducts(){
       );
 
     });
-
 
   if(!list.length){
 
@@ -2670,12 +2149,9 @@ function renderProducts(){
     `;
 
     return;
-
   }
 
-
   tbody.innerHTML="";
-
 
   list.forEach(p=>{
 
@@ -2684,20 +2160,16 @@ function renderProducts(){
         c=>String(c.id)===String(p.category_id)
       );
 
-
     let image=
       p.image_url||
       p.image||
       parseJsonArray(p.image_urls)[0]||
       "https://placehold.co/100x100?text=JR";
 
-
     let stock=
       Number(p.stock||0);
 
-
     let stockBadge;
-
 
     if(stock<=0){
 
@@ -2725,14 +2197,11 @@ function renderProducts(){
 
     }
 
-
     let active=
       p.is_active!==false &&
       p.active!==false;
 
-
     let row=document.createElement("tr");
-
 
     row.innerHTML=`
 
@@ -2762,23 +2231,19 @@ function renderProducts(){
 
       </td>
 
-
       <td>
         <strong>
           ${formatPrice(p.price)}
         </strong>
       </td>
 
-
       <td>
         ${stockBadge}
       </td>
 
-
       <td>
         ${escapeHtml(category?.name||"بدون تصنيف")}
       </td>
-
 
       <td>
 
@@ -2792,7 +2257,6 @@ function renderProducts(){
 
       </td>
 
-
       <td>
 
         <div class="actions">
@@ -2804,14 +2268,12 @@ function renderProducts(){
             ✏️
           </button>
 
-
           <button
             class="icon-btn"
             title="تفعيل/تعطيل"
             onclick="toggleProduct('${p.id}')">
             ${active?"👁️":"🚫"}
           </button>
-
 
           <button
             class="icon-btn"
@@ -2826,7 +2288,6 @@ function renderProducts(){
 
     `;
 
-
     tbody.appendChild(row);
 
   });
@@ -2835,15 +2296,13 @@ function renderProducts(){
 
 
 /* =========================================================
-   PRODUCT CATEGORY SELECT
+   PRODUCT CATEGORY SELECTS
 ========================================================= */
 
 function updateProductCategorySelects(){
 
   let select=$("productCategory");
-
   let filter=$("productCategoryFilter");
-
 
   if(select){
 
@@ -2855,24 +2314,19 @@ function updateProductCategorySelects(){
       </option>
     `;
 
-
     categories.forEach(c=>{
 
       let o=document.createElement("option");
 
       o.value=c.id;
-
       o.textContent=c.name;
 
       select.appendChild(o);
 
     });
 
-
     select.value=current;
-
   }
-
 
   if(filter){
 
@@ -2884,29 +2338,25 @@ function updateProductCategorySelects(){
       </option>
     `;
 
-
     categories.forEach(c=>{
 
       let o=document.createElement("option");
 
       o.value=c.id;
-
       o.textContent=c.name;
 
       filter.appendChild(o);
 
     });
 
-
     filter.value=current;
-
   }
 
 }
 
 
 /* =========================================================
-   OPTIONS PICKERS
+   OPTIONS
 ========================================================= */
 
 function getAvailableColors(){
@@ -2941,21 +2391,16 @@ function renderOptionPickers(
   let cp=$("colorsPicker");
   let sp=$("sizesPicker");
 
-
   cp.innerHTML="";
   sp.innerHTML="";
 
-
   getAvailableColors().forEach((color,index)=>{
 
-    let id=
-      "color_"+index;
-
+    let id="color_"+index;
 
     let wrap=document.createElement("div");
 
     wrap.className="option-check";
-
 
     wrap.innerHTML=`
 
@@ -2972,22 +2417,17 @@ function renderOptionPickers(
 
     `;
 
-
     cp.appendChild(wrap);
 
   });
 
-
   getAvailableSizes().forEach((size,index)=>{
 
-    let id=
-      "size_"+index;
-
+    let id="size_"+index;
 
     let wrap=document.createElement("div");
 
     wrap.className="option-check";
-
 
     wrap.innerHTML=`
 
@@ -3004,11 +2444,9 @@ function renderOptionPickers(
 
     `;
 
-
     sp.appendChild(wrap);
 
   });
-
 
   cp
     .querySelectorAll("input")
@@ -3018,7 +2456,6 @@ function renderOptionPickers(
         renderVariantTable
       );
     });
-
 
   sp
     .querySelectorAll("input")
@@ -3039,7 +2476,6 @@ function getSelectedOptions(type){
     ?"#colorsPicker input:checked"
     :"#sizesPicker input:checked";
 
-
   return [
     ...document.querySelectorAll(selector)
   ].map(x=>x.value);
@@ -3054,15 +2490,12 @@ function addCustomOption(type){
     ?$("customColor")
     :$("customSize");
 
-
   let value=
     input.value.trim();
-
 
   if(!value){
     return;
   }
-
 
   if(type==="color"){
 
@@ -3078,17 +2511,13 @@ function addCustomOption(type){
 
   }
 
-
   input.value="";
-
 
   let selectedColors=
     getSelectedOptions("color");
 
-
   let selectedSizes=
     getSelectedOptions("size");
-
 
   if(type==="color"){
     selectedColors.push(value);
@@ -3096,12 +2525,10 @@ function addCustomOption(type){
     selectedSizes.push(value);
   }
 
-
   renderOptionPickers(
     [...new Set(selectedColors)],
     [...new Set(selectedSizes)]
   );
-
 
   renderVariantTable();
 
@@ -3109,12 +2536,12 @@ function addCustomOption(type){
 
 
 /* =========================================================
-   VARIANT TABLE
+   VARIANT KEY
 ========================================================= */
 
 function variantKey(color,size){
 
-  return (
+  return(
     String(color||"").trim()+
     "|"+
     String(size||"").trim()
@@ -3123,18 +2550,37 @@ function variantKey(color,size){
 }
 
 
+/* =========================================================
+   FIND EXISTING VARIANT
+========================================================= */
+
+function findExistingVariant(color,size){
+
+  return editingVariants.find(v=>{
+
+    return(
+      String(v.color||"")===String(color||"") &&
+      String(v.size||"")===String(size||"")
+    );
+
+  });
+
+}
+
+
+/* =========================================================
+   VARIANT TABLE
+========================================================= */
+
 function renderVariantTable(){
 
   let colors=
     getSelectedOptions("color");
 
-
   let sizes=
     getSelectedOptions("size");
 
-
   let box=$("variantTable");
-
 
   if(!colors.length && !sizes.length){
 
@@ -3145,20 +2591,9 @@ function renderVariantTable(){
     `;
 
     return;
-
   }
 
-
-  let existing=
-    editingProduct
-    ?parseVariantStock(
-      editingProduct.variant_stock
-    )
-    :{};
-
-
   let html="";
-
 
   /*
     اللون + المقاس
@@ -3170,12 +2605,16 @@ function renderVariantTable(){
       <table class="variant-table">
 
         <thead>
+
           <tr>
             <th>اللون / المقاس</th>
-            ${sizes.map(s=>`
-              <th>${escapeHtml(s)}</th>
+
+            ${sizes.map(size=>`
+              <th>${escapeHtml(size)}</th>
             `).join("")}
+
           </tr>
+
         </thead>
 
         <tbody>
@@ -3192,25 +2631,62 @@ function renderVariantTable(){
 
               ${sizes.map(size=>{
 
+                let existing=
+                  findExistingVariant(
+                    color,
+                    size
+                  );
+
+                let stock=
+                  Number(existing?.stock||0);
+
+                let image=
+                  existing?.image_url||
+                  "";
+
                 let key=
-                  variantKey(color,size);
+                  variantKey(
+                    color,
+                    size
+                  );
 
-                let value=
-                  existing[key]??0;
+                return`
 
-                return `
                   <td>
 
-                    <input
-                      class="variant-stock-input"
-                      type="number"
-                      min="0"
-                      data-key="${escapeHtml(key)}"
-                      value="${Number(value)||0}"
-                      oninput="calculateTotalStock()"
-                    >
+                    <div style="
+                      display:flex;
+                      flex-direction:column;
+                      gap:6px;
+                      align-items:center;
+                    ">
+
+                      <input
+                        class="variant-stock-input"
+                        type="number"
+                        min="0"
+                        data-key="${escapeHtml(key)}"
+                        data-color="${escapeHtml(color)}"
+                        data-size="${escapeHtml(size)}"
+                        value="${stock}"
+                        oninput="calculateTotalStock()"
+                        title="المخزون"
+                      >
+
+                      <input
+                        class="variant-image-input"
+                        type="url"
+                        data-image-key="${escapeHtml(key)}"
+                        data-color="${escapeHtml(color)}"
+                        data-size="${escapeHtml(size)}"
+                        value="${escapeHtml(image)}"
+                        placeholder="رابط الصورة"
+                      >
+
+                    </div>
 
                   </td>
+
                 `;
 
               }).join("")}
@@ -3226,7 +2702,6 @@ function renderVariantTable(){
 
   }
 
-
   /*
     اللون فقط
   */
@@ -3237,29 +2712,43 @@ function renderVariantTable(){
       <table class="variant-table">
 
         <thead>
+
           <tr>
             <th>اللون</th>
             <th>المخزون</th>
+            <th>صورة Variant</th>
           </tr>
+
         </thead>
 
         <tbody>
 
           ${colors.map(color=>{
 
+            let existing=
+              findExistingVariant(
+                color,
+                ""
+              );
+
+            let stock=
+              Number(existing?.stock||0);
+
+            let image=
+              existing?.image_url||
+              "";
+
             let key=
               variantKey(color,"");
 
-            let value=
-              existing[color]??
-              existing[key]??
-              0;
+            return`
 
-            return `
               <tr>
 
                 <td>
-                  ${escapeHtml(color)}
+                  <strong>
+                    ${escapeHtml(color)}
+                  </strong>
                 </td>
 
                 <td>
@@ -3268,14 +2757,31 @@ function renderVariantTable(){
                     class="variant-stock-input"
                     type="number"
                     min="0"
-                    data-key="${escapeHtml(color)}"
-                    value="${Number(value)||0}"
+                    data-key="${escapeHtml(key)}"
+                    data-color="${escapeHtml(color)}"
+                    data-size=""
+                    value="${stock}"
                     oninput="calculateTotalStock()"
                   >
 
                 </td>
 
+                <td>
+
+                  <input
+                    class="variant-image-input"
+                    type="url"
+                    data-image-key="${escapeHtml(key)}"
+                    data-color="${escapeHtml(color)}"
+                    data-size=""
+                    value="${escapeHtml(image)}"
+                    placeholder="https://..."
+                  >
+
+                </td>
+
               </tr>
+
             `;
 
           }).join("")}
@@ -3286,7 +2792,6 @@ function renderVariantTable(){
     `;
 
   }
-
 
   /*
     المقاس فقط
@@ -3298,29 +2803,43 @@ function renderVariantTable(){
       <table class="variant-table">
 
         <thead>
+
           <tr>
             <th>المقاس</th>
             <th>المخزون</th>
+            <th>صورة Variant</th>
           </tr>
+
         </thead>
 
         <tbody>
 
           ${sizes.map(size=>{
 
+            let existing=
+              findExistingVariant(
+                "",
+                size
+              );
+
+            let stock=
+              Number(existing?.stock||0);
+
+            let image=
+              existing?.image_url||
+              "";
+
             let key=
               variantKey("",size);
 
-            let value=
-              existing[size]??
-              existing[key]??
-              0;
+            return`
 
-            return `
               <tr>
 
                 <td>
-                  ${escapeHtml(size)}
+                  <strong>
+                    ${escapeHtml(size)}
+                  </strong>
                 </td>
 
                 <td>
@@ -3329,14 +2848,31 @@ function renderVariantTable(){
                     class="variant-stock-input"
                     type="number"
                     min="0"
-                    data-key="${escapeHtml(size)}"
-                    value="${Number(value)||0}"
+                    data-key="${escapeHtml(key)}"
+                    data-color=""
+                    data-size="${escapeHtml(size)}"
+                    value="${stock}"
                     oninput="calculateTotalStock()"
                   >
 
                 </td>
 
+                <td>
+
+                  <input
+                    class="variant-image-input"
+                    type="url"
+                    data-image-key="${escapeHtml(key)}"
+                    data-color=""
+                    data-size="${escapeHtml(size)}"
+                    value="${escapeHtml(image)}"
+                    placeholder="https://..."
+                  >
+
+                </td>
+
               </tr>
+
             `;
 
           }).join("")}
@@ -3348,24 +2884,26 @@ function renderVariantTable(){
 
   }
 
-
   box.innerHTML=html;
-
 
   box.insertAdjacentHTML(
     "beforeend",
     `
       <div class="total-stock-box">
-        <span>المخزون الإجمالي</span>
+
+        <span>
+          المخزون الإجمالي
+        </span>
+
         <span
           id="totalVariantStock"
           class="total-stock-number">
           0
         </span>
+
       </div>
     `
   );
-
 
   calculateTotalStock();
 
@@ -3375,7 +2913,6 @@ function renderVariantTable(){
 function calculateTotalStock(){
 
   let total=0;
-
 
   document
     .querySelectorAll(".variant-stock-input")
@@ -3391,43 +2928,80 @@ function calculateTotalStock(){
 
     });
 
-
   let el=$("totalVariantStock");
 
   if(el){
     el.textContent=total;
   }
 
-
   return total;
 
 }
 
 
-function getVariantStockFromForm(){
+/* =========================================================
+   GET VARIANTS FROM FORM
+========================================================= */
 
-  let obj={};
+function getVariantsFromForm(){
 
+  let result=[];
 
-  document
-    .querySelectorAll(".variant-stock-input")
-    .forEach(input=>{
+  let stockInputs=
+    [
+      ...document.querySelectorAll(
+        ".variant-stock-input"
+      )
+    ];
 
-      let key=input.dataset.key;
+  stockInputs.forEach(input=>{
 
-      let value=
-        Math.max(
-          0,
-          parseInt(input.value,10)||0
-        );
+    let color=
+      input.dataset.color||null;
 
+    let size=
+      input.dataset.size||null;
 
-      obj[key]=value;
+    let stock=
+      Math.max(
+        0,
+        parseInt(
+          input.value,
+          10
+        )||0
+      );
+
+    let key=
+      variantKey(
+        color,
+        size
+      );
+
+    let imageInput=
+      document.querySelector(
+        `.variant-image-input[data-image-key="${CSS.escape(key)}"]`
+      );
+
+    let image=
+      imageInput
+      ?imageInput.value.trim()
+      :"";
+
+    result.push({
+
+      color:color||null,
+
+      size:size||null,
+
+      stock:stock,
+
+      image_url:image||null
 
     });
 
+  });
 
-  return obj;
+  return result;
 
 }
 
@@ -3436,7 +3010,7 @@ function getVariantStockFromForm(){
    PRODUCT MODAL
 ========================================================= */
 
-function openProductModal(productId=null){
+async function openProductModal(productId=null){
 
   editingProduct=
     productId
@@ -3445,52 +3019,43 @@ function openProductModal(productId=null){
     )
     :null;
 
+  editingVariants=[];
 
   $("productModalTitle").textContent=
     editingProduct
     ?"تعديل المنتج"
     :"إضافة منتج";
 
-
   $("editProductId").value=
     editingProduct?.id||"";
-
 
   $("productName").value=
     editingProduct?.name||"";
 
-
   $("productPrice").value=
     editingProduct?.price??"";
-
 
   $("productOldPrice").value=
     editingProduct?.old_price??"";
 
-
   $("productDescription").value=
     editingProduct?.description||"";
-
 
   $("productImage").value=
     editingProduct?.image_url||
     editingProduct?.image||
     "";
 
-
   let images=
     parseJsonArray(
       editingProduct?.image_urls
     );
 
-
   $("productImages").value=
     images.join("\n");
 
-
   $("productCategory").value=
     editingProduct?.category_id||"";
-
 
   let active=
     editingProduct
@@ -3500,42 +3065,261 @@ function openProductModal(productId=null){
     )
     :true;
 
-
   $("productActive").value=
     active?"true":"false";
-
 
   let selectedColors=
     parseJsonArray(
       editingProduct?.colors
     ).map(String);
 
-
   let selectedSizes=
     parseJsonArray(
       editingProduct?.sizes
     ).map(String);
-
 
   renderOptionPickers(
     selectedColors,
     selectedSizes
   );
 
-
-  renderVariantTable();
-
+  $("variantTable").innerHTML=`
+    <div class="loading">
+      ${editingProduct
+        ?"جاري تحميل Variants..."
+        :"جاهز لإنشاء Variants..."}
+    </div>
+  `;
 
   $("productModal").classList.add("open");
 
+  if(editingProduct){
+
+    let result=
+      await supabaseClient
+        .from("product_variants")
+        .select(
+          "id,product_id,color,size,stock,image_url"
+        )
+        .eq(
+          "product_id",
+          editingProduct.id
+        )
+        .order("color",{ascending:true})
+        .order("size",{ascending:true});
+
+    if(result.error){
+
+      console.error(result.error);
+
+      /*
+        لا نوقفش تعديل المنتج بالكامل.
+      */
+
+      editingVariants=[];
+
+      showToast(
+        "تعذر تحميل Variants",
+        true
+      );
+
+    }else{
+
+      editingVariants=
+        result.data||[];
+
+    }
+
+  }
+
+  renderVariantTable();
+
 }
 
+
+/* =========================================================
+   CLOSE PRODUCT MODAL
+========================================================= */
 
 function closeProductModal(){
 
   $("productModal").classList.remove("open");
 
   editingProduct=null;
+  editingVariants=[];
+
+}
+
+
+/* =========================================================
+   SYNC PRODUCT VARIANTS
+========================================================= */
+
+async function syncProductVariants(
+  productId,
+  variants
+){
+
+  /*
+    إذا ماكان حتى Variant:
+    نحذف Variants القديمة الخاصة بهذا المنتج.
+  */
+
+  if(!variants.length){
+
+    let del=
+      await supabaseClient
+        .from("product_variants")
+        .delete()
+        .eq(
+          "product_id",
+          productId
+        );
+
+    if(del.error){
+      throw del.error;
+    }
+
+    return;
+
+  }
+
+
+  /*
+    نجيب الـVariants الحالية من DB
+    باش نعرف واش نحذف وواش نحدث.
+  */
+
+  let existingResult=
+    await supabaseClient
+      .from("product_variants")
+      .select(
+        "id,product_id,color,size,stock,image_url"
+      )
+      .eq(
+        "product_id",
+        productId
+      );
+
+  if(existingResult.error){
+    throw existingResult.error;
+  }
+
+  let existing=
+    existingResult.data||[];
+
+  let wantedKeys=
+    new Set();
+
+  /*
+    Upsert لكل Variant.
+    ما نعتمدوش على unique constraint.
+  */
+
+  for(let variant of variants){
+
+    let color=
+      variant.color||null;
+
+    let size=
+      variant.size||null;
+
+    let key=
+      variantKey(
+        color,
+        size
+      );
+
+    wantedKeys.add(key);
+
+    let old=
+      existing.find(v=>
+        variantKey(
+          v.color,
+          v.size
+        )===key
+      );
+
+    let payload={
+
+      product_id:productId,
+
+      color:color,
+
+      size:size,
+
+      stock:
+        Math.max(
+          0,
+          Number(variant.stock)||0
+        ),
+
+      image_url:
+        variant.image_url||
+        null
+
+    };
+
+    let result;
+
+    if(old){
+
+      result=
+        await supabaseClient
+          .from("product_variants")
+          .update(payload)
+          .eq(
+            "id",
+            old.id
+          );
+
+    }else{
+
+      result=
+        await supabaseClient
+          .from("product_variants")
+          .insert(payload);
+
+    }
+
+    if(result.error){
+      throw result.error;
+    }
+
+  }
+
+
+  /*
+    نحذف Variants اللي ما بقاتش
+    ضمن الألوان/المقاسات المختارة.
+  */
+
+  let obsolete=
+    existing.filter(v=>
+      !wantedKeys.has(
+        variantKey(
+          v.color,
+          v.size
+        )
+      )
+    );
+
+  for(let old of obsolete){
+
+    let result=
+      await supabaseClient
+        .from("product_variants")
+        .delete()
+        .eq(
+          "id",
+          old.id
+        );
+
+    if(result.error){
+      throw result.error;
+    }
+
+  }
 
 }
 
@@ -3549,10 +3333,8 @@ async function saveProduct(){
   let name=
     $("productName").value.trim();
 
-
   let price=
     Number($("productPrice").value);
-
 
   if(!name){
 
@@ -3562,9 +3344,7 @@ async function saveProduct(){
     );
 
     return;
-
   }
-
 
   if(
     Number.isNaN(price) ||
@@ -3577,41 +3357,33 @@ async function saveProduct(){
     );
 
     return;
-
   }
-
 
   let colors=
     getSelectedOptions("color");
 
-
   let sizes=
     getSelectedOptions("size");
 
-
-  let variantStock=
-    getVariantStockFromForm();
-
-
-  let totalStock=
-    Object.values(variantStock)
-      .reduce(
-        (sum,v)=>
-          sum+(Number(v)||0),
-        0
-      );
-
+  let variants=
+    getVariantsFromForm();
 
   /*
-    إذا ماكانش variants
-    نخلي stock = 0
-    ويمكن تعديله لاحقًا من variants.
+    stock الإجمالي = مجموع جميع Variants.
   */
 
+  let totalStock=
+    variants.reduce(
+      (sum,v)=>
+        sum+
+        (Number(v.stock)||0),
+      0
+    );
 
   let image=
-    $("productImage").value.trim();
-
+    $("productImage")
+      .value
+      .trim();
 
   let extraImages=
     $("productImages")
@@ -3620,23 +3392,59 @@ async function saveProduct(){
       .map(x=>x.trim())
       .filter(Boolean);
 
-
   let imageUrls=
     [
       ...new Set([
-        ...(
-          image
-          ?[image]
-          :[]
-        ),
+        ...(image?[image]:[]),
         ...extraImages
       ])
     ];
 
-
   let active=
     $("productActive").value==="true";
 
+  /*
+    نبني variant_stock أيضاً
+    للمحافظة على التوافق مع باقي الموقع.
+  */
+
+  let variantStock={};
+
+  variants.forEach(v=>{
+
+    let key=
+      variantKey(
+        v.color,
+        v.size
+      );
+
+    variantStock[key]=
+      Number(v.stock)||0;
+
+  });
+
+  /*
+    إذا ماكانش إلا لون أو إلا مقاس
+    نخلي fallback keys كذلك.
+  */
+
+  variants.forEach(v=>{
+
+    if(v.color && !v.size){
+
+      variantStock[v.color]=
+        Number(v.stock)||0;
+
+    }
+
+    if(v.size && !v.color){
+
+      variantStock[v.size]=
+        Number(v.stock)||0;
+
+    }
+
+  });
 
   let payload={
 
@@ -3650,7 +3458,9 @@ async function saveProduct(){
     price:price,
 
     old_price:
-      Number($("productOldPrice").value)||null,
+      Number(
+        $("productOldPrice").value
+      )||null,
 
     stock:totalStock,
 
@@ -3663,8 +3473,7 @@ async function saveProduct(){
     image:
       image||null,
 
-    image_urls:
-      imageUrls,
+    image_urls:imageUrls,
 
     colors:colors,
 
@@ -3681,11 +3490,21 @@ async function saveProduct(){
 
   };
 
+  let saveBtn=$("saveProductBtn");
+
+  if(saveBtn){
+    saveBtn.disabled=true;
+    saveBtn.textContent="⏳ جاري الحفظ...";
+  }
 
   try{
 
     let result;
+    let productId;
 
+    /*
+      1. نحفظ product
+    */
 
     if(editingProduct){
 
@@ -3698,34 +3517,98 @@ async function saveProduct(){
             editingProduct.id
           );
 
+      if(result.error){
+        throw result.error;
+      }
+
+      productId=
+        editingProduct.id;
+
     }else{
 
       result=
         await supabaseClient
           .from("products")
-          .insert(payload);
+          .insert(payload)
+          .select("id")
+          .single();
+
+      if(result.error){
+        throw result.error;
+      }
+
+      productId=
+        result.data.id;
 
     }
 
+    /*
+      2. نحفظ product_variants
+    */
 
-    if(result.error){
-      throw result.error;
+    await syncProductVariants(
+      productId,
+      variants
+    );
+
+    /*
+      3. نعيد حساب stock من DB
+      ونضمن products.stock مطابق للـVariants.
+    */
+
+    let variantsResult=
+      await supabaseClient
+        .from("product_variants")
+        .select("stock")
+        .eq(
+          "product_id",
+          productId
+        );
+
+    if(variantsResult.error){
+      throw variantsResult.error;
     }
 
+    let finalStock=
+      (variantsResult.data||[])
+        .reduce(
+          (sum,v)=>
+            sum+
+            Math.max(
+              0,
+              Number(v.stock)||0
+            ),
+          0
+        );
+
+    let finalUpdate=
+      await supabaseClient
+        .from("products")
+        .update({
+          stock:finalStock,
+          updated_at:
+            new Date().toISOString()
+        })
+        .eq(
+          "id",
+          productId
+        );
+
+    if(finalUpdate.error){
+      throw finalUpdate.error;
+    }
 
     showToast(
       editingProduct
-      ?"تم تعديل المنتج ✓"
-      :"تمت إضافة المنتج ✓"
+      ?"تم تعديل المنتج والـVariants ✓"
+      :"تمت إضافة المنتج والـVariants ✓"
     );
-
 
     closeProductModal();
 
     await loadProducts();
 
     updateDashboard();
-
 
   }catch(e){
 
@@ -3736,6 +3619,15 @@ async function saveProduct(){
       (e.message||"خطأ"),
       true
     );
+
+  }finally{
+
+    if(saveBtn){
+
+      saveBtn.disabled=false;
+      saveBtn.textContent="💾 حفظ المنتج";
+
+    }
 
   }
 
@@ -3753,19 +3645,15 @@ async function toggleProduct(id){
       x=>String(x.id)===String(id)
     );
 
-
   if(!p){
     return;
   }
-
 
   let active=
     p.is_active!==false &&
     p.active!==false;
 
-
   let newValue=!active;
-
 
   let result=
     await supabaseClient
@@ -3773,10 +3661,10 @@ async function toggleProduct(id){
       .update({
         is_active:newValue,
         active:newValue,
-        updated_at:new Date().toISOString()
+        updated_at:
+          new Date().toISOString()
       })
       .eq("id",id);
-
 
   if(result.error){
 
@@ -3786,16 +3674,13 @@ async function toggleProduct(id){
     );
 
     return;
-
   }
-
 
   showToast(
     newValue
     ?"تم تفعيل المنتج ✓"
     :"تم إخفاء المنتج ✓"
   );
-
 
   await loadProducts();
 
@@ -3813,11 +3698,9 @@ async function deleteProduct(id){
       x=>String(x.id)===String(id)
     );
 
-
   if(!p){
     return;
   }
-
 
   let ok=
     confirm(
@@ -3826,18 +3709,44 @@ async function deleteProduct(id){
       "\n\nلا يمكن التراجع عن هذه العملية."
     );
 
-
   if(!ok){
     return;
   }
 
+  /*
+    نحاول حذف Variants أولاً.
+    إذا كان عندها Foreign Key cascade
+    فالأمر أيضاً آمن.
+  */
+
+  let variantsDelete=
+    await supabaseClient
+      .from("product_variants")
+      .delete()
+      .eq(
+        "product_id",
+        id
+      );
+
+  if(variantsDelete.error){
+
+    console.error(
+      variantsDelete.error
+    );
+
+    showToast(
+      "تعذر حذف Variants الخاصة بالمنتج.",
+      true
+    );
+
+    return;
+  }
 
   let result=
     await supabaseClient
       .from("products")
       .delete()
       .eq("id",id);
-
 
   if(result.error){
 
@@ -3849,14 +3758,11 @@ async function deleteProduct(id){
     console.error(result.error);
 
     return;
-
   }
-
 
   showToast(
     "تم حذف المنتج ✓"
   );
-
 
   await loadProducts();
 
@@ -3875,9 +3781,14 @@ async function loadCategories(){
     await supabaseClient
       .from("categories")
       .select("*")
-      .order("sort_order",{ascending:true})
-      .order("created_at",{ascending:false});
-
+      .order(
+        "sort_order",
+        {ascending:true}
+      )
+      .order(
+        "created_at",
+        {ascending:false}
+      );
 
   if(result.error){
 
@@ -3889,13 +3800,10 @@ async function loadCategories(){
     );
 
     return;
-
   }
-
 
   categories=
     result.data||[];
-
 
   renderCategories();
 
@@ -3912,7 +3820,6 @@ function renderCategories(){
 
   let grid=$("categoriesGrid");
 
-
   if(!categories.length){
 
     grid.innerHTML=`
@@ -3922,12 +3829,9 @@ function renderCategories(){
     `;
 
     return;
-
   }
 
-
   grid.innerHTML="";
-
 
   categories.forEach(c=>{
 
@@ -3935,11 +3839,9 @@ function renderCategories(){
 
     card.className="category-card";
 
-
     let image=
       c.image_url||
       "https://placehold.co/100x100?text=JR";
-
 
     card.innerHTML=`
 
@@ -3948,7 +3850,6 @@ function renderCategories(){
         src="${escapeHtml(image)}"
         onerror="this.src='https://placehold.co/100x100?text=JR'"
       >
-
 
       <div class="category-info">
 
@@ -3974,7 +3875,6 @@ function renderCategories(){
 
       </div>
 
-
       <div class="actions">
 
         <button
@@ -3992,7 +3892,6 @@ function renderCategories(){
       </div>
 
     `;
-
 
     grid.appendChild(card);
 
@@ -4014,38 +3913,30 @@ function openCategoryModal(id=null){
     )
     :null;
 
-
   $("categoryModalTitle").textContent=
     c
     ?"تعديل تصنيف"
     :"إضافة تصنيف";
 
-
   $("editCategoryId").value=
     c?.id||"";
-
 
   $("categoryName").value=
     c?.name||"";
 
-
   $("categorySlug").value=
     c?.slug||"";
-
 
   $("categoryImage").value=
     c?.image_url||"";
 
-
   $("categorySort").value=
     c?.sort_order??0;
-
 
   $("categoryActive").value=
     c?.active===false
     ?"false"
     :"true";
-
 
   $("categoryModal").classList.add("open");
 
@@ -4068,7 +3959,6 @@ async function saveCategory(){
   let name=
     $("categoryName").value.trim();
 
-
   if(!name){
 
     showToast(
@@ -4077,14 +3967,11 @@ async function saveCategory(){
     );
 
     return;
-
   }
-
 
   let slug=
     $("categorySlug").value.trim()||
     slugify(name);
-
 
   let payload={
 
@@ -4108,13 +3995,10 @@ async function saveCategory(){
 
   };
 
-
   let id=
     $("editCategoryId").value;
 
-
   let result;
-
 
   if(id){
 
@@ -4133,7 +4017,6 @@ async function saveCategory(){
 
   }
 
-
   if(result.error){
 
     console.error(result.error);
@@ -4144,16 +4027,13 @@ async function saveCategory(){
     );
 
     return;
-
   }
-
 
   showToast(
     id
     ?"تم تعديل التصنيف ✓"
     :"تمت إضافة التصنيف ✓"
   );
-
 
   closeCategoryModal();
 
@@ -4173,11 +4053,9 @@ async function deleteCategory(id){
       x=>String(x.id)===String(id)
     );
 
-
   if(!c){
     return;
   }
-
 
   if(
     !confirm(
@@ -4189,13 +4067,11 @@ async function deleteCategory(id){
     return;
   }
 
-
   let result=
     await supabaseClient
       .from("categories")
       .delete()
       .eq("id",id);
-
 
   if(result.error){
 
@@ -4205,14 +4081,11 @@ async function deleteCategory(id){
     );
 
     return;
-
   }
-
 
   showToast(
     "تم حذف التصنيف ✓"
   );
-
 
   await loadCategories();
 
@@ -4246,7 +4119,6 @@ async function loadOrders(){
         {ascending:false}
       );
 
-
   if(result.error){
 
     console.error(result.error);
@@ -4257,13 +4129,10 @@ async function loadOrders(){
     );
 
     return;
-
   }
-
 
   orders=
     result.data||[];
-
 
   renderOrders();
 
@@ -4281,19 +4150,13 @@ function statusLabel(status){
   let map={
 
     pending:"قيد الانتظار",
-
     confirmed:"مؤكد",
-
     processing:"قيد المعالجة",
-
     shipped:"تم الشحن",
-
     completed:"مكتمل",
-
     cancelled:"ملغى"
 
   };
-
 
   return map[status]||status||"غير معروف";
 
@@ -4302,7 +4165,10 @@ function statusLabel(status){
 
 function statusClass(status){
 
-  if(status==="completed"||status==="confirmed"){
+  if(
+    status==="completed"||
+    status==="confirmed"
+  ){
     return "badge-green";
   }
 
@@ -4310,7 +4176,10 @@ function statusClass(status){
     return "badge-red";
   }
 
-  if(status==="processing"||status==="shipped"){
+  if(
+    status==="processing"||
+    status==="shipped"
+  ){
     return "badge-orange";
   }
 
@@ -4327,41 +4196,29 @@ function renderOrders(){
 
   let tbody=$("ordersTable");
 
-
   let search=
     ($("orderSearch")?.value||"")
       .trim()
       .toLowerCase();
 
-
   let status=
     $("orderStatusFilter")?.value||"";
-
 
   let list=
     orders.filter(o=>{
 
       let text=
-        (
-          o.customer_name||
-          ""
-        )+
+        (o.customer_name||"")+
         " "+
-        (
-          o.phone||
-          ""
-        );
-
+        (o.phone||"");
 
       let matchSearch=
         !search||
         text.toLowerCase().includes(search);
 
-
       let matchStatus=
         !status||
         o.status===status;
-
 
       return(
         matchSearch&&
@@ -4369,7 +4226,6 @@ function renderOrders(){
       );
 
     });
-
 
   if(!list.length){
 
@@ -4384,17 +4240,13 @@ function renderOrders(){
     `;
 
     return;
-
   }
 
-
   tbody.innerHTML="";
-
 
   list.forEach(o=>{
 
     let row=document.createElement("tr");
-
 
     let location=[
       o.wilaya,
@@ -4403,48 +4255,44 @@ function renderOrders(){
     .filter(Boolean)
     .join(" / ");
 
-
     row.innerHTML=`
 
       <td>
 
         <strong>
           #${escapeHtml(
-            String(o.id).slice(0,8).toUpperCase()
+            String(o.id)
+              .slice(0,8)
+              .toUpperCase()
           )}
         </strong>
 
         <div class="order-items">
-
           ${(o.order_items||[]).length}
           منتج
-
         </div>
 
       </td>
 
-
       <td>
-        ${escapeHtml(o.customer_name||"—")}
+        ${escapeHtml(
+          o.customer_name||"—"
+        )}
       </td>
-
 
       <td>
         ${escapeHtml(o.phone||"—")}
       </td>
 
-
       <td>
         ${escapeHtml(location||"—")}
       </td>
-
 
       <td>
         <strong>
           ${formatPrice(o.total)}
         </strong>
       </td>
-
 
       <td>
 
@@ -4473,11 +4321,9 @@ function renderOrders(){
 
       </td>
 
-
       <td>
         ${formatDate(o.created_at)}
       </td>
-
 
       <td>
 
@@ -4490,7 +4336,6 @@ function renderOrders(){
       </td>
 
     `;
-
 
     tbody.appendChild(row);
 
@@ -4510,20 +4355,12 @@ async function changeOrderStatus(id,status){
       o=>String(o.id)===String(id)
     );
 
-
   if(!order){
     return;
   }
 
-
   let oldStatus=
     order.status;
-
-
-  /*
-    إذا كان الانتقال إلى confirmed
-    من status آخر، نحاول خصم stock.
-  */
 
   if(
     status==="confirmed" &&
@@ -4532,7 +4369,6 @@ async function changeOrderStatus(id,status){
 
     let ok=
       await decreaseStockForOrder(order);
-
 
     if(!ok){
 
@@ -4544,16 +4380,9 @@ async function changeOrderStatus(id,status){
       renderOrders();
 
       return;
-
     }
 
   }
-
-
-  /*
-    إذا ألغينا طلبًا كان confirmed
-    نرجع المخزون.
-  */
 
   if(
     status==="cancelled" &&
@@ -4564,7 +4393,6 @@ async function changeOrderStatus(id,status){
 
   }
 
-
   let result=
     await supabaseClient
       .from("orders")
@@ -4572,7 +4400,6 @@ async function changeOrderStatus(id,status){
         status:status
       })
       .eq("id",id);
-
 
   if(result.error){
 
@@ -4584,17 +4411,13 @@ async function changeOrderStatus(id,status){
     );
 
     return;
-
   }
-
 
   showToast(
     "تم تحديث حالة الطلب ✓"
   );
 
-
   await loadOrders();
-
   await loadProducts();
 
   updateDashboard();
@@ -4603,22 +4426,16 @@ async function changeOrderStatus(id,status){
 
 
 /* =========================================================
-   STOCK FUNCTIONS FOR ORDERS
+   STOCK - DECREASE
 ========================================================= */
 
 async function decreaseStockForOrder(order){
-
-  /*
-    هذه العملية تعتمد على variant_stock.
-    نقرأ المنتج ونحدثه واحدًا واحدًا.
-  */
 
   for(let item of (order.order_items||[])){
 
     if(!item.product_id){
       continue;
     }
-
 
     let result=
       await supabaseClient
@@ -4632,18 +4449,14 @@ async function decreaseStockForOrder(order){
         )
         .maybeSingle();
 
-
     if(result.error || !result.data){
 
       console.error(result.error);
 
       return false;
-
     }
 
-
     let p=result.data;
-
 
     let qty=
       Math.max(
@@ -4651,66 +4464,89 @@ async function decreaseStockForOrder(order){
         Number(item.quantity)||1
       );
 
-
-    let variants=
-      parseVariantStock(
-        p.variant_stock
-      );
-
-
-    let colors=
-      parseJsonArray(p.colors);
-
-
-    let sizes=
-      parseJsonArray(p.sizes);
-
-
     let color=
       item.color||
       item.variant_color||
       "";
-
 
     let size=
       item.size||
       item.variant_size||
       "";
 
+    /*
+      إذا عندنا color/size
+      نستعمل product_variants مباشرة.
+    */
 
-    if(
-      Object.keys(variants).length &&
-      (color||size)
-    ){
+    if(color||size){
 
-      let key=
-        variantKey(color,size);
+      let variantQuery=
+        supabaseClient
+          .from("product_variants")
+          .select(
+            "id,product_id,color,size,stock"
+          )
+          .eq(
+            "product_id",
+            p.id
+          );
 
-
-      if(
-        variants[key]===undefined
-      ){
-
-        /*
-          fallback
-        */
-
-        if(color && !size){
-          key=color;
-        }
-
-        if(size && !color){
-          key=size;
-        }
-
+      if(color){
+        variantQuery=
+          variantQuery.eq(
+            "color",
+            color
+          );
+      }else{
+        variantQuery=
+          variantQuery.is(
+            "color",
+            null
+          );
       }
 
+      if(size){
+        variantQuery=
+          variantQuery.eq(
+            "size",
+            size
+          );
+      }else{
+        variantQuery=
+          variantQuery.is(
+            "size",
+            null
+          );
+      }
 
-      let available=
-        Number(
-          variants[key]??0
+      let variantResult=
+        await variantQuery.maybeSingle();
+
+      if(
+        variantResult.error||
+        !variantResult.data
+      ){
+
+        showToast(
+          "لم نجد Variant للمنتج: "+
+          p.name+
+          " ("+
+          color+
+          " / "+
+          size+
+          ")",
+          true
         );
 
+        return false;
+      }
+
+      let variant=
+        variantResult.data;
+
+      let available=
+        Number(variant.stock||0);
 
       if(available<qty){
 
@@ -4721,40 +4557,82 @@ async function decreaseStockForOrder(order){
         );
 
         return false;
-
       }
 
-
-      variants[key]=
+      let newStock=
         available-qty;
 
+      let variantUpdate=
+        await supabaseClient
+          .from("product_variants")
+          .update({
+            stock:newStock
+          })
+          .eq(
+            "id",
+            variant.id
+          );
+
+      if(variantUpdate.error){
+
+        console.error(
+          variantUpdate.error
+        );
+
+        return false;
+      }
+
+      /*
+        نعيد حساب stock الإجمالي
+        من product_variants.
+      */
+
+      let allVariants=
+        await supabaseClient
+          .from("product_variants")
+          .select("stock")
+          .eq(
+            "product_id",
+            p.id
+          );
+
+      if(allVariants.error){
+        return false;
+      }
 
       let total=
-        Object.values(variants)
+        (allVariants.data||[])
           .reduce(
             (sum,v)=>
-              sum+(Number(v)||0),
+              sum+
+              (Number(v.stock)||0),
             0
           );
 
-
-      let update=
+      let productUpdate=
         await supabaseClient
           .from("products")
           .update({
-            variant_stock:variants,
             stock:total,
-            updated_at:new Date().toISOString()
+            variant_stock:
+              await buildVariantStockObject(
+                p.id
+              ),
+            updated_at:
+              new Date().toISOString()
           })
-          .eq("id",p.id);
+          .eq(
+            "id",
+            p.id
+          );
 
+      if(productUpdate.error){
 
-      if(update.error){
-
-        console.error(update.error);
+        console.error(
+          productUpdate.error
+        );
 
         return false;
-
       }
 
     }else{
@@ -4762,7 +4640,6 @@ async function decreaseStockForOrder(order){
       let available=
         Number(p.stock||0);
 
-
       if(available<qty){
 
         showToast(
@@ -4772,42 +4649,92 @@ async function decreaseStockForOrder(order){
         );
 
         return false;
-
       }
-
 
       let update=
         await supabaseClient
           .from("products")
           .update({
             stock:available-qty,
-            updated_at:new Date().toISOString()
+            updated_at:
+              new Date().toISOString()
           })
-          .eq("id",p.id);
-
+          .eq(
+            "id",
+            p.id
+          );
 
       if(update.error){
-
-        console.error(update.error);
-
         return false;
-
       }
 
     }
 
   }
 
-
   return true;
 
 }
 
 
-/*
-  ملاحظة:
-  هذه الدالة ترجع الكمية عند إلغاء confirmed.
-*/
+/* =========================================================
+   BUILD VARIANT STOCK OBJECT
+========================================================= */
+
+async function buildVariantStockObject(productId){
+
+  let result=
+    await supabaseClient
+      .from("product_variants")
+      .select(
+        "color,size,stock"
+      )
+      .eq(
+        "product_id",
+        productId
+      );
+
+  if(result.error){
+    return {};
+  }
+
+  let obj={};
+
+  (result.data||[]).forEach(v=>{
+
+    let key=
+      variantKey(
+        v.color,
+        v.size
+      );
+
+    obj[key]=
+      Number(v.stock)||0;
+
+    if(v.color && !v.size){
+
+      obj[v.color]=
+        Number(v.stock)||0;
+
+    }
+
+    if(v.size && !v.color){
+
+      obj[v.size]=
+        Number(v.stock)||0;
+
+    }
+
+  });
+
+  return obj;
+
+}
+
+
+/* =========================================================
+   STOCK - RESTORE
+========================================================= */
 
 async function restoreStockForOrder(order){
 
@@ -4817,12 +4744,11 @@ async function restoreStockForOrder(order){
       continue;
     }
 
-
     let result=
       await supabaseClient
         .from("products")
         .select(
-          "id,stock,variant_stock"
+          "id,stock"
         )
         .eq(
           "id",
@@ -4830,14 +4756,11 @@ async function restoreStockForOrder(order){
         )
         .maybeSingle();
 
-
     if(result.error || !result.data){
       continue;
     }
 
-
     let p=result.data;
-
 
     let qty=
       Math.max(
@@ -4845,68 +4768,127 @@ async function restoreStockForOrder(order){
         Number(item.quantity)||1
       );
 
-
-    let variants=
-      parseVariantStock(
-        p.variant_stock
-      );
-
-
     let color=
       item.color||
       item.variant_color||
       "";
-
 
     let size=
       item.size||
       item.variant_size||
       "";
 
+    if(color||size){
 
-    if(
-      Object.keys(variants).length &&
-      (color||size)
-    ){
+      let variantQuery=
+        supabaseClient
+          .from("product_variants")
+          .select(
+            "id,stock"
+          )
+          .eq(
+            "product_id",
+            p.id
+          );
 
-      let key=
-        variantKey(color,size);
-
-
-      if(variants[key]===undefined){
-
-        if(color && !size){
-          key=color;
-        }
-
-        if(size && !color){
-          key=size;
-        }
-
+      if(color){
+        variantQuery=
+          variantQuery.eq(
+            "color",
+            color
+          );
+      }else{
+        variantQuery=
+          variantQuery.is(
+            "color",
+            null
+          );
       }
 
+      if(size){
+        variantQuery=
+          variantQuery.eq(
+            "size",
+            size
+          );
+      }else{
+        variantQuery=
+          variantQuery.is(
+            "size",
+            null
+          );
+      }
 
-      variants[key]=
-        Number(variants[key]||0)+qty;
+      let variantResult=
+        await variantQuery.maybeSingle();
 
+      if(
+        variantResult.error||
+        !variantResult.data
+      ){
+        continue;
+      }
+
+      let variant=
+        variantResult.data;
+
+      let newStock=
+        Number(variant.stock||0)+qty;
+
+      let update=
+        await supabaseClient
+          .from("product_variants")
+          .update({
+            stock:newStock
+          })
+          .eq(
+            "id",
+            variant.id
+          );
+
+      if(update.error){
+        continue;
+      }
+
+      let allVariants=
+        await supabaseClient
+          .from("product_variants")
+          .select("stock")
+          .eq(
+            "product_id",
+            p.id
+          );
+
+      if(allVariants.error){
+        continue;
+      }
 
       let total=
-        Object.values(variants)
+        (allVariants.data||[])
           .reduce(
             (sum,v)=>
-              sum+(Number(v)||0),
+              sum+
+              (Number(v.stock)||0),
             0
           );
 
+      let variantStock=
+        await buildVariantStockObject(
+          p.id
+        );
 
       await supabaseClient
         .from("products")
         .update({
-          variant_stock:variants,
           stock:total,
-          updated_at:new Date().toISOString()
+          variant_stock:variantStock,
+          updated_at:
+            new Date().toISOString()
         })
-        .eq("id",p.id);
+        .eq(
+          "id",
+          p.id
+        );
 
     }else{
 
@@ -4915,9 +4897,13 @@ async function restoreStockForOrder(order){
         .update({
           stock:
             Number(p.stock||0)+qty,
-          updated_at:new Date().toISOString()
+          updated_at:
+            new Date().toISOString()
         })
-        .eq("id",p.id);
+        .eq(
+          "id",
+          p.id
+        );
 
     }
 
@@ -4937,15 +4923,12 @@ function openOrderModal(id){
       x=>String(x.id)===String(id)
     );
 
-
   if(!o){
     return;
   }
 
-
   let items=
     o.order_items||[];
-
 
   let html=`
 
@@ -4989,7 +4972,6 @@ function openOrderModal(id){
 
       </div>
 
-
       <div class="panel">
 
         <h3 class="panel-title">
@@ -5008,9 +4990,11 @@ function openOrderModal(id){
 
         <p>
           <strong>الحالة:</strong>
+
           <span class="badge ${statusClass(o.status)}">
             ${statusLabel(o.status)}
           </span>
+
         </p>
 
         <p>
@@ -5022,8 +5006,9 @@ function openOrderModal(id){
 
     </div>
 
-
-    <div class="panel" style="margin-top:15px">
+    <div
+      class="panel"
+      style="margin-top:15px">
 
       <h3 class="panel-title">
         المنتجات
@@ -5041,8 +5026,8 @@ function openOrderModal(id){
                 String(item.product_id)
             );
 
+          return`
 
-          return `
             <div
               style="
                 padding:12px 0;
@@ -5096,17 +5081,19 @@ function openOrderModal(id){
               </div>
 
             </div>
+
           `;
 
         }).join("")
         :
-        `<div class="empty">لا توجد تفاصيل.</div>`
+        `<div class="empty">
+          لا توجد تفاصيل.
+        </div>`
       }
 
     </div>
 
   `;
-
 
   $("orderDetails").innerHTML=html;
 
@@ -5123,7 +5110,7 @@ function closeOrderModal(){
 
 
 /* =========================================================
-   REVIEWS LOAD
+   REVIEWS
 ========================================================= */
 
 async function loadReviewsAdmin(){
@@ -5137,7 +5124,6 @@ async function loadReviewsAdmin(){
         {ascending:false}
       );
 
-
   if(result.error){
 
     console.error(result.error);
@@ -5148,27 +5134,19 @@ async function loadReviewsAdmin(){
     );
 
     return;
-
   }
-
 
   reviews=
     result.data||[];
-
 
   renderReviews();
 
 }
 
 
-/* =========================================================
-   REVIEWS RENDER
-========================================================= */
-
 function renderReviews(){
 
   let tbody=$("reviewsTable");
-
 
   if(!reviews.length){
 
@@ -5183,12 +5161,9 @@ function renderReviews(){
     `;
 
     return;
-
   }
 
-
   tbody.innerHTML="";
-
 
   reviews.forEach(r=>{
 
@@ -5199,9 +5174,7 @@ function renderReviews(){
           String(r.product_id)
       );
 
-
     let row=document.createElement("tr");
-
 
     row.innerHTML=`
 
@@ -5214,14 +5187,12 @@ function renderReviews(){
         </strong>
       </td>
 
-
       <td>
         ${escapeHtml(
           product?.name||
           "منتج محذوف"
         )}
       </td>
-
 
       <td>
 
@@ -5239,7 +5210,6 @@ function renderReviews(){
 
       </td>
 
-
       <td>
 
         <div class="review-comment">
@@ -5251,13 +5221,11 @@ function renderReviews(){
 
       </td>
 
-
       <td>
         ${formatDate(r.created_at)}
       </td>
 
     `;
-
 
     tbody.appendChild(row);
 
@@ -5275,7 +5243,6 @@ function updateDashboard(){
   let totalProducts=
     products.length;
 
-
   let totalStock=
     products.reduce(
       (sum,p)=>
@@ -5287,10 +5254,8 @@ function updateDashboard(){
       0
     );
 
-
   let totalOrders=
     orders.length;
-
 
   let confirmedSales=
     orders
@@ -5308,22 +5273,17 @@ function updateDashboard(){
         0
       );
 
-
   $("statProducts").textContent=
     totalProducts;
-
 
   $("statStock").textContent=
     totalStock;
 
-
   $("statOrders").textContent=
     totalOrders;
 
-
   $("statSales").textContent=
     formatPrice(confirmedSales);
-
 
   renderRecentOrders();
 
@@ -5334,10 +5294,8 @@ function renderRecentOrders(){
 
   let box=$("recentOrders");
 
-
   let list=
     orders.slice(0,6);
-
 
   if(!list.length){
 
@@ -5348,17 +5306,13 @@ function renderRecentOrders(){
     `;
 
     return;
-
   }
 
-
   box.innerHTML="";
-
 
   list.forEach(o=>{
 
     let div=document.createElement("div");
-
 
     div.style.cssText=`
       display:flex;
@@ -5368,7 +5322,6 @@ function renderRecentOrders(){
       padding:12px 0;
       border-bottom:1px solid #eee;
     `;
-
 
     div.innerHTML=`
 
@@ -5393,12 +5346,12 @@ function renderRecentOrders(){
             .toUpperCase()}
 
           •
+
           ${formatDate(o.created_at)}
 
         </div>
 
       </div>
-
 
       <div style="text-align:left">
 
@@ -5421,7 +5374,6 @@ function renderRecentOrders(){
 
     `;
 
-
     box.appendChild(div);
 
   });
@@ -5439,9 +5391,7 @@ async function refreshAll(){
     "جاري التحديث..."
   );
 
-
   await loadAll();
-
 
   showToast(
     "تم التحديث ✓"
@@ -5451,7 +5401,7 @@ async function refreshAll(){
 
 
 /* =========================================================
-   MODAL CLICK OUTSIDE
+   MODAL OUTSIDE CLICK
 ========================================================= */
 
 document
@@ -5483,9 +5433,7 @@ document
 document.addEventListener(
   "DOMContentLoaded",
   ()=>{
-
     checkAuth();
-
   }
 );
 
@@ -5493,3 +5441,4 @@ document.addEventListener(
 
 </body>
 </html>
+```
