@@ -1,925 +1,987 @@
 <!DOCTYPE html>
+
 <html lang="fr">
 
 <head>
 
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width,initial-scale=1.0"
-  >
-
-  <title>Checkout - JR Shop</title>
-
-  <link
-    rel="stylesheet"
-    href="style.css"
-  >
-
-  <style>
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      background: #f6f6f4;
-      color: #171717;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
-    button,
-    input,
-    textarea,
-    select {
-      font: inherit;
-    }
-
-    .checkout-page {
-      max-width: 1150px;
-      margin: auto;
-      padding: 25px 15px 80px;
-    }
-
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 22px;
-    }
-
-    .back-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 11px 15px;
-      border-radius: 11px;
-      background: #111;
-      color: #fff;
-      text-decoration: none;
-      font-weight: 800;
-      font-size: 14px;
-    }
-
-    .logo {
-      font-weight: 900;
-      letter-spacing: 2px;
-    }
-
-    .checkout-layout {
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 22px;
-    }
-
-    .box {
-      background: #fff;
-      border: 1px solid #e8e8e4;
-      border-radius: 18px;
-      padding: 22px;
-      box-shadow: 0 10px 35px #0000000a;
-    }
-
-    .box-title {
-      margin: 0 0 18px;
-      font-size: 22px;
-    }
-
-    .step {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      margin: 25px 0 14px;
-      font-weight: 900;
-      font-size: 16px;
-    }
-
-    .step:first-of-type {
-      margin-top: 0;
-    }
-
-    .step-number {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #111;
-      color: #fff;
-      font-size: 13px;
-    }
-
-    .field {
-      margin-bottom: 13px;
-    }
-
-    .field label {
-      display: block;
-      font-size: 12px;
-      font-weight: 800;
-      margin-bottom: 7px;
-    }
-
-    .field input,
-    .field textarea,
-    .field select {
-      width: 100%;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 12px;
-      outline: none;
-      background: #fff;
-    }
-
-    .field input:focus,
-    .field textarea:focus,
-    .field select:focus {
-      border-color: #111;
-    }
-
-    .field select {
-      cursor: pointer;
-    }
-
-    .field select:disabled {
-      background: #f3f3f3;
-      color: #999;
-      cursor: not-allowed;
-    }
-
-    .fields-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .review-items {
-      display: flex;
-      flex-direction: column;
-      gap: 11px;
-    }
-
-    .cart-item {
-      display: grid;
-      grid-template-columns: 70px 1fr auto;
-      gap: 11px;
-      align-items: center;
-      padding: 10px 0;
-      border-bottom: 1px solid #eee;
-    }
-
-    .cart-item:last-child {
-      border-bottom: 0;
-    }
-
-    .cart-image {
-      width: 70px;
-      height: 70px;
-      border-radius: 10px;
-      object-fit: cover;
-      background: #f2f2ef;
-    }
-
-    .item-name {
-      font-weight: 900;
-      font-size: 14px;
-    }
-
-    .item-variant {
-      margin-top: 4px;
-      color: #777;
-      font-size: 12px;
-      line-height: 1.5;
-    }
-
-    .item-quantity {
-      margin-top: 4px;
-      font-size: 12px;
-      color: #777;
-    }
-
-    .item-price {
-      font-weight: 900;
-      white-space: nowrap;
-    }
-
-    .total-box {
-      margin-top: 18px;
-      padding-top: 17px;
-      border-top: 1px solid #ddd;
-    }
-
-    .total-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .total-label {
-      font-weight: 800;
-    }
-
-    .total-price {
-      font-size: 24px;
-      font-weight: 900;
-    }
-
-    .confirm-btn {
-      width: 100%;
-      min-height: 55px;
-      border: 0;
-      border-radius: 13px;
-      background: #111;
-      color: #fff;
-      font-weight: 900;
-      cursor: pointer;
-      margin-top: 17px;
-    }
-
-    .confirm-btn:disabled {
-      background: #aaa;
-      cursor: not-allowed;
-    }
-
-    .notice {
-      padding: 12px;
-      border-radius: 10px;
-      background: #f7f7f4;
-      color: #666;
-      font-size: 12px;
-      line-height: 1.6;
-      margin-top: 14px;
-    }
-
-    .status {
-      margin-top: 12px;
-      font-size: 13px;
-      font-weight: 800;
-      text-align: center;
-    }
-
-    .success {
-      color: #138a4a;
-    }
-
-    .error {
-      color: #b42318;
-    }
-
-    .empty {
-      text-align: center;
-      padding: 60px 20px;
-    }
-
-    .empty a {
-      display: inline-block;
-      margin-top: 15px;
-      padding: 12px 17px;
-      border-radius: 10px;
-      background: #111;
-      color: #fff;
-      text-decoration: none;
-      font-weight: 800;
-    }
-
-    .success-page {
-      display: none;
-      text-align: center;
-      padding: 60px 20px;
-    }
-
-    .success-icon {
-      font-size: 55px;
-      margin-bottom: 10px;
-    }
-
-    .order-id {
-      margin-top: 15px;
-      padding: 13px;
-      background: #f5f5f2;
-      border-radius: 10px;
-      word-break: break-all;
-      font-weight: 800;
-    }
-
-    .location-loading {
-      font-size: 12px;
-      color: #777;
-      margin-top: 5px;
-    }
-
-
-    /* =========================================================
-       MOBILE
-    ========================================================= */
-
-    @media (max-width: 800px) {
-
-      .checkout-layout {
-        grid-template-columns: 1fr;
-      }
-
-    }
-
-
-    @media (max-width: 550px) {
-
-      .checkout-page {
-        padding: 12px 8px 50px;
-      }
-
-      .box {
-        padding: 16px;
-        border-radius: 15px;
-      }
-
-      .fields-grid {
-        grid-template-columns: 1fr;
-        gap: 0;
-      }
-
-      .topbar {
-        margin-bottom: 14px;
-      }
-
-      .logo {
-        font-size: 13px;
-      }
-
-      .cart-item {
-        grid-template-columns: 60px 1fr;
-      }
-
-      .cart-image {
-        width: 60px;
-        height: 60px;
-      }
-
-      .item-price {
-        grid-column: 2;
-      }
-
-    }
-
-  </style>
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1.0"
+
+>
+
+<title>Checkout - JR Shop</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#f6f6f4;
+  color:#171717;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+button,
+input,
+textarea,
+select{
+  font:inherit;
+}
+
+.checkout-page{
+  max-width:1150px;
+  margin:auto;
+  padding:25px 15px 80px;
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:22px;
+}
+
+.back-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:11px 15px;
+  border-radius:11px;
+  background:#111;
+  color:#fff;
+  text-decoration:none;
+  font-weight:800;
+  font-size:14px;
+}
+
+.logo{
+  font-weight:900;
+  letter-spacing:2px;
+}
+
+.checkout-layout{
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:22px;
+}
+
+.box{
+  background:#fff;
+  border:1px solid #e8e8e4;
+  border-radius:18px;
+  padding:22px;
+  box-shadow:0 10px 35px #0000000a;
+}
+
+.box-title{
+  margin:0 0 18px;
+  font-size:22px;
+}
+
+.step{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin:25px 0 14px;
+  font-weight:900;
+  font-size:16px;
+}
+
+.step:first-of-type{
+  margin-top:0;
+}
+
+.step-number{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#111;
+  color:#fff;
+  font-size:13px;
+}
+
+.field{
+  margin-bottom:13px;
+}
+
+.field label{
+  display:block;
+  font-size:12px;
+  font-weight:800;
+  margin-bottom:7px;
+}
+
+.field input,
+.field textarea,
+.field select{
+  width:100%;
+  border:1px solid #ddd;
+  border-radius:10px;
+  padding:12px;
+  outline:none;
+  background:#fff;
+}
+
+.field textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus{
+  border-color:#111;
+}
+
+.field select{
+  cursor:pointer;
+}
+
+.field select:disabled{
+  background:#f3f3f3;
+  color:#999;
+  cursor:not-allowed;
+}
+
+.fields-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.review-items{
+  display:flex;
+  flex-direction:column;
+  gap:11px;
+}
+
+.cart-item{
+  display:grid;
+  grid-template-columns:70px 1fr auto;
+  gap:11px;
+  align-items:center;
+  padding:10px 0;
+  border-bottom:1px solid #eee;
+}
+
+.cart-item:last-child{
+  border-bottom:0;
+}
+
+.cart-image{
+  width:70px;
+  height:70px;
+  border-radius:10px;
+  object-fit:cover;
+  background:#f2f2ef;
+}
+
+.item-name{
+  font-weight:900;
+  font-size:14px;
+}
+
+.item-variant{
+  margin-top:4px;
+  color:#777;
+  font-size:12px;
+  line-height:1.5;
+}
+
+.item-quantity{
+  margin-top:4px;
+  font-size:12px;
+  color:#777;
+}
+
+.item-price{
+  font-weight:900;
+  white-space:nowrap;
+}
+
+.total-box{
+  margin-top:18px;
+  padding-top:17px;
+  border-top:1px solid #ddd;
+}
+
+.total-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.total-label{
+  font-weight:800;
+}
+
+.total-price{
+  font-size:24px;
+  font-weight:900;
+}
+
+.confirm-btn{
+  width:100%;
+  min-height:55px;
+  border:0;
+  border-radius:13px;
+  background:#111;
+  color:#fff;
+  font-weight:900;
+  cursor:pointer;
+  margin-top:17px;
+}
+
+.confirm-btn:hover{
+  background:#292929;
+}
+
+.confirm-btn:disabled{
+  background:#aaa;
+  cursor:not-allowed;
+}
+
+.notice{
+  padding:12px;
+  border-radius:10px;
+  background:#f7f7f4;
+  color:#666;
+  font-size:12px;
+  line-height:1.6;
+  margin-top:14px;
+}
+
+.status{
+  margin-top:12px;
+  font-size:13px;
+  font-weight:800;
+  text-align:center;
+}
+
+.success{
+  color:#138a4a;
+}
+
+.error{
+  color:#b42318;
+}
+
+.empty{
+  text-align:center;
+  padding:60px 20px;
+}
+
+.empty a{
+  display:inline-block;
+  margin-top:15px;
+  padding:12px 17px;
+  border-radius:10px;
+  background:#111;
+  color:#fff;
+  text-decoration:none;
+  font-weight:800;
+}
+
+.success-page{
+  display:none;
+  text-align:center;
+  padding:60px 20px;
+}
+
+.success-icon{
+  font-size:55px;
+  margin-bottom:10px;
+}
+
+.order-id{
+  margin-top:15px;
+  padding:13px;
+  background:#f5f5f2;
+  border-radius:10px;
+  word-break:break-all;
+  font-weight:800;
+}
+
+.location-loading{
+  font-size:12px;
+  color:#777;
+  margin-top:5px;
+}
+
+@media(max-width:800px){
+
+  .checkout-layout{
+    grid-template-columns:1fr;
+  }
+
+}
+
+@media(max-width:550px){
+
+  .checkout-page{
+    padding:12px 8px 50px;
+  }
+
+  .box{
+    padding:16px;
+    border-radius:15px;
+  }
+
+  .fields-grid{
+    grid-template-columns:1fr;
+    gap:0;
+  }
+
+  .topbar{
+    margin-bottom:14px;
+  }
+
+  .logo{
+    font-size:13px;
+  }
+
+  .cart-item{
+    grid-template-columns:60px 1fr;
+  }
+
+  .cart-image{
+    width:60px;
+    height:60px;
+  }
+
+  .item-price{
+    grid-column:2;
+  }
+
+}
+
+</style>
 
 </head>
 
-
 <body>
 
+<main class="checkout-page">
 
-  <main class="checkout-page">
+<div class="topbar">
 
+<a href="index.html" class="back-btn">
+  ← Retour
+</a>
 
-    <!-- =====================================================
-         TOPBAR
-    ===================================================== -->
+<div class="logo">
+  JR SHOP
+</div>
 
-    <div class="topbar">
+</div>
 
-      <a
-        href="index.html"
-        class="back-btn"
-      >
-        ← Retour
-      </a>
+<!-- EMPTY -->
 
-      <div class="logo">
-        JR SHOP
-      </div>
+<div
+  id="emptyBox"
+  class="box empty"
+  style="display:none;"
+>
 
-    </div>
+<h2>
+  Votre panier est vide
+</h2>
 
+<p>
+  Ajoutez un produit avant de passer commande.
+</p>
 
-    <!-- =====================================================
-         EMPTY CART
-    ===================================================== -->
+<a href="index.html">
+  Continuer mes achats
+</a>
 
-    <div
-      id="emptyBox"
-      class="box empty"
-      style="display: none"
-    >
+</div>
 
-      <h2>
-        Votre panier est vide
-      </h2>
+<!-- CHECKOUT -->
 
-      <p>
-        Ajoutez un produit avant de passer commande.
-      </p>
+<div
+  id="checkoutContent"
+  class="checkout-layout"
+  style="display:none;"
+>
 
-      <a href="index.html">
-        Continuer mes achats
-      </a>
+<!-- CUSTOMER -->
 
-    </div>
+<section class="box">
 
+<h1 class="box-title">
+  Finaliser ma commande
+</h1>
 
-    <!-- =====================================================
-         CHECKOUT
-    ===================================================== -->
+<div class="step">
 
-    <div
-      id="checkoutContent"
-      class="checkout-layout"
-      style="display: none"
-    >
+<div class="step-number">
+  1
+</div>
 
+Informations client
 
-      <!-- =====================================================
-           CUSTOMER INFORMATION
-      ===================================================== -->
+</div>
 
-      <section class="box">
+<div class="fields-grid">
 
-        <h1 class="box-title">
-          Finaliser ma commande
-        </h1>
+<div class="field">
 
+<label for="customerName">
+  Nom complet *
+</label>
 
-        <!-- STEP 1 -->
+<input
+id="customerName"
+type="text"
+placeholder="Votre nom complet"
+autocomplete="name"
 
-        <div class="step">
+>
 
-          <div class="step-number">
-            1
-          </div>
+</div>
 
-          Informations client
+<div class="field">
 
-        </div>
+<label for="phone">
+  Téléphone *
+</label>
 
+<input
+id="phone"
+type="tel"
+placeholder="05 / 06 / 07 ..."
+autocomplete="tel"
 
-        <!-- NAME + PHONE -->
+>
 
-        <div class="fields-grid">
+</div>
 
-          <div class="field">
+</div>
 
-            <label for="customerName">
-              Nom complet *
-            </label>
+<div class="fields-grid">
 
-            <input
-              id="customerName"
-              type="text"
-              placeholder="Votre nom complet"
-              autocomplete="name"
-            >
+<div class="field">
 
-          </div>
+<label for="wilaya">
+  Wilaya *
+</label>
 
+<select
+id="wilaya"
+required
 
-          <div class="field">
+>
 
-            <label for="phone">
-              Téléphone *
-            </label>
+<option value="">
+  Sélectionnez votre wilaya
+</option>
 
-            <input
-              id="phone"
-              type="tel"
-              placeholder="05 / 06 / 07 ..."
-              autocomplete="tel"
-            >
+</select>
 
-          </div>
+<div
+  id="wilayaStatus"
+  class="location-loading"
+>
+  Chargement des wilayas...
+</div>
 
-        </div>
+</div>
 
+<div class="field">
 
-        <!-- =================================================
-             WILAYA + COMMUNE
-        ================================================== -->
+<label for="commune">
+  Commune *
+</label>
 
-        <div class="fields-grid">
+<select
+id="commune"
+required
+disabled
 
+>
 
-          <!-- WILAYA -->
+<option value="">
+  Choisissez d'abord une wilaya
+</option>
 
-          <div class="field">
+</select>
 
-            <label for="wilaya">
-              Wilaya *
-            </label>
+</div>
 
-            <select
-              id="wilaya"
-              required
-            >
+</div>
 
-              <option value="">
-                Sélectionnez votre wilaya
-              </option>
+<div class="field">
 
-            </select>
+<label for="address">
+  Adresse *
+</label>
 
-            <div
-              id="wilayaStatus"
-              class="location-loading"
-            >
-              Chargement des wilayas...
-            </div>
+<textarea
+  id="address"
+  placeholder="Adresse complète de livraison"
+></textarea>
 
-          </div>
+</div>
 
+<div class="field">
 
-          <!-- COMMUNE -->
+<label for="notes">
+  Note de commande
+</label>
 
-          <div class="field">
+<textarea
+  id="notes"
+  placeholder="Information supplémentaire (facultatif)"
+></textarea>
 
-            <label for="commune">
-              Commune *
-            </label>
+</div>
 
-            <select
-              id="commune"
-              required
-              disabled
-            >
+<div class="notice">
 
-              <option value="">
-                Choisissez d'abord une wilaya
-              </option>
+🚚 Livraison selon les zones couvertes par JR Shop.
 
-            </select>
+<br>
 
-          </div>
+🔒 Vos informations sont utilisées uniquement pour traiter votre commande.
 
+</div>
 
-        </div>
+</section>
 
+<!-- REVIEW -->
 
-        <!-- ADDRESS -->
+<section class="box">
 
-        <div class="field">
+<h2 class="box-title">
+  2. Vérifier ma commande
+</h2>
 
-          <label for="address">
-            Adresse *
-          </label>
+<div
+  id="reviewItems"
+  class="review-items"
+></div>
 
-          <textarea
-            id="address"
-            placeholder="Adresse complète de livraison"
-          ></textarea>
+<div class="total-box">
 
-        </div>
+<div class="total-row">
 
+<div class="total-label">
+  Total
+</div>
 
-        <!-- NOTES -->
+<div
+  id="totalPrice"
+  class="total-price"
+>
+  0 DA
+</div>
 
-        <div class="field">
+</div>
 
-          <label for="notes">
-            Note de commande
-          </label>
+<button
+id="confirmBtn"
+class="confirm-btn"
+type="button"
 
-          <textarea
-            id="notes"
-            placeholder="Information supplémentaire (facultatif)"
-          ></textarea>
+>
 
-        </div>
+Confirmer la commande </button>
 
+<div
+  id="checkoutStatus"
+  class="status"
+></div>
 
-        <div class="notice">
+</div>
 
-          🚚 Livraison selon les zones couvertes par JR Shop.
-          <br>
+</section>
 
-          🔒 Vos informations sont utilisées uniquement pour traiter votre commande.
+</div>
 
-        </div>
+<!-- SUCCESS -->
 
-      </section>
+<section
+  id="successPage"
+  class="box success-page"
+>
 
+<div class="success-icon">
+  ✓
+</div>
 
-      <!-- =====================================================
-           REVIEW
-      ===================================================== -->
+<h1>
+  Commande confirmée !
+</h1>
 
-      <section class="box">
+<p>
+  Merci pour votre commande chez JR Shop.
+</p>
 
-        <h2 class="box-title">
-          2. Vérifier ma commande
-        </h2>
+<div>
+  Votre numéro de commande :
+</div>
 
+<div
+  id="successOrderId"
+  class="order-id"
+></div>
 
-        <div
-          id="reviewItems"
-          class="review-items"
-        ></div>
+<br>
 
+<a
+href="index.html"
+class="back-btn"
 
-        <div class="total-box">
+>
 
-          <div class="total-row">
+Continuer mes achats </a>
 
-            <div class="total-label">
-              Total
-            </div>
+</section>
 
-            <div
-              id="totalPrice"
-              class="total-price"
-            >
-              0 DA
-            </div>
+</main>
 
-          </div>
+<!-- SUPABASE -->
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-          <button
-            id="confirmBtn"
-            class="confirm-btn"
-            type="button"
-            onclick="confirmOrder()"
-          >
-            Confirmer la commande
-          </button>
+<script src="config.js"></script>
 
+<script>
 
-          <div
-            id="checkoutStatus"
-            class="status"
-          ></div>
+/* =========================================================
+   DATA
+========================================================= */
 
-        </div>
+let cart = [];
 
-      </section>
+let currentUser = null;
 
-    </div>
+let algeriaLocations = [];
 
 
-    <!-- =====================================================
-         SUCCESS
-    ===================================================== -->
+/* =========================================================
+   PRICE
+========================================================= */
 
-    <section
-      id="successPage"
-      class="box success-page"
-    >
+function formatPrice(value){
 
-      <div class="success-icon">
-        ✓
-      </div>
+  const n =
+    Number(value) || 0;
 
-      <h1>
-        Commande confirmée !
-      </h1>
+  return n.toLocaleString("fr-FR") + " DA";
 
-      <p>
-        Merci pour votre commande chez JR Shop.
-      </p>
+}
 
-      <div>
-        Votre numéro de commande :
-      </div>
 
-      <div
-        id="successOrderId"
-        class="order-id"
-      ></div>
+/* =========================================================
+   ESCAPE
+========================================================= */
 
-      <br>
+function escapeHtml(value){
 
-      <a
-        href="index.html"
-        class="back-btn"
-      >
-        Continuer mes achats
-      </a>
+  if(
+    value === null ||
+    value === undefined
+  ){
 
-    </section>
+    return "";
 
-  </main>
+  }
 
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
-  <!-- =====================================================
-       SUPABASE
-  ===================================================== -->
+}
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <script src="config.js"></script>
+/* =========================================================
+   GET CART
+========================================================= */
 
+function getCart(){
 
-  <script>
+  try{
 
-    /* =========================================================
-       JR SHOP CHECKOUT
-    ========================================================= */
+    /*
+      PRIORITÉ :
 
-    let cart = [];
+      1. Achat direct depuis product.html
+      2. Panier normal
+    */
 
-    let currentUser = null;
+    const checkoutProduct =
+      JSON.parse(
+        localStorage.getItem(
+          "jr_checkout_product"
+        ) || "null"
+      );
 
-    let algeriaLocations = [];
 
+    if(
+      checkoutProduct &&
+      typeof checkoutProduct === "object"
+    ){
 
-    /* =========================================================
-       FORMAT PRICE
-    ========================================================= */
-
-    function formatPrice(value) {
-
-      const n =
-        Number(value) || 0;
-
-      return n.toLocaleString("fr-FR") + " DA";
+      return [checkoutProduct];
 
     }
 
 
-    /* =========================================================
-       ESCAPE HTML
-    ========================================================= */
-
-    function escapeHtml(value) {
-
-      if (
-        value === null ||
-        value === undefined
-      ) {
-        return "";
-      }
-
-      return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-
-    }
+    const data =
+      JSON.parse(
+        localStorage.getItem(
+          "jr_cart"
+        ) || "[]"
+      );
 
 
-    /* =========================================================
-       GET CART
-    ========================================================= */
+    return Array.isArray(data)
+      ? data
+      : [];
 
-    function getCart() {
+  }catch(error){
 
-      try {
+    console.error(
+      "GET CART ERROR:",
+      error
+    );
 
-        const data =
-          JSON.parse(
-            localStorage.getItem("jr_cart") || "[]"
-          );
+    return [];
 
-        return Array.isArray(data)
-          ? data
-          : [];
+  }
 
-      } catch (error) {
-
-        console.error(error);
-
-        return [];
-
-      }
-
-    }
+}
 
 
-    /* =========================================================
-       PRODUCT PRICE
-    ========================================================= */
+/* =========================================================
+   PRICE
+========================================================= */
 
-    function getItemPrice(item) {
+function getItemPrice(item){
 
-      return Number(
-        item.price ??
-        item.sale_price ??
-        item.product_price ??
-        0
-      ) || 0;
+  return Number(
+    item.price ??
+    item.sale_price ??
+    item.product_price ??
+    0
+  ) || 0;
 
-    }
+}
 
 
-    /* =========================================================
-       TOTAL
-    ========================================================= */
+/* =========================================================
+   TOTAL
+========================================================= */
 
-    function calculateTotal() {
+function calculateTotal(){
 
-      return cart.reduce(
-        (total, item) => {
+  return cart.reduce(
+    (total,item) => {
 
-          const price =
-            getItemPrice(item);
+      const price =
+        getItemPrice(item);
 
-          const quantity =
-            Number(
-              item.quantity ??
-              item.qty ??
-              0
-            ) || 0;
+      const quantity =
+        Number(item.quantity) || 0;
 
-          return total +
-            price * quantity;
+      return total +
+        price * quantity;
 
-        },
-        0
+    },
+    0
+  );
+
+}
+
+
+/* =========================================================
+   LOCATIONS
+========================================================= */
+
+async function loadAlgeriaLocations(){
+
+  const wilayaSelect =
+    document.getElementById(
+      "wilaya"
+    );
+
+  const communeSelect =
+    document.getElementById(
+      "commune"
+    );
+
+  const status =
+    document.getElementById(
+      "wilayaStatus"
+    );
+
+
+  try{
+
+    const response =
+      await fetch(
+        "https://raw.githubusercontent.com/RachidBR/algerian-wilayas-with-municipalities/main/wilayas-with-municipalities.json"
+      );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "Impossible de charger les wilayas."
       );
 
     }
 
 
-    /* =========================================================
-       LOAD WILAYAS + COMMUNES
-    ========================================================= */
-
-    async function loadAlgeriaLocations() {
-
-      const wilayaSelect =
-        document.getElementById("wilaya");
-
-      const communeSelect =
-        document.getElementById("commune");
-
-      const status =
-        document.getElementById("wilayaStatus");
+    algeriaLocations =
+      await response.json();
 
 
-      try {
+    if(
+      !Array.isArray(
+        algeriaLocations
+      ) ||
+      !algeriaLocations.length
+    ){
 
-        /*
-          Dataset public يحتوي على
-          wilayaCode + nameFr + communes
-        */
+      throw new Error(
+        "Données des wilayas invalides."
+      );
 
-        const response =
-          await fetch(
-            "https://raw.githubusercontent.com/RachidBR/algerian-wilayas-with-municipalities/main/wilayas-with-municipalities.json"
+    }
+
+
+    wilayaSelect.innerHTML =
+      '<option value="">Sélectionnez votre wilaya</option>';
+
+
+    algeriaLocations.forEach(
+      wilaya => {
+
+        const option =
+          document.createElement(
+            "option"
           );
 
 
-        if (!response.ok) {
+        option.value =
+          wilaya.nameFr;
 
-          throw new Error(
-            "Impossible de charger les wilayas."
-          );
+
+        option.textContent =
+          wilaya.wilayaCode +
+          " - " +
+          wilaya.nameFr;
+
+
+        option.dataset.code =
+          wilaya.wilayaCode;
+
+
+        wilayaSelect.appendChild(
+          option
+        );
+
+      }
+    );
+
+
+    status.textContent =
+      algeriaLocations.length +
+      " wilayas disponibles";
+
+
+    wilayaSelect.addEventListener(
+      "change",
+      function(){
+
+        const selectedOption =
+          this.options[
+            this.selectedIndex
+          ];
+
+
+        const code =
+          selectedOption?.dataset.code;
+
+
+        communeSelect.innerHTML =
+          '<option value="">Sélectionnez votre commune</option>';
+
+
+        communeSelect.disabled =
+          true;
+
+
+        if(!code){
+
+          return;
 
         }
 
 
-        algeriaLocations =
-          await response.json();
-
-
-        if (
-          !Array.isArray(algeriaLocations) ||
-          !algeriaLocations.length
-        ) {
-
-          throw new Error(
-            "Données des wilayas invalides."
+        const selectedWilaya =
+          algeriaLocations.find(
+            item =>
+              String(
+                item.wilayaCode
+              ) === String(code)
           );
+
+
+        if(!selectedWilaya){
+
+          return;
 
         }
 
 
-        /*
-          Nettoyer
-        */
+        const communes =
+          Array.isArray(
+            selectedWilaya.communes
+          )
+            ? selectedWilaya.communes
+            : [];
 
-        wilayaSelect.innerHTML =
-          '<option value="">Sélectionnez votre wilaya</option>';
 
-
-        /*
-          Ajouter les wilayas
-        */
-
-        algeriaLocations.forEach(
-          (wilaya) => {
+        communes.forEach(
+          commune => {
 
             const option =
-              document.createElement("option");
+              document.createElement(
+                "option"
+              );
 
 
             option.value =
-              wilaya.nameFr;
+              commune.nameFr;
 
 
             option.textContent =
-              wilaya.wilayaCode +
-              " - " +
-              wilaya.nameFr;
+              commune.nameFr;
 
 
-            option.dataset.code =
-              wilaya.wilayaCode;
+            option.dataset.id =
+              commune.id || "";
 
 
-            wilayaSelect.appendChild(
+            communeSelect.appendChild(
               option
             );
 
@@ -927,882 +989,799 @@
         );
 
 
-        status.textContent =
-          algeriaLocations.length +
-          " wilayas disponibles";
-
-
-        /*
-          Change Wilaya
-        */
-
-        wilayaSelect.addEventListener(
-          "change",
-          function () {
-
-            const code =
-              this.options[
-                this.selectedIndex
-              ]?.dataset.code;
-
-
-            communeSelect.innerHTML =
-              '<option value="">Sélectionnez votre commune</option>';
-
-
-            communeSelect.disabled =
-              true;
-
-
-            if (!code) {
-              return;
-            }
-
-
-            const selectedWilaya =
-              algeriaLocations.find(
-                (item) =>
-                  String(
-                    item.wilayaCode
-                  ) === String(code)
-              );
-
-
-            if (!selectedWilaya) {
-              return;
-            }
-
-
-            const communes =
-              Array.isArray(
-                selectedWilaya.communes
-              )
-                ? selectedWilaya.communes
-                : [];
-
-
-            communes.forEach(
-              (commune) => {
-
-                const option =
-                  document.createElement("option");
-
-
-                option.value =
-                  commune.nameFr;
-
-
-                option.textContent =
-                  commune.nameFr;
-
-
-                option.dataset.id =
-                  commune.id || "";
-
-
-                communeSelect.appendChild(
-                  option
-                );
-
-              }
-            );
-
-
-            communeSelect.disabled =
-              communes.length === 0;
-
-          }
-        );
-
-
-      } catch (error) {
-
-        console.error(
-          "LOCATION ERROR:",
-          error
-        );
-
-
-        status.textContent =
-          "Erreur de chargement";
-
-
-        status.style.color =
-          "#b42318";
-
-
-        wilayaSelect.innerHTML =
-          '<option value="">Impossible de charger</option>';
-
-
-        communeSelect.innerHTML =
-          '<option value="">Impossible de charger</option>';
-
-
         communeSelect.disabled =
-          true;
-
-      }
-
-    }
-
-
-    /* =========================================================
-       RENDER CART
-    ========================================================= */
-
-    function renderCart() {
-
-      const emptyBox =
-        document.getElementById(
-          "emptyBox"
-        );
-
-      const checkoutContent =
-        document.getElementById(
-          "checkoutContent"
-        );
-
-      const reviewItems =
-        document.getElementById(
-          "reviewItems"
-        );
-
-      const totalPrice =
-        document.getElementById(
-          "totalPrice"
-        );
-
-
-      if (!cart.length) {
-
-        emptyBox.style.display =
-          "block";
-
-        checkoutContent.style.display =
-          "none";
-
-        return;
-
-      }
-
-
-      emptyBox.style.display =
-        "none";
-
-      checkoutContent.style.display =
-        "grid";
-
-
-      reviewItems.innerHTML =
-        "";
-
-
-      cart.forEach(
-        (item) => {
-
-          const price =
-            getItemPrice(item);
-
-
-          const quantity =
-            Number(
-              item.quantity ??
-              item.qty ??
-              1
-            ) || 1;
-
-
-          const image =
-            item.image_url ||
-            item.image ||
-            (
-              Array.isArray(
-                item.image_urls
-              )
-                ? item.image_urls[0]
-                : ""
-            ) ||
-            "https://placehold.co/500x500?text=JR+Shop";
-
-
-          const variants = [];
-
-
-          if (item.color) {
-
-            variants.push(
-              "Couleur : " +
-              escapeHtml(item.color)
-            );
-
-          }
-
-
-          if (item.size) {
-
-            variants.push(
-              "Taille : " +
-              escapeHtml(item.size)
-            );
-
-          }
-
-
-          const card =
-            document.createElement(
-              "div"
-            );
-
-
-          card.className =
-            "cart-item";
-
-
-          card.innerHTML = `
-
-            <img
-              class="cart-image"
-              src="${escapeHtml(image)}"
-              alt="Produit"
-              onerror="this.src='https://placehold.co/500x500?text=JR+Shop'"
-            >
-
-            <div>
-
-              <div class="item-name">
-
-                ${escapeHtml(
-                  item.name ||
-                  item.title ||
-                  "Produit"
-                )}
-
-              </div>
-
-
-              <div class="item-variant">
-
-                ${
-                  variants.length
-                    ? variants.join("<br>")
-                    : "Produit standard"
-                }
-
-              </div>
-
-
-              <div class="item-quantity">
-
-                Quantité :
-                ${quantity}
-
-              </div>
-
-            </div>
-
-
-            <div class="item-price">
-
-              ${formatPrice(
-                price * quantity
-              )}
-
-            </div>
-
-          `;
-
-
-          reviewItems.appendChild(
-            card
-          );
-
-        }
-      );
-
-
-      totalPrice.textContent =
-        formatPrice(
-          calculateTotal()
-        );
-
-    }
-
-
-    /* =========================================================
-       LOAD USER
-    ========================================================= */
-
-    async function loadUser() {
-
-      try {
-
-        if (
-          typeof supabaseClient ===
-          "undefined" ||
-          !supabaseClient
-        ) {
-          return;
-        }
-
-
-        const response =
-          await supabaseClient.auth.getUser();
-
-
-        currentUser =
-          response.data?.user ||
-          null;
-
-
-        if (currentUser) {
-
-          const name =
-            currentUser
-              .user_metadata
-              ?.full_name ||
-            currentUser
-              .user_metadata
-              ?.name ||
-            "";
-
-
-          const customerName =
-            document.getElementById(
-              "customerName"
-            );
-
-
-          if (
-            customerName &&
-            !customerName.value &&
-            name
-          ) {
-
-            customerName.value =
-              name;
-
-          }
-
-        }
-
-      } catch (error) {
-
-        console.error(
-          "USER ERROR:",
-          error
-        );
-
-      }
-
-    }
-
-
-    /* =========================================================
-       CUSTOMER ID
-    ========================================================= */
-
-    async function getCustomerId() {
-
-      if (!currentUser?.id) {
-        return null;
-      }
-
-
-      try {
-
-        const response =
-          await supabaseClient
-            .from("customers")
-            .select("id")
-            .eq(
-              "id",
-              currentUser.id
-            )
-            .maybeSingle();
-
-
-        if (
-          !response.error &&
-          response.data?.id
-        ) {
-
-          return response.data.id;
-
-        }
-
-      } catch (error) {
-
-        console.warn(
-          "Customer lookup:",
-          error
-        );
-
-      }
-
-
-      return null;
-
-    }
-
-
-    /* =========================================================
-       CUSTOMER DATA
-    ========================================================= */
-
-    function getCustomerData() {
-
-      const customerName =
-        document
-          .getElementById(
-            "customerName"
-          )
-          .value
-          .trim();
-
-
-      const phone =
-        document
-          .getElementById(
-            "phone"
-          )
-          .value
-          .trim();
-
-
-      const wilaya =
-        document
-          .getElementById(
-            "wilaya"
-          )
-          .value
-          .trim();
-
-
-      const commune =
-        document
-          .getElementById(
-            "commune"
-          )
-          .value
-          .trim();
-
-
-      const address =
-        document
-          .getElementById(
-            "address"
-          )
-          .value
-          .trim();
-
-
-      const notes =
-        document
-          .getElementById(
-            "notes"
-          )
-          .value
-          .trim();
-
-
-      if (!customerName) {
-
-        throw new Error(
-          "Veuillez entrer votre nom complet."
-        );
-
-      }
-
-
-      if (!phone) {
-
-        throw new Error(
-          "Veuillez entrer votre numéro de téléphone."
-        );
-
-      }
-
-
-      if (!wilaya) {
-
-        throw new Error(
-          "Veuillez sélectionner votre wilaya."
-        );
-
-      }
-
-
-      if (!commune) {
-
-        throw new Error(
-          "Veuillez sélectionner votre commune."
-        );
-
-      }
-
-
-      if (!address) {
-
-        throw new Error(
-          "Veuillez entrer votre adresse."
-        );
-
-      }
-
-
-      return {
-
-        customerName,
-
-        phone,
-
-        wilaya,
-
-        commune,
-
-        address,
-
-        notes
-
-      };
-
-    }
-
-
-    /* =========================================================
-       BUILD ORDER ITEMS
-    ========================================================= */
-
-    function buildOrderItems() {
-
-      return cart.map(
-        (item) => ({
-
-          product_id:
-            item.id || null,
-
-          name:
-            item.name ||
-            item.title ||
-            "Produit",
-
-          price:
-            getItemPrice(item),
-
-          quantity:
-            Number(
-              item.quantity ??
-              item.qty ??
-              1
-            ) || 1,
-
-          color:
-            item.color || null,
-
-          size:
-            item.size || null,
-
-          image_url:
-            item.image_url ||
-            item.image ||
-            (
-              Array.isArray(
-                item.image_urls
-              )
-                ? item.image_urls[0]
-                : null
-            )
-
-        })
-      );
-
-    }
-
-
-    /* =========================================================
-       STATUS
-    ========================================================= */
-
-    function setStatus(
-      message,
-      type
-    ) {
-
-      const box =
-        document.getElementById(
-          "checkoutStatus"
-        );
-
-
-      box.textContent =
-        message;
-
-
-      box.className =
-        "status " +
-        (type || "");
-
-    }
-
-
-    /* =========================================================
-       CONFIRM ORDER
-    ========================================================= */
-
-    async function confirmOrder() {
-
-      const button =
-        document.getElementById(
-          "confirmBtn"
-        );
-
-
-      if (!cart.length) {
-
-        setStatus(
-          "Votre panier est vide.",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      if (
-        typeof supabaseClient ===
-        "undefined" ||
-        !supabaseClient
-      ) {
-
-        setStatus(
-          "Supabase n'est pas disponible.",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      let customer;
-
-
-      try {
-
-        customer =
-          getCustomerData();
-
-      } catch (error) {
-
-        setStatus(
-          error.message,
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      const total =
-        calculateTotal();
-
-
-      if (total <= 0) {
-
-        setStatus(
-          "Le total de la commande est invalide.",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      button.disabled =
-        true;
-
-
-      button.textContent =
-        "Création de la commande...";
-
-
-      setStatus(
-        "Veuillez patienter...",
-        ""
-      );
-
-
-      try {
-
-        const customerId =
-          await getCustomerId();
-
-
-        const items =
-          buildOrderItems();
-
-
-        const response =
-          await supabaseClient
-            .from("orders")
-            .insert({
-
-              customer_id:
-                customerId,
-
-              status:
-                "pending",
-
-              total:
-                total,
-
-              notes:
-                customer.notes || null,
-
-              address:
-                customer.address,
-
-              customer_name:
-                customer.customerName,
-
-              phone:
-                customer.phone,
-
-              wilaya:
-                customer.wilaya,
-
-              commune:
-                customer.commune,
-
-              items:
-                items
-
-            })
-            .select("id")
-            .single();
-
-
-        if (response.error) {
-
-          throw response.error;
-
-        }
-
-
-        const orderId =
-          response.data?.id;
-
-
-        /* Supprimer panier */
-
-        localStorage.removeItem(
-          "jr_cart"
-        );
-
-
-        cart = [];
-
-
-        /* Success */
-
-        document
-          .getElementById(
-            "checkoutContent"
-          )
-          .style.display =
-          "none";
-
-
-        document
-          .getElementById(
-            "successPage"
-          )
-          .style.display =
-          "block";
-
-
-        document
-          .getElementById(
-            "successOrderId"
-          )
-          .textContent =
-          orderId ||
-          "Commande créée";
-
-
-        window.scrollTo({
-
-          top: 0,
-
-          behavior: "smooth"
-
-        });
-
-
-      } catch (error) {
-
-        console.error(
-          "ORDER ERROR:",
-          error
-        );
-
-
-        setStatus(
-          error?.message ||
-          "Impossible de créer la commande.",
-          "error"
-        );
-
-
-        button.disabled =
-          false;
-
-
-        button.textContent =
-          "Confirmer la commande";
-
-      }
-
-    }
-
-
-    /* =========================================================
-       INIT
-    ========================================================= */
-
-    document.addEventListener(
-      "DOMContentLoaded",
-      async function () {
-
-        cart =
-          getCart();
-
-
-        renderCart();
-
-
-        /*
-          نحمّل Wilaya/Commune
-        */
-
-        await loadAlgeriaLocations();
-
-
-        /*
-          Supabase user
-        */
-
-        await loadUser();
+          communes.length === 0;
 
       }
     );
 
-  </script>
+
+  }catch(error){
+
+    console.error(
+      "LOCATION ERROR:",
+      error
+    );
+
+
+    status.textContent =
+      "Erreur de chargement";
+
+    status.style.color =
+      "#b42318";
+
+
+    wilayaSelect.innerHTML =
+      '<option value="">Impossible de charger</option>';
+
+
+    communeSelect.innerHTML =
+      '<option value="">Impossible de charger</option>';
+
+
+    communeSelect.disabled =
+      true;
+
+  }
+
+}
+
+
+/* =========================================================
+   RENDER CART
+========================================================= */
+
+function renderCart(){
+
+  const emptyBox =
+    document.getElementById(
+      "emptyBox"
+    );
+
+  const checkoutContent =
+    document.getElementById(
+      "checkoutContent"
+    );
+
+  const reviewItems =
+    document.getElementById(
+      "reviewItems"
+    );
+
+  const totalPrice =
+    document.getElementById(
+      "totalPrice"
+    );
+
+
+  if(!cart.length){
+
+    emptyBox.style.display =
+      "block";
+
+    checkoutContent.style.display =
+      "none";
+
+    return;
+
+  }
+
+
+  emptyBox.style.display =
+    "none";
+
+  checkoutContent.style.display =
+    "grid";
+
+
+  reviewItems.innerHTML =
+    "";
+
+
+  cart.forEach(
+    item => {
+
+      const price =
+        getItemPrice(item);
+
+
+      const quantity =
+        Number(item.quantity) || 1;
+
+
+      const image =
+        item.image_url ||
+        item.image ||
+        (
+          Array.isArray(
+            item.image_urls
+          )
+            ? item.image_urls[0]
+            : ""
+        ) ||
+        "https://placehold.co/500x500?text=JR+Shop";
+
+
+      const variants = [];
+
+
+      if(item.color){
+
+        variants.push(
+          "Couleur : " +
+          escapeHtml(item.color)
+        );
+
+      }
+
+
+      if(item.size){
+
+        variants.push(
+          "Taille : " +
+          escapeHtml(item.size)
+        );
+
+      }
+
+
+      const card =
+        document.createElement(
+          "div"
+        );
+
+
+      card.className =
+        "cart-item";
+
+
+      card.innerHTML = `
+
+<img
+  class="cart-image"
+  src="${escapeHtml(image)}"
+  alt="Produit"
+  onerror="this.src='https://placehold.co/500x500?text=JR+Shop'"
+>
+
+<div>
+
+<div class="item-name">
+  ${escapeHtml(
+    item.name ||
+    item.title ||
+    "Produit"
+  )}
+</div>
+
+<div class="item-variant">
+
+${
+  variants.length
+    ? variants.join("<br>")
+    : "Produit standard"
+}
+
+</div>
+
+<div class="item-quantity">
+  Quantité : ${quantity}
+</div>
+
+</div>
+
+<div class="item-price">
+  ${formatPrice(
+    price * quantity
+  )}
+</div>
+
+`;
+
+
+      reviewItems.appendChild(
+        card
+      );
+
+    }
+  );
+
+
+  totalPrice.textContent =
+    formatPrice(
+      calculateTotal()
+    );
+
+}
+
+
+/* =========================================================
+   USER
+========================================================= */
+
+async function loadUser(){
+
+  try{
+
+    if(
+      typeof supabaseClient ===
+      "undefined" ||
+      !supabaseClient
+    ){
+
+      return;
+
+    }
+
+
+    const response =
+      await supabaseClient.auth.getUser();
+
+
+    currentUser =
+      response.data?.user ||
+      null;
+
+
+    if(currentUser){
+
+      const metadata =
+        currentUser.user_metadata || {};
+
+
+      const name =
+        metadata.full_name ||
+        metadata.name ||
+        "";
+
+
+      const customerName =
+        document.getElementById(
+          "customerName"
+        );
+
+
+      if(
+        customerName &&
+        !customerName.value &&
+        name
+      ){
+
+        customerName.value =
+          name;
+
+      }
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "USER ERROR:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   CUSTOMER ID
+========================================================= */
+
+async function getCustomerId(){
+
+  if(!currentUser?.id){
+
+    return null;
+
+  }
+
+
+  try{
+
+    const response =
+      await supabaseClient
+        .from("customers")
+        .select("id")
+        .eq(
+          "id",
+          currentUser.id
+        )
+        .maybeSingle();
+
+
+    if(
+      !response.error &&
+      response.data?.id
+    ){
+
+      return response.data.id;
+
+    }
+
+  }catch(error){
+
+    console.warn(
+      "CUSTOMER LOOKUP:",
+      error
+    );
+
+  }
+
+
+  return null;
+
+}
+
+
+/* =========================================================
+   CUSTOMER DATA
+========================================================= */
+
+function getCustomerData(){
+
+  const customerName =
+    document
+      .getElementById(
+        "customerName"
+      )
+      .value
+      .trim();
+
+
+  const phone =
+    document
+      .getElementById(
+        "phone"
+      )
+      .value
+      .trim();
+
+
+  const wilaya =
+    document
+      .getElementById(
+        "wilaya"
+      )
+      .value
+      .trim();
+
+
+  const commune =
+    document
+      .getElementById(
+        "commune"
+      )
+      .value
+      .trim();
+
+
+  const address =
+    document
+      .getElementById(
+        "address"
+      )
+      .value
+      .trim();
+
+
+  const notes =
+    document
+      .getElementById(
+        "notes"
+      )
+      .value
+      .trim();
+
+
+  if(!customerName){
+
+    throw new Error(
+      "Veuillez entrer votre nom complet."
+    );
+
+  }
+
+
+  if(!phone){
+
+    throw new Error(
+      "Veuillez entrer votre numéro de téléphone."
+    );
+
+  }
+
+
+  if(!wilaya){
+
+    throw new Error(
+      "Veuillez sélectionner votre wilaya."
+    );
+
+  }
+
+
+  if(!commune){
+
+    throw new Error(
+      "Veuillez sélectionner votre commune."
+    );
+
+  }
+
+
+  if(!address){
+
+    throw new Error(
+      "Veuillez entrer votre adresse."
+    );
+
+  }
+
+
+  return {
+
+    customerName,
+    phone,
+    wilaya,
+    commune,
+    address,
+    notes
+
+  };
+
+}
+
+
+/* =========================================================
+   BUILD ORDER ITEMS
+========================================================= */
+
+function buildOrderItems(){
+
+  return cart.map(
+    item => ({
+
+      product_id:
+        item.product_id ||
+        item.id ||
+        null,
+
+      variant_id:
+        item.variant_id ||
+        null,
+
+      name:
+        item.name ||
+        item.title ||
+        "Produit",
+
+      price:
+        getItemPrice(item),
+
+      quantity:
+        Number(item.quantity) || 1,
+
+      color:
+        item.color || null,
+
+      size:
+        item.size || null,
+
+      image_url:
+        item.image_url ||
+        item.image ||
+        (
+          Array.isArray(
+            item.image_urls
+          )
+            ? item.image_urls[0]
+            : null
+        )
+
+    })
+  );
+
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+function setStatus(
+  message,
+  type
+){
+
+  const box =
+    document.getElementById(
+      "checkoutStatus"
+    );
+
+
+  box.textContent =
+    message;
+
+
+  box.className =
+    "status " +
+    (type || "");
+
+}
+
+
+/* =========================================================
+   CONFIRM ORDER
+========================================================= */
+
+async function confirmOrder(){
+
+  const button =
+    document.getElementById(
+      "confirmBtn"
+    );
+
+
+  if(!cart.length){
+
+    setStatus(
+      "Votre panier est vide.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  if(
+    typeof supabaseClient ===
+    "undefined" ||
+    !supabaseClient
+  ){
+
+    setStatus(
+      "Supabase n'est pas disponible.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  let customer;
+
+
+  try{
+
+    customer =
+      getCustomerData();
+
+  }catch(error){
+
+    setStatus(
+      error.message,
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  const total =
+    calculateTotal();
+
+
+  if(total <= 0){
+
+    setStatus(
+      "Le total de la commande est invalide.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  button.disabled =
+    true;
+
+  button.textContent =
+    "Création de la commande...";
+
+
+  setStatus(
+    "Veuillez patienter...",
+    ""
+  );
+
+
+  try{
+
+    const customerId =
+      await getCustomerId();
+
+
+    const items =
+      buildOrderItems();
+
+
+    const response =
+      await supabaseClient
+        .from("orders")
+        .insert({
+
+          customer_id:
+            customerId,
+
+          status:
+            "pending",
+
+          total:
+            total,
+
+          notes:
+            customer.notes || null,
+
+          address:
+            customer.address,
+
+          customer_name:
+            customer.customerName,
+
+          phone:
+            customer.phone,
+
+          wilaya:
+            customer.wilaya,
+
+          commune:
+            customer.commune,
+
+          items:
+            items
+
+        })
+        .select("id")
+        .single();
+
+
+    if(response.error){
+
+      throw response.error;
+
+    }
+
+
+    const orderId =
+      response.data?.id;
+
+
+    /*
+      IMPORTANT :
+      Nettoyer les deux sources
+    */
+
+    localStorage.removeItem(
+      "jr_cart"
+    );
+
+    localStorage.removeItem(
+      "jr_checkout_product"
+    );
+
+
+    cart = [];
+
+
+    document
+      .getElementById(
+        "checkoutContent"
+      )
+      .style.display =
+      "none";
+
+
+    document
+      .getElementById(
+        "emptyBox"
+      )
+      .style.display =
+      "none";
+
+
+    document
+      .getElementById(
+        "successPage"
+      )
+      .style.display =
+      "block";
+
+
+    document
+      .getElementById(
+        "successOrderId"
+      )
+      .textContent =
+      orderId ||
+      "Commande créée";
+
+
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    });
+
+
+  }catch(error){
+
+    console.error(
+      "ORDER ERROR:",
+      error
+    );
+
+
+    setStatus(
+      error?.message ||
+      "Impossible de créer la commande.",
+      "error"
+    );
+
+
+    button.disabled =
+      false;
+
+
+    button.textContent =
+      "Confirmer la commande";
+
+  }
+
+}
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  async function(){
+
+    /*
+      Achat direct prioritaire
+    */
+
+    cart =
+      getCart();
+
+
+    renderCart();
+
+
+    /*
+      Wilaya / Commune
+    */
+
+    await loadAlgeriaLocations();
+
+
+    /*
+      User Supabase
+    */
+
+    await loadUser();
+
+  }
+);
+
+</script>
 
 </body>
-
 </html>
