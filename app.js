@@ -157,25 +157,36 @@ function productCard(product) {
   return `
     <article class="product card">
 
-      <img
-        src="${escapeHtml(image)}"
-        alt="${escapeHtml(product.name)}"
-        loading="lazy"
+      <a
+        href="product-details.html?id=${encodeURIComponent(product.id)}"
+        class="product-link"
       >
 
-      <div class="product-body">
+        <img
+          src="${escapeHtml(image)}"
+          alt="${escapeHtml(product.name)}"
+          loading="lazy"
+        >
 
-        <h3>
-          ${escapeHtml(product.name)}
-        </h3>
+        <div class="product-body">
 
-        <strong>
-          ${money(product.price)}
-        </strong>
+          <h3>
+            ${escapeHtml(product.name)}
+          </h3>
 
-        <small>
-          ${stockText}
-        </small>
+          <strong>
+            ${money(product.price)}
+          </strong>
+
+          <small>
+            ${stockText}
+          </small>
+
+        </div>
+
+      </a>
+
+      <div class="product-actions">
 
         <button
           class="btn primary add"
@@ -214,7 +225,7 @@ async function loadCategories() {
       await supabaseClient
         .from("categories")
         .select("*")
-        .order("name", {
+        .order("sort_order", {
           ascending: true
         });
 
@@ -300,6 +311,7 @@ async function loadCategories() {
           }
         );
       });
+
   } catch (error) {
     console.error(
       "Categories JavaScript error:",
@@ -357,6 +369,7 @@ async function loadProducts() {
     allProducts = data || [];
 
     renderProducts();
+
   } catch (error) {
     console.error(
       "Products JavaScript error:",
@@ -449,9 +462,18 @@ function renderProducts() {
   document
     .querySelectorAll(".add")
     .forEach((button) => {
+
       button.addEventListener(
         "click",
-        () => {
+        (event) => {
+
+          /*
+           * Empêche le clic du bouton
+           * d'ouvrir Product Details.
+           */
+          event.preventDefault();
+          event.stopPropagation();
+
           const product =
             allProducts.find(
               (item) =>
