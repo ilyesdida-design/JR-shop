@@ -2275,8 +2275,24 @@ list.innerHTML=
    AUTH + VERIFIED PURCHASE
 ===================================================== */
 
-async function prepareReviewSystem(){
+function updateReviewLoginLink(){
 
+    const button =
+        document.getElementById("reviewLoginButton");
+
+    if(!button){
+        return;
+    }
+
+    const currentUrl =
+        window.location.pathname +
+        window.location.search;
+
+    button.href =
+        "login.html?next=" +
+        encodeURIComponent(currentUrl);
+}
+    
 const loginArea=document.getElementById("reviewLoginArea");
 const formArea=document.getElementById("reviewFormArea");
 const message=document.getElementById("reviewFormMessage");
