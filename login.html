@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr" dir="ltr">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -10,6 +12,7 @@
 <script src="config.js"></script>
 
 <style>
+
 *{
     box-sizing:border-box;
 }
@@ -98,6 +101,12 @@ body{
 .social-btn:hover{
     transform:translateY(-1px);
     box-shadow:0 5px 15px rgba(0,0,0,.07);
+}
+
+.social-btn:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+    transform:none;
 }
 
 .google-icon{
@@ -229,6 +238,7 @@ body{
 }
 
 @media(max-width:500px){
+
     body{
         padding:10px;
     }
@@ -241,245 +251,325 @@ body{
     .logo{
         font-size:24px;
     }
+
 }
+
 </style>
+
 </head>
 
 <body>
 
 <div class="auth-container">
 
-    <div class="auth-card">
+<div class="auth-card">
 
-        <div class="logo">
-            JR SHOP
-        </div>
+    <div class="logo">
+        JR SHOP
+    </div>
 
-        <div class="subtitle">
-            Connectez-vous pour continuer
-        </div>
+    <div class="subtitle">
+        Connectez-vous pour continuer
+    </div>
 
-        <div class="tabs">
-
-            <button
-                id="loginTab"
-                class="tab active"
-                onclick="showLogin()">
-                Se connecter
-            </button>
-
-            <button
-                id="signupTab"
-                class="tab"
-                onclick="showSignup()">
-                Créer un compte
-            </button>
-
-        </div>
-
-        <!-- GOOGLE -->
+    <div class="tabs">
 
         <button
-            class="social-btn"
-            onclick="loginWithGoogle()">
+            id="loginTab"
+            class="tab active"
+            onclick="showLogin()">
 
-            <span class="google-icon">G</span>
-
-            Continuer avec Google
+            Se connecter
 
         </button>
 
-        <!-- FACEBOOK -->
-
         <button
-            class="social-btn"
-            onclick="loginWithFacebook()">
+            id="signupTab"
+            class="tab"
+            onclick="showSignup()">
 
-            <span class="facebook-icon">f</span>
-
-            Continuer avec Facebook
+            Créer un compte
 
         </button>
 
-        <div class="divider">
-            OU
-        </div>
+    </div>
 
-        <!-- LOGIN -->
 
-        <div id="loginForm">
+    <!-- GOOGLE -->
 
-            <div class="field">
+    <button
+        id="googleButton"
+        class="social-btn"
+        onclick="loginWithGoogle()">
 
-                <label for="loginEmail">
-                    Email
-                </label>
+        <span class="google-icon">G</span>
 
-                <input
-                    id="loginEmail"
-                    type="email"
-                    autocomplete="email"
-                    placeholder="exemple@gmail.com">
+        Continuer avec Google
 
-            </div>
+    </button>
 
-            <div class="field">
 
-                <label for="loginPassword">
-                    Mot de passe
-                </label>
+    <!-- FACEBOOK -->
 
-                <input
-                    id="loginPassword"
-                    type="password"
-                    autocomplete="current-password"
-                    placeholder="Votre mot de passe">
+    <button
+        id="facebookButton"
+        class="social-btn"
+        onclick="loginWithFacebook()">
 
-            </div>
+        <span class="facebook-icon">f</span>
 
-            <a
-                class="forgot"
-                onclick="forgotPassword()">
+        Continuer avec Facebook
 
-                Mot de passe oublié ?
+    </button>
 
-            </a>
 
-            <button
-                id="loginButton"
-                class="submit-btn"
-                onclick="loginWithEmail()">
+    <div class="divider">
+        OU
+    </div>
 
-                Se connecter
 
-            </button>
+    <!-- LOGIN -->
 
-        </div>
+    <div id="loginForm">
 
-        <!-- SIGNUP -->
+        <div class="field">
 
-        <div id="signupForm" class="signup-only">
+            <label for="loginEmail">
+                Email
+            </label>
 
-            <div class="field">
-
-                <label for="signupName">
-                    Nom et prénom
-                </label>
-
-                <input
-                    id="signupName"
-                    type="text"
-                    autocomplete="name"
-                    placeholder="Votre nom et prénom">
-
-            </div>
-
-            <div class="field">
-
-                <label for="signupEmail">
-                    Email
-                </label>
-
-                <input
-                    id="signupEmail"
-                    type="email"
-                    autocomplete="email"
-                    placeholder="exemple@gmail.com">
-
-            </div>
-
-            <div class="field">
-
-                <label for="signupPassword">
-                    Mot de passe
-                </label>
-
-                <input
-                    id="signupPassword"
-                    type="password"
-                    autocomplete="new-password"
-                    placeholder="Minimum 6 caractères">
-
-            </div>
-
-            <div class="field">
-
-                <label for="signupPassword2">
-                    Confirmer le mot de passe
-                </label>
-
-                <input
-                    id="signupPassword2"
-                    type="password"
-                    autocomplete="new-password"
-                    placeholder="Retapez votre mot de passe">
-
-            </div>
-
-            <button
-                id="signupButton"
-                class="submit-btn"
-                onclick="signupWithEmail()">
-
-                Créer mon compte
-
-            </button>
+            <input
+                id="loginEmail"
+                type="email"
+                autocomplete="email"
+                placeholder="exemple@gmail.com">
 
         </div>
 
-        <div id="message" class="message"></div>
+
+        <div class="field">
+
+            <label for="loginPassword">
+                Mot de passe
+            </label>
+
+            <input
+                id="loginPassword"
+                type="password"
+                autocomplete="current-password"
+                placeholder="Votre mot de passe">
+
+        </div>
+
 
         <a
-            id="backLink"
-            href="index.html"
-            class="back">
+            class="forgot"
+            onclick="forgotPassword()">
 
-            ← Retour à la boutique
+            Mot de passe oublié ?
 
         </a>
 
-        <div class="small-note">
-            Votre compte vous permettra également de laisser des avis
-            sur les produits que vous avez achetés.
+
+        <button
+            id="loginButton"
+            class="submit-btn"
+            onclick="loginWithEmail()">
+
+            Se connecter
+
+        </button>
+
+    </div>
+
+
+    <!-- SIGNUP -->
+
+    <div id="signupForm" class="signup-only">
+
+        <div class="field">
+
+            <label for="signupName">
+                Nom et prénom
+            </label>
+
+            <input
+                id="signupName"
+                type="text"
+                autocomplete="name"
+                placeholder="Votre nom et prénom">
+
         </div>
+
+
+        <div class="field">
+
+            <label for="signupEmail">
+                Email
+            </label>
+
+            <input
+                id="signupEmail"
+                type="email"
+                autocomplete="email"
+                placeholder="exemple@gmail.com">
+
+        </div>
+
+
+        <div class="field">
+
+            <label for="signupPassword">
+                Mot de passe
+            </label>
+
+            <input
+                id="signupPassword"
+                type="password"
+                autocomplete="new-password"
+                placeholder="Minimum 6 caractères">
+
+        </div>
+
+
+        <div class="field">
+
+            <label for="signupPassword2">
+                Confirmer le mot de passe
+            </label>
+
+            <input
+                id="signupPassword2"
+                type="password"
+                autocomplete="new-password"
+                placeholder="Retapez votre mot de passe">
+
+        </div>
+
+
+        <button
+            id="signupButton"
+            class="submit-btn"
+            onclick="signupWithEmail()">
+
+            Créer mon compte
+
+        </button>
+
+    </div>
+
+
+    <div id="message" class="message"></div>
+
+
+    <a
+        id="backLink"
+        href="index.html"
+        class="back">
+
+        ← Retour à la boutique
+
+    </a>
+
+
+    <div class="small-note">
+
+        Votre compte vous permettra également de laisser des avis
+        sur les produits que vous avez achetés.
 
     </div>
 
 </div>
 
+</div>
+
+
 <script>
+
+/* =========================================================
+   RETURN URL
+========================================================= */
 
 let redirectAfterLogin = "index.html";
 
-/* =========================================
-   RETURN TO PRODUCT
-========================================= */
 
 function getReturnUrl(){
 
-    const params = new URLSearchParams(
-        window.location.search
-    );
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
 
-    const next = params.get("next");
+    const next =
+        params.get("next");
+
+
+    /*
+       Si next موجود، نتحقق منه باش
+       ما نسمحوش بأي رابط خارجي.
+    */
 
     if(next){
-        return next;
+
+        try{
+
+            const decoded =
+                decodeURIComponent(next);
+
+            /*
+               السماح فقط بالصفحات الداخلية
+               داخل JR Shop
+            */
+
+            if(
+                decoded.startsWith("/") &&
+                !decoded.startsWith("//")
+            ){
+
+                return decoded;
+
+            }
+
+            if(
+                !decoded.startsWith("http://") &&
+                !decoded.startsWith("https://") &&
+                decoded.includes(".html")
+            ){
+
+                return decoded;
+
+            }
+
+        }catch(error){
+
+            console.error(error);
+
+        }
+
     }
+
+
+    /*
+       fallback من الصفحة السابقة
+    */
 
     try{
 
-        const referrer = document.referrer;
+        const referrer =
+            document.referrer;
 
         if(
             referrer &&
             referrer.includes("product-details.html")
         ){
 
-            const url = new URL(referrer);
+            const url =
+                new URL(referrer);
 
-            return url.pathname.split("/").pop() +
-                   url.search;
+            return (
+                url.pathname.split("/").pop() +
+                url.search
+            );
 
         }
 
@@ -489,19 +579,26 @@ function getReturnUrl(){
 
     }
 
+
     return "index.html";
 }
 
-redirectAfterLogin = getReturnUrl();
+
+redirectAfterLogin =
+    getReturnUrl();
 
 
-/* =========================================
+/* =========================================================
    MESSAGE
-========================================= */
+========================================================= */
 
-function showMessage(text,type="error"){
+function showMessage(
+    text,
+    type="error"
+){
 
-    const box = document.getElementById("message");
+    const box =
+        document.getElementById("message");
 
     box.textContent = text;
 
@@ -511,139 +608,218 @@ function showMessage(text,type="error"){
 }
 
 
-/* =========================================
+/* =========================================================
    TABS
-========================================= */
+========================================================= */
 
 function showLogin(){
 
-    document.getElementById("loginForm").style.display="block";
+    document.getElementById(
+        "loginForm"
+    ).style.display = "block";
 
-    document.getElementById("signupForm").style.display="none";
+    document.getElementById(
+        "signupForm"
+    ).style.display = "none";
 
-    document.getElementById("loginTab").classList.add("active");
+    document.getElementById(
+        "loginTab"
+    ).classList.add("active");
 
-    document.getElementById("signupTab").classList.remove("active");
+    document.getElementById(
+        "signupTab"
+    ).classList.remove("active");
 
-    document.getElementById("message").style.display="none";
+    document.getElementById(
+        "message"
+    ).style.display = "none";
+
 }
 
 
 function showSignup(){
 
-    document.getElementById("loginForm").style.display="none";
+    document.getElementById(
+        "loginForm"
+    ).style.display = "none";
 
-    document.getElementById("signupForm").style.display="block";
+    document.getElementById(
+        "signupForm"
+    ).style.display = "block";
 
-    document.getElementById("loginTab").classList.remove("active");
+    document.getElementById(
+        "loginTab"
+    ).classList.remove("active");
 
-    document.getElementById("signupTab").classList.add("active");
+    document.getElementById(
+        "signupTab"
+    ).classList.add("active");
 
-    document.getElementById("message").style.display="none";
+    document.getElementById(
+        "message"
+    ).style.display = "none";
+
 }
 
 
-/* =========================================
+/* =========================================================
+   OAUTH REDIRECT URL
+========================================================= */
+
+function getOAuthRedirectUrl(){
+
+    return (
+        window.location.origin +
+        window.location.pathname +
+        "?next=" +
+        encodeURIComponent(
+            redirectAfterLogin
+        )
+    );
+
+}
+
+
+/* =========================================================
    GOOGLE
-========================================= */
+========================================================= */
 
 async function loginWithGoogle(){
 
+    const button =
+        document.getElementById(
+            "googleButton"
+        );
+
+    button.disabled = true;
+
+    showMessage(
+        "Redirection vers Google...",
+        "success"
+    );
+
     try{
 
-        const { error } =
-            await supabaseClient.auth.signInWithOAuth({
+        const {
+            error
+        } =
+        await supabaseClient.auth.signInWithOAuth({
 
-                provider:"google",
+            provider:"google",
 
-                options:{
-                    redirectTo:
-                        window.location.origin +
-                        window.location.pathname +
-                        "?next=" +
-                        encodeURIComponent(
-                            redirectAfterLogin
-                        )
-                }
+            options:{
 
-            });
+                redirectTo:
+                    getOAuthRedirectUrl()
+
+            }
+
+        });
+
 
         if(error){
 
-            showMessage(error.message);
+            button.disabled = false;
+
+            showMessage(
+                getAuthError(error)
+            );
 
         }
 
     }catch(error){
+
+        console.error(error);
+
+        button.disabled = false;
 
         showMessage(
             "Une erreur est survenue avec Google."
         );
 
-        console.error(error);
-
     }
 
 }
 
 
-/* =========================================
+/* =========================================================
    FACEBOOK
-========================================= */
+========================================================= */
 
 async function loginWithFacebook(){
 
+    const button =
+        document.getElementById(
+            "facebookButton"
+        );
+
+    button.disabled = true;
+
+    showMessage(
+        "Redirection vers Facebook...",
+        "success"
+    );
+
     try{
 
-        const { error } =
-            await supabaseClient.auth.signInWithOAuth({
+        const {
+            error
+        } =
+        await supabaseClient.auth.signInWithOAuth({
 
-                provider:"facebook",
+            provider:"facebook",
 
-                options:{
-                    redirectTo:
-                        window.location.origin +
-                        window.location.pathname +
-                        "?next=" +
-                        encodeURIComponent(
-                            redirectAfterLogin
-                        )
-                }
+            options:{
 
-            });
+                redirectTo:
+                    getOAuthRedirectUrl()
+
+            }
+
+        });
+
 
         if(error){
 
-            showMessage(error.message);
+            button.disabled = false;
+
+            showMessage(
+                getAuthError(error)
+            );
 
         }
 
     }catch(error){
 
+        console.error(error);
+
+        button.disabled = false;
+
         showMessage(
             "Une erreur est survenue avec Facebook."
         );
-
-        console.error(error);
 
     }
 
 }
 
 
-/* =========================================
+/* =========================================================
    EMAIL LOGIN
-========================================= */
+========================================================= */
 
 async function loginWithEmail(){
 
     const email =
-        document.getElementById("loginEmail")
-        .value.trim();
+        document.getElementById(
+            "loginEmail"
+        ).value.trim();
 
     const password =
-        document.getElementById("loginPassword")
-        .value;
+        document.getElementById(
+            "loginPassword"
+        ).value;
+
 
     if(!email || !password){
 
@@ -652,25 +828,36 @@ async function loginWithEmail(){
         );
 
         return;
+
     }
 
+
     const button =
-        document.getElementById("loginButton");
+        document.getElementById(
+            "loginButton"
+        );
 
-    button.disabled=true;
 
-    button.textContent="Connexion...";
+    button.disabled = true;
+
+    button.textContent =
+        "Connexion...";
+
 
     try{
 
-        const { data,error } =
-            await supabaseClient.auth.signInWithPassword({
+        const {
+            data,
+            error
+        } =
+        await supabaseClient.auth.signInWithPassword({
 
-                email:email,
+            email:email,
 
-                password:password
+            password:password
 
-            });
+        });
+
 
         if(error){
 
@@ -679,24 +866,34 @@ async function loginWithEmail(){
                 "error"
             );
 
-            button.disabled=false;
+            button.disabled = false;
 
-            button.textContent="Se connecter";
+            button.textContent =
+                "Se connecter";
 
             return;
+
         }
 
-        showMessage(
-            "Connexion réussie. Redirection...",
-            "success"
-        );
 
-        setTimeout(function(){
+        if(data?.session){
 
-            window.location.href =
-                redirectAfterLogin;
+            showMessage(
+                "Connexion réussie. Redirection...",
+                "success"
+            );
 
-        },500);
+
+            setTimeout(function(){
+
+                window.location.replace(
+                    redirectAfterLogin
+                );
+
+            },500);
+
+        }
+
 
     }catch(error){
 
@@ -706,45 +903,61 @@ async function loginWithEmail(){
             "Impossible de se connecter."
         );
 
-        button.disabled=false;
+        button.disabled = false;
 
-        button.textContent="Se connecter";
+        button.textContent =
+            "Se connecter";
 
     }
 
 }
 
 
-/* =========================================
+/* =========================================================
    SIGNUP
-========================================= */
+========================================================= */
 
 async function signupWithEmail(){
 
     const name =
-        document.getElementById("signupName")
-        .value.trim();
+        document.getElementById(
+            "signupName"
+        ).value.trim();
+
 
     const email =
-        document.getElementById("signupEmail")
-        .value.trim();
+        document.getElementById(
+            "signupEmail"
+        ).value.trim();
+
 
     const password =
-        document.getElementById("signupPassword")
-        .value;
+        document.getElementById(
+            "signupPassword"
+        ).value;
+
 
     const password2 =
-        document.getElementById("signupPassword2")
-        .value;
+        document.getElementById(
+            "signupPassword2"
+        ).value;
 
-    if(!name || !email || !password || !password2){
+
+    if(
+        !name ||
+        !email ||
+        !password ||
+        !password2
+    ){
 
         showMessage(
             "Veuillez remplir tous les champs."
         );
 
         return;
+
     }
+
 
     if(password.length < 6){
 
@@ -753,7 +966,9 @@ async function signupWithEmail(){
         );
 
         return;
+
     }
+
 
     if(password !== password2){
 
@@ -762,40 +977,51 @@ async function signupWithEmail(){
         );
 
         return;
+
     }
 
+
     const button =
-        document.getElementById("signupButton");
+        document.getElementById(
+            "signupButton"
+        );
 
-    button.disabled=true;
 
-    button.textContent="Création...";
+    button.disabled = true;
+
+    button.textContent =
+        "Création...";
+
 
     try{
 
-        const { data,error } =
-            await supabaseClient.auth.signUp({
+        const {
+            data,
+            error
+        } =
+        await supabaseClient.auth.signUp({
 
-                email:email,
+            email:email,
 
-                password:password,
+            password:password,
 
-                options:{
-                    data:{
-                        full_name:name,
-                        name:name
-                    },
+            options:{
 
-                    emailRedirectTo:
-                        window.location.origin +
-                        window.location.pathname +
-                        "?next=" +
-                        encodeURIComponent(
-                            redirectAfterLogin
-                        )
-                }
+                data:{
 
-            });
+                    full_name:name,
+
+                    name:name
+
+                },
+
+                emailRedirectTo:
+                    getOAuthRedirectUrl()
+
+            }
+
+        });
+
 
         if(error){
 
@@ -803,44 +1029,60 @@ async function signupWithEmail(){
                 getAuthError(error)
             );
 
-            button.disabled=false;
+            button.disabled = false;
 
-            button.textContent="Créer mon compte";
+            button.textContent =
+                "Créer mon compte";
 
             return;
+
         }
 
+
         /*
-          Si Supabase exige la confirmation
-          de l'email, user sera null.
+           Compte créé + session immédiate
         */
 
-        if(data.user && data.session){
+        if(
+            data?.user &&
+            data?.session
+        ){
 
             showMessage(
                 "Compte créé avec succès. Redirection...",
                 "success"
             );
 
+
             setTimeout(function(){
 
-                window.location.href =
-                    redirectAfterLogin;
+                window.location.replace(
+                    redirectAfterLogin
+                );
 
             },700);
 
-        }else{
 
-            showMessage(
-                "Compte créé ! Vérifiez votre email pour confirmer votre compte.",
-                "success"
-            );
-
-            button.disabled=false;
-
-            button.textContent="Créer mon compte";
+            return;
 
         }
+
+
+        /*
+           Email confirmation activée
+        */
+
+        showMessage(
+            "Compte créé ! Vérifiez votre email pour confirmer votre compte.",
+            "success"
+        );
+
+
+        button.disabled = false;
+
+        button.textContent =
+            "Créer mon compte";
+
 
     }catch(error){
 
@@ -850,24 +1092,27 @@ async function signupWithEmail(){
             "Impossible de créer le compte."
         );
 
-        button.disabled=false;
+        button.disabled = false;
 
-        button.textContent="Créer mon compte";
+        button.textContent =
+            "Créer mon compte";
 
     }
 
 }
 
 
-/* =========================================
+/* =========================================================
    FORGOT PASSWORD
-========================================= */
+========================================================= */
 
 async function forgotPassword(){
 
     const email =
-        document.getElementById("loginEmail")
-        .value.trim();
+        document.getElementById(
+            "loginEmail"
+        ).value.trim();
+
 
     if(!email){
 
@@ -876,19 +1121,29 @@ async function forgotPassword(){
         );
 
         return;
+
     }
+
 
     try{
 
-        const { error } =
-            await supabaseClient.auth.resetPasswordForEmail(
-                email,
-                {
-                    redirectTo:
-                        window.location.origin +
-                        window.location.pathname
-                }
-            );
+        const {
+            error
+        } =
+        await supabaseClient.auth.resetPasswordForEmail(
+
+            email,
+
+            {
+
+                redirectTo:
+                    window.location.origin +
+                    window.location.pathname
+
+            }
+
+        );
+
 
         if(error){
 
@@ -897,12 +1152,15 @@ async function forgotPassword(){
             );
 
             return;
+
         }
+
 
         showMessage(
             "Un lien de réinitialisation a été envoyé à votre email.",
             "success"
         );
+
 
     }catch(error){
 
@@ -917,74 +1175,119 @@ async function forgotPassword(){
 }
 
 
-/* =========================================
+/* =========================================================
    AUTH ERRORS
-========================================= */
+========================================================= */
 
 function getAuthError(error){
 
     const message =
-        String(error?.message || "")
-        .toLowerCase();
+        String(
+            error?.message || ""
+        ).toLowerCase();
+
 
     if(
-        message.includes("invalid login credentials")
+        message.includes(
+            "invalid login credentials"
+        )
     ){
 
         return "Email ou mot de passe incorrect.";
 
     }
 
+
     if(
-        message.includes("email not confirmed")
+        message.includes(
+            "email not confirmed"
+        )
     ){
 
         return "Veuillez confirmer votre adresse email.";
 
     }
 
+
     if(
-        message.includes("user already registered")
+        message.includes(
+            "user already registered"
+        )
     ){
 
         return "Un compte existe déjà avec cet email.";
 
     }
 
+
     if(
-        message.includes("password should be at least")
+        message.includes(
+            "password should be at least"
+        )
     ){
 
         return "Le mot de passe est trop court.";
 
     }
 
-    return error?.message ||
-        "Une erreur est survenue.";
+
+    if(
+        message.includes(
+            "email rate limit"
+        )
+    ){
+
+        return "Trop de tentatives. Veuillez patienter quelques instants.";
+
+    }
+
+
+    return (
+        error?.message ||
+        "Une erreur est survenue."
+    );
 
 }
 
 
-/* =========================================
-   OAUTH CALLBACK
-========================================= */
+/* =========================================================
+   AUTH SESSION / OAUTH CALLBACK
+========================================================= */
+
+let redirecting = false;
+
 
 async function checkExistingSession(){
 
     try{
 
-        const { data } =
-            await supabaseClient.auth.getSession();
+        const {
+            data
+        } =
+        await supabaseClient.auth.getSession();
 
-        if(data?.session){
 
-            /*
-              Si l'utilisateur arrive déjà connecté
-              sur login.html, on le renvoie directement.
-            */
+        if(
+            data?.session &&
+            !redirecting
+        ){
 
-            window.location.href =
-                redirectAfterLogin;
+            redirecting = true;
+
+
+            showMessage(
+                "Connexion réussie. Redirection...",
+                "success"
+            );
+
+
+            setTimeout(function(){
+
+                window.location.replace(
+                    redirectAfterLogin
+                );
+
+            },300);
 
         }
 
@@ -997,9 +1300,50 @@ async function checkExistingSession(){
 }
 
 
-/* =========================================
+/* =========================================================
+   AUTH STATE LISTENER
+========================================================= */
+
+supabaseClient.auth.onAuthStateChange(
+    function(event,session){
+
+        /*
+           Google / Facebook / Email confirmation
+           يمكنهم trigger هذا الحدث.
+        */
+
+        if(
+            event === "SIGNED_IN" &&
+            session &&
+            !redirecting
+        ){
+
+            redirecting = true;
+
+
+            showMessage(
+                "Connexion réussie. Redirection...",
+                "success"
+            );
+
+
+            setTimeout(function(){
+
+                window.location.replace(
+                    redirectAfterLogin
+                );
+
+            },300);
+
+        }
+
+    }
+);
+
+
+/* =========================================================
    START
-========================================= */
+========================================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
