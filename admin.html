@@ -31,13 +31,19 @@ button{
   cursor:pointer;
 }
 
+.hidden{
+  display:none!important;
+}
+
+/* HEADER */
+
 header{
   background:#111;
   color:#fff;
   padding:15px;
   position:sticky;
   top:0;
-  z-index:20;
+  z-index:50;
 }
 
 .top{
@@ -62,16 +68,20 @@ header{
   border:0;
   background:#dc2626;
   color:#fff;
-  padding:10px 15px;
+  padding:10px 16px;
   border-radius:10px;
   font-weight:bold;
 }
 
+/* CONTAINER */
+
 .container{
   max-width:1200px;
   margin:auto;
-  padding:20px 15px 50px;
+  padding:20px 15px 60px;
 }
+
+/* LOGIN */
 
 .login{
   max-width:420px;
@@ -87,6 +97,17 @@ header{
   margin-top:0;
 }
 
+.field{
+  margin-bottom:13px;
+}
+
+label{
+  display:block;
+  font-weight:bold;
+  font-size:14px;
+  margin-bottom:6px;
+}
+
 input,
 textarea,
 select{
@@ -95,6 +116,13 @@ select{
   border:1px solid #ddd;
   border-radius:9px;
   background:#fff;
+  outline:none;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+  border-color:#16a34a;
 }
 
 textarea{
@@ -102,16 +130,7 @@ textarea{
   resize:vertical;
 }
 
-label{
-  display:block;
-  font-weight:bold;
-  font-size:14px;
-  margin:0 0 6px;
-}
-
-.field{
-  margin-bottom:12px;
-}
+/* BUTTONS */
 
 .btn{
   border:0;
@@ -145,6 +164,37 @@ label{
   color:#fff;
 }
 
+/* STATS */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.stat{
+  background:#fff;
+  padding:18px;
+  border-radius:15px;
+  box-shadow:0 4px 18px #0000000b;
+  text-align:right;
+}
+
+.stat-title{
+  color:#444;
+  font-size:14px;
+}
+
+.stat b{
+  display:block;
+  font-size:25px;
+  margin-top:7px;
+  color:#16a34a;
+}
+
+/* TABS */
+
 .tabs{
   display:flex;
   gap:8px;
@@ -166,6 +216,8 @@ label{
   color:#fff;
 }
 
+/* PANELS */
+
 .panel{
   display:none;
 }
@@ -174,11 +226,7 @@ label{
   display:block;
 }
 
-.grid{
-  display:grid;
-  grid-template-columns:1fr 1.6fr;
-  gap:18px;
-}
+/* CARDS */
 
 .card{
   background:#fff;
@@ -191,6 +239,16 @@ label{
 .card h2{
   margin-top:0;
 }
+
+/* GRID */
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1.6fr;
+  gap:18px;
+}
+
+/* ITEMS */
 
 .products,
 .orders{
@@ -214,6 +272,7 @@ label{
   object-fit:cover;
   border-radius:10px;
   background:#eee;
+  flex-shrink:0;
 }
 
 .item-main{
@@ -237,6 +296,8 @@ label{
   flex-wrap:wrap;
 }
 
+/* BADGES */
+
 .badge{
   display:inline-block;
   padding:4px 8px;
@@ -245,12 +306,25 @@ label{
   font-weight:bold;
   background:#dcfce7;
   color:#166534;
+  margin-top:5px;
 }
 
 .badge.off{
   background:#fee2e2;
   color:#991b1b;
 }
+
+.badge.stock-low{
+  background:#ffedd5;
+  color:#9a3412;
+}
+
+.badge.stock-zero{
+  background:#fee2e2;
+  color:#991b1b;
+}
+
+/* ORDERS */
 
 .order{
   background:#fff;
@@ -264,6 +338,12 @@ label{
   justify-content:space-between;
   gap:10px;
   flex-wrap:wrap;
+  align-items:center;
+}
+
+.order-head select{
+  width:auto;
+  min-width:150px;
 }
 
 .order-meta{
@@ -275,43 +355,46 @@ label{
 
 .order-meta div{
   background:#f8fafc;
-  padding:10px;
+  padding:9px;
   border-radius:9px;
 }
 
 .order-items{
   background:#f6f7f8;
   border-radius:10px;
-  padding:12px;
+  padding:10px;
   margin:10px 0;
-  white-space:pre-wrap;
-  line-height:1.7;
+  line-height:1.8;
 }
 
-.stats{
+.status-badge{
+  display:inline-block;
+  padding:5px 10px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:bold;
+}
+
+/* FILTERS */
+
+.filters{
   display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:12px;
-  margin-bottom:18px;
+  grid-template-columns:1.5fr 1fr 1fr;
+  gap:10px;
+  margin-top:14px;
 }
 
-.stat{
+/* EMPTY */
+
+.empty{
   background:#fff;
-  padding:18px;
+  padding:25px;
   border-radius:14px;
-  box-shadow:0 3px 12px #0000000a;
-}
-
-.stat b{
-  display:block;
-  font-size:25px;
-  margin-top:5px;
-  color:#16a34a;
-}
-
-.stat small{
+  text-align:center;
   color:#777;
 }
+
+/* TOAST */
 
 .toast{
   position:fixed;
@@ -329,64 +412,62 @@ label{
   z-index:100;
 }
 
-.hidden{
-  display:none!important;
-}
+/* DASHBOARD */
 
-.empty{
+.dashboard-box{
   background:#fff;
-  padding:25px;
-  border-radius:14px;
-  text-align:center;
-  color:#777;
+  border-radius:16px;
+  padding:22px;
+  box-shadow:0 4px 18px #0000000b;
 }
 
-.filters{
-  display:grid;
-  grid-template-columns:1.5fr 1fr 1fr;
-  gap:10px;
-  margin-top:14px;
+.dashboard-list{
+  line-height:2.2;
+  font-size:16px;
 }
 
-.stock-ok{
-  color:#16a34a;
-  font-weight:bold;
+.dashboard-list strong{
+  font-size:18px;
 }
 
-.stock-low{
-  color:#d97706;
-  font-weight:bold;
-}
+/* MOBILE */
 
-.stock-zero{
-  color:#dc2626;
-  font-weight:bold;
-}
+@media(max-width:950px){
 
-.category-card{
-  margin-bottom:10px;
-}
-
-hr{
-  border:0;
-  border-top:1px solid #eee;
-  margin:14px 0;
-}
-
-@media(max-width:1000px){
   .stats{
     grid-template-columns:repeat(2,1fr);
   }
-}
-
-@media(max-width:800px){
 
   .grid{
     grid-template-columns:1fr;
   }
+}
+
+@media(max-width:600px){
+
+  .container{
+    padding:15px 10px 50px;
+  }
 
   .stats{
-    grid-template-columns:1fr;
+    grid-template-columns:1fr 1fr;
+  }
+
+  .stat{
+    padding:14px;
+  }
+
+  .stat b{
+    font-size:22px;
+  }
+
+  .item{
+    align-items:flex-start;
+  }
+
+  .item img{
+    width:65px;
+    height:65px;
   }
 
   .order-meta{
@@ -397,24 +478,24 @@ hr{
     grid-template-columns:1fr;
   }
 
-  .item{
-    align-items:flex-start;
-    flex-wrap:wrap;
-  }
-
-  .item img{
-    width:65px;
-    height:65px;
-  }
-
-  .actions{
+  .order-head select{
     width:100%;
+  }
+
+  .top{
+    flex-direction:row;
+  }
+
+  .logo{
+    font-size:20px;
   }
 }
 </style>
 </head>
 
 <body>
+
+<!-- HEADER -->
 
 <header id="header" class="hidden">
   <div class="top">
@@ -433,7 +514,7 @@ hr{
 
 <section id="loginBox" class="login">
 
-  <h1>🔐 JR Shop Admin</h1>
+  <h1>🔐 JR Shop Admin V7</h1>
 
   <p style="text-align:center;color:#777">
     دخول لوحة التحكم
@@ -480,39 +561,38 @@ hr{
 
 <main id="app" class="container hidden">
 
-
-  <!-- DASHBOARD -->
+  <!-- STATS -->
 
   <div class="stats">
 
     <div class="stat">
-      📦 المنتجات
+      <div class="stat-title">📦 المنتجات</div>
       <b id="statProducts">0</b>
-      <small>إجمالي المنتجات</small>
+      <small class="muted">إجمالي المنتجات</small>
     </div>
 
     <div class="stat">
-      🗂️ الفئات
+      <div class="stat-title">🗂️ الفئات</div>
       <b id="statCategories">0</b>
-      <small>إجمالي الفئات</small>
+      <small class="muted">إجمالي الفئات</small>
     </div>
 
     <div class="stat">
-      📋 الطلبات
+      <div class="stat-title">📋 الطلبات</div>
       <b id="statOrders">0</b>
-      <small>إجمالي الطلبات</small>
+      <small class="muted">إجمالي الطلبات</small>
     </div>
 
     <div class="stat">
-      ⏳ Pending
+      <div class="stat-title">⏳ Pending</div>
       <b id="statPending">0</b>
-      <small>طلبات قيد الانتظار</small>
+      <small class="muted">طلبات قيد الانتظار</small>
     </div>
 
     <div class="stat">
-      💰 المبيعات
+      <div class="stat-title">💰 المبيعات</div>
       <b id="statSales">0 دج</b>
-      <small>مجموع الطلبات</small>
+      <small class="muted">مجموع الطلبات</small>
     </div>
 
   </div>
@@ -553,25 +633,65 @@ hr{
   </div>
 
 
-  <!-- DASHBOARD TAB -->
+  <!-- DASHBOARD -->
 
   <section
     id="dashboardTab"
     class="panel active"
   >
 
-    <div class="card">
+    <div class="dashboard-box">
 
-      <h2>📊 Dashboard JR Shop</h2>
+      <h2>
+        Dashboard JR Shop 📊
+      </h2>
 
       <p class="muted">
-        ملخص سريع للمنتجات، المخزون والطلبات.
+        ملخص سريع للمنتجات والمخزون والطلبات.
       </p>
 
-      <div
-        id="dashboardInfo"
-        style="line-height:2"
-      ></div>
+      <div class="dashboard-list">
+
+        <div>
+          📦 مجموع وحدات المخزون:
+          <strong id="dashStock">0</strong>
+        </div>
+
+        <div>
+          🔴 منتجات بدون مخزون:
+          <strong
+            id="dashOutStock"
+            style="color:#dc2626"
+          >
+            0
+          </strong>
+        </div>
+
+        <div>
+          🟠 منتجات مخزونها منخفض:
+          <strong
+            id="dashLowStock"
+            style="color:#f97316"
+          >
+            0
+          </strong>
+        </div>
+
+        <div>
+          ⏳ الطلبات Pending:
+          <strong id="dashPending">
+            0
+          </strong>
+        </div>
+
+        <div>
+          💰 مجموع الطلبات:
+          <strong id="dashSales">
+            0 دج
+          </strong>
+        </div>
+
+      </div>
 
     </div>
 
@@ -630,6 +750,7 @@ hr{
 
         <div class="field">
           <label>المخزون</label>
+
           <input
             id="pStock"
             type="number"
@@ -645,11 +766,9 @@ hr{
           </label>
 
           <select id="pCategory">
-
             <option value="">
               بدون فئة
             </option>
-
           </select>
 
         </div>
@@ -667,7 +786,7 @@ hr{
           >
 
           <small style="color:#777">
-            اختار صورة من الكمبيوتر.
+            الصورة أقل من 5MB.
           </small>
 
         </div>
@@ -702,19 +821,23 @@ hr{
 
         </div>
 
-        <button
-          id="saveProduct"
-          class="btn green"
-        >
-          حفظ المنتج
-        </button>
+        <div class="actions">
 
-        <button
-          id="cancelProduct"
-          class="btn gray"
-        >
-          إلغاء
-        </button>
+          <button
+            id="saveProduct"
+            class="btn green"
+          >
+            حفظ المنتج
+          </button>
+
+          <button
+            id="cancelProduct"
+            class="btn gray"
+          >
+            إلغاء
+          </button>
+
+        </div>
 
       </div>
 
@@ -835,19 +958,23 @@ hr{
 
         </div>
 
-        <button
-          id="saveCategory"
-          class="btn green"
-        >
-          حفظ الفئة
-        </button>
+        <div class="actions">
 
-        <button
-          id="cancelCategory"
-          class="btn gray"
-        >
-          إلغاء
-        </button>
+          <button
+            id="saveCategory"
+            class="btn green"
+          >
+            حفظ الفئة
+          </button>
+
+          <button
+            id="cancelCategory"
+            class="btn gray"
+          >
+            إلغاء
+          </button>
+
+        </div>
 
       </div>
 
@@ -879,10 +1006,6 @@ hr{
       <h2>
         📋 الطلبات
       </h2>
-
-      <p class="muted">
-        عرض الطلبات فقط — بدون تعديل الحالة.
-      </p>
 
       <div class="filters">
 
@@ -919,18 +1042,18 @@ hr{
 
         </select>
 
-        <select id="orderDeliveryFilter">
+        <select id="orderSort">
 
-          <option value="">
-            كل طرق التوصيل
+          <option value="new">
+            الأحدث أولاً
           </option>
 
-          <option value="home">
-            🏠 Domicile
+          <option value="old">
+            الأقدم أولاً
           </option>
 
-          <option value="stopdesk">
-            🏢 Stop Desk
+          <option value="price">
+            الأعلى سعراً
           </option>
 
         </select>
@@ -978,6 +1101,10 @@ hr{
 
 <script>
 
+/* =========================================
+   SUPABASE
+========================================= */
+
 const SUPABASE_URL =
 "https://cstjgsuehmqcolajspqh.supabase.co";
 
@@ -991,9 +1118,17 @@ window.supabase.createClient(
 );
 
 
+/* =========================================
+   ADMIN
+========================================= */
+
 const ADMIN_EMAIL =
 "ilyesdida@hotmail.fr";
 
+
+/* =========================================
+   DATA
+========================================= */
 
 let products = [];
 let categories = [];
@@ -1002,13 +1137,13 @@ let orders = [];
 let appLoaded = false;
 
 
+/* =========================================
+   HELPER
+========================================= */
+
 const $ = id =>
 document.getElementById(id);
 
-
-/* =========================
-   HELPERS
-========================= */
 
 function toast(message){
 
@@ -1024,7 +1159,6 @@ function toast(message){
     $("toast").style.display = "none";
 
   },3000);
-
 }
 
 
@@ -1034,8 +1168,7 @@ function esc(value){
     .replace(/&/g,"&amp;")
     .replace(/</g,"&lt;")
     .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+    .replace(/"/g,"&quot;");
 
 }
 
@@ -1048,47 +1181,9 @@ function price(value){
 }
 
 
-function imageUrl(value){
-
-  return value ||
-  "https://placehold.co/100x100?text=JR";
-
-}
-
-
-function stockClass(stock){
-
-  const n = Number(stock || 0);
-
-  if(n <= 0)
-    return "stock-zero";
-
-  if(n <= 5)
-    return "stock-low";
-
-  return "stock-ok";
-
-}
-
-
-function stockText(stock){
-
-  const n = Number(stock || 0);
-
-  if(n <= 0)
-    return "نفذ المخزون";
-
-  if(n <= 5)
-    return "مخزون منخفض";
-
-  return "متوفر";
-
-}
-
-
-/* =========================
+/* =========================================
    LOGIN
-========================= */
+========================================= */
 
 function showLogin(message=""){
 
@@ -1121,6 +1216,10 @@ function showApp(){
 
 }
 
+
+/* =========================================
+   SESSION
+========================================= */
 
 async function checkSession(){
 
@@ -1164,7 +1263,7 @@ async function checkSession(){
       await supabaseClient.auth.signOut();
 
       showLogin(
-        "هذا الحساب غير مصرح له بالدخول إلى لوحة الإدارة."
+        "هذا الحساب غير مصرح له بالدخول."
       );
 
       return;
@@ -1184,6 +1283,10 @@ async function checkSession(){
 
 }
 
+
+/* =========================================
+   AUTH CHANGE
+========================================= */
 
 supabaseClient.auth.onAuthStateChange(
   (event,session)=>{
@@ -1223,7 +1326,7 @@ supabaseClient.auth.onAuthStateChange(
             await supabaseClient.auth.signOut();
 
             showLogin(
-              "هذا الحساب غير مصرح له بالدخول إلى لوحة الإدارة."
+              "هذا الحساب غير مصرح له بالدخول."
             );
 
           }
@@ -1242,15 +1345,17 @@ supabaseClient.auth.onAuthStateChange(
 );
 
 
+/* =========================================
+   LOGIN BUTTON
+========================================= */
+
 $("loginBtn").onclick =
 async()=>{
 
   $("loginError").textContent = "";
 
   const email =
-  $("email").value
-  .trim()
-  .toLowerCase();
+  $("email").value.trim().toLowerCase();
 
   const password =
   $("password").value;
@@ -1275,10 +1380,10 @@ async()=>{
       error
     } =
     await supabaseClient.auth
-    .signInWithPassword({
-      email,
-      password
-    });
+      .signInWithPassword({
+        email,
+        password
+      });
 
     if(error){
 
@@ -1302,7 +1407,7 @@ async()=>{
       ){
 
         msg =
-        "لازم تأكد Email الحساب من Supabase أولًا.";
+        "لازم تأكد Email الحساب من Supabase.";
 
       }
 
@@ -1324,7 +1429,7 @@ async()=>{
       await supabaseClient.auth.signOut();
 
       $("loginError").textContent =
-      "هذا الحساب غير مصرح له بالدخول إلى لوحة الإدارة.";
+      "هذا الحساب غير مصرح له بالدخول.";
 
       return;
     }
@@ -1351,6 +1456,10 @@ async()=>{
 };
 
 
+/* =========================================
+   LOGOUT
+========================================= */
+
 $("logoutBtn").onclick =
 async()=>{
 
@@ -1359,9 +1468,9 @@ async()=>{
 };
 
 
-/* =========================
+/* =========================================
    TABS
-========================= */
+========================================= */
 
 document
 .querySelectorAll(".tab")
@@ -1384,16 +1493,16 @@ document
     button.classList.add("active");
 
     $(button.dataset.tab)
-    .classList.add("active");
+      .classList.add("active");
 
   };
 
 });
 
 
-/* =========================
+/* =========================================
    LOAD ALL
-========================= */
+========================================= */
 
 async function loadAll(){
 
@@ -1408,9 +1517,9 @@ async function loadAll(){
 }
 
 
-/* =========================
+/* =========================================
    CATEGORIES
-========================= */
+========================================= */
 
 async function loadCategories(){
 
@@ -1419,16 +1528,16 @@ async function loadCategories(){
     error
   } =
   await supabaseClient
-  .from("categories")
-  .select("*")
-  .order("sort_order",{ascending:true});
+    .from("categories")
+    .select("*")
+    .order("sort_order",{ascending:true});
 
   if(error){
 
     console.error(error);
 
     toast(
-      "خطأ في categories: " +
+      "خطأ الفئات: " +
       error.message
     );
 
@@ -1444,103 +1553,96 @@ async function loadCategories(){
   $("pCategory").innerHTML =
   '<option value="">بدون فئة</option>' +
 
-  categories
-  .map(category => {
+  categories.map(category => `
 
-    return `
-      <option value="${esc(category.id)}">
-        ${esc(category.name)}
-      </option>
-    `;
+    <option value="${category.id}">
+      ${esc(category.name)}
+    </option>
 
-  })
-  .join("");
+  `).join("");
 
 
   $("categoriesList").innerHTML =
-  categories
-  .map(category => {
 
-    return `
+  categories.map(category => `
 
-      <div
-        class="item category-card"
+    <div
+      class="item"
+      style="margin-bottom:10px"
+    >
+
+      <img
+        src="${
+          esc(
+            category.image_url ||
+            "https://placehold.co/100x100?text=JR"
+          )
+        }"
+        onerror="
+          this.src='https://placehold.co/100x100?text=JR'
+        "
       >
 
-        <img
-          src="${esc(
-            imageUrl(category.image_url)
-          )}"
-          onerror="
-            this.src='https://placehold.co/100x100?text=JR'
-          "
+      <div class="item-main">
+
+        <h3>
+          ${esc(category.name)}
+        </h3>
+
+        <div class="muted">
+          ${esc(category.slug || "")}
+          · ترتيب
+          ${category.sort_order ?? 0}
+        </div>
+
+        <span
+          class="badge ${
+            category.active === false
+            ? "off"
+            : ""
+          }"
         >
-
-        <div class="item-main">
-
-          <h3>
-            ${esc(category.name)}
-          </h3>
-
-          <div class="muted">
-            ${esc(category.slug || "")}
-            · ترتيب
-            ${esc(category.sort_order ?? 0)}
-          </div>
-
-          <span
-            class="badge ${
-              category.active === false
-              ? "off"
-              : ""
-            }"
-          >
-            ${
-              category.active === false
-              ? "موقوفة"
-              : "نشطة"
-            }
-          </span>
-
-        </div>
-
-        <div class="actions">
-
-          <button
-            class="btn dark"
-            onclick="
-              editCategory('${category.id}')
-            "
-          >
-            تعديل
-          </button>
-
-          <button
-            class="btn red"
-            onclick="
-              deleteCategory('${category.id}')
-            "
-          >
-            حذف
-          </button>
-
-        </div>
+          ${
+            category.active === false
+            ? "موقوفة"
+            : "نشطة"
+          }
+        </span>
 
       </div>
 
-    `;
+      <div class="actions">
 
-  })
-  .join("") ||
+        <button
+          class="btn dark"
+          onclick="editCategory('${category.id}')"
+        >
+          تعديل
+        </button>
 
-  '<div class="empty">لا توجد فئات.</div>';
+        <button
+          class="btn red"
+          onclick="deleteCategory('${category.id}')"
+        >
+          حذف
+        </button>
+
+      </div>
+
+    </div>
+
+  `).join("")
+
+  ||
+
+  '<p class="empty">لا توجد فئات.</p>';
 
 }
 
 
-/* =========================
+/* =========================================
    PRODUCTS
-========================= */
+========================================= */
 
 async function loadProducts(){
 
@@ -1549,16 +1651,16 @@ async function loadProducts(){
     error
   } =
   await supabaseClient
-  .from("products")
-  .select("*")
-  .order("created_at",{ascending:false});
+    .from("products")
+    .select("*")
+    .order("created_at",{ascending:false});
 
   if(error){
 
     console.error(error);
 
     toast(
-      "خطأ في products: " +
+      "خطأ المنتجات: " +
       error.message
     );
 
@@ -1572,24 +1674,29 @@ async function loadProducts(){
 
   renderProducts();
 
+  updateDashboard();
+
 }
 
+
+/* =========================================
+   RENDER PRODUCTS
+========================================= */
 
 function renderProducts(){
 
   const query =
   $("productSearch")
-  .value
-  .trim()
-  .toLowerCase();
-
+    .value
+    .trim()
+    .toLowerCase();
 
   const list =
   products.filter(product => {
 
     const name =
     String(product.name || "")
-    .toLowerCase();
+      .toLowerCase();
 
     return name.includes(query);
 
@@ -1597,15 +1704,31 @@ function renderProducts(){
 
 
   $("productsList").innerHTML =
-  list
-  .map(product => {
+
+  list.map(product => {
 
     const stock =
     Number(product.stock || 0);
 
-    const active =
-    product.active !== false &&
-    product.is_active !== false;
+    let stockClass = "";
+    let stockText = "متوفر";
+
+    if(stock <= 0){
+
+      stockClass = "stock-zero";
+      stockText = "نفذ المخزون";
+
+    }else if(stock <= 5){
+
+      stockClass = "stock-low";
+      stockText = "مخزون منخفض";
+
+    }
+
+
+    const inactive =
+      product.active === false ||
+      product.is_active === false;
 
 
     return `
@@ -1613,12 +1736,13 @@ function renderProducts(){
       <div class="item">
 
         <img
-          src="${esc(
-            imageUrl(
+          src="${
+            esc(
               product.image_url ||
-              product.image
+              product.image ||
+              "https://placehold.co/100x100?text=JR"
             )
-          )}"
+          }"
           onerror="
             this.src='https://placehold.co/100x100?text=JR'
           "
@@ -1631,28 +1755,32 @@ function renderProducts(){
           </h3>
 
           <div class="muted">
-            💰 ${price(product.price)}
-          </div>
 
-          <div
-            class="${stockClass(stock)}"
-            style="margin-top:5px"
-          >
-            📦 المخزون:
-            ${stock}
-            —
-            ${stockText(stock)}
+            ${price(product.price)}
+
+            · المخزون:
+
+            <strong>
+              ${stock}
+            </strong>
+
           </div>
 
           <span
+            class="badge ${stockClass}"
+          >
+            ${stockText}
+          </span>
+
+          <span
             class="badge ${
-              active ? "" : "off"
+              inactive ? "off" : ""
             }"
           >
             ${
-              active
-              ? "نشط"
-              : "غير نشط"
+              inactive
+              ? "غير نشط"
+              : "نشط"
             }
           </span>
 
@@ -1662,18 +1790,14 @@ function renderProducts(){
 
           <button
             class="btn dark"
-            onclick="
-              editProduct('${product.id}')
-            "
+            onclick="editProduct('${product.id}')"
           >
             تعديل
           </button>
 
           <button
             class="btn red"
-            onclick="
-              deleteProduct('${product.id}')
-            "
+            onclick="deleteProduct('${product.id}')"
           >
             حذف
           </button>
@@ -1684,10 +1808,11 @@ function renderProducts(){
 
     `;
 
-  })
-  .join("") ||
+  }).join("")
 
-  '<div class="empty">لا توجد منتجات.</div>';
+  ||
+
+  '<p class="empty">لا توجد منتجات.</p>';
 
 }
 
@@ -1696,9 +1821,9 @@ $("productSearch").oninput =
 renderProducts;
 
 
-/* =========================
-   PRODUCT FORM
-========================= */
+/* =========================================
+   RESET PRODUCT
+========================================= */
 
 function resetProduct(){
 
@@ -1732,242 +1857,19 @@ $("cancelProduct").onclick =
 resetProduct;
 
 
-$("saveProduct").onclick =
-async()=>{
-
-  const id =
-  $("productId").value;
-
-  const file =
-  $("pImageFile").files[0];
-
-
-  if(
-    !$("pName")
-    .value
-    .trim()
-  ){
-
-    toast("اكتب اسم المنتج");
-
-    return;
-  }
-
-
-  let imageUrl =
-  $("pImage")
-  .value
-  .trim() || null;
-
-
-  if(file){
-
-    if(
-      file.size >
-      5 * 1024 * 1024
-    ){
-
-      toast(
-        "الصورة لازم تكون أقل من 5MB"
-      );
-
-      return;
-    }
-
-
-    if(
-      !file.type.startsWith("image/")
-    ){
-
-      toast(
-        "اختار ملف صورة فقط"
-      );
-
-      return;
-    }
-
-
-    $("saveProduct").disabled = true;
-
-    $("saveProduct").textContent =
-    "جاري رفع الصورة...";
-
-
-    const extension =
-    (
-      file.name
-      .split(".")
-      .pop() ||
-      "jpg"
-    )
-    .toLowerCase()
-    .replace(/[^a-z0-9]/gi,"")
-    || "jpg";
-
-
-    const fileName =
-    `${crypto.randomUUID()}.${extension}`;
-
-
-    const upload =
-    await supabaseClient
-    .storage
-    .from("product-images")
-    .upload(
-      fileName,
-      file,
-      {
-        cacheControl:"3600",
-        upsert:false,
-        contentType:file.type
-      }
-    );
-
-
-    if(upload.error){
-
-      $("saveProduct").disabled = false;
-
-      $("saveProduct").textContent =
-      "حفظ المنتج";
-
-      toast(
-        "فشل رفع الصورة: " +
-        upload.error.message
-      );
-
-      return;
-    }
-
-
-    imageUrl =
-    supabaseClient
-    .storage
-    .from("product-images")
-    .getPublicUrl(fileName)
-    .data
-    .publicUrl;
-
-  }
-
-
-  const obj = {
-
-    name:
-    $("pName")
-    .value
-    .trim(),
-
-    description:
-    $("pDescription")
-    .value
-    .trim(),
-
-    price:
-    Number(
-      $("pPrice").value || 0
-    ),
-
-    old_price:
-    Number(
-      $("pOldPrice").value || 0
-    ),
-
-    stock:
-    Number(
-      $("pStock").value || 0
-    ),
-
-    category_id:
-    $("pCategory").value ||
-    null,
-
-    image_url:
-    imageUrl,
-
-    active:
-    $("pActive").checked,
-
-    is_active:
-    $("pActive").checked,
-
-    updated_at:
-    new Date().toISOString()
-
-  };
-
-
-  let result;
-
-
-  if(id){
-
-    result =
-    await supabaseClient
-    .from("products")
-    .update(obj)
-    .eq("id",id);
-
-  }else{
-
-    result =
-    await supabaseClient
-    .from("products")
-    .insert(obj);
-
-  }
-
-
-  $("saveProduct").disabled = false;
-
-  $("saveProduct").textContent =
-  "حفظ المنتج";
-
-
-  if(result.error){
-
-    console.error(result.error);
-
-    toast(
-      "خطأ: " +
-      result.error.message
-    );
-
-    return;
-  }
-
-
-  toast(
-    id
-    ? "تم تعديل المنتج ✅"
-    : "تمت إضافة المنتج ✅"
-  );
-
-
-  resetProduct();
-
-  await loadProducts();
-
-  updateDashboard();
-
-};
-
-
-/* =========================
+/* =========================================
    EDIT PRODUCT
-========================= */
+========================================= */
 
 window.editProduct =
-function(id){
+id => {
 
   const product =
   products.find(
     x => String(x.id) === String(id)
   );
 
-  if(!product)
-    return;
-
+  if(!product) return;
 
   $("productId").value =
   product.id;
@@ -1998,18 +1900,13 @@ function(id){
   $("pImageFile").value = "";
 
   $("pActive").checked =
-  product.active !== false &&
-  product.is_active !== false;
-
+  !(
+    product.active === false ||
+    product.is_active === false
+  );
 
   $("productFormTitle").textContent =
   "✏️ تعديل المنتج";
-
-
-  document.querySelector(
-    '[data-tab="productsTab"]'
-  ).click();
-
 
   window.scrollTo({
     top:0,
@@ -2019,28 +1916,262 @@ function(id){
 };
 
 
-/* =========================
+/* =========================================
+   SAVE PRODUCT
+========================================= */
+
+$("saveProduct").onclick =
+async()=>{
+
+  const id =
+  $("productId").value;
+
+  const file =
+  $("pImageFile").files[0];
+
+  const name =
+  $("pName").value.trim();
+
+  if(!name){
+
+    toast("اكتب اسم المنتج.");
+
+    return;
+  }
+
+  let imageUrl =
+  $("pImage").value.trim() ||
+  null;
+
+
+  $("saveProduct").disabled = true;
+
+  $("saveProduct").textContent =
+  "جاري الحفظ...";
+
+
+  try{
+
+    /* UPLOAD IMAGE */
+
+    if(file){
+
+      if(file.size > 5 * 1024 * 1024){
+
+        toast(
+          "الصورة لازم تكون أقل من 5MB."
+        );
+
+        return;
+      }
+
+      if(!file.type.startsWith("image/")){
+
+        toast(
+          "اختار ملف صورة فقط."
+        );
+
+        return;
+      }
+
+      const extension =
+      (
+        file.name
+        .split(".")
+        .pop() ||
+        "jpg"
+      )
+      .toLowerCase()
+      .replace(/[^a-z0-9]/gi,"")
+      || "jpg";
+
+
+      const fileName =
+      `${crypto.randomUUID()}.${extension}`;
+
+
+      $("saveProduct").textContent =
+      "جاري رفع الصورة...";
+
+
+      const upload =
+      await supabaseClient
+        .storage
+        .from("product-images")
+        .upload(
+          fileName,
+          file,
+          {
+            cacheControl:"3600",
+            upsert:false,
+            contentType:file.type
+          }
+        );
+
+
+      if(upload.error){
+
+        toast(
+          "فشل رفع الصورة: " +
+          upload.error.message
+        );
+
+        return;
+      }
+
+
+      imageUrl =
+      supabaseClient
+        .storage
+        .from("product-images")
+        .getPublicUrl(fileName)
+        .data
+        .publicUrl;
+
+    }
+
+
+    /* PRODUCT DATA */
+
+    const productData = {
+
+      name:name,
+
+      description:
+      $("pDescription")
+        .value
+        .trim(),
+
+      price:
+      Number(
+        $("pPrice").value || 0
+      ),
+
+      old_price:
+      Number(
+        $("pOldPrice").value || 0
+      ),
+
+      stock:
+      Number(
+        $("pStock").value || 0
+      ),
+
+      category_id:
+      $("pCategory").value ||
+      null,
+
+      image_url:
+      imageUrl,
+
+      active:
+      $("pActive").checked,
+
+      is_active:
+      $("pActive").checked,
+
+      updated_at:
+      new Date().toISOString()
+
+    };
+
+
+    let result;
+
+
+    if(id){
+
+      result =
+      await supabaseClient
+        .from("products")
+        .update(productData)
+        .eq("id",id);
+
+    }else{
+
+      result =
+      await supabaseClient
+        .from("products")
+        .insert(productData);
+
+    }
+
+
+    if(result.error){
+
+      toast(
+        "خطأ: " +
+        result.error.message
+      );
+
+      return;
+    }
+
+
+    toast(
+      id
+      ? "تم تعديل المنتج ✅"
+      : "تمت إضافة المنتج ✅"
+    );
+
+
+    resetProduct();
+
+    await loadProducts();
+
+  }catch(error){
+
+    console.error(error);
+
+    toast(
+      "حدث خطأ: " +
+      (error.message || error)
+    );
+
+  }finally{
+
+    $("saveProduct").disabled = false;
+
+    $("saveProduct").textContent =
+    "حفظ المنتج";
+
+  }
+
+};
+
+
+/* =========================================
    DELETE PRODUCT
-========================= */
+========================================= */
 
 window.deleteProduct =
-async function(id){
+async id => {
+
+  const product =
+  products.find(
+    x => String(x.id) === String(id)
+  );
+
+  if(!product) return;
+
 
   if(
     !confirm(
-      "هل تريد حذف هذا المنتج؟"
+      `حذف المنتج "${product.name}"؟`
     )
-  )
+  ){
+
     return;
+  }
 
 
   const {
     error
   } =
   await supabaseClient
-  .from("products")
-  .delete()
-  .eq("id",id);
+    .from("products")
+    .delete()
+    .eq("id",id);
 
 
   if(error){
@@ -2058,17 +2189,14 @@ async function(id){
     "تم حذف المنتج ✅"
   );
 
-
-  await loadProducts();
-
-  updateDashboard();
+  loadProducts();
 
 };
 
 
-/* =========================
-   CATEGORY FORM
-========================= */
+/* =========================================
+   CATEGORY RESET
+========================================= */
 
 function resetCategory(){
 
@@ -2094,29 +2222,41 @@ $("cancelCategory").onclick =
 resetCategory;
 
 
+/* =========================================
+   SAVE CATEGORY
+========================================= */
+
 $("saveCategory").onclick =
 async()=>{
 
   const id =
   $("categoryId").value;
 
+  const name =
+  $("cName").value.trim();
 
-  const obj = {
+  const slug =
+  $("cSlug").value.trim();
 
-    name:
-    $("cName")
-    .value
-    .trim(),
 
-    slug:
-    $("cSlug")
-    .value
-    .trim(),
+  if(!name || !slug){
+
+    toast(
+      "أدخل اسم وSlug الفئة."
+    );
+
+    return;
+  }
+
+
+  const categoryData = {
+
+    name:name,
+
+    slug:slug,
 
     image_url:
-    $("cImage")
-    .value
-    .trim() ||
+    $("cImage").value.trim() ||
     null,
 
     sort_order:
@@ -2130,19 +2270,6 @@ async()=>{
   };
 
 
-  if(
-    !obj.name ||
-    !obj.slug
-  ){
-
-    toast(
-      "أدخل اسم وSlug الفئة"
-    );
-
-    return;
-  }
-
-
   let result;
 
 
@@ -2150,16 +2277,16 @@ async()=>{
 
     result =
     await supabaseClient
-    .from("categories")
-    .update(obj)
-    .eq("id",id);
+      .from("categories")
+      .update(categoryData)
+      .eq("id",id);
 
   }else{
 
     result =
     await supabaseClient
-    .from("categories")
-    .insert(obj);
+      .from("categories")
+      .insert(categoryData);
 
   }
 
@@ -2167,6 +2294,7 @@ async()=>{
   if(result.error){
 
     toast(
+      "خطأ: " +
       result.error.message
     );
 
@@ -2185,25 +2313,22 @@ async()=>{
 
   await loadCategories();
 
-  updateDashboard();
-
 };
 
 
-/* =========================
+/* =========================================
    EDIT CATEGORY
-========================= */
+========================================= */
 
 window.editCategory =
-function(id){
+id => {
 
   const category =
   categories.find(
     x => String(x.id) === String(id)
   );
 
-  if(!category)
-    return;
+  if(!category) return;
 
 
   $("categoryId").value =
@@ -2219,7 +2344,7 @@ function(id){
   category.image_url || "";
 
   $("cOrder").value =
-  category.sort_order || 0;
+  category.sort_order ?? 0;
 
   $("cActive").checked =
   category.active !== false;
@@ -2227,11 +2352,6 @@ function(id){
 
   $("categoryFormTitle").textContent =
   "✏️ تعديل الفئة";
-
-
-  document.querySelector(
-    '[data-tab="categoriesTab"]'
-  ).click();
 
 
   window.scrollTo({
@@ -2242,28 +2362,30 @@ function(id){
 };
 
 
-/* =========================
+/* =========================================
    DELETE CATEGORY
-========================= */
+========================================= */
 
 window.deleteCategory =
-async function(id){
+async id => {
 
   if(
     !confirm(
-      "حذف الفئة؟ المنتجات المرتبطة بها ستصبح بدون فئة إذا كان الربط يسمح بذلك."
+      "حذف الفئة؟ المنتجات المرتبطة بها ستصبح بدون فئة."
     )
-  )
+  ){
+
     return;
+  }
 
 
   const {
     error
   } =
   await supabaseClient
-  .from("categories")
-  .delete()
-  .eq("id",id);
+    .from("categories")
+    .delete()
+    .eq("id",id);
 
 
   if(error){
@@ -2286,14 +2408,12 @@ async function(id){
 
   await loadProducts();
 
-  updateDashboard();
-
 };
 
 
-/* =========================
+/* =========================================
    ORDERS
-========================= */
+========================================= */
 
 async function loadOrders(){
 
@@ -2302,14 +2422,12 @@ async function loadOrders(){
     error
   } =
   await supabaseClient
-  .from("orders")
-  .select("*")
-  .order(
-    "created_at",
-    {
-      ascending:false
-    }
-  );
+    .from("orders")
+    .select("*")
+    .order(
+      "created_at",
+      {ascending:false}
+    );
 
 
   if(error){
@@ -2317,7 +2435,7 @@ async function loadOrders(){
     console.error(error);
 
     toast(
-      "خطأ في orders: " +
+      "خطأ الطلبات: " +
       error.message
     );
 
@@ -2332,6 +2450,32 @@ async function loadOrders(){
   orders.length;
 
 
+  const pending =
+  orders.filter(
+    order =>
+      String(
+        order.status || "pending"
+      ).toLowerCase()
+      === "pending"
+  ).length;
+
+
+  $("statPending").textContent =
+  pending;
+
+
+  const sales =
+  orders.reduce(
+    (sum,order)=>
+      sum + Number(order.total || 0),
+    0
+  );
+
+
+  $("statSales").textContent =
+  price(sales);
+
+
   renderOrders();
 
   updateDashboard();
@@ -2339,207 +2483,59 @@ async function loadOrders(){
 }
 
 
-/* =========================
-   DELIVERY
-========================= */
+/* =========================================
+   STATUS STYLE
+========================================= */
 
-function deliveryLabel(order){
+function statusClass(status){
 
-  const notes =
-  String(
-    order.notes || ""
-  );
-
-  const lower =
-  notes.toLowerCase();
+  status =
+  String(status || "pending")
+  .toLowerCase();
 
 
-  if(
-    lower.includes("domicile") ||
-    lower.includes("دوميسيل") ||
-    lower.includes("توصيل")
-  ){
+  if(status === "delivered")
+    return "background:#dcfce7;color:#166534";
 
-    return "🏠 Domicile";
+  if(status === "cancelled")
+    return "background:#fee2e2;color:#991b1b";
 
-  }
+  if(status === "confirmed")
+    return "background:#dbeafe;color:#1d4ed8";
 
+  if(status === "shipped")
+    return "background:#fef3c7;color:#92400e";
 
-  if(
-    lower.includes("stop") ||
-    lower.includes("stopdesk") ||
-    lower.includes("stop desk")
-  ){
-
-    return "🏢 Stop Desk";
-
-  }
-
-
-  return "🚚 التوصيل";
+  return "background:#f3f4f6;color:#374151";
 
 }
 
 
-/* =========================
-   ORDER STATUS
-========================= */
-
-function statusLabel(status){
-
-  const s =
-  String(
-    status || "pending"
-  ).toLowerCase();
-
-
-  const map = {
-
-    pending:
-    "⏳ Pending",
-
-    confirmed:
-    "✅ Confirmed",
-
-    shipped:
-    "🚚 Shipped",
-
-    delivered:
-    "📦 Delivered",
-
-    cancelled:
-    "❌ Cancelled"
-
-  };
-
-
-  return map[s] ||
-  "📋 " + esc(status);
-
-}
-
-
-/* =========================
-   ORDER ITEMS
-========================= */
-
-function renderOrderItems(items){
-
-  if(
-    items === null ||
-    items === undefined ||
-    items === ""
-  ){
-
-    return "لا توجد تفاصيل المنتجات.";
-
-  }
-
-
-  if(
-    typeof items === "string"
-  ){
-
-    try{
-
-      const parsed =
-      JSON.parse(items);
-
-      return renderOrderItems(parsed);
-
-    }catch(error){
-
-      return esc(items);
-
-    }
-
-  }
-
-
-  if(Array.isArray(items)){
-
-    return items
-    .map(item=>{
-
-      const name =
-      item.name ||
-      item.product_name ||
-      "منتج";
-
-      const quantity =
-      item.quantity ||
-      item.qty ||
-      1;
-
-      const itemPrice =
-      item.price ||
-      item.unit_price ||
-      0;
-
-
-      return `
-        • ${esc(name)}
-        × ${esc(quantity)}
-        — ${price(
-          Number(itemPrice) *
-          Number(quantity)
-        )}
-      `;
-
-    })
-    .join("<br>");
-
-  }
-
-
-  if(typeof items === "object"){
-
-    return Object.entries(items)
-    .map(
-      ([key,value]) =>
-      `• ${esc(key)}: ${esc(
-        typeof value === "object"
-        ? JSON.stringify(value)
-        : value
-      )}`
-    )
-    .join("<br>");
-
-  }
-
-
-  return esc(items);
-
-}
-
-
-/* =========================
+/* =========================================
    RENDER ORDERS
-========================= */
+========================================= */
 
 function renderOrders(){
 
   const query =
   $("orderSearch")
-  .value
-  .trim()
-  .toLowerCase();
+    .value
+    .trim()
+    .toLowerCase();
 
 
   const status =
-  $("orderStatusFilter")
-  .value;
+  $("orderStatusFilter").value;
 
 
-  const delivery =
-  $("orderDeliveryFilter")
-  .value;
+  const sort =
+  $("orderSort").value;
 
 
-  const filtered =
-  orders.filter(order=>{
+  let filtered =
+  orders.filter(order => {
 
-    const searchable = [
+    const haystack = [
 
       order.id,
 
@@ -2570,11 +2566,10 @@ function renderOrders(){
 
     if(
       query &&
-      !searchable.includes(query)
+      !haystack.includes(query)
     ){
 
       return false;
-
     }
 
 
@@ -2582,55 +2577,11 @@ function renderOrders(){
       status &&
       String(
         order.status || "pending"
-      ).toLowerCase() !== status
+      ).toLowerCase() !==
+      status
     ){
 
       return false;
-
-    }
-
-
-    if(delivery){
-
-      const text =
-      String(
-        order.notes || ""
-      ).toLowerCase();
-
-
-      if(delivery === "home"){
-
-        if(
-          !(
-            text.includes("domicile") ||
-            text.includes("دوميسيل") ||
-            text.includes("توصيل")
-          )
-        ){
-
-          return false;
-
-        }
-
-      }
-
-
-      if(delivery === "stopdesk"){
-
-        if(
-          !(
-            text.includes("stop") ||
-            text.includes("stopdesk") ||
-            text.includes("stop desk")
-          )
-        ){
-
-          return false;
-
-        }
-
-      }
-
     }
 
 
@@ -2639,24 +2590,56 @@ function renderOrders(){
   });
 
 
+  /* SORT */
+
+  if(sort === "old"){
+
+    filtered.sort(
+      (a,b)=>
+        new Date(a.created_at || 0) -
+        new Date(b.created_at || 0)
+    );
+
+  }else if(sort === "price"){
+
+    filtered.sort(
+      (a,b)=>
+        Number(b.total || 0) -
+        Number(a.total || 0)
+    );
+
+  }else{
+
+    filtered.sort(
+      (a,b)=>
+        new Date(b.created_at || 0) -
+        new Date(a.created_at || 0)
+    );
+
+  }
+
+
   if(!filtered.length){
 
     $("ordersList").innerHTML =
     '<div class="empty">لا توجد طلبات مطابقة.</div>';
 
     return;
-
   }
 
 
   $("ordersList").innerHTML =
-  filtered
-  .map(order=>{
 
-    const status =
+  filtered.map(order => {
+
+    const orderNumber =
+    String(order.id || "")
+      .slice(0,8);
+
+
+    const currentStatus =
     String(
-      order.status ||
-      "pending"
+      order.status || "pending"
     ).toLowerCase();
 
 
@@ -2669,11 +2652,7 @@ function renderOrders(){
           <div>
 
             <b>
-              #${esc(
-                String(
-                  order.id || ""
-                ).slice(0,8)
-              )}
+              📋 #${esc(orderNumber)}
             </b>
 
             <br>
@@ -2684,9 +2663,7 @@ function renderOrders(){
                 order.created_at
                 ? new Date(
                     order.created_at
-                  ).toLocaleString(
-                    "ar-DZ"
-                  )
+                  ).toLocaleString("ar-DZ")
                 : "—"
               }
 
@@ -2695,16 +2672,56 @@ function renderOrders(){
           </div>
 
 
+          <div>
+
+            <select
+              onchange="
+                changeStatus(
+                  '${order.id}',
+                  this.value
+                )
+              "
+            >
+
+              ${
+                [
+                  "pending",
+                  "confirmed",
+                  "shipped",
+                  "delivered",
+                  "cancelled"
+                ]
+                .map(status => `
+
+                  <option
+                    value="${status}"
+                    ${
+                      currentStatus === status
+                      ? "selected"
+                      : ""
+                    }
+                  >
+                    ${status}
+                  </option>
+
+                `)
+                .join("")
+              }
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+        <div style="margin-top:10px">
+
           <span
-            class="badge ${
-              status === "cancelled"
-              ? "off"
-              : ""
-            }"
+            class="status-badge"
+            style="${statusClass(currentStatus)}"
           >
-
-            ${statusLabel(status)}
-
+            ${esc(currentStatus)}
           </span>
 
         </div>
@@ -2716,89 +2733,68 @@ function renderOrders(){
         <div class="order-meta">
 
           <div>
-
             👤
             <b>الزبون</b>
-
             <br>
-
             ${esc(
               order.customer_name ||
               "—"
             )}
-
           </div>
 
 
           <div>
-
             📞
             <b>الهاتف</b>
-
             <br>
-
             ${esc(
               order.phone ||
               "—"
             )}
-
           </div>
 
 
           <div>
-
             📍
             <b>الولاية</b>
-
             <br>
-
             ${esc(
               order.wilaya ||
               "—"
             )}
-
           </div>
 
 
           <div>
-
             🏙️
             <b>البلدية</b>
-
             <br>
-
             ${esc(
               order.commune ||
               "—"
             )}
-
           </div>
 
 
           <div>
-
             🏠
             <b>العنوان</b>
-
             <br>
-
             ${esc(
               order.address ||
               "—"
             )}
-
           </div>
 
 
           <div>
-
-            🚚
-            <b>التوصيل</b>
-
+            📝
+            <b>ملاحظات</b>
             <br>
-
-            ${deliveryLabel(order)}
-
+            ${esc(
+              order.notes ||
+              "—"
+            )}
           </div>
 
         </div>
@@ -2812,44 +2808,20 @@ function renderOrders(){
 
           <br>
 
-          ${renderOrderItems(
-            order.items
-          )}
+          ${renderOrderItems(order.items)}
 
         </div>
 
 
-        ${
-          order.notes
-          ? `
-            <div
-              style="
-                background:#fff7ed;
-                padding:10px;
-                border-radius:9px;
-                margin-bottom:10px;
-              "
-            >
-
-              📝
-              <b>ملاحظات:</b>
-
-              <br>
-
-              ${esc(order.notes)}
-
-            </div>
-          `
-          : ""
-        }
-
-
         <div>
 
-          <b>
-            💰 المجموع:
+          💰
+
+          <strong style="font-size:18px">
+
             ${price(order.total)}
-          </b>
+
+          </strong>
 
         </div>
 
@@ -2857,11 +2829,125 @@ function renderOrders(){
 
     `;
 
-  })
-  .join("");
+  }).join("");
 
 }
 
+
+/* =========================================
+   ORDER ITEMS
+========================================= */
+
+function renderOrderItems(items){
+
+  if(!items){
+
+    return "لا توجد تفاصيل المنتجات.";
+
+  }
+
+
+  if(Array.isArray(items)){
+
+    return items.map(item => {
+
+      const quantity =
+      Number(
+        item.quantity ||
+        item.qty ||
+        1
+      );
+
+
+      const itemPrice =
+      Number(
+        item.price ||
+        0
+      );
+
+
+      return `
+
+        •
+        ${esc(
+          item.name ||
+          item.product_name ||
+          "منتج"
+        )}
+
+        ×
+
+        ${quantity}
+
+        =
+
+        ${price(
+          itemPrice * quantity
+        )}
+
+      `;
+
+    }).join("<br>");
+
+  }
+
+
+  if(typeof items === "object"){
+
+    return esc(
+      JSON.stringify(items)
+    );
+
+  }
+
+
+  return esc(items);
+
+}
+
+
+/* =========================================
+   CHANGE ORDER STATUS
+========================================= */
+
+window.changeStatus =
+async(id,status)=>{
+
+  const {
+    error
+  } =
+  await supabaseClient
+    .from("orders")
+    .update({
+      status:status
+    })
+    .eq("id",id);
+
+
+  if(error){
+
+    toast(
+      "فشل تحديث الحالة: " +
+      error.message
+    );
+
+    return;
+  }
+
+
+  toast(
+    "تم تحديث حالة الطلب ✅"
+  );
+
+
+  await loadOrders();
+
+};
+
+
+/* =========================================
+   ORDER CONTROLS
+========================================= */
 
 $("refreshOrders").onclick =
 loadOrders;
@@ -2875,7 +2961,7 @@ $("orderStatusFilter").onchange =
 renderOrders;
 
 
-$("orderDeliveryFilter").onchange =
+$("orderSort").onchange =
 renderOrders;
 
 
@@ -2886,82 +2972,32 @@ $("clearOrderFilters").onclick =
 
   $("orderStatusFilter").value = "";
 
-  $("orderDeliveryFilter").value = "";
+  $("orderSort").value = "new";
 
   renderOrders();
 
 };
 
 
-/* =========================
+/* =========================================
    DASHBOARD
-========================= */
+========================================= */
 
 function updateDashboard(){
 
-  const totalProducts =
-  products.length;
-
-
-  const totalCategories =
-  categories.length;
-
-
-  const totalOrders =
-  orders.length;
-
-
-  const pending =
-  orders.filter(
-    order =>
-    String(
-      order.status || "pending"
-    ).toLowerCase() === "pending"
-  ).length;
-
-
-  const totalSales =
-  orders.reduce(
-    (sum,order)=>
-    sum +
-    Number(order.total || 0),
-    0
-  );
-
-
-  $("statProducts").textContent =
-  totalProducts;
-
-
-  $("statCategories").textContent =
-  totalCategories;
-
-
-  $("statOrders").textContent =
-  totalOrders;
-
-
-  $("statPending").textContent =
-  pending;
-
-
-  $("statSales").textContent =
-  price(totalSales);
-
-
-  const stockTotal =
+  const totalStock =
   products.reduce(
     (sum,product)=>
-    sum +
-    Number(product.stock || 0),
+      sum +
+      Number(product.stock || 0),
     0
   );
 
 
-  const outOfStock =
+  const outStock =
   products.filter(
     product =>
-    Number(product.stock || 0) <= 0
+      Number(product.stock || 0) <= 0
   ).length;
 
 
@@ -2970,9 +3006,7 @@ function updateDashboard(){
     product => {
 
       const stock =
-      Number(
-        product.stock || 0
-      );
+      Number(product.stock || 0);
 
       return stock > 0 && stock <= 5;
 
@@ -2980,45 +3014,58 @@ function updateDashboard(){
   ).length;
 
 
-  $("dashboardInfo").innerHTML = `
+  const pending =
+  orders.filter(
+    order =>
+      String(
+        order.status || "pending"
+      ).toLowerCase()
+      === "pending"
+  ).length;
 
-    <div>
-      📦 مجموع وحدات المخزون:
-      <b>${stockTotal}</b>
-    </div>
 
-    <div>
-      🔴 منتجات نفذ مخزونها:
-      <b style="color:#dc2626">
-        ${outOfStock}
-      </b>
-    </div>
+  const sales =
+  orders.reduce(
+    (sum,order)=>
+      sum +
+      Number(order.total || 0),
+    0
+  );
 
-    <div>
-      🟠 منتجات مخزونها منخفض:
-      <b style="color:#d97706">
-        ${lowStock}
-      </b>
-    </div>
 
-    <div>
-      ⏳ طلبات Pending:
-      <b>${pending}</b>
-    </div>
+  $("dashStock").textContent =
+  totalStock;
 
-    <div>
-      💰 مجموع الطلبات:
-      <b>${price(totalSales)}</b>
-    </div>
 
-  `;
+  $("dashOutStock").textContent =
+  outStock;
+
+
+  $("dashLowStock").textContent =
+  lowStock;
+
+
+  $("dashPending").textContent =
+  pending;
+
+
+  $("dashSales").textContent =
+  price(sales);
+
+
+  $("statPending").textContent =
+  pending;
+
+
+  $("statSales").textContent =
+  price(sales);
 
 }
 
 
-/* =========================
+/* =========================================
    START
-========================= */
+========================================= */
 
 checkSession();
 
