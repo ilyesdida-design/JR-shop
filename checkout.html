@@ -9,7 +9,6 @@
 <link rel="stylesheet" href="style.css">
 
 <style>
-
 *{
   box-sizing:border-box;
 }
@@ -21,23 +20,21 @@ body{
   font-family:Arial,Helvetica,sans-serif;
 }
 
-button,
-input,
-textarea{
+button,input,textarea,select{
   font:inherit;
 }
 
 .checkout-page{
-  max-width:1100px;
+  max-width:1150px;
   margin:auto;
-  padding:20px 15px 80px;
+  padding:25px 15px 80px;
 }
 
 .topbar{
   display:flex;
-  align-items:center;
   justify-content:space-between;
-  margin-bottom:20px;
+  align-items:center;
+  margin-bottom:22px;
 }
 
 .back-btn{
@@ -58,38 +55,64 @@ textarea{
   letter-spacing:2px;
 }
 
-.checkout-grid{
+.checkout-layout{
   display:grid;
-  grid-template-columns:1fr 400px;
-  gap:20px;
+  grid-template-columns:1.1fr .9fr;
+  gap:22px;
 }
 
-.card{
+.box{
   background:#fff;
   border:1px solid #e8e8e4;
-  border-radius:20px;
+  border-radius:18px;
   padding:22px;
-  box-shadow:0 10px 35px #00000008;
+  box-shadow:0 10px 35px #0000000a;
 }
 
-.card h2{
+.box-title{
   margin:0 0 18px;
-  font-size:21px;
+  font-size:22px;
+}
+
+.step{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin:25px 0 14px;
+  font-weight:900;
+  font-size:16px;
+}
+
+.step:first-of-type{
+  margin-top:0;
+}
+
+.step-number{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#111;
+  color:#fff;
+  font-size:13px;
 }
 
 .field{
-  margin-bottom:14px;
+  margin-bottom:13px;
 }
 
 .field label{
   display:block;
-  font-size:13px;
+  font-size:12px;
   font-weight:800;
   margin-bottom:7px;
 }
 
 .field input,
-.field textarea{
+.field textarea,
+.field select{
   width:100%;
   border:1px solid #ddd;
   border-radius:10px;
@@ -99,122 +122,119 @@ textarea{
 }
 
 .field textarea{
-  min-height:100px;
+  min-height:90px;
   resize:vertical;
 }
 
-.field input:focus,
-.field textarea:focus{
-  border-color:#111;
+.fields-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
 }
 
-.product-list{
+.review-items{
   display:flex;
   flex-direction:column;
-  gap:12px;
+  gap:11px;
 }
 
-.product{
-  display:flex;
-  gap:12px;
-  padding-bottom:12px;
+.cart-item{
+  display:grid;
+  grid-template-columns:70px 1fr auto;
+  gap:11px;
+  align-items:center;
+  padding:10px 0;
   border-bottom:1px solid #eee;
 }
 
-.product:last-child{
+.cart-item:last-child{
   border-bottom:0;
 }
 
-.product img{
-  width:82px;
-  height:82px;
+.cart-image{
+  width:70px;
+  height:70px;
+  border-radius:10px;
   object-fit:cover;
-  border-radius:11px;
   background:#f2f2ef;
 }
 
-.product-info{
-  flex:1;
-  min-width:0;
-}
-
-.product-name{
+.item-name{
   font-weight:900;
   font-size:14px;
-  margin-bottom:6px;
 }
 
-.product-option{
+.item-variant{
+  margin-top:4px;
   color:#777;
   font-size:12px;
-  margin-bottom:3px;
+  line-height:1.5;
 }
 
-.product-price{
-  margin-top:6px;
+.item-quantity{
+  margin-top:4px;
+  font-size:12px;
+  color:#777;
+}
+
+.item-price{
   font-weight:900;
+  white-space:nowrap;
 }
 
-.summary-row{
+.total-box{
+  margin-top:18px;
+  padding-top:17px;
+  border-top:1px solid #ddd;
+}
+
+.total-row{
   display:flex;
   justify-content:space-between;
-  gap:10px;
-  margin:10px 0;
-  font-size:14px;
+  align-items:center;
 }
 
-.summary-total{
-  border-top:1px solid #eee;
-  margin-top:15px;
-  padding-top:15px;
-  font-size:20px;
+.total-label{
+  font-weight:800;
+}
+
+.total-price{
+  font-size:24px;
   font-weight:900;
 }
 
-.order-btn{
+.confirm-btn{
   width:100%;
-  min-height:56px;
+  min-height:55px;
   border:0;
   border-radius:13px;
   background:#111;
   color:#fff;
   font-weight:900;
   cursor:pointer;
-  margin-top:18px;
+  margin-top:17px;
 }
 
-.order-btn:disabled{
+.confirm-btn:disabled{
   background:#aaa;
   cursor:not-allowed;
 }
 
-.empty{
-  background:#fff;
-  border-radius:20px;
-  padding:60px 20px;
-  text-align:center;
-}
-
-.empty h2{
-  margin-top:0;
-}
-
-.continue-btn{
-  display:inline-block;
-  margin-top:15px;
-  padding:12px 18px;
-  background:#111;
-  color:#fff;
+.notice{
+  padding:12px;
   border-radius:10px;
-  text-decoration:none;
-  font-weight:800;
+  background:#f7f7f4;
+  color:#666;
+  font-size:12px;
+  line-height:1.6;
+  margin-top:14px;
 }
 
-.message{
+.status{
   margin-top:12px;
-  text-align:center;
   font-size:13px;
   font-weight:800;
+  text-align:center;
 }
 
 .success{
@@ -225,41 +245,75 @@ textarea{
   color:#b42318;
 }
 
-.notice{
-  padding:12px;
+.empty{
+  text-align:center;
+  padding:60px 20px;
+}
+
+.empty a{
+  display:inline-block;
+  margin-top:15px;
+  padding:12px 17px;
   border-radius:10px;
-  background:#f7f7f4;
-  color:#666;
-  font-size:12px;
-  line-height:1.6;
-  margin-bottom:15px;
+  background:#111;
+  color:#fff;
+  text-decoration:none;
+  font-weight:800;
+}
+
+.success-page{
+  display:none;
+  text-align:center;
+  padding:60px 20px;
+}
+
+.success-icon{
+  font-size:55px;
+  margin-bottom:10px;
+}
+
+.order-id{
+  margin-top:15px;
+  padding:13px;
+  background:#f5f5f2;
+  border-radius:10px;
+  word-break:break-all;
+  font-weight:800;
 }
 
 @media(max-width:800px){
 
-  .checkout-grid{
+  .checkout-layout{
     grid-template-columns:1fr;
   }
 
 }
 
-@media(max-width:500px){
+@media(max-width:550px){
 
   .checkout-page{
-    padding:10px 8px 50px;
+    padding:12px 8px 50px;
   }
 
-  .card{
+  .box{
     padding:16px;
-    border-radius:16px;
+    border-radius:15px;
+  }
+
+  .fields-grid{
+    grid-template-columns:1fr;
+    gap:0;
+  }
+
+  .topbar{
+    margin-bottom:14px;
   }
 
   .logo{
-    display:none;
+    font-size:13px;
   }
 
 }
-
 </style>
 </head>
 
@@ -267,265 +321,285 @@ textarea{
 
 <main class="checkout-page">
 
-  <div class="topbar">
+<div class="topbar">
 
-    <a href="product-details.html"
-       class="back-btn">
-      ← Retour
-    </a>
+<a href="index.html" class="back-btn">
+← Retour
+</a>
 
-    <div class="logo">
-      JR SHOP
-    </div>
+<div class="logo">
+JR SHOP
+</div>
 
-  </div>
+</div>
 
 
-  <div id="emptyState"
-       class="empty"
-       style="display:none">
+<!-- EMPTY -->
 
-    <h2>Votre panier est vide</h2>
+<div id="emptyBox" class="box empty" style="display:none">
 
-    <p>
-      Ajoutez un produit avant de passer la commande.
-    </p>
+<h2>Votre panier est vide</h2>
 
-    <a href="index.html"
-       class="continue-btn">
-      Continuer mes achats
-    </a>
+<p>
+Ajoutez un produit avant de passer commande.
+</p>
 
-  </div>
+<a href="index.html">
+Continuer mes achats
+</a>
 
+</div>
 
-  <div id="checkoutContent"
-       class="checkout-grid"
-       style="display:none">
 
+<!-- CHECKOUT -->
 
-    <!-- CUSTOMER -->
+<div id="checkoutContent" class="checkout-layout" style="display:none">
 
-    <section class="card">
 
-      <h2>
-        Informations de livraison
-      </h2>
+<!-- CUSTOMER -->
 
-      <div class="notice">
+<section class="box">
 
-        Remplissez vos informations pour confirmer
-        votre commande JR Shop.
+<h1 class="box-title">
+Finaliser ma commande
+</h1>
 
-      </div>
 
+<div class="step">
 
-      <div class="field">
+<div class="step-number">
+1
+</div>
 
-        <label for="customerName">
-          Nom complet
-        </label>
+Informations client
 
-        <input
-          id="customerName"
-          type="text"
-          placeholder="Votre nom complet"
-          autocomplete="name">
+</div>
 
-      </div>
 
+<div class="fields-grid">
 
-      <div class="field">
+<div class="field">
 
-        <label for="customerPhone">
-          Téléphone
-        </label>
+<label for="customerName">
+Nom complet *
+</label>
 
-        <input
-          id="customerPhone"
-          type="tel"
-          placeholder="06 XX XX XX XX"
-          autocomplete="tel">
+<input
+id="customerName"
+type="text"
+placeholder="Votre nom complet"
+autocomplete="name">
 
-      </div>
+</div>
 
 
-      <div class="field">
+<div class="field">
 
-        <label for="customerAddress">
-          Adresse
-        </label>
+<label for="phone">
+Téléphone *
+</label>
 
-        <textarea
-          id="customerAddress"
-          placeholder="Votre adresse de livraison"></textarea>
+<input
+id="phone"
+type="tel"
+placeholder="05 / 06 / 07 ..."
+autocomplete="tel">
 
-      </div>
+</div>
 
+</div>
 
-      <div class="field">
 
-        <label for="customerCity">
-          Ville
-        </label>
+<div class="fields-grid">
 
-        <input
-          id="customerCity"
-          type="text"
-          placeholder="Votre ville"
-          autocomplete="address-level2">
+<div class="field">
 
-      </div>
+<label for="wilaya">
+Wilaya *
+</label>
 
+<input
+id="wilaya"
+type="text"
+placeholder="Votre wilaya">
 
-      <div class="field">
+</div>
 
-        <label for="customerNote">
-          Note de commande
-        </label>
 
-        <textarea
-          id="customerNote"
-          placeholder="Information supplémentaire (optionnel)"></textarea>
+<div class="field">
 
-      </div>
+<label for="commune">
+Commune *
+</label>
 
+<input
+id="commune"
+type="text"
+placeholder="Votre commune">
 
-      <button
-        id="orderButton"
-        class="order-btn"
-        onclick="placeOrder()">
+</div>
 
-        Confirmer la commande
+</div>
 
-      </button>
 
+<div class="field">
 
-      <div
-        id="orderMessage"
-        class="message">
-      </div>
+<label for="address">
+Adresse *
+</label>
 
-    </section>
+<textarea
+id="address"
+placeholder="Adresse complète de livraison"></textarea>
 
+</div>
 
 
-    <!-- SUMMARY -->
+<div class="field">
 
-    <section class="card">
+<label for="notes">
+Note de commande
+</label>
 
-      <h2>
-        Votre commande
-      </h2>
+<textarea
+id="notes"
+placeholder="Information supplémentaire (facultatif)"></textarea>
 
-      <div
-        id="productList"
-        class="product-list">
-      </div>
+</div>
 
 
-      <div class="summary-row">
+<div class="notice">
 
-        <span>
-          Sous-total
-        </span>
+🚚 Livraison selon les zones couvertes par JR Shop.<br>
+🔒 Vos informations sont utilisées uniquement pour traiter votre commande.
 
-        <strong id="subtotal">
-          0 DA
-        </strong>
+</div>
 
-      </div>
+</section>
 
 
-      <div class="summary-row">
+<!-- REVIEW -->
 
-        <span>
-          Livraison
-        </span>
+<section class="box">
 
-        <strong>
-          À confirmer
-        </strong>
+<h2 class="box-title">
+2. Vérifier ma commande
+</h2>
 
-      </div>
 
+<div id="reviewItems" class="review-items">
+</div>
 
-      <div class="summary-row summary-total">
 
-        <span>
-          Total
-        </span>
+<div class="total-box">
 
-        <strong id="total">
-          0 DA
-        </strong>
+<div class="total-row">
 
-      </div>
+<div class="total-label">
+Total
+</div>
 
-    </section>
+<div id="totalPrice" class="total-price">
+0 DA
+</div>
 
-  </div>
+</div>
+
+
+<button
+id="confirmBtn"
+class="confirm-btn"
+type="button"
+onclick="confirmOrder()">
+
+Confirmer la commande
+
+</button>
+
+
+<div
+id="checkoutStatus"
+class="status">
+</div>
+
+</div>
+
+</section>
+
+</div>
+
+
+<!-- SUCCESS -->
+
+<section
+id="successPage"
+class="box success-page">
+
+<div class="success-icon">
+✓
+</div>
+
+<h1>
+Commande confirmée !
+</h1>
+
+<p>
+Merci pour votre commande chez JR Shop.
+</p>
+
+<div>
+Votre numéro de commande :
+</div>
+
+<div
+id="successOrderId"
+class="order-id">
+</div>
+
+<br>
+
+<a
+href="index.html"
+class="back-btn">
+
+Continuer mes achats
+
+</a>
+
+</section>
 
 </main>
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script src="config.js"></script>
 
 
 <script>
 
 /* =========================================================
-   JR SHOP CHECKOUT
-   Uses the existing jr_cart
+   JR SHOP CHECKOUT V8
 ========================================================= */
-
 
 let cart = [];
+let currentUser = null;
 
 
 /* =========================================================
-   CART
-========================================================= */
-
-function getCart(){
-
-  try{
-
-    const data =
-      JSON.parse(
-        localStorage.getItem("jr_cart") || "[]"
-      );
-
-    return Array.isArray(data)
-      ? data
-      : [];
-
-  }catch(error){
-
-    return [];
-
-  }
-
-}
-
-
-/* =========================================================
-   PRICE
+   FORMAT PRICE
 ========================================================= */
 
 function formatPrice(value){
 
-  const number = Number(value) || 0;
+  const n = Number(value) || 0;
 
-  return number.toLocaleString("fr-FR") + " DA";
+  return n.toLocaleString("fr-FR") + " DA";
 
 }
 
 
 /* =========================================================
-   ESCAPE
+   ESCAPE HTML
 ========================================================= */
 
 function escapeHtml(value){
@@ -545,25 +619,76 @@ function escapeHtml(value){
 
 
 /* =========================================================
-   IMAGE
+   GET CART
 ========================================================= */
 
-function getProductImage(item){
+function getCart(){
 
-  if(item.image_url){
-    return item.image_url;
+  try{
+
+    const data =
+      JSON.parse(
+        localStorage.getItem("jr_cart") || "[]"
+      );
+
+    return Array.isArray(data) ? data : [];
+
+  }catch(error){
+
+    return [];
+
   }
 
-  if(
-    Array.isArray(item.image_urls) &&
-    item.image_urls.length
-  ){
+}
 
-    return item.image_urls[0];
 
-  }
+/* =========================================================
+   SAVE CART
+========================================================= */
 
-  return "https://placehold.co/300x300?text=JR+Shop";
+function saveCart(){
+
+  localStorage.setItem(
+    "jr_cart",
+    JSON.stringify(cart)
+  );
+
+}
+
+
+/* =========================================================
+   PRODUCT PRICE
+========================================================= */
+
+function getItemPrice(item){
+
+  return Number(
+    item.price ??
+    item.sale_price ??
+    item.product_price ??
+    0
+  ) || 0;
+
+}
+
+
+/* =========================================================
+   TOTAL
+========================================================= */
+
+function calculateTotal(){
+
+  return cart.reduce(
+    (total,item)=>{
+
+      const price = getItemPrice(item);
+      const quantity = Number(item.quantity) || 0;
+
+      return total + price * quantity;
+
+    },
+    0
+  );
 
 }
 
@@ -574,20 +699,22 @@ function getProductImage(item){
 
 function renderCart(){
 
-  cart = getCart();
-
-  const emptyState =
-    document.getElementById("emptyState");
+  const emptyBox =
+    document.getElementById("emptyBox");
 
   const checkoutContent =
     document.getElementById("checkoutContent");
 
-  const productList =
-    document.getElementById("productList");
+  const reviewItems =
+    document.getElementById("reviewItems");
+
+  const totalPrice =
+    document.getElementById("totalPrice");
+
 
   if(!cart.length){
 
-    emptyState.style.display = "block";
+    emptyBox.style.display = "block";
     checkoutContent.style.display = "none";
 
     return;
@@ -595,133 +722,234 @@ function renderCart(){
   }
 
 
-  emptyState.style.display = "none";
+  emptyBox.style.display = "none";
   checkoutContent.style.display = "grid";
 
-  productList.innerHTML = "";
+
+  reviewItems.innerHTML = "";
 
 
-  let subtotal = 0;
+  cart.forEach(item=>{
 
-
-  cart.forEach(item => {
+    const price = getItemPrice(item);
 
     const quantity =
       Number(item.quantity) || 1;
 
-    const price =
-      Number(item.price) || 0;
-
-    const lineTotal =
-      price * quantity;
-
-    subtotal += lineTotal;
-
-
-    const product =
-      document.createElement("div");
-
-    product.className = "product";
-
 
     const image =
-      getProductImage(item);
+      item.image_url ||
+      item.image ||
+      (
+        Array.isArray(item.image_urls)
+          ? item.image_urls[0]
+          : ""
+      ) ||
+      "https://placehold.co/500x500?text=JR+Shop";
 
 
-    let options = "";
+    let variants = [];
 
 
     if(item.color){
 
-      options +=
+      variants.push(
         "Couleur : " +
-        escapeHtml(item.color);
+        escapeHtml(item.color)
+      );
 
     }
 
 
     if(item.size){
 
-      if(options){
-        options += " • ";
-      }
-
-      options +=
+      variants.push(
         "Taille : " +
-        escapeHtml(item.size);
+        escapeHtml(item.size)
+      );
 
     }
 
 
-    product.innerHTML = `
+    const card =
+      document.createElement("div");
 
-      <img
-        src="${escapeHtml(image)}"
-        alt="${escapeHtml(item.name || "Produit")}">
+    card.className = "cart-item";
 
-      <div class="product-info">
 
-        <div class="product-name">
+    card.innerHTML =
 
-          ${escapeHtml(
+      '<img class="cart-image" ' +
+      'src="' + escapeHtml(image) + '" ' +
+      'alt="Produit" ' +
+      'onerror="this.src=\'https://placehold.co/500x500?text=JR+Shop\'">' +
+
+      '<div>' +
+
+        '<div class="item-name">' +
+          escapeHtml(
             item.name ||
             item.title ||
             "Produit"
-          )}
+          ) +
+        '</div>' +
 
-        </div>
+        '<div class="item-variant">' +
+          (
+            variants.length
+              ? variants.join("<br>")
+              : "Produit standard"
+          ) +
+        '</div>' +
 
-        ${
-          options
-          ?
-          `<div class="product-option">
-             ${options}
-           </div>`
-          :
-          ""
-        }
+        '<div class="item-quantity">' +
+          "Quantité : " +
+          quantity +
+        '</div>' +
 
-        <div class="product-option">
+      '</div>' +
 
-          Quantité : ${quantity}
-
-        </div>
-
-        <div class="product-price">
-
-          ${formatPrice(lineTotal)}
-
-        </div>
-
-      </div>
-
-    `;
+      '<div class="item-price">' +
+        formatPrice(price * quantity) +
+      '</div>';
 
 
-    productList.appendChild(product);
+    reviewItems.appendChild(card);
 
   });
 
 
-  document.getElementById("subtotal")
-    .textContent =
-    formatPrice(subtotal);
-
-
-  document.getElementById("total")
-    .textContent =
-    formatPrice(subtotal);
+  totalPrice.textContent =
+    formatPrice(calculateTotal());
 
 }
 
 
 /* =========================================================
-   PLACE ORDER
+   LOAD CURRENT USER
 ========================================================= */
 
-async function placeOrder(){
+async function loadUser(){
 
-  const name =
+  try{
+
+    if(
+      typeof supabaseClient === "undefined" ||
+      !supabaseClient
+    ){
+
+      return;
+
+    }
+
+
+    const response =
+      await supabaseClient.auth.getUser();
+
+
+    currentUser =
+      response.data?.user || null;
+
+
+    /*
+      إذا كان العميل مسجل الدخول
+      نحاول تعبئة الاسم والإيميل إن وجد
+    */
+
+    if(currentUser){
+
+      const name =
+        currentUser.user_metadata?.full_name ||
+        currentUser.user_metadata?.name ||
+        "";
+
+
+      const customerName =
+        document.getElementById("customerName");
+
+
+      if(
+        customerName &&
+        !customerName.value &&
+        name
+      ){
+
+        customerName.value = name;
+
+      }
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+  }
+
+}
+
+
+/* =========================================================
+   GET CUSTOMER ID
+========================================================= */
+
+async function getCustomerId(){
+
+  /*
+    orders.customer_id مربوط بـ customers.id
+
+    لذلك لا نضع auth user id مباشرة إلا إذا
+    وجد نفس الـID في customers.
+  */
+
+  if(!currentUser?.id){
+
+    return null;
+
+  }
+
+
+  try{
+
+    const response =
+      await supabaseClient
+        .from("customers")
+        .select("id")
+        .eq("id",currentUser.id)
+        .maybeSingle();
+
+
+    if(
+      !response.error &&
+      response.data?.id
+    ){
+
+      return response.data.id;
+
+    }
+
+  }catch(error){
+
+    console.warn(
+      "Customer lookup:",
+      error
+    );
+
+  }
+
+
+  return null;
+
+}
+
+
+/* =========================================================
+   VALIDATE FORM
+========================================================= */
+
+function getCustomerData(){
+
+  const customerName =
     document
       .getElementById("customerName")
       .value
@@ -730,94 +958,168 @@ async function placeOrder(){
 
   const phone =
     document
-      .getElementById("customerPhone")
+      .getElementById("phone")
+      .value
+      .trim();
+
+
+  const wilaya =
+    document
+      .getElementById("wilaya")
+      .value
+      .trim();
+
+
+  const commune =
+    document
+      .getElementById("commune")
       .value
       .trim();
 
 
   const address =
     document
-      .getElementById("customerAddress")
+      .getElementById("address")
       .value
       .trim();
 
 
-  const city =
+  const notes =
     document
-      .getElementById("customerCity")
+      .getElementById("notes")
       .value
       .trim();
 
 
-  const note =
-    document
-      .getElementById("customerNote")
-      .value
-      .trim();
+  if(!customerName){
 
-
-  const message =
-    document.getElementById("orderMessage");
-
-
-  const button =
-    document.getElementById("orderButton");
-
-
-  if(!name){
-
-    showMessage(
-      "Veuillez entrer votre nom.",
-      "error"
+    throw new Error(
+      "Veuillez entrer votre nom complet."
     );
-
-    return;
 
   }
 
 
   if(!phone){
 
-    showMessage(
-      "Veuillez entrer votre numéro de téléphone.",
-      "error"
+    throw new Error(
+      "Veuillez entrer votre numéro de téléphone."
     );
 
-    return;
+  }
+
+
+  if(!wilaya){
+
+    throw new Error(
+      "Veuillez entrer votre wilaya."
+    );
+
+  }
+
+
+  if(!commune){
+
+    throw new Error(
+      "Veuillez entrer votre commune."
+    );
 
   }
 
 
   if(!address){
 
-    showMessage(
-      "Veuillez entrer votre adresse.",
-      "error"
+    throw new Error(
+      "Veuillez entrer votre adresse."
     );
-
-    return;
 
   }
 
 
-  if(!city){
+  return {
+    customerName,
+    phone,
+    wilaya,
+    commune,
+    address,
+    notes
+  };
 
-    showMessage(
-      "Veuillez entrer votre ville.",
-      "error"
+}
+
+
+/* =========================================================
+   BUILD ORDER ITEMS
+========================================================= */
+
+function buildOrderItems(){
+
+  return cart.map(item=>({
+
+    product_id: item.id,
+
+    name:
+      item.name ||
+      item.title ||
+      "Produit",
+
+    price: getItemPrice(item),
+
+    quantity:
+      Number(item.quantity) || 1,
+
+    color:
+      item.color || null,
+
+    size:
+      item.size || null,
+
+    image_url:
+      item.image_url ||
+      item.image ||
+      (
+        Array.isArray(item.image_urls)
+          ? item.image_urls[0]
+          : null
+      )
+
+  }));
+
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+function setStatus(message,type){
+
+  const box =
+    document.getElementById(
+      "checkoutStatus"
     );
 
-    return;
+  box.textContent = message;
 
-  }
+  box.className =
+    "status " + (type || "");
+
+}
 
 
-  cart = getCart();
+/* =========================================================
+   CONFIRM ORDER
+========================================================= */
+
+async function confirmOrder(){
+
+  const button =
+    document.getElementById("confirmBtn");
 
 
   if(!cart.length){
 
-    showMessage(
+    setStatus(
       "Votre panier est vide.",
       "error"
     );
@@ -827,111 +1129,206 @@ async function placeOrder(){
   }
 
 
-  const subtotal =
-    cart.reduce(
-      (sum,item) =>
-        sum +
-        (
-          Number(item.price) || 0
-        ) *
-        (
-          Number(item.quantity) || 1
-        ),
-      0
+  if(
+    typeof supabaseClient === "undefined" ||
+    !supabaseClient
+  ){
+
+    setStatus(
+      "Supabase n'est pas disponible.",
+      "error"
     );
 
+    return;
 
-  /*
-    IMPORTANT
-
-    Pour l'instant on prépare les données
-    sans inventer les colonnes de orders.
-
-    On garde tout dans jr_pending_order.
-  */
+  }
 
 
-  const pendingOrder = {
-
-    customer_name: name,
-
-    customer_phone: phone,
-
-    customer_address: address,
-
-    customer_city: city,
-
-    note: note,
-
-    subtotal: subtotal,
-
-    total: subtotal,
-
-    items: cart,
-
-    created_at:
-      new Date().toISOString()
-
-  };
+  let customer;
 
 
-  localStorage.setItem(
-    "jr_pending_order",
-    JSON.stringify(pendingOrder)
-  );
+  try{
+
+    customer =
+      getCustomerData();
+
+  }catch(error){
+
+    setStatus(
+      error.message,
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  const total =
+    calculateTotal();
+
+
+  if(total <= 0){
+
+    setStatus(
+      "Le total de la commande est invalide.",
+      "error"
+    );
+
+    return;
+
+  }
 
 
   button.disabled = true;
+  button.textContent = "Création de la commande...";
 
-  button.textContent =
-    "Préparation de la commande...";
-
-
-  /*
-    IMPORTANT:
-    Ici on ne fait PAS encore INSERT dans orders
-    parce que nous ne connaissons pas les colonnes
-    exactes de ta table orders.
-  */
-
-
-  showMessage(
-    "Commande préparée ✓",
-    "success"
+  setStatus(
+    "Veuillez patienter...",
+    ""
   );
 
 
-  setTimeout(() => {
+  try{
 
-    alert(
-      "La commande est prête.\n\n" +
-      "Il reste à connecter cette page " +
-      "à ta table orders."
+    /*
+      Récupérer customer_id si disponible
+    */
+
+    const customerId =
+      await getCustomerId();
+
+
+    /*
+      JSONB items
+    */
+
+    const items =
+      buildOrderItems();
+
+
+    /*
+      Notes
+    */
+
+    const notes =
+      customer.notes || null;
+
+
+    /*
+      INSERT ORDERS
+    */
+
+    const response =
+      await supabaseClient
+        .from("orders")
+        .insert({
+
+          customer_id:
+            customerId,
+
+          status:
+            "pending",
+
+          total:
+            total,
+
+          notes:
+            notes,
+
+          address:
+            customer.address,
+
+          customer_name:
+            customer.customerName,
+
+          phone:
+            customer.phone,
+
+          wilaya:
+            customer.wilaya,
+
+          commune:
+            customer.commune,
+
+          items:
+            items
+
+        })
+        .select("id")
+        .single();
+
+
+    if(response.error){
+
+      throw response.error;
+
+    }
+
+
+    const orderId =
+      response.data?.id;
+
+
+    /*
+      Nettoyer le panier
+    */
+
+    localStorage.removeItem(
+      "jr_cart"
     );
+
+
+    cart = [];
+
+
+    /*
+      Afficher succès
+    */
+
+    document
+      .getElementById("checkoutContent")
+      .style.display = "none";
+
+
+    document
+      .getElementById("successPage")
+      .style.display = "block";
+
+
+    document
+      .getElementById("successOrderId")
+      .textContent =
+        orderId || "Commande créée";
+
+
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    });
+
+
+  }catch(error){
+
+    console.error(
+      "ORDER ERROR:",
+      error
+    );
+
+
+    setStatus(
+      error?.message ||
+      "Impossible de créer la commande.",
+      "error"
+    );
+
 
     button.disabled = false;
 
     button.textContent =
       "Confirmer la commande";
 
-  },700);
-
-}
-
-
-/* =========================================================
-   MESSAGE
-========================================================= */
-
-function showMessage(text,type){
-
-  const message =
-    document.getElementById("orderMessage");
-
-  message.textContent = text;
-
-  message.className =
-    "message " + type;
+  }
 
 }
 
@@ -942,9 +1339,13 @@ function showMessage(text,type){
 
 document.addEventListener(
   "DOMContentLoaded",
-  () => {
+  async ()=>{
+
+    cart = getCart();
 
     renderCart();
+
+    await loadUser();
 
   }
 );
