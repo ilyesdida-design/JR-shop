@@ -1,5 +1,7 @@
 <!DOCTYPE html>
+
 <html lang="fr">
+
 <head>
 
 <meta charset="UTF-8">
@@ -25,10 +27,6 @@ body{
   color:#111;
   font-family:Arial,Helvetica,sans-serif;
 }
-
-/* =========================
-   PRODUCT PAGE
-========================= */
 
 .product-page{
   max-width:1200px;
@@ -318,9 +316,7 @@ body{
   color:#16803c;
 }
 
-/* =========================
-   MODALS
-========================= */
+/* MODALS */
 
 .modal-overlay{
   position:fixed;
@@ -583,225 +579,177 @@ body{
 }
 
 </style>
+
 </head>
 
 <body>
 
 <main class="product-page">
 
-  <a href="index.html" class="back-btn">
-    ← Retour aux produits
-  </a>
+<a href="index.html" class="back-btn">
+  ← Retour aux produits
+</a>
 
-  <section class="product-container">
+<section class="product-container">
 
-    <!-- IMAGE -->
+<div class="product-image-box">
 
-    <div class="product-image-box">
+<img
+id="productImage"
+class="product-image"
+src=""
+alt="Produit"
 
-      <img
-        id="productImage"
-        class="product-image"
-        src=""
-        alt="Produit"
-      >
+>
 
-      <button
-        type="button"
-        id="favoriteBtn"
-        class="favorite-btn"
-        aria-label="Ajouter aux favoris"
-      >
-        ♡
-      </button>
+<button
+type="button"
+id="favoriteBtn"
+class="favorite-btn"
+aria-label="Ajouter aux favoris"
 
-    </div>
+>
 
+♡ </button>
 
-    <!-- INFO -->
+</div>
 
-    <div class="product-info">
+<div class="product-info">
 
-      <div
-        id="productCategory"
-        class="product-category"
-      >
-        Produit
-      </div>
+<div id="productCategory" class="product-category">
+  Produit
+</div>
 
-      <h1
-        id="productName"
-        class="product-title"
-      >
-        Chargement...
-      </h1>
+<h1 id="productName" class="product-title">
+  Chargement...
+</h1>
 
+<div class="price-area">
 
-      <div class="price-area">
+<span id="productPrice" class="current-price">
+  0.00 DA
+</span>
 
-        <span
-          id="productPrice"
-          class="current-price"
-        >
-          0.00 DA
-        </span>
+<span
+id="productOldPrice"
+class="old-price"
+style="display:none;"
 
-        <span
-          id="productOldPrice"
-          class="old-price"
-          style="display:none;"
-        ></span>
+> </span>
 
-      </div>
+</div>
 
+<p id="productDescription" class="description">
+  Découvrez ce produit de JR Shop.
+</p>
 
-      <p
-        id="productDescription"
-        class="description"
-      >
-        Découvrez ce produit de JR Shop.
-      </p>
+<div
+  id="colorBlock"
+  class="option-block"
+  style="display:none;"
+>
 
+<div class="option-header">
 
-      <!-- COLOR -->
+<div class="option-title">
+  Couleur :
+  <span id="selectedColor">—</span>
+</div>
 
-      <div
-        id="colorBlock"
-        class="option-block"
-        style="display:none;"
-      >
+</div>
 
-        <div class="option-header">
+<div id="colorList" class="option-list"></div>
 
-          <div class="option-title">
-            Couleur :
-            <span id="selectedColor">—</span>
-          </div>
+</div>
 
-        </div>
+<div
+  id="sizeBlock"
+  class="option-block"
+  style="display:none;"
+>
 
-        <div
-          id="colorList"
-          class="option-list"
-        ></div>
+<div class="option-header">
 
-      </div>
+<div class="option-title">
+  Taille :
+  <span id="selectedSize">—</span>
+</div>
 
+<button
+type="button"
+id="sizeGuideBtn"
+class="size-guide-btn"
 
-      <!-- SIZE -->
+>
 
-      <div
-        id="sizeBlock"
-        class="option-block"
-        style="display:none;"
-      >
+Guide des tailles </button>
 
-        <div class="option-header">
+</div>
 
-          <div class="option-title">
-            Taille :
-            <span id="selectedSize">—</span>
-          </div>
+<div id="sizeList" class="option-list"></div>
 
-          <button
-            type="button"
-            id="sizeGuideBtn"
-            class="size-guide-btn"
-          >
-            Guide des tailles
-          </button>
+</div>
 
-        </div>
+<div class="quantity-title">
+  Quantité
+</div>
 
-        <div
-          id="sizeList"
-          class="option-list"
-        ></div>
+<div class="quantity-control">
 
-      </div>
+<button type="button" id="minusBtn">
+  −
+</button>
 
+<input
+type="number"
+id="quantityInput"
+value="1"
+min="1"
+max="99"
 
-      <!-- QUANTITY -->
+>
 
-      <div class="quantity-title">
-        Quantité
-      </div>
+<button type="button" id="plusBtn">
+  +
+</button>
 
-      <div class="quantity-control">
+</div>
 
-        <button
-          type="button"
-          id="minusBtn"
-        >
-          −
-        </button>
+<div id="stockInfo" class="stock-info">
+  Chargement du stock...
+</div>
 
-        <input
-          type="number"
-          id="quantityInput"
-          value="1"
-          min="1"
-          max="99"
-        >
+<div class="button-row">
 
-        <button
-          type="button"
-          id="plusBtn"
-        >
-          +
-        </button>
+<button
+type="button"
+id="cartBtn"
+class="cart-btn"
 
-      </div>
+>
 
+🛒 Ajouter au panier </button>
 
-      <!-- STOCK -->
+<button
+type="button"
+id="buyBtn"
+class="buy-btn"
 
-      <div
-        id="stockInfo"
-        class="stock-info"
-      >
-        Sélectionnez une option
-      </div>
+>
 
+Acheter </button>
 
-      <!-- BUTTONS -->
+</div>
 
-      <div class="button-row">
+<div id="cartMessage" class="cart-message"></div>
 
-        <button
-          type="button"
-          id="cartBtn"
-          class="cart-btn"
-        >
-          🛒 Ajouter au panier
-        </button>
+</div>
 
-        <button
-          type="button"
-          id="buyBtn"
-          class="buy-btn"
-        >
-          Acheter
-        </button>
-
-      </div>
-
-
-      <div
-        id="cartMessage"
-        class="cart-message"
-      ></div>
-
-    </div>
-
-  </section>
+</section>
 
 </main>
 
-
-<!-- ==================================================
-     CONFIRMATION MODAL
-================================================== -->
+<!-- CONFIRMATION MODAL -->
 
 <div
   id="confirmationModal"
@@ -809,160 +757,132 @@ body{
   aria-hidden="true"
 >
 
-  <div
-    class="modal-box"
-    role="dialog"
-    aria-modal="true"
-  >
+<div
+  class="modal-box"
+  role="dialog"
+  aria-modal="true"
+>
 
-    <div class="modal-header">
+<div class="modal-header">
 
-      <h2>
-        Confirmer votre commande
-      </h2>
+<h2>
+  Confirmer votre commande
+</h2>
 
-      <button
-        type="button"
-        id="closeConfirmModal"
-        class="close-modal"
-      >
-        ×
-      </button>
+<button
+type="button"
+id="closeConfirmModal"
+class="close-modal"
 
-    </div>
+>
 
-
-    <div class="modal-body">
-
-      <p class="modal-intro">
-        Vérifiez les détails de votre commande avant de continuer.
-      </p>
-
-
-      <div class="order-product">
-
-        <img
-          id="modalProductImage"
-          class="order-product-image"
-          src=""
-          alt="Produit"
-        >
-
-        <div class="order-product-info">
-
-          <p
-            id="modalProductName"
-            class="order-product-name"
-          >
-            Produit
-          </p>
-
-          <div
-            id="modalProductPrice"
-            class="order-product-price"
-          >
-            0.00 DA
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <div class="order-details">
-
-        <div class="detail-row">
-
-          <span>Couleur</span>
-
-          <span id="modalColor">
-            —
-          </span>
-
-        </div>
-
-
-        <div class="detail-row">
-
-          <span>Taille</span>
-
-          <span id="modalSize">
-            —
-          </span>
-
-        </div>
-
-
-        <div class="detail-row">
-
-          <span>Prix unitaire</span>
-
-          <span id="modalUnitPrice">
-            0.00 DA
-          </span>
-
-        </div>
-
-
-        <div class="detail-row">
-
-          <span>Quantité</span>
-
-          <span id="modalQuantity">
-            1
-          </span>
-
-        </div>
-
-      </div>
-
-
-      <div class="total-row">
-
-        <span>
-          Total
-        </span>
-
-        <span
-          id="modalTotal"
-          class="total-price"
-        >
-          0.00 DA
-        </span>
-
-      </div>
-
-
-      <div class="modal-actions">
-
-        <button
-          type="button"
-          id="cancelConfirmModal"
-          class="cancel-btn"
-        >
-          Annuler
-        </button>
-
-        <button
-          type="button"
-          id="confirmPurchase"
-          class="confirm-btn"
-        >
-          Confirmer et continuer
-        </button>
-
-      </div>
-
-    </div>
-
-  </div>
+× </button>
 
 </div>
 
+<div class="modal-body">
 
-<!-- ==================================================
-     SIZE GUIDE MODAL
-================================================== -->
+<p class="modal-intro">
+  Vérifiez les détails de votre commande avant de continuer.
+</p>
+
+<div class="order-product">
+
+<img
+id="modalProductImage"
+class="order-product-image"
+src=""
+alt="Produit"
+
+>
+
+<div class="order-product-info">
+
+<p
+  id="modalProductName"
+  class="order-product-name"
+>
+  Produit
+</p>
+
+<div
+  id="modalProductPrice"
+  class="order-product-price"
+>
+  0.00 DA
+</div>
+
+</div>
+
+</div>
+
+<div class="order-details">
+
+<div class="detail-row">
+<span>Couleur</span>
+<span id="modalColor">—</span>
+</div>
+
+<div class="detail-row">
+<span>Taille</span>
+<span id="modalSize">—</span>
+</div>
+
+<div class="detail-row">
+<span>Prix unitaire</span>
+<span id="modalUnitPrice">0.00 DA</span>
+</div>
+
+<div class="detail-row">
+<span>Quantité</span>
+<span id="modalQuantity">1</span>
+</div>
+
+</div>
+
+<div class="total-row">
+
+<span>Total</span>
+
+<span
+id="modalTotal"
+class="total-price"
+
+>
+
+0.00 DA </span>
+
+</div>
+
+<div class="modal-actions">
+
+<button
+type="button"
+id="cancelConfirmModal"
+class="cancel-btn"
+
+>
+
+Annuler </button>
+
+<button
+type="button"
+id="confirmPurchase"
+class="confirm-btn"
+
+>
+
+Confirmer et continuer </button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- SIZE GUIDE -->
 
 <div
   id="sizeGuideModal"
@@ -970,97 +890,95 @@ body{
   aria-hidden="true"
 >
 
-  <div
-    class="modal-box"
-    role="dialog"
-    aria-modal="true"
-  >
+<div
+  class="modal-box"
+  role="dialog"
+  aria-modal="true"
+>
 
-    <div class="modal-header">
+<div class="modal-header">
 
-      <h2>
-        Guide des tailles
-      </h2>
+<h2>
+  Guide des tailles
+</h2>
 
-      <button
-        type="button"
-        id="closeSizeGuide"
-        class="close-modal"
-      >
-        ×
-      </button>
+<button
+type="button"
+id="closeSizeGuide"
+class="close-modal"
 
-    </div>
+>
 
-
-    <div class="modal-body">
-
-      <table class="size-table">
-
-        <thead>
-
-          <tr>
-            <th>Taille</th>
-            <th>Poitrine</th>
-            <th>Taille</th>
-            <th>Hanches</th>
-          </tr>
-
-        </thead>
-
-        <tbody>
-
-          <tr>
-            <td>S</td>
-            <td>88-92 cm</td>
-            <td>68-72 cm</td>
-            <td>92-96 cm</td>
-          </tr>
-
-          <tr>
-            <td>M</td>
-            <td>92-96 cm</td>
-            <td>72-76 cm</td>
-            <td>96-100 cm</td>
-          </tr>
-
-          <tr>
-            <td>L</td>
-            <td>96-100 cm</td>
-            <td>76-80 cm</td>
-            <td>100-104 cm</td>
-          </tr>
-
-          <tr>
-            <td>XL</td>
-            <td>100-106 cm</td>
-            <td>80-86 cm</td>
-            <td>104-110 cm</td>
-          </tr>
-
-          <tr>
-            <td>XXL</td>
-            <td>106-112 cm</td>
-            <td>86-92 cm</td>
-            <td>110-116 cm</td>
-          </tr>
-
-        </tbody>
-
-      </table>
-
-
-      <p class="guide-note">
-        Les mesures sont indicatives. Pour choisir votre taille,
-        comparez-les avec un vêtement qui vous convient déjà.
-      </p>
-
-    </div>
-
-  </div>
+× </button>
 
 </div>
 
+<div class="modal-body">
+
+<table class="size-table">
+
+<thead>
+
+<tr>
+<th>Taille</th>
+<th>Poitrine</th>
+<th>Taille</th>
+<th>Hanches</th>
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+<td>S</td>
+<td>88-92 cm</td>
+<td>68-72 cm</td>
+<td>92-96 cm</td>
+</tr>
+
+<tr>
+<td>M</td>
+<td>92-96 cm</td>
+<td>72-76 cm</td>
+<td>96-100 cm</td>
+</tr>
+
+<tr>
+<td>L</td>
+<td>96-100 cm</td>
+<td>76-80 cm</td>
+<td>100-104 cm</td>
+</tr>
+
+<tr>
+<td>XL</td>
+<td>100-106 cm</td>
+<td>80-86 cm</td>
+<td>104-110 cm</td>
+</tr>
+
+<tr>
+<td>XXL</td>
+<td>106-112 cm</td>
+<td>86-92 cm</td>
+<td>110-116 cm</td>
+</tr>
+
+</tbody>
+
+</table>
+
+<p class="guide-note">
+  Les mesures sont indicatives. Pour choisir votre taille,
+  comparez-les avec un vêtement qui vous convient déjà.
+</p>
+
+</div>
+
+</div>
+
+</div>
 
 <script>
 
@@ -1088,34 +1006,45 @@ function formatPrice(value){
     minimumFractionDigits:2,
     maximumFractionDigits:2
   }) + " DA";
+
 }
 
 
 function getProductId(){
 
   const params =
-    new URLSearchParams(
-      window.location.search
-    );
+    new URLSearchParams(window.location.search);
 
   return (
     params.get("id") ||
     params.get("product_id")
   );
+
 }
 
 
 function getProductImage(){
 
-  if(selectedVariant && selectedVariant.image_url){
+  if(
+    selectedVariant &&
+    selectedVariant.image_url
+  ){
+
     return selectedVariant.image_url;
+
   }
 
-  if(product && product.image_url){
+  if(
+    product &&
+    product.image_url
+  ){
+
     return product.image_url;
+
   }
 
-  return "https://via.placeholder.com/800x800?text=JR+Shop";
+  return "https://placehold.co/800x800?text=JR+Shop";
+
 }
 
 
@@ -1128,9 +1057,11 @@ function getSelectedPrice(){
   ){
 
     return Number(selectedVariant.price) || 0;
+
   }
 
   return Number(product?.price) || 0;
+
 }
 
 
@@ -1140,15 +1071,16 @@ function getSelectedPrice(){
 
 async function loadProduct(){
 
-  const productId = getProductId();
+  const productId =
+    getProductId();
 
   if(!productId){
 
     showError();
 
     return;
-  }
 
+  }
 
   if(
     typeof SUPABASE_URL === "undefined" ||
@@ -1162,8 +1094,8 @@ async function loadProduct(){
     showError();
 
     return;
-  }
 
+  }
 
   try{
 
@@ -1182,36 +1114,34 @@ async function loadProduct(){
         }
       );
 
-
     if(!productResponse.ok){
+
       throw new Error(
         "Erreur produit : " +
         productResponse.status
       );
-    }
 
+    }
 
     const products =
       await productResponse.json();
 
-
     if(
-      !products ||
+      !Array.isArray(products) ||
       !products.length
     ){
 
       showError();
 
       return;
+
     }
 
+    product =
+      products[0];
 
-    product = products[0];
 
-
-    /* =========================
-       LOAD VARIANTS
-    ========================= */
+    /* VARIANTS */
 
     const variantResponse =
       await fetch(
@@ -1230,11 +1160,16 @@ async function loadProduct(){
         }
       );
 
-
     if(variantResponse.ok){
 
       variants =
         await variantResponse.json();
+
+      if(!Array.isArray(variants)){
+
+        variants = [];
+
+      }
 
     }else{
 
@@ -1242,12 +1177,14 @@ async function loadProduct(){
 
     }
 
-
     renderProduct();
 
   }catch(error){
 
-    console.error(error);
+    console.error(
+      "PRODUCT ERROR:",
+      error
+    );
 
     showError();
 
@@ -1257,7 +1194,7 @@ async function loadProduct(){
 
 
 /* ==================================================
-   RENDER PRODUCT
+   RENDER
 ================================================== */
 
 function renderProduct(){
@@ -1266,29 +1203,24 @@ function renderProduct(){
     product.name ||
     "Produit JR Shop";
 
-
   const price =
     Number(product.price) || 0;
-
 
   const oldPrice =
     Number(product.old_price) || 0;
 
-
   document.title =
     name + " - JR Shop";
 
-
   document.getElementById(
     "productName"
-  ).textContent = name;
-
+  ).textContent =
+    name;
 
   document.getElementById(
     "productPrice"
   ).textContent =
     formatPrice(price);
-
 
   document.getElementById(
     "productDescription"
@@ -1296,17 +1228,15 @@ function renderProduct(){
     product.description ||
     "Découvrez ce produit de JR Shop.";
 
-
   document.getElementById(
     "productImage"
   ).src =
     getProductImage();
 
-
   document.getElementById(
     "productImage"
-  ).alt = name;
-
+  ).alt =
+    name;
 
   document.getElementById(
     "productCategory"
@@ -1316,13 +1246,10 @@ function renderProduct(){
     "Produit";
 
 
-  /* OLD PRICE */
-
   const oldPriceElement =
     document.getElementById(
       "productOldPrice"
     );
-
 
   if(oldPrice > price){
 
@@ -1339,12 +1266,9 @@ function renderProduct(){
 
   }
 
-
   renderOptions();
 
-
   updateFavoriteButton();
-
 
   updateAvailability();
 
@@ -1352,25 +1276,19 @@ function renderProduct(){
 
 
 /* ==================================================
-   RENDER OPTIONS
+   OPTIONS
 ================================================== */
 
 function renderOptions(){
 
   const colorList =
-    document.getElementById(
-      "colorList"
-    );
+    document.getElementById("colorList");
 
   const sizeList =
-    document.getElementById(
-      "sizeList"
-    );
-
+    document.getElementById("sizeList");
 
   colorList.innerHTML = "";
   sizeList.innerHTML = "";
-
 
   const colors = [
     ...new Set(
@@ -1379,7 +1297,6 @@ function renderOptions(){
         .filter(Boolean)
     )
   ];
-
 
   const sizes = [
     ...new Set(
@@ -1399,50 +1316,53 @@ function renderOptions(){
     ).style.display =
       "block";
 
-
     colors.forEach(color => {
 
       const button =
-        document.createElement(
-          "button"
-        );
+        document.createElement("button");
 
-      button.type =
-        "button";
-
-      button.className =
-        "option-btn";
-
-      button.textContent =
-        color;
-
+      button.type = "button";
+      button.className = "option-btn";
+      button.textContent = color;
 
       button.addEventListener(
         "click",
         function(){
 
-          selectedColor =
-            color;
+          selectedColor = color;
 
           document.getElementById(
             "selectedColor"
           ).textContent =
             color;
 
+          /* Reset size if incompatible */
+
+          if(
+            selectedSize &&
+            !variants.some(v =>
+              v.color === selectedColor &&
+              v.size === selectedSize &&
+              Number(v.stock) > 0
+            )
+          ){
+
+            selectedSize = null;
+
+            document.getElementById(
+              "selectedSize"
+            ).textContent = "—";
+
+          }
 
           updateColorButtons();
-
           updateSizeButtons();
-
           findVariant();
 
         }
       );
 
-
-      colorList.appendChild(
-        button
-      );
+      colorList.appendChild(button);
 
     });
 
@@ -1465,48 +1385,39 @@ function renderOptions(){
     ).style.display =
       "block";
 
-
     sizes.forEach(size => {
 
       const button =
-        document.createElement(
-          "button"
-        );
+        document.createElement("button");
 
-      button.type =
-        "button";
-
-      button.className =
-        "option-btn";
-
-      button.textContent =
-        size;
-
+      button.type = "button";
+      button.className = "option-btn";
+      button.textContent = size;
 
       button.addEventListener(
         "click",
         function(){
 
-          selectedSize =
-            size;
+          if(button.disabled){
+
+            return;
+
+          }
+
+          selectedSize = size;
 
           document.getElementById(
             "selectedSize"
           ).textContent =
             size;
 
-
           updateSizeButtons();
-
           findVariant();
 
         }
       );
 
-
-      sizeList.appendChild(
-        button
-      );
+      sizeList.appendChild(button);
 
     });
 
@@ -1519,7 +1430,6 @@ function renderOptions(){
 
   }
 
-
   updateColorButtons();
   updateSizeButtons();
 
@@ -1527,7 +1437,7 @@ function renderOptions(){
 
 
 /* ==================================================
-   UPDATE COLOR BUTTONS
+   COLOR BUTTONS
 ================================================== */
 
 function updateColorButtons(){
@@ -1537,12 +1447,28 @@ function updateColorButtons(){
       "#colorList .option-btn"
     );
 
-
   buttons.forEach(button => {
+
+    const color =
+      button.textContent;
+
+    const hasStock =
+      variants.some(v =>
+        v.color === color &&
+        Number(v.stock) > 0
+      );
+
+    button.disabled =
+      !hasStock;
+
+    button.classList.toggle(
+      "disabled",
+      !hasStock
+    );
 
     button.classList.toggle(
       "active",
-      button.textContent === selectedColor
+      color === selectedColor
     );
 
   });
@@ -1551,7 +1477,7 @@ function updateColorButtons(){
 
 
 /* ==================================================
-   UPDATE SIZE BUTTONS
+   SIZE BUTTONS
 ================================================== */
 
 function updateSizeButtons(){
@@ -1561,55 +1487,51 @@ function updateSizeButtons(){
       "#sizeList .option-btn"
     );
 
-
   buttons.forEach(button => {
 
     const size =
       button.textContent;
 
-
     let available = true;
-
 
     if(selectedColor){
 
-      const variant =
-        variants.find(v =>
+      available =
+        variants.some(v =>
           v.color === selectedColor &&
-          v.size === size
+          v.size === size &&
+          Number(v.stock) > 0
         );
 
+    }else{
 
       available =
-        !!variant &&
-        Number(variant.stock) > 0;
+        variants.some(v =>
+          v.size === size &&
+          Number(v.stock) > 0
+        );
 
     }
 
+    button.disabled =
+      !available;
 
     button.classList.toggle(
       "disabled",
       !available
     );
 
-
     button.classList.toggle(
       "active",
       size === selectedSize
     );
-
-
-    button.disabled =
-      !available;
-
 
     if(
       selectedSize === size &&
       !available
     ){
 
-      selectedSize =
-        null;
+      selectedSize = null;
 
       document.getElementById(
         "selectedSize"
@@ -1631,7 +1553,6 @@ function findVariant(){
 
   selectedVariant = null;
 
-
   if(!variants.length){
 
     updateAvailability();
@@ -1640,10 +1561,8 @@ function findVariant(){
 
   }
 
-
   const hasColors =
     variants.some(v => v.color);
-
 
   const hasSizes =
     variants.some(v => v.size);
@@ -1656,7 +1575,6 @@ function findVariant(){
     return;
 
   }
-
 
   if(hasSizes && !selectedSize){
 
@@ -1674,11 +1592,9 @@ function findVariant(){
         !hasColors ||
         v.color === selectedColor;
 
-
       const sizeOK =
         !hasSizes ||
         v.size === selectedSize;
-
 
       return colorOK && sizeOK;
 
@@ -1687,27 +1603,19 @@ function findVariant(){
 
   if(selectedVariant){
 
-    const price =
-      getSelectedPrice();
-
-
     document.getElementById(
       "productPrice"
     ).textContent =
-      formatPrice(price);
-
-
-    const image =
-      getProductImage();
-
+      formatPrice(
+        getSelectedPrice()
+      );
 
     document.getElementById(
       "productImage"
     ).src =
-      image;
+      getProductImage();
 
   }
-
 
   updateAvailability();
 
@@ -1721,27 +1629,16 @@ function findVariant(){
 function updateAvailability(){
 
   const stockInfo =
-    document.getElementById(
-      "stockInfo"
-    );
-
+    document.getElementById("stockInfo");
 
   const buyBtn =
-    document.getElementById(
-      "buyBtn"
-    );
-
+    document.getElementById("buyBtn");
 
   const cartBtn =
-    document.getElementById(
-      "cartBtn"
-    );
-
+    document.getElementById("cartBtn");
 
   const quantityInput =
-    document.getElementById(
-      "quantityInput"
-    );
+    document.getElementById("quantityInput");
 
 
   let stock = 0;
@@ -1785,12 +1682,8 @@ function updateAvailability(){
     stockInfo.className =
       "stock-info";
 
-
-    buyBtn.disabled =
-      true;
-
-    cartBtn.disabled =
-      true;
+    buyBtn.disabled = true;
+    cartBtn.disabled = true;
 
     return;
 
@@ -1805,12 +1698,8 @@ function updateAvailability(){
     stockInfo.className =
       "stock-info out";
 
-
-    buyBtn.disabled =
-      true;
-
-    cartBtn.disabled =
-      true;
+    buyBtn.disabled = true;
+    cartBtn.disabled = true;
 
     return;
 
@@ -1839,26 +1728,24 @@ function updateAvailability(){
   }
 
 
-  buyBtn.disabled =
-    false;
-
-  cartBtn.disabled =
-    false;
+  buyBtn.disabled = false;
+  cartBtn.disabled = false;
 
 
   let quantity =
     Number(quantityInput.value) || 1;
 
-
   if(quantity > stock){
-    quantity = stock;
-  }
 
+    quantity = stock;
+
+  }
 
   if(quantity < 1){
-    quantity = 1;
-  }
 
+    quantity = 1;
+
+  }
 
   quantityInput.value =
     quantity;
@@ -1867,7 +1754,7 @@ function updateAvailability(){
 
 
 /* ==================================================
-   FALLBACK
+   ERROR
 ================================================== */
 
 function showError(){
@@ -1877,35 +1764,28 @@ function showError(){
   ).textContent =
     "Produit introuvable";
 
-
   document.getElementById(
     "productPrice"
   ).textContent =
     "0.00 DA";
-
 
   document.getElementById(
     "productDescription"
   ).textContent =
     "Impossible de charger ce produit.";
 
-
   document.getElementById(
     "stockInfo"
   ).textContent =
     "Produit indisponible";
 
-
   document.getElementById(
     "buyBtn"
-  ).disabled =
-    true;
-
+  ).disabled = true;
 
   document.getElementById(
     "cartBtn"
-  ).disabled =
-    true;
+  ).disabled = true;
 
 }
 
@@ -1927,18 +1807,15 @@ document.getElementById(
   function(){
 
     let quantity =
-      Number(
-        quantityInput.value
-      ) || 1;
-
+      Number(quantityInput.value) || 1;
 
     quantity--;
 
-
     if(quantity < 1){
-      quantity = 1;
-    }
 
+      quantity = 1;
+
+    }
 
     quantityInput.value =
       quantity;
@@ -1954,24 +1831,18 @@ document.getElementById(
   function(){
 
     let quantity =
-      Number(
-        quantityInput.value
-      ) || 1;
+      Number(quantityInput.value) || 1;
 
-
-    let max =
-      Number(
-        quantityInput.max
-      ) || 99;
-
+    const max =
+      Number(quantityInput.max) || 99;
 
     quantity++;
 
-
     if(quantity > max){
-      quantity = max;
-    }
 
+      quantity = max;
+
+    }
 
     quantityInput.value =
       quantity;
@@ -1987,20 +1858,20 @@ quantityInput.addEventListener(
     let quantity =
       Number(this.value) || 1;
 
-
-    let max =
+    const max =
       Number(this.max) || 99;
 
-
     if(quantity < 1){
-      quantity = 1;
-    }
 
+      quantity = 1;
+
+    }
 
     if(quantity > max){
-      quantity = max;
-    }
 
+      quantity = max;
+
+    }
 
     this.value =
       quantity;
@@ -2017,13 +1888,18 @@ function getCart(){
 
   try{
 
-    return JSON.parse(
-      localStorage.getItem(
-        "jr_cart"
-      )
-    ) || [];
+    const data =
+      JSON.parse(
+        localStorage.getItem("jr_cart") || "[]"
+      );
+
+    return Array.isArray(data)
+      ? data
+      : [];
 
   }catch(error){
+
+    console.error(error);
 
     return [];
 
@@ -2045,59 +1921,42 @@ function saveCart(cart){
 function buildCartItem(){
 
   if(!product){
+
     return null;
+
   }
 
-
   const quantity =
-    Number(
-      quantityInput.value
-    ) || 1;
-
+    Number(quantityInput.value) || 1;
 
   const price =
     getSelectedPrice();
-
 
   return {
 
     product_id:
       product.id,
 
-
     variant_id:
-      selectedVariant?.id ||
-      null,
-
+      selectedVariant?.id || null,
 
     name:
-      product.name ||
-      "Produit",
-
+      product.name || "Produit",
 
     price:
       price,
 
-
     old_price:
-      Number(
-        product.old_price
-      ) || 0,
-
+      Number(product.old_price) || 0,
 
     image_url:
       getProductImage(),
 
-
     color:
-      selectedColor ||
-      null,
-
+      selectedColor || null,
 
     size:
-      selectedSize ||
-      null,
-
+      selectedSize || null,
 
     quantity:
       quantity
@@ -2112,30 +1971,36 @@ function addToCart(){
   const item =
     buildCartItem();
 
-
   if(!item){
-    return;
-  }
 
+    return;
+
+  }
 
   const cart =
     getCart();
 
-
   const existingIndex =
     cart.findIndex(
       cartItem =>
-        cartItem.product_id ===
-          item.product_id &&
-        cartItem.variant_id ===
-          item.variant_id
+        cartItem.product_id === item.product_id &&
+        cartItem.variant_id === item.variant_id
     );
 
 
   if(existingIndex !== -1){
 
-    cart[existingIndex].quantity +=
-      item.quantity;
+    const maxStock =
+      selectedVariant
+        ? Number(selectedVariant.stock) || 0
+        : Number(product.stock) || 0;
+
+    cart[existingIndex].quantity =
+      Math.min(
+        cart[existingIndex].quantity +
+        item.quantity,
+        maxStock
+      );
 
   }else{
 
@@ -2152,16 +2017,13 @@ function addToCart(){
       "cartMessage"
     );
 
-
   message.textContent =
     "✓ Produit ajouté au panier";
-
 
   setTimeout(
     function(){
 
-      message.textContent =
-        "";
+      message.textContent = "";
 
     },
     2500
@@ -2186,11 +2048,16 @@ function getFavorites(){
 
   try{
 
-    return JSON.parse(
-      localStorage.getItem(
-        "jr_favorites"
-      )
-    ) || [];
+    const data =
+      JSON.parse(
+        localStorage.getItem(
+          "jr_favorites"
+        ) || "[]"
+      );
+
+    return Array.isArray(data)
+      ? data
+      : [];
 
   }catch(error){
 
@@ -2205,9 +2072,7 @@ function saveFavorites(favorites){
 
   localStorage.setItem(
     "jr_favorites",
-    JSON.stringify(
-      favorites
-    )
+    JSON.stringify(favorites)
   );
 
 }
@@ -2216,43 +2081,33 @@ function saveFavorites(favorites){
 function updateFavoriteButton(){
 
   if(!product){
-    return;
-  }
 
+    return;
+
+  }
 
   const favorites =
     getFavorites();
 
-
   const exists =
-    favorites.includes(
-      product.id
-    );
-
+    favorites.includes(product.id);
 
   const button =
     document.getElementById(
       "favoriteBtn"
     );
 
-
   if(exists){
 
-    button.textContent =
-      "♥";
+    button.textContent = "♥";
 
-    button.classList.add(
-      "active"
-    );
+    button.classList.add("active");
 
   }else{
 
-    button.textContent =
-      "♡";
+    button.textContent = "♡";
 
-    button.classList.remove(
-      "active"
-    );
+    button.classList.remove("active");
 
   }
 
@@ -2266,40 +2121,28 @@ document.getElementById(
   function(){
 
     if(!product){
-      return;
-    }
 
+      return;
+
+    }
 
     let favorites =
       getFavorites();
 
-
     const index =
-      favorites.indexOf(
-        product.id
-      );
-
+      favorites.indexOf(product.id);
 
     if(index === -1){
 
-      favorites.push(
-        product.id
-      );
+      favorites.push(product.id);
 
     }else{
 
-      favorites.splice(
-        index,
-        1
-      );
+      favorites.splice(index,1);
 
     }
 
-
-    saveFavorites(
-      favorites
-    );
-
+    saveFavorites(favorites);
 
     updateFavoriteButton();
 
@@ -2320,7 +2163,9 @@ const confirmationModal =
 function openConfirmationModal(){
 
   if(!product){
+
     return;
+
   }
 
 
@@ -2330,7 +2175,7 @@ function openConfirmationModal(){
   ){
 
     alert(
-      "Veuillez sélectionner la couleur et la taille."
+      "Veuillez sélectionner une couleur et une taille disponibles."
     );
 
     return;
@@ -2339,13 +2184,26 @@ function openConfirmationModal(){
 
 
   const quantity =
-    Number(
-      quantityInput.value
-    ) || 1;
-
+    Number(quantityInput.value) || 1;
 
   const price =
     getSelectedPrice();
+
+  const stock =
+    selectedVariant
+      ? Number(selectedVariant.stock) || 0
+      : Number(product.stock) || 0;
+
+
+  if(quantity < 1 || quantity > stock){
+
+    alert(
+      "La quantité sélectionnée n'est pas disponible."
+    );
+
+    return;
+
+  }
 
 
   const total =
@@ -2361,8 +2219,7 @@ function openConfirmationModal(){
   document.getElementById(
     "modalProductName"
   ).textContent =
-    product.name ||
-    "Produit";
+    product.name || "Produit";
 
 
   document.getElementById(
@@ -2374,15 +2231,13 @@ function openConfirmationModal(){
   document.getElementById(
     "modalColor"
   ).textContent =
-    selectedColor ||
-    "—";
+    selectedColor || "—";
 
 
   document.getElementById(
     "modalSize"
   ).textContent =
-    selectedSize ||
-    "—";
+    selectedSize || "—";
 
 
   document.getElementById(
@@ -2403,16 +2258,12 @@ function openConfirmationModal(){
     formatPrice(total);
 
 
-  confirmationModal.classList.add(
-    "active"
-  );
-
+  confirmationModal.classList.add("active");
 
   confirmationModal.setAttribute(
     "aria-hidden",
     "false"
   );
-
 
   document.body.style.overflow =
     "hidden";
@@ -2434,12 +2285,10 @@ function closeConfirmation(){
     "active"
   );
 
-
   confirmationModal.setAttribute(
     "aria-hidden",
     "true"
   );
-
 
   document.body.style.overflow =
     "";
@@ -2478,7 +2327,7 @@ confirmationModal.addEventListener(
 
 
 /* ==================================================
-   CONFIRM PURCHASE
+   CONFIRM PURCHASE → CHECKOUT
 ================================================== */
 
 document.getElementById(
@@ -2488,63 +2337,49 @@ document.getElementById(
   function(){
 
     if(!product){
+
       return;
+
     }
 
 
     const quantity =
-      Number(
-        quantityInput.value
-      ) || 1;
-
+      Number(quantityInput.value) || 1;
 
     const price =
       getSelectedPrice();
-
 
     const checkoutProduct = {
 
       id:
         product.id || null,
 
+      product_id:
+        product.id || null,
 
       variant_id:
-        selectedVariant?.id ||
-        null,
-
+        selectedVariant?.id || null,
 
       name:
-        product.name ||
-        "",
-
+        product.name || "",
 
       price:
         price,
 
-
       old_price:
-        Number(
-          product.old_price
-        ) || 0,
-
+        Number(product.old_price) || 0,
 
       image_url:
         getProductImage(),
 
-
       color:
-        selectedColor ||
-        null,
-
+        selectedColor || null,
 
       size:
-        selectedSize ||
-        null,
-
+        selectedSize || null,
 
       quantity:
         quantity,
-
 
       total:
         price * quantity
@@ -2552,11 +2387,18 @@ document.getElementById(
     };
 
 
+    /* Nettoyer ancien achat direct */
+
+    localStorage.removeItem(
+      "jr_checkout_product"
+    );
+
+
+    /* Enregistrer nouveau produit */
+
     localStorage.setItem(
       "jr_checkout_product",
-      JSON.stringify(
-        checkoutProduct
-      )
+      JSON.stringify(checkoutProduct)
     );
 
 
@@ -2565,11 +2407,7 @@ document.getElementById(
         "confirmPurchase"
       );
 
-
-    button.classList.add(
-      "loading"
-    );
-
+    button.classList.add("loading");
 
     button.textContent =
       "Préparation...";
@@ -2582,7 +2420,7 @@ document.getElementById(
           "checkout.html";
 
       },
-      300
+      250
     );
 
   }
@@ -2609,12 +2447,10 @@ document.getElementById(
       "active"
     );
 
-
     sizeGuideModal.setAttribute(
       "aria-hidden",
       "false"
     );
-
 
     document.body.style.overflow =
       "hidden";
@@ -2629,12 +2465,10 @@ function closeSizeGuide(){
     "active"
   );
 
-
   sizeGuideModal.setAttribute(
     "aria-hidden",
     "true"
   );
-
 
   document.body.style.overflow =
     "";
@@ -2673,9 +2507,10 @@ document.addEventListener(
   function(event){
 
     if(event.key !== "Escape"){
-      return;
-    }
 
+      return;
+
+    }
 
     if(
       confirmationModal.classList.contains(
@@ -2686,7 +2521,6 @@ document.addEventListener(
       closeConfirmation();
 
     }
-
 
     if(
       sizeGuideModal.classList.contains(
