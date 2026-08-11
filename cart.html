@@ -1,16 +1,14 @@
 <!doctype html>
-
 <html lang="fr">
 
 <head>
 
   <meta charset="UTF-8">
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
-
->
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Panier — JR Shop</title>
 
@@ -18,188 +16,197 @@ content="width=device-width, initial-scale=1.0"
 
 </head>
 
+
 <body>
 
-<!-- =========================
-     HEADER
-========================= -->
-
-<header class="site-header">
-
-  <div class="wrap nav">
-
-```
-<a
-  class="logo"
-  href="index.html"
->
-  JR <span>Shop</span>
-</a>
-
-
-<a
-  class="cart-link"
-  href="cart.html"
->
-
-  🛒 Panier
-
-  <b id="cartCount">0</b>
-
-</a>
-```
-
-  </div>
-
-</header>
-
-<!-- =========================
-     MAIN
-========================= -->
-
-<main class="wrap">
-
-  <section class="hero">
-
-```
-<h1>
-  Votre panier
-</h1>
-
-<p>
-  Vérifiez vos produits avant de confirmer votre commande.
-</p>
-```
-
-  </section>
-
-  <!-- CART -->
-
-  <section>
-
-```
-<div id="cart">
-
-  <div class="card empty">
-
-    <h2>
-      Chargement...
-    </h2>
-
-  </div>
-
-</div>
-```
-
-  </section>
 
   <!-- =========================
-       CHECKOUT
+       HEADER
   ========================= -->
 
-  <section
-    id="checkout"
-    class="checkout card"
-    hidden
-  >
+  <header class="site-header">
 
-```
-<h2>
-  Passer la commande
-</h2>
+    <div class="wrap nav">
 
-
-<p>
-  Remplissez vos informations de livraison.
-</p>
+      <a
+        class="logo"
+        href="index.html"
+      >
+        JR <span>Shop</span>
+      </a>
 
 
-<form id="orderForm">
+      <a
+        class="cart-link"
+        href="cart.html"
+      >
+
+        🛒 Panier
+
+        <b id="cartCount">0</b>
+
+      </a>
+
+    </div>
+
+  </header>
 
 
-  <!-- NAME -->
+  <!-- =========================
+       MAIN
+  ========================= -->
 
-  <input
-    type="text"
-    name="customer_name"
-    placeholder="Nom et prénom"
-    required
-  >
+  <main class="wrap">
 
 
-  <!-- PHONE -->
+    <section class="hero">
 
-  <input
-    type="tel"
-    name="phone"
-    placeholder="Téléphone"
-    required
-  >
+      <h1>
+        Votre panier
+      </h1>
 
+      <p>
+        Vérifiez vos produits avant de confirmer votre commande.
+      </p>
 
-  <!-- ADDRESS -->
-
-  <textarea
-    name="address"
-    placeholder="Adresse de livraison"
-    required
-  ></textarea>
+    </section>
 
 
-  <!-- NOTE -->
+    <!-- =========================
+         CART
+    ========================= -->
 
-  <textarea
-    name="note"
-    placeholder="Note (facultatif)"
-  ></textarea>
+    <section>
+
+      <div id="cart">
+
+        <div class="card empty">
+
+          <h2>
+            Chargement...
+          </h2>
+
+        </div>
+
+      </div>
+
+    </section>
 
 
-  <!-- SUBMIT -->
+    <!-- =========================
+         CHECKOUT
+    ========================= -->
 
-  <button
-    class="btn primary"
-    type="submit"
-  >
-    Confirmer la commande
-  </button>
+    <section
+      id="checkout"
+      class="checkout card"
+      hidden
+    >
+
+      <h2>
+        Passer la commande
+      </h2>
 
 
-</form>
-```
+      <p>
+        Remplissez vos informations de livraison.
+      </p>
 
-  </section>
 
-</main>
+      <form id="orderForm">
 
-<!-- =========================
-     TOAST
-========================= -->
 
-<div
-  id="toast"
-  class="toast"
-></div>
+        <!-- NAME -->
 
-<!-- =========================
-     SUPABASE
-========================= -->
+        <input
+          type="text"
+          name="customer_name"
+          placeholder="Nom et prénom"
+          required
+        >
 
-<script
-  src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
-></script>
 
-<!-- =========================
-     CONFIG
-========================= -->
+        <!-- PHONE -->
 
-<script src="config.js"></script>
+        <input
+          type="tel"
+          name="phone"
+          placeholder="Téléphone"
+          required
+        >
 
-<!-- =========================
-     CART JS
-========================= -->
 
-<script src="cart.js"></script>
+        <!-- ADDRESS -->
+
+        <textarea
+          name="address"
+          placeholder="Adresse de livraison"
+          required
+        ></textarea>
+
+
+        <!-- NOTE -->
+
+        <textarea
+          name="note"
+          placeholder="Note (facultatif)"
+        ></textarea>
+
+
+        <!-- SUBMIT -->
+
+        <button
+          class="btn primary"
+          type="submit"
+        >
+          Confirmer la commande
+        </button>
+
+
+      </form>
+
+    </section>
+
+
+  </main>
+
+
+  <!-- =========================
+       TOAST
+  ========================= -->
+
+  <div
+    id="toast"
+    class="toast"
+    role="status"
+    aria-live="polite"
+  ></div>
+
+
+  <!-- =========================
+       SUPABASE
+  ========================= -->
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+  ></script>
+
+
+  <!-- =========================
+       CONFIG
+  ========================= -->
+
+  <script src="config.js"></script>
+
+
+  <!-- =========================
+       CART JS
+  ========================= -->
+
+  <script src="cart.js"></script>
+
 
 </body>
 
 </html>
+
