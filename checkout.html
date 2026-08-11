@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Checkout - JR Shop</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#f6f6f4;
+  color:#171717;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+button,
+input,
+textarea{
+  font:inherit;
+}
+
+.checkout-page{
+  max-width:1100px;
+  margin:auto;
+  padding:20px 15px 80px;
+}
+
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:20px;
+}
+
+.back-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:11px 15px;
+  border-radius:11px;
+  background:#111;
+  color:#fff;
+  text-decoration:none;
+  font-weight:800;
+  font-size:14px;
+}
+
+.logo{
+  font-weight:900;
+  letter-spacing:2px;
+}
+
+.checkout-grid{
+  display:grid;
+  grid-template-columns:1fr 400px;
+  gap:20px;
+}
+
+.card{
+  background:#fff;
+  border:1px solid #e8e8e4;
+  border-radius:20px;
+  padding:22px;
+  box-shadow:0 10px 35px #00000008;
+}
+
+.card h2{
+  margin:0 0 18px;
+  font-size:21px;
+}
+
+.field{
+  margin-bottom:14px;
+}
+
+.field label{
+  display:block;
+  font-size:13px;
+  font-weight:800;
+  margin-bottom:7px;
+}
+
+.field input,
+.field textarea{
+  width:100%;
+  border:1px solid #ddd;
+  border-radius:10px;
+  padding:12px;
+  outline:none;
+  background:#fff;
+}
+
+.field textarea{
+  min-height:100px;
+  resize:vertical;
+}
+
+.field input:focus,
+.field textarea:focus{
+  border-color:#111;
+}
+
+.product-list{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.product{
+  display:flex;
+  gap:12px;
+  padding-bottom:12px;
+  border-bottom:1px solid #eee;
+}
+
+.product:last-child{
+  border-bottom:0;
+}
+
+.product img{
+  width:82px;
+  height:82px;
+  object-fit:cover;
+  border-radius:11px;
+  background:#f2f2ef;
+}
+
+.product-info{
+  flex:1;
+  min-width:0;
+}
+
+.product-name{
+  font-weight:900;
+  font-size:14px;
+  margin-bottom:6px;
+}
+
+.product-option{
+  color:#777;
+  font-size:12px;
+  margin-bottom:3px;
+}
+
+.product-price{
+  margin-top:6px;
+  font-weight:900;
+}
+
+.summary-row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin:10px 0;
+  font-size:14px;
+}
+
+.summary-total{
+  border-top:1px solid #eee;
+  margin-top:15px;
+  padding-top:15px;
+  font-size:20px;
+  font-weight:900;
+}
+
+.order-btn{
+  width:100%;
+  min-height:56px;
+  border:0;
+  border-radius:13px;
+  background:#111;
+  color:#fff;
+  font-weight:900;
+  cursor:pointer;
+  margin-top:18px;
+}
+
+.order-btn:disabled{
+  background:#aaa;
+  cursor:not-allowed;
+}
+
+.empty{
+  background:#fff;
+  border-radius:20px;
+  padding:60px 20px;
+  text-align:center;
+}
+
+.empty h2{
+  margin-top:0;
+}
+
+.continue-btn{
+  display:inline-block;
+  margin-top:15px;
+  padding:12px 18px;
+  background:#111;
+  color:#fff;
+  border-radius:10px;
+  text-decoration:none;
+  font-weight:800;
+}
+
+.message{
+  margin-top:12px;
+  text-align:center;
+  font-size:13px;
+  font-weight:800;
+}
+
+.success{
+  color:#138a4a;
+}
+
+.error{
+  color:#b42318;
+}
+
+.notice{
+  padding:12px;
+  border-radius:10px;
+  background:#f7f7f4;
+  color:#666;
+  font-size:12px;
+  line-height:1.6;
+  margin-bottom:15px;
+}
+
+@media(max-width:800px){
+
+  .checkout-grid{
+    grid-template-columns:1fr;
+  }
+
+}
+
+@media(max-width:500px){
+
+  .checkout-page{
+    padding:10px 8px 50px;
+  }
+
+  .card{
+    padding:16px;
+    border-radius:16px;
+  }
+
+  .logo{
+    display:none;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<main class="checkout-page">
+
+  <div class="topbar">
+
+    <a href="product-details.html"
+       class="back-btn">
+      ← Retour
+    </a>
+
+    <div class="logo">
+      JR SHOP
+    </div>
+
+  </div>
+
+
+  <div id="emptyState"
+       class="empty"
+       style="display:none">
+
+    <h2>Votre panier est vide</h2>
+
+    <p>
+      Ajoutez un produit avant de passer la commande.
+    </p>
+
+    <a href="index.html"
+       class="continue-btn">
+      Continuer mes achats
+    </a>
+
+  </div>
+
+
+  <div id="checkoutContent"
+       class="checkout-grid"
+       style="display:none">
+
+
+    <!-- CUSTOMER -->
+
+    <section class="card">
+
+      <h2>
+        Informations de livraison
+      </h2>
+
+      <div class="notice">
+
+        Remplissez vos informations pour confirmer
+        votre commande JR Shop.
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="customerName">
+          Nom complet
+        </label>
+
+        <input
+          id="customerName"
+          type="text"
+          placeholder="Votre nom complet"
+          autocomplete="name">
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="customerPhone">
+          Téléphone
+        </label>
+
+        <input
+          id="customerPhone"
+          type="tel"
+          placeholder="06 XX XX XX XX"
+          autocomplete="tel">
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="customerAddress">
+          Adresse
+        </label>
+
+        <textarea
+          id="customerAddress"
+          placeholder="Votre adresse de livraison"></textarea>
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="customerCity">
+          Ville
+        </label>
+
+        <input
+          id="customerCity"
+          type="text"
+          placeholder="Votre ville"
+          autocomplete="address-level2">
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="customerNote">
+          Note de commande
+        </label>
+
+        <textarea
+          id="customerNote"
+          placeholder="Information supplémentaire (optionnel)"></textarea>
+
+      </div>
+
+
+      <button
+        id="orderButton"
+        class="order-btn"
+        onclick="placeOrder()">
+
+        Confirmer la commande
+
+      </button>
+
+
+      <div
+        id="orderMessage"
+        class="message">
+      </div>
+
+    </section>
+
+
+
+    <!-- SUMMARY -->
+
+    <section class="card">
+
+      <h2>
+        Votre commande
+      </h2>
+
+      <div
+        id="productList"
+        class="product-list">
+      </div>
+
+
+      <div class="summary-row">
+
+        <span>
+          Sous-total
+        </span>
+
+        <strong id="subtotal">
+          0 DA
+        </strong>
+
+      </div>
+
+
+      <div class="summary-row">
+
+        <span>
+          Livraison
+        </span>
+
+        <strong>
+          À confirmer
+        </strong>
+
+      </div>
+
+
+      <div class="summary-row summary-total">
+
+        <span>
+          Total
+        </span>
+
+        <strong id="total">
+          0 DA
+        </strong>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="config.js"></script>
+
+
+<script>
+
+/* =========================================================
+   JR SHOP CHECKOUT
+   Uses the existing jr_cart
+========================================================= */
+
+
+let cart = [];
+
+
+/* =========================================================
+   CART
+========================================================= */
+
+function getCart(){
+
+  try{
+
+    const data =
+      JSON.parse(
+        localStorage.getItem("jr_cart") || "[]"
+      );
+
+    return Array.isArray(data)
+      ? data
+      : [];
+
+  }catch(error){
+
+    return [];
+
+  }
+
+}
+
+
+/* =========================================================
+   PRICE
+========================================================= */
+
+function formatPrice(value){
+
+  const number = Number(value) || 0;
+
+  return number.toLocaleString("fr-FR") + " DA";
+
+}
+
+
+/* =========================================================
+   ESCAPE
+========================================================= */
+
+function escapeHtml(value){
+
+  if(value === null || value === undefined){
+    return "";
+  }
+
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================================================
+   IMAGE
+========================================================= */
+
+function getProductImage(item){
+
+  if(item.image_url){
+    return item.image_url;
+  }
+
+  if(
+    Array.isArray(item.image_urls) &&
+    item.image_urls.length
+  ){
+
+    return item.image_urls[0];
+
+  }
+
+  return "https://placehold.co/300x300?text=JR+Shop";
+
+}
+
+
+/* =========================================================
+   RENDER CART
+========================================================= */
+
+function renderCart(){
+
+  cart = getCart();
+
+  const emptyState =
+    document.getElementById("emptyState");
+
+  const checkoutContent =
+    document.getElementById("checkoutContent");
+
+  const productList =
+    document.getElementById("productList");
+
+  if(!cart.length){
+
+    emptyState.style.display = "block";
+    checkoutContent.style.display = "none";
+
+    return;
+
+  }
+
+
+  emptyState.style.display = "none";
+  checkoutContent.style.display = "grid";
+
+  productList.innerHTML = "";
+
+
+  let subtotal = 0;
+
+
+  cart.forEach(item => {
+
+    const quantity =
+      Number(item.quantity) || 1;
+
+    const price =
+      Number(item.price) || 0;
+
+    const lineTotal =
+      price * quantity;
+
+    subtotal += lineTotal;
+
+
+    const product =
+      document.createElement("div");
+
+    product.className = "product";
+
+
+    const image =
+      getProductImage(item);
+
+
+    let options = "";
+
+
+    if(item.color){
+
+      options +=
+        "Couleur : " +
+        escapeHtml(item.color);
+
+    }
+
+
+    if(item.size){
+
+      if(options){
+        options += " • ";
+      }
+
+      options +=
+        "Taille : " +
+        escapeHtml(item.size);
+
+    }
+
+
+    product.innerHTML = `
+
+      <img
+        src="${escapeHtml(image)}"
+        alt="${escapeHtml(item.name || "Produit")}">
+
+      <div class="product-info">
+
+        <div class="product-name">
+
+          ${escapeHtml(
+            item.name ||
+            item.title ||
+            "Produit"
+          )}
+
+        </div>
+
+        ${
+          options
+          ?
+          `<div class="product-option">
+             ${options}
+           </div>`
+          :
+          ""
+        }
+
+        <div class="product-option">
+
+          Quantité : ${quantity}
+
+        </div>
+
+        <div class="product-price">
+
+          ${formatPrice(lineTotal)}
+
+        </div>
+
+      </div>
+
+    `;
+
+
+    productList.appendChild(product);
+
+  });
+
+
+  document.getElementById("subtotal")
+    .textContent =
+    formatPrice(subtotal);
+
+
+  document.getElementById("total")
+    .textContent =
+    formatPrice(subtotal);
+
+}
+
+
+/* =========================================================
+   PLACE ORDER
+========================================================= */
+
+async function placeOrder(){
+
+  const name =
+    document
+      .getElementById("customerName")
+      .value
+      .trim();
+
+
+  const phone =
+    document
+      .getElementById("customerPhone")
+      .value
+      .trim();
+
+
+  const address =
+    document
+      .getElementById("customerAddress")
+      .value
+      .trim();
+
+
+  const city =
+    document
+      .getElementById("customerCity")
+      .value
+      .trim();
+
+
+  const note =
+    document
+      .getElementById("customerNote")
+      .value
+      .trim();
+
+
+  const message =
+    document.getElementById("orderMessage");
+
+
+  const button =
+    document.getElementById("orderButton");
+
+
+  if(!name){
+
+    showMessage(
+      "Veuillez entrer votre nom.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  if(!phone){
+
+    showMessage(
+      "Veuillez entrer votre numéro de téléphone.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  if(!address){
+
+    showMessage(
+      "Veuillez entrer votre adresse.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  if(!city){
+
+    showMessage(
+      "Veuillez entrer votre ville.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  cart = getCart();
+
+
+  if(!cart.length){
+
+    showMessage(
+      "Votre panier est vide.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  const subtotal =
+    cart.reduce(
+      (sum,item) =>
+        sum +
+        (
+          Number(item.price) || 0
+        ) *
+        (
+          Number(item.quantity) || 1
+        ),
+      0
+    );
+
+
+  /*
+    IMPORTANT
+
+    Pour l'instant on prépare les données
+    sans inventer les colonnes de orders.
+
+    On garde tout dans jr_pending_order.
+  */
+
+
+  const pendingOrder = {
+
+    customer_name: name,
+
+    customer_phone: phone,
+
+    customer_address: address,
+
+    customer_city: city,
+
+    note: note,
+
+    subtotal: subtotal,
+
+    total: subtotal,
+
+    items: cart,
+
+    created_at:
+      new Date().toISOString()
+
+  };
+
+
+  localStorage.setItem(
+    "jr_pending_order",
+    JSON.stringify(pendingOrder)
+  );
+
+
+  button.disabled = true;
+
+  button.textContent =
+    "Préparation de la commande...";
+
+
+  /*
+    IMPORTANT:
+    Ici on ne fait PAS encore INSERT dans orders
+    parce que nous ne connaissons pas les colonnes
+    exactes de ta table orders.
+  */
+
+
+  showMessage(
+    "Commande préparée ✓",
+    "success"
+  );
+
+
+  setTimeout(() => {
+
+    alert(
+      "La commande est prête.\n\n" +
+      "Il reste à connecter cette page " +
+      "à ta table orders."
+    );
+
+    button.disabled = false;
+
+    button.textContent =
+      "Confirmer la commande";
+
+  },700);
+
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+function showMessage(text,type){
+
+  const message =
+    document.getElementById("orderMessage");
+
+  message.textContent = text;
+
+  message.className =
+    "message " + type;
+
+}
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    renderCart();
+
+  }
+);
+
+</script>
+
+</body>
+</html>
