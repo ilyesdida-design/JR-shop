@@ -640,6 +640,84 @@ padding:18px 22px;
 border-top:1px solid #eee
 }
 
+ .delivery-box{
+border:1px solid #e5e7eb;
+background:#fafafa;
+padding:14px;
+margin:4px 0 12px;
+border-radius:10px
+}
+
+.delivery-title{
+font-weight:900;
+margin-bottom:10px
+}
+
+.delivery-option{
+display:flex;
+align-items:center;
+gap:10px;
+border:1px solid #e5e7eb;
+background:#fff;
+padding:11px;
+margin-top:8px;
+border-radius:8px;
+cursor:pointer
+}
+
+.delivery-option:has(input:checked){
+border-color:var(--jr-green);
+box-shadow:0 0 0 1px var(--jr-green)
+}
+
+.delivery-option input{
+margin:0;
+width:auto!important
+}
+
+.delivery-option span{
+flex:1;
+display:flex;
+flex-direction:column;
+gap:3px
+}
+
+.delivery-option small{
+color:#777;
+font-size:10px
+}
+
+.delivery-option b{
+font-size:13px
+}
+
+.delivery-summary{
+border:1px solid #eee;
+background:#fff;
+padding:13px;
+margin-bottom:12px;
+border-radius:10px
+}
+
+.delivery-summary>div{
+display:flex;
+justify-content:space-between;
+gap:12px;
+padding:6px 0;
+font-size:13px
+}
+
+.delivery-summary .grand-total{
+border-top:1px solid #eee;
+margin-top:5px;
+padding-top:12px;
+font-size:17px
+}
+
+.delivery-summary .grand-total strong{
+color:var(--jr-green)
+}
+
 .checkout{padding:22px}
 
 .checkout input,
@@ -1106,6 +1184,34 @@ inputmode="tel"
 </option>
 </select>
 
+<div class="delivery-box">
+  <div class="delivery-title">🚚 طريقة التوصيل</div>
+
+  <label class="delivery-option">
+    <input type="radio" name="deliveryType" value="domicile" checked>
+    <span>
+      <strong>🏠 Domicile</strong>
+      <small>التوصيل إلى العنوان</small>
+    </span>
+    <b id="domicileFee">—</b>
+  </label>
+
+  <label class="delivery-option">
+    <input type="radio" name="deliveryType" value="stopdesk">
+    <span>
+      <strong>🏢 Stop Desk</strong>
+      <small>الاستلام من مكتب شركة التوصيل</small>
+    </span>
+    <b id="stopDeskFee">—</b>
+  </label>
+</div>
+
+<div class="delivery-summary">
+  <div><span>🛍️ المنتجات</span><strong id="checkoutProductsTotal">0 دج</strong></div>
+  <div><span>🚚 التوصيل</span><strong id="checkoutDeliveryTotal">0 دج</strong></div>
+  <div class="grand-total"><span>💰 المجموع النهائي</span><strong id="checkoutGrandTotal">0 دج</strong></div>
+</div>
+
 <textarea
 id="customerAddress"
 rows="3"
@@ -1285,6 +1391,119 @@ Number(x.quantity||1),
 );
 
 }
+
+/* =========================
+   V6 — PATCH 1
+   Domicile / Stop Desk
+   Delivery by Wilaya
+========================= */
+
+const DELIVERY_RATES={
+"01 - Adrar":{domicile:900,stopdesk:750},
+"02 - Chlef":{domicile:700,stopdesk:600},
+"03 - Laghouat":{domicile:850,stopdesk:700},
+"04 - Oum El Bouaghi":{domicile:800,stopdesk:650},
+"05 - Batna":{domicile:800,stopdesk:650},
+"06 - Béjaïa":{domicile:750,stopdesk:600},
+"07 - Biskra":{domicile:850,stopdesk:700},
+"08 - Béchar":{domicile:1000,stopdesk:850},
+"09 - Blida":{domicile:650,stopdesk:550},
+"10 - Bouira":{domicile:700,stopdesk:600},
+"11 - Tamanrasset":{domicile:1300,stopdesk:1100},
+"12 - Tébessa":{domicile:850,stopdesk:700},
+"13 - Tlemcen":{domicile:650,stopdesk:550},
+"14 - Tiaret":{domicile:700,stopdesk:600},
+"15 - Tizi Ouzou":{domicile:700,stopdesk:600},
+"16 - Alger":{domicile:600,stopdesk:500},
+"17 - Djelfa":{domicile:800,stopdesk:650},
+"18 - Jijel":{domicile:800,stopdesk:650},
+"19 - Sétif":{domicile:750,stopdesk:600},
+"20 - Saïda":{domicile:750,stopdesk:600},
+"21 - Skikda":{domicile:800,stopdesk:650},
+"22 - Sidi Bel Abbès":{domicile:650,stopdesk:550},
+"23 - Annaba":{domicile:800,stopdesk:650},
+"24 - Guelma":{domicile:800,stopdesk:650},
+"25 - Constantine":{domicile:750,stopdesk:600},
+"26 - Médéa":{domicile:700,stopdesk:600},
+"27 - Mostaganem":{domicile:700,stopdesk:600},
+"28 - M'Sila":{domicile:800,stopdesk:650},
+"29 - Mascara":{domicile:700,stopdesk:600},
+"30 - Ouargla":{domicile:950,stopdesk:800},
+"31 - Oran":{domicile:650,stopdesk:550},
+"32 - El Bayadh":{domicile:950,stopdesk:800},
+"33 - Illizi":{domicile:1300,stopdesk:1100},
+"34 - Bordj Bou Arreridj":{domicile:750,stopdesk:600},
+"35 - Boumerdes":{domicile:650,stopdesk:550},
+"36 - El Tarf":{domicile:850,stopdesk:700},
+"37 - Tindouf":{domicile:1300,stopdesk:1100},
+"38 - Tissemsilt":{domicile:750,stopdesk:600},
+"39 - El Oued":{domicile:950,stopdesk:800},
+"40 - Khenchela":{domicile:850,stopdesk:700},
+"41 - Souk Ahras":{domicile:850,stopdesk:700},
+"42 - Tipaza":{domicile:650,stopdesk:550},
+"43 - Mila":{domicile:800,stopdesk:650},
+"44 - Aïn Defla":{domicile:700,stopdesk:600},
+"45 - Naâma":{domicile:1000,stopdesk:850},
+"46 - Aïn Témouchent":{domicile:700,stopdesk:600},
+"47 - Ghardaïa":{domicile:900,stopdesk:750},
+"48 - Relizane":{domicile:700,stopdesk:600},
+"49 - Timimoun":{domicile:1100,stopdesk:950},
+"50 - Bordj Badji Mokhtar":{domicile:1400,stopdesk:1200},
+"51 - Ouled Djellal":{domicile:900,stopdesk:750},
+"52 - Béni Abbès":{domicile:1100,stopdesk:950},
+"53 - In Salah":{domicile:1200,stopdesk:1000},
+"54 - In Guezzam":{domicile:1400,stopdesk:1200},
+"55 - Touggourt":{domicile:950,stopdesk:800},
+"56 - Djanet":{domicile:1400,stopdesk:1200},
+"57 - El Meghaier":{domicile:1000,stopdesk:850},
+"58 - El Meniaa":{domicile:1050,stopdesk:900}
+};
+
+let selectedDeliveryType="domicile";
+let deliveryFee=0;
+
+function getDeliveryRate(wilaya= document.getElementById("customerWilaya")?.value){
+const r=DELIVERY_RATES[wilaya];
+if(!r)return {domicile:0,stopdesk:0};
+return r;
+}
+
+function updateCheckoutTotals(){
+
+const productTotal=getCartTotal();
+const wilaya=document.getElementById("customerWilaya")?.value||"";
+const rate=getDeliveryRate(wilaya);
+
+deliveryFee=Number(rate[selectedDeliveryType]||0);
+
+const domicile=document.getElementById("domicileFee");
+const stopdesk=document.getElementById("stopDeskFee");
+
+if(domicile)domicile.textContent=rate.domicile?formatPrice(rate.domicile):"—";
+if(stopdesk)stopdesk.textContent=rate.stopdesk?formatPrice(rate.stopdesk):"—";
+
+const p=document.getElementById("checkoutProductsTotal");
+const d=document.getElementById("checkoutDeliveryTotal");
+const g=document.getElementById("checkoutGrandTotal");
+
+if(p)p.textContent=formatPrice(productTotal);
+if(d)d.textContent=formatPrice(deliveryFee);
+if(g)g.textContent=formatPrice(productTotal+deliveryFee);
+
+}
+
+function getCheckoutGrandTotal(){
+return getCartTotal()+Number(deliveryFee||0);
+}
+
+document.addEventListener("change",e=>{
+
+if(e.target.name==="deliveryType"){
+selectedDeliveryType=e.target.value;
+updateCheckoutTotals();
+}
+
+});
 
 async function loadCategories(){
 
@@ -2239,6 +2458,7 @@ return showToast(
 
 closeModal("cartModal");
 openModal("checkoutModal");
+updateCheckoutTotals();
 
 };
 
@@ -3225,12 +3445,34 @@ x.price*x.quantity
 );
 
 m+=
-"%0A💰 المجموع: "+
+"%0A🚚 طريقة التوصيل: "+
 encodeURIComponent(
-formatPrice(
-getCartTotal()
-)
-);
+selectedDeliveryType==="domicile"
+?"🏠 Domicile"
+:"🏢 Stop Desk"
+)+
+"%0A";
+
+m+=
+"🚚 مصاريف التوصيل: "+
+encodeURIComponent(
+formatPrice(deliveryFee)
+)+
+"%0A";
+
+m+=
+"💰 مجموع المنتجات: "+
+encodeURIComponent(
+formatPrice(getCartTotal())
+)+
+"%0A";
+
+m+=
+"💵 *المجموع النهائي: "+
+encodeURIComponent(
+formatPrice(getCheckoutGrandTotal())
+)+
+"*";
 
 return m;
 
@@ -3260,6 +3502,14 @@ return showToast(
 "أكمل معلومات الطلب أولًا"
 );
 
+}
+
+updateCheckoutTotals();
+
+if(!deliveryFee){
+return showToast(
+"اختر الولاية أولًا"
+);
 }
 
 window.open(
@@ -3345,6 +3595,14 @@ return showToast(
 
 }
 
+updateCheckoutTotals();
+
+if(!deliveryFee){
+return showToast(
+"تعذر حساب مصاريف التوصيل"
+);
+}
+
 if(!supabaseClient){
 
 return showToast(
@@ -3382,9 +3640,13 @@ commune:commune,
 
 address:address,
 
-notes:"",
+notes:
+"طريقة التوصيل: "+
+(selectedDeliveryType==="domicile"?"Domicile":"Stop Desk")+
+" | مصاريف التوصيل: "+
+formatPrice(deliveryFee),
 
-total:getCartTotal(),
+total:getCheckoutGrandTotal(),
 
 status:"pending",
 
@@ -3434,7 +3696,14 @@ document.getElementById(
 "customerWilaya"
 ).value="";
 
+selectedDeliveryType="domicile";
+const defaultDelivery=document.querySelector(
+'input[name="deliveryType"][value="domicile"]'
+);
+if(defaultDelivery)defaultDelivery.checked=true;
+
 populateCommunes();
+updateCheckoutTotals();
 
 closeModal(
 "checkoutModal"
