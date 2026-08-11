@@ -3,6 +3,7 @@ let selectedCategory = null;
 
 const $ = (selector) => document.querySelector(selector);
 
+
 /* =========================
    TOAST
 ========================= */
@@ -20,6 +21,7 @@ function toast(message) {
   }, 2500);
 }
 
+
 /* =========================
    CART
 ========================= */
@@ -34,6 +36,7 @@ function getCart() {
   }
 }
 
+
 function saveCart(cart) {
   localStorage.setItem(
     "jr_cart",
@@ -42,6 +45,7 @@ function saveCart(cart) {
 
   updateCartCount();
 }
+
 
 function updateCartCount() {
   const cartCount =
@@ -59,6 +63,7 @@ function updateCartCount() {
 
   cartCount.textContent = count;
 }
+
 
 /* =========================
    ADD TO CART
@@ -83,13 +88,16 @@ function addToCart(product) {
   );
 
   if (existingProduct) {
+
     if (existingProduct.qty >= stock) {
       toast("Stock insuffisant");
       return;
     }
 
     existingProduct.qty++;
+
   } else {
+
     cart.push({
       id: product.id,
       name: product.name,
@@ -98,12 +106,14 @@ function addToCart(product) {
       qty: 1,
       stock: stock
     });
+
   }
 
   saveCart(cart);
 
   toast("Produit ajouté au panier");
 }
+
 
 /* =========================
    ESCAPE HTML
@@ -122,6 +132,7 @@ function escapeHtml(value) {
   );
 }
 
+
 /* =========================
    MONEY
 ========================= */
@@ -136,30 +147,39 @@ function money(value) {
   );
 }
 
+
 /* =========================
    PRODUCT CARD
 ========================= */
 
 function productCard(product) {
+
   const image =
     product.image_url ||
     "https://placehold.co/600x700?text=JR+Shop";
 
-  const stock = Number(
-    product.stock || 0
-  );
+  const stock =
+    Number(product.stock || 0);
 
   const stockText =
     stock > 0
       ? `Stock: ${stock}`
       : "Rupture de stock";
 
+
   return `
     <article class="product card">
+
+      <!-- PRODUCT DETAILS LINK -->
 
       <a
         href="product-details.html?id=${encodeURIComponent(product.id)}"
         class="product-link"
+        style="
+          display:block;
+          text-decoration:none;
+          color:inherit;
+        "
       >
 
         <img
@@ -186,7 +206,10 @@ function productCard(product) {
 
       </a>
 
-      <div class="product-actions">
+
+      <!-- ADD TO CART -->
+
+      <div class="product-body">
 
         <button
           class="btn primary add"
@@ -206,30 +229,37 @@ function productCard(product) {
   `;
 }
 
+
 /* =========================
    LOAD CATEGORIES
 ========================= */
 
 async function loadCategories() {
+
   const categoriesBox =
     document.querySelector("#categories");
 
   if (!categoriesBox) return;
 
+
   categoriesBox.innerHTML = `
     <p>Chargement des catégories...</p>
   `;
 
+
   try {
+
     const { data, error } =
       await supabaseClient
         .from("categories")
         .select("*")
-        .order("sort_order", {
+        .order("name", {
           ascending: true
         });
 
+
     if (error) {
+
       console.error(
         "Categories error:",
         error
@@ -244,23 +274,34 @@ async function loadCategories() {
       return;
     }
 
+
     const categories = data || [];
 
+
     categoriesBox.innerHTML = `
+
       <button
         class="cat active"
         data-cat=""
       >
-        <span>Toutes</span>
+
+        <span>
+          Toutes
+        </span>
+
       </button>
+
 
       ${categories
         .map((category) => {
+
           const image =
             category.image_url ||
             "https://placehold.co/120x100?text=Cat";
 
+
           return `
+
             <button
               class="cat"
               data-cat="${escapeHtml(
@@ -283,40 +324,58 @@ async function loadCategories() {
               </span>
 
             </button>
+
           `;
+
         })
         .join("")}
+
     `;
+
 
     document
       .querySelectorAll(".cat")
       .forEach((button) => {
+
         button.addEventListener(
           "click",
           () => {
+
             selectedCategory =
               button.dataset.cat || null;
+
 
             document
               .querySelectorAll(".cat")
               .forEach((item) => {
+
                 item.classList.remove(
                   "active"
                 );
+
               });
 
-            button.classList.add("active");
+
+            button.classList.add(
+              "active"
+            );
+
 
             renderProducts();
+
           }
         );
+
       });
 
+
   } catch (error) {
+
     console.error(
       "Categories JavaScript error:",
       error
     );
+
 
     categoriesBox.innerHTML = `
       <p>
@@ -324,24 +383,33 @@ async function loadCategories() {
         des catégories.
       </p>
     `;
+
   }
+
 }
+
 
 /* =========================
    LOAD PRODUCTS
 ========================= */
 
 async function loadProducts() {
+
   const productsBox =
     document.querySelector("#products");
 
   if (!productsBox) return;
 
+
   productsBox.innerHTML = `
-    <p>Chargement des produits...</p>
+    <p>
+      Chargement des produits...
+    </p>
   `;
 
+
   try {
+
     const { data, error } =
       await supabaseClient
         .from("products")
@@ -351,11 +419,14 @@ async function loadProducts() {
           ascending: false
         });
 
+
     if (error) {
+
       console.error(
         "Products error:",
         error
       );
+
 
       productsBox.innerHTML = `
         <p>
@@ -366,73 +437,110 @@ async function loadProducts() {
       return;
     }
 
+
     allProducts = data || [];
+
 
     renderProducts();
 
+
   } catch (error) {
+
     console.error(
       "Products JavaScript error:",
       error
     );
 
+
     productsBox.innerHTML = `
       <p>
-        Erreur lors du chargement des produits.
+        Erreur lors du chargement
+        des produits.
       </p>
     `;
+
   }
+
 }
+
 
 /* =========================
    RENDER PRODUCTS
 ========================= */
 
 function renderProducts() {
+
   const productsBox =
     document.querySelector("#products");
 
   if (!productsBox) return;
 
+
   let products = [
     ...allProducts
   ];
 
-  /* CATEGORY FILTER */
+
+  /* =========================
+     CATEGORY FILTER
+  ========================= */
 
   if (selectedCategory) {
-    products = products.filter(
-      (product) =>
-        String(product.category_id) ===
-        String(selectedCategory)
-    );
+
+    products =
+      products.filter(
+        (product) =>
+          String(
+            product.category_id
+          ) ===
+          String(
+            selectedCategory
+          )
+      );
+
   }
 
-  /* SORT */
+
+  /* =========================
+     SORT
+  ========================= */
 
   const sort =
-    document.querySelector("#sort")?.value;
+    document.querySelector(
+      "#sort"
+    )?.value;
+
 
   if (sort === "priceAsc") {
+
     products.sort(
       (a, b) =>
         Number(a.price || 0) -
         Number(b.price || 0)
     );
+
   }
 
+
   if (sort === "priceDesc") {
+
     products.sort(
       (a, b) =>
         Number(b.price || 0) -
         Number(a.price || 0)
     );
+
   }
 
-  /* EMPTY */
+
+  /* =========================
+     EMPTY
+  ========================= */
 
   if (!products.length) {
+
     productsBox.innerHTML = `
+
       <div class="card empty">
 
         <h3>
@@ -445,19 +553,26 @@ function renderProducts() {
         </p>
 
       </div>
+
     `;
 
     return;
   }
 
-  /* PRODUCTS */
+
+  /* =========================
+     DISPLAY PRODUCTS
+  ========================= */
 
   productsBox.innerHTML =
     products
       .map(productCard)
       .join("");
 
-  /* ADD BUTTONS */
+
+  /* =========================
+     ADD BUTTONS
+  ========================= */
 
   document
     .querySelectorAll(".add")
@@ -468,11 +583,14 @@ function renderProducts() {
         (event) => {
 
           /*
-           * Empêche le clic du bouton
-           * d'ouvrir Product Details.
+           * Empêche le clic sur
+           * le bouton d'ouvrir
+           * Product Details.
            */
+
           event.preventDefault();
           event.stopPropagation();
+
 
           const product =
             allProducts.find(
@@ -483,11 +601,16 @@ function renderProducts() {
                 )
             );
 
+
           addToCart(product);
+
         }
       );
+
     });
+
 }
+
 
 /* =========================
    SORT
@@ -496,12 +619,16 @@ function renderProducts() {
 const sortSelect =
   document.querySelector("#sort");
 
+
 if (sortSelect) {
+
   sortSelect.addEventListener(
     "change",
     renderProducts
   );
+
 }
+
 
 /* =========================
    INITIALIZE
