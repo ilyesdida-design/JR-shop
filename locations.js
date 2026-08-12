@@ -1,6 +1,6 @@
 /* =========================================================
    JR SHOP — LOCATIONS
-   Wilaya + Commune — Algeria
+   58 WILAYAS + COMMUNES
 ========================================================= */
 
 const LOCATIONS_API =
@@ -19,20 +19,22 @@ async function loadWilayas() {
   const communeSelect =
     document.getElementById("commune");
 
+
   if (!wilayaSelect) {
-    console.error("Wilaya select not found.");
     return;
   }
+
 
   wilayaSelect.innerHTML =
     '<option value="">Chargement des wilayas...</option>';
 
   wilayaSelect.disabled = true;
 
+
   if (communeSelect) {
 
     communeSelect.innerHTML =
-      '<option value="">Choisissez d’abord une wilaya</option>';
+      '<option value="">Sélectionnez d’abord une wilaya</option>';
 
     communeSelect.disabled = true;
 
@@ -48,32 +50,20 @@ async function loadWilayas() {
 
 
     if (!response.ok) {
-
       throw new Error(
-        "Impossible de charger les wilayas."
+        "Erreur lors du chargement des wilayas."
       );
-
     }
 
 
-    const data =
+    const wilayas =
       await response.json();
 
 
-    /*
-      بعض APIs ترجع array مباشرة،
-      وبعضها داخل data.
-    */
-
-    const wilayas =
-      Array.isArray(data)
-        ? data
-        : Array.isArray(data.data)
-          ? data.data
-          : [];
-
-
-    if (wilayas.length === 0) {
+    if (
+      !Array.isArray(wilayas) ||
+      wilayas.length === 0
+    ) {
 
       throw new Error(
         "Aucune wilaya trouvée."
@@ -92,31 +82,12 @@ async function loadWilayas() {
         document.createElement("option");
 
 
-      /*
-        نحاول التعامل مع أكثر من
-        تسمية ممكنة للـAPI.
-      */
+      option.value =
+        wilaya.wilaya_code;
 
-      const id =
-        wilaya.id ??
-        wilaya.wilaya_id ??
-        wilaya.code ??
-        wilaya.wilayaCode;
-
-
-      const name =
-        wilaya.name_fr ??
-        wilaya.nameFr ??
-        wilaya.name ??
-        wilaya.nom ??
-        wilaya.name_ascii ??
-        "Wilaya";
-
-
-      option.value = id;
 
       option.textContent =
-        name;
+        wilaya.wilaya_name_ascii;
 
 
       wilayaSelect.appendChild(
@@ -129,6 +100,12 @@ async function loadWilayas() {
     wilayaSelect.disabled = false;
 
 
+    console.log(
+      "Wilayas chargées:",
+      wilayas.length
+    );
+
+
   } catch (error) {
 
     console.error(
@@ -138,7 +115,7 @@ async function loadWilayas() {
 
 
     wilayaSelect.innerHTML =
-      '<option value="">Erreur de chargement</option>';
+      '<option value="">Erreur de chargement des wilayas</option>';
 
   }
 
@@ -150,25 +127,27 @@ async function loadWilayas() {
 ========================================================= */
 
 async function loadCommunes(
-  wilayaId
+  wilayaCode
 ) {
 
   const communeSelect =
     document.getElementById("commune");
+
 
   if (!communeSelect) {
     return;
   }
 
 
-  if (!wilayaId) {
+  if (!wilayaCode) {
 
     communeSelect.innerHTML =
-      '<option value="">Choisissez d’abord une wilaya</option>';
+      '<option value="">Sélectionnez d’abord une wilaya</option>';
 
     communeSelect.disabled = true;
 
     return;
+
   }
 
 
@@ -183,16 +162,17 @@ async function loadCommunes(
     const response =
       await fetch(
         LOCATIONS_API +
-        "/wilayas/" +
-        encodeURIComponent(wilayaId) +
-        "/communes"
+        "/wilayas/communes/" +
+        encodeURIComponent(
+          wilayaCode
+        )
       );
 
 
     if (!response.ok) {
 
       throw new Error(
-        "Impossible de charger les communes."
+        "Erreur lors du chargement des communes."
       );
 
     }
@@ -229,24 +209,24 @@ async function loadCommunes(
         document.createElement("option");
 
 
-      const id =
+      const code =
+        commune.commune_code ??
         commune.id ??
-        commune.commune_id ??
         commune.code ??
         "";
 
 
       const name =
-        commune.name_fr ??
-        commune.nameFr ??
+        commune.commune_name_ascii ??
+        commune.commune_name ??
+        commune.name_ascii ??
         commune.name ??
         commune.nom ??
-        commune.name_ascii ??
-        "Commune";
+        "";
 
 
       option.value =
-        id || name;
+        code || name;
 
 
       option.textContent =
@@ -261,6 +241,12 @@ async function loadCommunes(
 
 
     communeSelect.disabled = false;
+
+
+    console.log(
+      "Communes chargées:",
+      communes.length
+    );
 
 
   } catch (error) {
@@ -280,7 +266,7 @@ async function loadCommunes(
 
 
 /* =========================================================
-   INIT LOCATIONS
+   INIT
 ========================================================= */
 
 function initLocations() {
@@ -288,17 +274,22 @@ function initLocations() {
   const wilayaSelect =
     document.getElementById("wilaya");
 
+
   const communeSelect =
     document.getElementById("commune");
 
 
   if (!wilayaSelect) {
-
-    console.error(
-      "Element #wilaya introuvable."
-    );
-
     return;
+  }
+
+
+  if (communeSelect) {
+
+    communeSelect.innerHTML =
+      '<option value="">Sélectionnez d’abord une wilaya</option>';
+
+    communeSelect.disabled = true;
 
   }
 
@@ -317,22 +308,6 @@ function initLocations() {
     }
   );
 
-
-  /*
-    Si checkout.js يبدل الـselect
-    أو الصفحة تعاود التحميل،
-    نضمنو أن commune ترجع للحالة الصحيحة.
-  */
-
-  if (communeSelect) {
-
-    communeSelect.innerHTML =
-      '<option value="">Choisissez d’abord une wilaya</option>';
-
-    communeSelect.disabled = true;
-
-  }
-
 }
 
 
@@ -348,4 +323,3 @@ document.addEventListener(
 
   }
 );
-
