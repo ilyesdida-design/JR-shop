@@ -1,3 +1,4 @@
+```javascript
 /* =========================================================
    JR SHOP — CHECKOUT
    Supabase Orders + WhatsApp
@@ -12,10 +13,8 @@ document.addEventListener("DOMContentLoaded", () => {
    CONFIG
 ========================================================= */
 
-// ⚠️ بدّل هذا الرقم برقم WhatsApp الخاص بـ JR Shop.
-// الصيغة: كود الدولة + الرقم بدون + أو مسافات.
-// مثال الجزائر: 2135XXXXXXXX
-
+// ضع رقم WhatsApp الخاص بـ JR Shop هنا
+// الجزائر: 213 + الرقم بدون + وبدون مسافات
 const WHATSAPP_NUMBER = "213697005313";
 
 
@@ -27,10 +26,9 @@ function getCart() {
 
   try {
 
-    const cart =
-      JSON.parse(
-        localStorage.getItem("jrshop_cart")
-      );
+    const cart = JSON.parse(
+      localStorage.getItem("jrshop_cart")
+    );
 
     return Array.isArray(cart)
       ? cart
@@ -38,10 +36,7 @@ function getCart() {
 
   } catch (error) {
 
-    console.error(
-      "Cart error:",
-      error
-    );
+    console.error("Cart error:", error);
 
     return [];
   }
@@ -54,15 +49,10 @@ function getCart() {
 
 function loadCheckout() {
 
-  const cart =
-    getCart();
-
+  const cart = getCart();
 
   const container =
-    document.getElementById(
-      "checkoutContainer"
-    );
-
+    document.getElementById("checkoutContainer");
 
   if (!container) return;
 
@@ -70,7 +60,6 @@ function loadCheckout() {
   if (cart.length === 0) {
 
     container.innerHTML = `
-
       <div class="card empty-state">
 
         <h2>
@@ -92,7 +81,6 @@ function loadCheckout() {
         </a>
 
       </div>
-
     `;
 
     return;
@@ -106,27 +94,18 @@ function loadCheckout() {
 
 
 /* =========================================================
-   SUMMARY
+   RENDER SUMMARY
 ========================================================= */
 
 function renderSummary(cart) {
 
   const itemsContainer =
-    document.getElementById(
-      "summaryItems"
-    );
-
+    document.getElementById("summaryItems");
 
   const totalElement =
-    document.getElementById(
-      "summaryTotal"
-    );
+    document.getElementById("summaryTotal");
 
-
-  if (
-    !itemsContainer ||
-    !totalElement
-  ) {
+  if (!itemsContainer || !totalElement) {
     return;
   }
 
@@ -134,65 +113,58 @@ function renderSummary(cart) {
   let total = 0;
 
 
-  itemsContainer.innerHTML =
-    cart
-      .map(item => {
+  itemsContainer.innerHTML = cart
+    .map(item => {
 
-        const price =
-          Number(item.price || 0);
+      const price =
+        Number(item.price || 0);
 
+      const quantity =
+        Number(item.quantity || 0);
 
-        const quantity =
-          Number(item.quantity || 0);
+      const itemTotal =
+        price * quantity;
 
-
-        const itemTotal =
-          price * quantity;
-
-
-        total += itemTotal;
+      total += itemTotal;
 
 
-        return `
+      return `
+        <div
+          class="summary-row"
+          style="
+            align-items:flex-start;
+            gap:12px;
+          "
+        >
 
-          <div
-            class="summary-row"
-            style="
-              align-items:flex-start;
-              gap:12px;
-            "
-          >
-
-            <div>
-
-              <strong>
-                ${escapeHTML(item.name)}
-              </strong>
-
-              <div
-                style="
-                  font-size:.9rem;
-                  opacity:.7;
-                  margin-top:4px;
-                "
-              >
-                ${quantity} ×
-                ${formatPrice(price)}
-              </div>
-
-            </div>
-
+          <div>
 
             <strong>
-              ${formatPrice(itemTotal)}
+              ${escapeHTML(item.name)}
             </strong>
+
+            <div
+              style="
+                font-size:.9rem;
+                opacity:.7;
+                margin-top:4px;
+              "
+            >
+              ${quantity} ×
+              ${formatPrice(price)}
+            </div>
 
           </div>
 
-        `;
+          <strong>
+            ${formatPrice(itemTotal)}
+          </strong>
 
-      })
-      .join("");
+        </div>
+      `;
+
+    })
+    .join("");
 
 
   totalElement.textContent =
@@ -201,7 +173,7 @@ function renderSummary(cart) {
 
 
 /* =========================================================
-   TOTAL
+   CALCULATE TOTAL
 ========================================================= */
 
 function calculateTotal(cart) {
@@ -222,16 +194,13 @@ function calculateTotal(cart) {
 
 
 /* =========================================================
-   FORM
+   CHECKOUT FORM
 ========================================================= */
 
 function setupCheckoutForm(cart) {
 
   const form =
-    document.getElementById(
-      "checkoutForm"
-    );
-
+    document.getElementById("checkoutForm");
 
   if (!form) return;
 
@@ -255,49 +224,37 @@ function setupCheckoutForm(cart) {
 
       const customerName =
         String(
-          formData.get(
-            "customerName"
-          ) || ""
+          formData.get("customerName") || ""
         ).trim();
 
 
       const phone =
         String(
-          formData.get(
-            "phone"
-          ) || ""
+          formData.get("phone") || ""
         ).trim();
 
 
       const wilaya =
         String(
-          formData.get(
-            "wilaya"
-          ) || ""
+          formData.get("wilaya") || ""
         ).trim();
 
 
       const commune =
         String(
-          formData.get(
-            "commune"
-          ) || ""
+          formData.get("commune") || ""
         ).trim();
 
 
       const address =
         String(
-          formData.get(
-            "address"
-          ) || ""
+          formData.get("address") || ""
         ).trim();
 
 
       const notes =
         String(
-          formData.get(
-            "notes"
-          ) || ""
+          formData.get("notes") || ""
         ).trim();
 
 
@@ -387,6 +344,10 @@ function setupCheckoutForm(cart) {
 
       try {
 
+        /* =========================
+           TOTAL
+        ========================== */
+
         const total =
           calculateTotal(cart);
 
@@ -417,13 +378,30 @@ function setupCheckoutForm(cart) {
 
 
         /* =========================
-           INSERT ORDER
+           CREATE ORDER ID
         ========================== */
 
-        const { data, error } =
+        const orderId =
+          crypto.randomUUID();
+
+
+        /* =========================
+           INSERT ORDER
+           
+           IMPORTANT:
+           We do NOT use .select()
+           because public users don't
+           have SELECT permission on
+           orders.
+        ========================== */
+
+        const { error } =
           await supabaseClient
             .from("orders")
             .insert({
+
+              id:
+                orderId,
 
               customer_name:
                 customerName,
@@ -452,15 +430,13 @@ function setupCheckoutForm(cart) {
               status:
                 "pending"
 
-            })
-            .select("id")
-            .single();
+            });
 
 
         if (error) {
 
           console.error(
-            "Order insert error:",
+            "Supabase order error:",
             error
           );
 
@@ -470,12 +446,8 @@ function setupCheckoutForm(cart) {
         }
 
 
-        const orderId =
-          data?.id;
-
-
         /* =========================
-           WHATSAPP
+           CREATE WHATSAPP MESSAGE
         ========================== */
 
         const whatsappMessage =
@@ -511,6 +483,10 @@ function setupCheckoutForm(cart) {
           });
 
 
+        /* =========================
+           WHATSAPP URL
+        ========================== */
+
         const whatsappUrl =
           "https://wa.me/" +
           WHATSAPP_NUMBER +
@@ -530,11 +506,11 @@ function setupCheckoutForm(cart) {
 
 
         /* =========================
-           SUCCESS
+           SUCCESS MESSAGE
         ========================== */
 
         showMessage(
-          "Commande enregistrée avec succès.",
+          "Commande enregistrée avec succès. Ouverture de WhatsApp...",
           "success"
         );
 
@@ -605,7 +581,7 @@ function createWhatsAppMessage(data) {
 
   message +=
     "📦 *Commande:* " +
-    (data.orderId || "N/A") +
+    data.orderId +
     "\n";
 
 
@@ -702,7 +678,7 @@ function isValidPhone(phone) {
 
 
 /* =========================================================
-   MESSAGE
+   SHOW MESSAGE
 ========================================================= */
 
 function showMessage(
@@ -766,3 +742,4 @@ function escapeHTML(value) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 }
+```
