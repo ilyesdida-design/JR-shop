@@ -1,17 +1,23 @@
 /* =========================================================
-   JR SHOP — CHECKOUT
+   JR SHOP - CHECKOUT
    Supabase Orders + WhatsApp
 ========================================================= */
 
 document.addEventListener("DOMContentLoaded", function () {
-
   loadCheckout();
-
 });
 
 
+/* =========================================================
+   CONFIG
+========================================================= */
+
 const WHATSAPP_NUMBER = "213697005313";
 
+
+/* =========================================================
+   CART
+========================================================= */
 
 function getCart() {
 
@@ -21,22 +27,20 @@ function getCart() {
       localStorage.getItem("jrshop_cart")
     );
 
-    if (Array.isArray(cart)) {
-      return cart;
-    }
-
-    return [];
+    return Array.isArray(cart) ? cart : [];
 
   } catch (error) {
 
     console.error("Cart error:", error);
 
     return [];
-
   }
-
 }
 
+
+/* =========================================================
+   LOAD CHECKOUT
+========================================================= */
 
 function loadCheckout() {
 
@@ -49,29 +53,30 @@ function loadCheckout() {
     return;
   }
 
-
   if (cart.length === 0) {
 
     container.innerHTML =
       '<div class="card empty-state">' +
-      '<h2>Votre panier est vide</h2>' +
-      '<p>Ajoutez au moins un produit avant de continuer.</p>' +
-      '<br>' +
-      '<a href="index.html#products" class="btn btn-primary">' +
-      'Découvrir les produits' +
-      '</a>' +
+        '<h2>Votre panier est vide</h2>' +
+        '<p>Ajoutez au moins un produit avant de continuer.</p>' +
+        '<br>' +
+        '<a href="index.html#products" class="btn btn-primary">' +
+          'Découvrir les produits' +
+        '</a>' +
       '</div>';
 
     return;
   }
 
-
   renderSummary(cart);
 
   setupCheckoutForm(cart);
-
 }
 
+
+/* =========================================================
+   SUMMARY
+========================================================= */
 
 function renderSummary(cart) {
 
@@ -84,7 +89,6 @@ function renderSummary(cart) {
   if (!itemsContainer || !totalElement) {
     return;
   }
-
 
   let total = 0;
 
@@ -108,25 +112,23 @@ function renderSummary(cart) {
     html +=
       '<div class="summary-row">' +
 
-      '<div>' +
+        '<div>' +
 
-      '<strong>' +
-      escapeHTML(item.name) +
-      '</strong>' +
+          '<strong>' +
+            escapeHTML(item.name) +
+          '</strong>' +
 
-      '<div style="font-size:.9rem;opacity:.7;margin-top:4px;">' +
+          '<div style="font-size:.9rem;opacity:.7;margin-top:4px;">' +
+            quantity +
+            ' × ' +
+            formatPrice(price) +
+          '</div>' +
 
-      quantity +
-      ' × ' +
-      formatPrice(price) +
+        '</div>' +
 
-      '</div>' +
-
-      '</div>' +
-
-      '<strong>' +
-      formatPrice(itemTotal) +
-      '</strong>' +
+        '<strong>' +
+          formatPrice(itemTotal) +
+        '</strong>' +
 
       '</div>';
 
@@ -137,9 +139,12 @@ function renderSummary(cart) {
 
   totalElement.textContent =
     formatPrice(total);
-
 }
 
+
+/* =========================================================
+   TOTAL
+========================================================= */
 
 function calculateTotal(cart) {
 
@@ -156,9 +161,12 @@ function calculateTotal(cart) {
 
 
   return total;
-
 }
 
+
+/* =========================================================
+   CHECKOUT FORM
+========================================================= */
 
 function setupCheckoutForm(cart) {
 
@@ -218,6 +226,10 @@ function setupCheckoutForm(cart) {
           "notes"
         ).value.trim();
 
+
+      /* =========================
+         VALIDATION
+      ========================== */
 
       if (!customerName) {
 
@@ -285,6 +297,10 @@ function setupCheckoutForm(cart) {
       }
 
 
+      /* =========================
+         BUTTON
+      ========================== */
+
       if (button) {
 
         button.disabled = true;
@@ -297,18 +313,28 @@ function setupCheckoutForm(cart) {
 
       try {
 
+        /* =========================
+           TOTAL
+        ========================== */
+
         const total =
           calculateTotal(cart);
 
+
+        /* =========================
+           ITEMS
+        ========================== */
 
         const items =
           cart.map(function (item) {
 
             return {
 
-              id: item.id,
+              id:
+                item.id,
 
-              name: item.name,
+              name:
+                item.name,
 
               price:
                 Number(item.price || 0),
@@ -324,13 +350,22 @@ function setupCheckoutForm(cart) {
           });
 
 
+        /* =========================
+           ORDER ID
+        ========================== */
+
         const orderId =
           crypto.randomUUID();
 
 
+        /* =========================
+           ORDER DATA
+        ========================== */
+
         const orderData = {
 
-          id: orderId,
+          id:
+            orderId,
 
           customer_name:
             customerName,
@@ -362,6 +397,10 @@ function setupCheckoutForm(cart) {
         };
 
 
+        /* =========================
+           SUPABASE INSERT
+        ========================== */
+
         const result =
           await supabaseClient
             .from("orders")
@@ -374,6 +413,7 @@ function setupCheckoutForm(cart) {
             "SUPABASE ERROR:",
             result.error
           );
+
 
           showMessage(
             "Erreur Supabase : " +
@@ -394,6 +434,10 @@ function setupCheckoutForm(cart) {
           return;
         }
 
+
+        /* =========================
+           WHATSAPP MESSAGE
+        ========================== */
 
         const whatsappMessage =
           createWhatsAppMessage(
@@ -418,10 +462,18 @@ function setupCheckoutForm(cart) {
           );
 
 
+        /* =========================
+           CLEAR CART
+        ========================== */
+
         localStorage.removeItem(
           "jrshop_cart"
         );
 
+
+        /* =========================
+           SUCCESS
+        ========================== */
 
         showMessage(
           "Commande enregistrée avec succès. Ouverture de WhatsApp...",
@@ -437,6 +489,10 @@ function setupCheckoutForm(cart) {
         }
 
 
+        /* =========================
+           OPEN WHATSAPP
+        ========================== */
+
         setTimeout(function () {
 
           window.location.href =
@@ -444,8 +500,10 @@ function setupCheckoutForm(cart) {
 
         }, 1000);
 
+      }
 
-      } catch (error) {
+
+      catch (error) {
 
         console.error(
           "CHECKOUT ERROR:",
@@ -473,9 +531,12 @@ function setupCheckoutForm(cart) {
 
     }
   );
-
 }
 
+
+/* =========================================================
+   WHATSAPP MESSAGE
+========================================================= */
 
 function createWhatsAppMessage(
   orderId,
@@ -568,9 +629,12 @@ function createWhatsAppMessage(
 
 
   return message;
-
 }
 
+
+/* =========================================================
+   PHONE VALIDATION
+========================================================= */
 
 function isValidPhone(phone) {
 
@@ -584,9 +648,12 @@ function isValidPhone(phone) {
   return /^[+]?[0-9]{8,15}$/.test(
     cleaned
   );
-
 }
 
+
+/* =========================================================
+   MESSAGE
+========================================================= */
 
 function showMessage(
   message,
@@ -621,9 +688,12 @@ function showMessage(
     behavior: "smooth",
     block: "center"
   });
-
 }
 
+
+/* =========================================================
+   PRICE
+========================================================= */
 
 function formatPrice(value) {
 
@@ -632,9 +702,12 @@ function formatPrice(value) {
       .toLocaleString("fr-DZ") +
     " DA"
   );
-
 }
 
+
+/* =========================================================
+   HTML ESCAPE
+========================================================= */
 
 function escapeHTML(value) {
 
