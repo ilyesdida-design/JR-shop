@@ -28,9 +28,11 @@ const supabaseClient =
 ========================================================= */
 
 const CONFIG = {
+
   currency: "DA",
 
   sections: {
+
     dashboard: {
       title: "Dashboard",
       subtitle: "Vue générale de votre boutique"
@@ -75,7 +77,9 @@ const CONFIG = {
       title: "Paramètres",
       subtitle: "Configuration de votre boutique"
     }
+
   }
+
 };
 
 
@@ -84,14 +88,19 @@ const CONFIG = {
 ========================================================= */
 
 const STATE = {
+
   currentSection: "dashboard",
 
   products: [],
+
   categories: [],
+
   orders: [],
+
   customers: [],
 
   loading: false
+
 };
 
 
@@ -105,43 +114,69 @@ const DOM = {
     document.querySelector(".sidebar"),
 
   mobileMenuBtn:
-    document.getElementById("mobileMenuBtn"),
+    document.getElementById(
+      "mobileMenuBtn"
+    ),
 
   pageTitle:
-    document.getElementById("pageTitle"),
+    document.getElementById(
+      "pageTitle"
+    ),
 
   pageSubtitle:
-    document.getElementById("pageSubtitle"),
+    document.getElementById(
+      "pageSubtitle"
+    ),
 
   navItems:
-    document.querySelectorAll(".nav-item"),
+    document.querySelectorAll(
+      ".nav-item"
+    ),
 
   pageSections:
-    document.querySelectorAll(".page-section"),
+    document.querySelectorAll(
+      ".page-section"
+    ),
 
   quickActions:
-    document.querySelectorAll("[data-section]"),
+    document.querySelectorAll(
+      "[data-section]"
+    ),
 
   logoutBtn:
-    document.getElementById("logoutBtn"),
+    document.getElementById(
+      "logoutBtn"
+    ),
 
   modalOverlay:
-    document.getElementById("modalOverlay"),
+    document.getElementById(
+      "modalOverlay"
+    ),
 
   modalContent:
-    document.getElementById("modalContent"),
+    document.getElementById(
+      "modalContent"
+    ),
 
   closeModalBtn:
-    document.getElementById("closeModalBtn"),
+    document.getElementById(
+      "closeModalBtn"
+    ),
 
   addProductBtn:
-    document.getElementById("addProductBtn"),
+    document.getElementById(
+      "addProductBtn"
+    ),
 
   addCategoryBtn:
-    document.getElementById("addCategoryBtn"),
+    document.getElementById(
+      "addCategoryBtn"
+    ),
 
   productSearch:
-    document.getElementById("productSearch"),
+    document.getElementById(
+      "productSearch"
+    ),
 
   productCategoryFilter:
     document.getElementById(
@@ -157,6 +192,7 @@ const DOM = {
     document.getElementById(
       "customerSearch"
     )
+
 };
 
 
@@ -177,14 +213,21 @@ async function init() {
   );
 
   setupNavigation();
+
   setupMobileMenu();
+
   setupModal();
+
   setupButtons();
+
   setupSearch();
 
   await loadAllData();
 
-  showSection("dashboard");
+  showSection(
+    "dashboard"
+  );
+
 }
 
 
@@ -199,8 +242,11 @@ async function loadAllData() {
   try {
 
     await Promise.all([
+
       loadProducts(),
+
       loadCategories()
+
     ]);
 
     updateDashboard();
@@ -222,6 +268,7 @@ async function loadAllData() {
     STATE.loading = false;
 
   }
+
 }
 
 
@@ -239,18 +286,21 @@ async function loadProducts() {
     data,
     error
   } = await supabaseClient
+
     .from("products")
-.select(`
-  id,
-  name,
-  price,
-  old_price,
-  stock,
-  category_id,
-  image_url,
-  active
-`)
-     .order(
+
+    .select(`
+      id,
+      name,
+      price,
+      old_price,
+      stock,
+      category_id,
+      image_url,
+      active
+    `)
+
+    .order(
       "name",
       {
         ascending: true
@@ -266,6 +316,7 @@ async function loadProducts() {
     );
 
     throw error;
+
   }
 
 
@@ -280,8 +331,11 @@ async function loadProducts() {
 
 
   renderProducts();
+
   updateProductCategoryFilter();
+
   updateDashboard();
+
 }
 
 
@@ -299,13 +353,16 @@ async function loadCategories() {
     data,
     error
   } = await supabaseClient
+
     .from("categories")
+
     .select(`
       id,
       name,
       slug,
       image_url
     `)
+
     .order(
       "name",
       {
@@ -322,6 +379,7 @@ async function loadCategories() {
     );
 
     throw error;
+
   }
 
 
@@ -336,7 +394,9 @@ async function loadCategories() {
 
 
   renderCategories();
+
   updateProductCategoryFilter();
+
 }
 
 
@@ -355,62 +415,89 @@ function renderProducts(
 
 
   if (!tbody) {
+
     return;
+
   }
 
 
   if (!products.length) {
 
     tbody.innerHTML = `
+
       <tr>
+
         <td
           colspan="6"
           class="empty-row"
         >
           Aucun produit trouvé.
         </td>
+
       </tr>
+
     `;
 
     return;
+
   }
 
 
   tbody.innerHTML =
+
     products
+
       .map(
         product => {
 
           const category =
             STATE.categories.find(
               category =>
-                String(category.id) ===
-                String(product.category_id)
+                String(
+                  category.id
+                ) ===
+                String(
+                  product.category_id
+                )
             );
 
 
+          /*
+            IMPORTANT:
+            products contient seulement "active"
+            et pas "is_active"
+          */
+
           const isActive =
-            product.is_active !== false &&
             product.active !== false;
 
 
           const stock =
-            Number(product.stock || 0);
+            Number(
+              product.stock || 0
+            );
 
 
           let stockClass =
             "status-success";
 
+
           let stockText =
             `${stock}`;
 
 
-          if (stock === 0) {
+          if (
+            stock === 0
+          ) {
 
             stockClass =
               "status-danger";
 
-          } else if (stock <= 5) {
+          }
+
+          else if (
+            stock <= 5
+          ) {
 
             stockClass =
               "status-warning";
@@ -419,6 +506,7 @@ function renderProducts(
 
 
           return `
+
             <tr>
 
               <td>
@@ -433,7 +521,9 @@ function renderProducts(
 
                   ${
                     product.image_url
+
                       ? `
+
                         <img
                           src="${escapeHTML(
                             product.image_url
@@ -449,8 +539,11 @@ function renderProducts(
                             background:#f1f1f1;
                           "
                         >
+
                       `
+
                       : `
+
                         <div
                           style="
                             width:48px;
@@ -464,21 +557,28 @@ function renderProducts(
                         >
                           JR
                         </div>
+
                       `
                   }
+
 
                   <div>
 
                     <strong>
+
                       ${escapeHTML(
                         product.name ||
                         "Produit"
                       )}
+
                     </strong>
+
 
                     ${
                       product.old_price
+
                         ? `
+
                           <div
                             style="
                               color:#888;
@@ -487,11 +587,15 @@ function renderProducts(
                               margin-top:3px;
                             "
                           >
+
                             ${formatPrice(
                               product.old_price
                             )}
+
                           </div>
+
                         `
+
                         : ""
                     }
 
@@ -503,22 +607,30 @@ function renderProducts(
 
 
               <td>
+
                 ${
                   category
+
                     ? escapeHTML(
                         category.name
                       )
+
                     : "—"
                 }
+
               </td>
 
 
               <td>
+
                 <strong>
+
                   ${formatPrice(
                     product.price
                   )}
+
                 </strong>
+
               </td>
 
 
@@ -530,7 +642,9 @@ function renderProducts(
                     ${stockClass}
                   "
                 >
+
                   ${stockText}
+
                 </span>
 
               </td>
@@ -548,11 +662,13 @@ function renderProducts(
                     }
                   "
                 >
+
                   ${
                     isActive
                       ? "Actif"
                       : "Inactif"
                   }
+
                 </span>
 
               </td>
@@ -566,16 +682,22 @@ function renderProducts(
                     product.id
                   )}')"
                 >
+
                   Modifier
+
                 </button>
 
               </td>
 
             </tr>
+
           `;
+
         }
       )
+
       .join("");
+
 }
 
 
@@ -590,7 +712,9 @@ function updateProductCategoryFilter() {
 
 
   if (!select) {
+
     return;
+
   }
 
 
@@ -599,9 +723,13 @@ function updateProductCategoryFilter() {
 
 
   select.innerHTML = `
+
     <option value="">
+
       Toutes les catégories
+
     </option>
+
   `;
 
 
@@ -617,6 +745,7 @@ function updateProductCategoryFilter() {
       option.value =
         category.id;
 
+
       option.textContent =
         category.name;
 
@@ -631,6 +760,7 @@ function updateProductCategoryFilter() {
 
   select.value =
     currentValue;
+
 }
 
 
@@ -641,11 +771,14 @@ function updateProductCategoryFilter() {
 function filterProducts() {
 
   const search =
+
     (
       DOM.productSearch?.value ||
       ""
     )
+
       .trim()
+
       .toLowerCase();
 
 
@@ -660,39 +793,58 @@ function filterProducts() {
 
 
   const filtered =
+
     STATE.products.filter(
       product => {
 
         const name =
+
           String(
             product.name || ""
-          ).toLowerCase();
+          )
+
+            .toLowerCase();
 
 
         const matchesSearch =
+
           !search ||
-          name.includes(search);
+
+          name.includes(
+            search
+          );
 
 
         const matchesCategory =
+
           !category ||
+
           String(
             product.category_id
           ) ===
-          String(category);
+          String(
+            category
+          );
 
+
+        /*
+          IMPORTANT:
+          On utilise uniquement "active"
+        */
 
         const isActive =
-          product.is_active !== false &&
           product.active !== false;
 
 
         const matchesStatus =
+
           !status ||
+
           (
             status === "active" &&
             isActive
           ) ||
+
           (
             status === "inactive" &&
             !isActive
@@ -700,9 +852,13 @@ function filterProducts() {
 
 
         return (
+
           matchesSearch &&
+
           matchesCategory &&
+
           matchesStatus
+
         );
 
       }
@@ -712,6 +868,7 @@ function filterProducts() {
   renderProducts(
     filtered
   );
+
 }
 
 
@@ -728,13 +885,18 @@ function renderCategories() {
 
 
   if (!container) {
+
     return;
+
   }
 
 
-  if (!STATE.categories.length) {
+  if (
+    !STATE.categories.length
+  ) {
 
     container.innerHTML = `
+
       <div class="empty-state">
 
         <div class="empty-icon">
@@ -750,18 +912,23 @@ function renderCategories() {
         </p>
 
       </div>
+
     `;
 
     return;
+
   }
 
 
   container.innerHTML =
+
     STATE.categories
+
       .map(
         category => {
 
           return `
+
             <div
               class="category-card"
             >
@@ -772,7 +939,9 @@ function renderCategories() {
 
                 ${
                   category.image_url
+
                     ? `
+
                       <img
                         src="${escapeHTML(
                           category.image_url
@@ -786,11 +955,15 @@ function renderCategories() {
                           object-fit:cover;
                         "
                       >
+
                     `
+
                     : `
+
                       <strong>
                         JR
                       </strong>
+
                     `
                 }
 
@@ -802,24 +975,33 @@ function renderCategories() {
               >
 
                 <h3>
+
                   ${escapeHTML(
                     category.name
                   )}
+
                 </h3>
 
+
                 <p>
+
                   ${escapeHTML(
                     category.slug || ""
                   )}
+
                 </p>
 
               </div>
 
             </div>
+
           `;
+
         }
       )
+
       .join("");
+
 }
 
 
@@ -833,10 +1015,15 @@ function updateDashboard() {
     STATE.products;
 
 
+  /*
+    IMPORTANT:
+    On utilise uniquement "active"
+  */
+
   const activeProducts =
+
     products.filter(
       product =>
-        product.is_active !== false &&
         product.active !== false
     );
 
@@ -865,15 +1052,21 @@ function updateDashboard() {
     );
 
 
-  if (revenueElement) {
+  if (
+    revenueElement
+  ) {
 
     revenueElement.textContent =
-      formatPrice(0);
+      formatPrice(
+        0
+      );
 
   }
 
 
-  if (ordersElement) {
+  if (
+    ordersElement
+  ) {
 
     ordersElement.textContent =
       STATE.orders.length;
@@ -881,7 +1074,9 @@ function updateDashboard() {
   }
 
 
-  if (productsElement) {
+  if (
+    productsElement
+  ) {
 
     productsElement.textContent =
       activeProducts.length;
@@ -889,7 +1084,9 @@ function updateDashboard() {
   }
 
 
-  if (customersElement) {
+  if (
+    customersElement
+  ) {
 
     customersElement.textContent =
       STATE.customers.length;
@@ -898,6 +1095,7 @@ function updateDashboard() {
 
 
   renderLowStock();
+
 }
 
 
@@ -914,11 +1112,14 @@ function renderLowStock() {
 
 
   if (!container) {
+
     return;
+
   }
 
 
   const lowStock =
+
     STATE.products.filter(
       product =>
         Number(
@@ -927,9 +1128,12 @@ function renderLowStock() {
     );
 
 
-  if (!lowStock.length) {
+  if (
+    !lowStock.length
+  ) {
 
     container.innerHTML = `
+
       <div class="empty-state">
 
         <div class="empty-icon">
@@ -945,15 +1149,23 @@ function renderLowStock() {
         </p>
 
       </div>
+
     `;
 
     return;
+
   }
 
 
   container.innerHTML =
+
     lowStock
-      .slice(0, 8)
+
+      .slice(
+        0,
+        8
+      )
+
       .map(
         product => {
 
@@ -964,15 +1176,19 @@ function renderLowStock() {
 
 
           return `
+
             <div
               class="low-stock-item"
             >
 
               <strong>
+
                 ${escapeHTML(
                   product.name
                 )}
+
               </strong>
+
 
               <span
                 class="
@@ -984,18 +1200,26 @@ function renderLowStock() {
                   }
                 "
               >
+
                 ${
                   stock === 0
+
                     ? "Rupture"
+
                     : `${stock} restant(s)`
                 }
+
               </span>
 
             </div>
+
           `;
+
         }
       )
+
       .join("");
+
 }
 
 
@@ -1034,7 +1258,9 @@ function setupNavigation() {
             item.dataset.section;
 
 
-          if (section) {
+          if (
+            section
+          ) {
 
             showSection(
               section
@@ -1047,6 +1273,7 @@ function setupNavigation() {
 
     }
   );
+
 }
 
 
@@ -1063,7 +1290,9 @@ function showSection(
       section
     ]
   ) {
+
     return;
+
   }
 
 
@@ -1075,9 +1304,12 @@ function showSection(
     item => {
 
       item.classList.toggle(
+
         "active",
+
         item.dataset.section ===
         section
+
       );
 
     }
@@ -1088,24 +1320,40 @@ function showSection(
     page => {
 
       page.classList.toggle(
+
         "active",
-        page.id === section
+
+        page.id ===
+        section
+
       );
 
     }
   );
 
 
-  DOM.pageTitle.textContent =
-    CONFIG.sections[
-      section
-    ].title;
+  if (
+    DOM.pageTitle
+  ) {
+
+    DOM.pageTitle.textContent =
+      CONFIG.sections[
+        section
+      ].title;
+
+  }
 
 
-  DOM.pageSubtitle.textContent =
-    CONFIG.sections[
-      section
-    ].subtitle;
+  if (
+    DOM.pageSubtitle
+  ) {
+
+    DOM.pageSubtitle.textContent =
+      CONFIG.sections[
+        section
+      ].subtitle;
+
+  }
 
 
   if (
@@ -1119,25 +1367,55 @@ function showSection(
   }
 
 
-  if (section === "inventory") {
+  if (
+    section ===
+    "inventory"
+  ) {
 
     loadInventory();
 
   }
 
 
-  if (section === "products") {
+  if (
+    section ===
+    "products"
+  ) {
 
     renderProducts();
 
   }
 
 
-  if (section === "categories") {
+  if (
+    section ===
+    "categories"
+  ) {
 
     renderCategories();
 
   }
+
+
+  if (
+    section ===
+    "orders"
+  ) {
+
+    loadOrders();
+
+  }
+
+
+  if (
+    section ===
+    "customers"
+  ) {
+
+    loadCustomers();
+
+  }
+
 }
 
 
@@ -1164,21 +1442,31 @@ function setupMobileMenu() {
     event => {
 
       if (
-        window.innerWidth > 900
+        window.innerWidth >
+        900
       ) {
+
         return;
+
       }
 
 
       if (
+
         DOM.sidebar?.contains(
           event.target
-        ) ||
+        )
+
+        ||
+
         DOM.mobileMenuBtn?.contains(
           event.target
         )
+
       ) {
+
         return;
+
       }
 
 
@@ -1188,6 +1476,7 @@ function setupMobileMenu() {
 
     }
   );
+
 }
 
 
@@ -1213,6 +1502,7 @@ function setupButtons() {
     "click",
     handleLogout
   );
+
 }
 
 
@@ -1238,11 +1528,12 @@ function setupSearch() {
     "change",
     filterProducts
   );
+
 }
 
 
 /* =========================================================
-   ADD PRODUCT
+   ADD PRODUCT MODAL
 ========================================================= */
 
 function openAddProductModal() {
@@ -1252,6 +1543,7 @@ function openAddProductModal() {
     <h2>
       Ajouter un produit
     </h2>
+
 
     <p
       style="
@@ -1269,6 +1561,7 @@ function openAddProductModal() {
         margin-top:20px;
       "
     >
+
 
       <div class="form-group">
 
@@ -1353,15 +1646,19 @@ function openAddProductModal() {
             STATE.categories
               .map(
                 category => `
+
                   <option
                     value="${escapeHTML(
                       category.id
                     )}"
                   >
+
                     ${escapeHTML(
                       category.name
                     )}
+
                   </option>
+
                 `
               )
               .join("")
@@ -1394,7 +1691,9 @@ function openAddProductModal() {
         Ajouter le produit
       </button>
 
+
     </div>
+
   `);
 
 
@@ -1406,6 +1705,7 @@ function openAddProductModal() {
       "click",
       saveProduct
     );
+
 }
 
 
@@ -1416,6 +1716,7 @@ function openAddProductModal() {
 async function saveProduct() {
 
   const name =
+
     document
       .getElementById(
         "newProductName"
@@ -1425,6 +1726,7 @@ async function saveProduct() {
 
 
   const price =
+
     document
       .getElementById(
         "newProductPrice"
@@ -1433,6 +1735,7 @@ async function saveProduct() {
 
 
   const oldPrice =
+
     document
       .getElementById(
         "newProductOldPrice"
@@ -1441,6 +1744,7 @@ async function saveProduct() {
 
 
   const stock =
+
     document
       .getElementById(
         "newProductStock"
@@ -1449,6 +1753,7 @@ async function saveProduct() {
 
 
   const categoryId =
+
     document
       .getElementById(
         "newProductCategory"
@@ -1457,6 +1762,7 @@ async function saveProduct() {
 
 
   const imageUrl =
+
     document
       .getElementById(
         "newProductImage"
@@ -1465,7 +1771,9 @@ async function saveProduct() {
       .trim();
 
 
-  if (!name) {
+  if (
+    !name
+  ) {
 
     showNotification(
       "Nom du produit obligatoire.",
@@ -1473,12 +1781,16 @@ async function saveProduct() {
     );
 
     return;
+
   }
 
 
   if (
+
     price === "" ||
+
     Number(price) < 0
+
   ) {
 
     showNotification(
@@ -1487,12 +1799,16 @@ async function saveProduct() {
     );
 
     return;
+
   }
 
 
   if (
+
     stock === "" ||
+
     Number(stock) < 0
+
   ) {
 
     showNotification(
@@ -1501,8 +1817,15 @@ async function saveProduct() {
     );
 
     return;
+
   }
 
+
+  /*
+    IMPORTANT:
+    products contient "active"
+    et pas "is_active"
+  */
 
   const productData = {
 
@@ -1525,11 +1848,9 @@ async function saveProduct() {
     image_url:
       imageUrl || null,
 
-    is_active:
-      true,
-
     active:
       true
+
   };
 
 
@@ -1537,16 +1858,23 @@ async function saveProduct() {
     data,
     error
   } =
+
     await supabaseClient
+
       .from("products")
+
       .insert(
         productData
       )
+
       .select()
+
       .single();
 
 
-  if (error) {
+  if (
+    error
+  ) {
 
     console.error(
       "Insert product error:",
@@ -1560,6 +1888,7 @@ async function saveProduct() {
     );
 
     return;
+
   }
 
 
@@ -1569,7 +1898,9 @@ async function saveProduct() {
 
 
   renderProducts();
+
   updateDashboard();
+
   renderLowStock();
 
 
@@ -1580,6 +1911,7 @@ async function saveProduct() {
     "Produit ajouté avec succès.",
     "success"
   );
+
 }
 
 
@@ -1595,11 +1927,13 @@ function openAddCategoryModal() {
       Ajouter une catégorie
     </h2>
 
+
     <div
       style="
         margin-top:20px;
       "
     >
+
 
       <div class="form-group">
 
@@ -1653,6 +1987,7 @@ function openAddCategoryModal() {
         Ajouter
       </button>
 
+
     </div>
 
   `);
@@ -1666,6 +2001,7 @@ function openAddCategoryModal() {
       "click",
       saveCategory
     );
+
 }
 
 
@@ -1676,6 +2012,7 @@ function openAddCategoryModal() {
 async function saveCategory() {
 
   const name =
+
     document
       .getElementById(
         "newCategoryName"
@@ -1685,6 +2022,7 @@ async function saveCategory() {
 
 
   let slug =
+
     document
       .getElementById(
         "newCategorySlug"
@@ -1694,6 +2032,7 @@ async function saveCategory() {
 
 
   const imageUrl =
+
     document
       .getElementById(
         "newCategoryImage"
@@ -1702,7 +2041,9 @@ async function saveCategory() {
       .trim();
 
 
-  if (!name) {
+  if (
+    !name
+  ) {
 
     showNotification(
       "Nom obligatoire.",
@@ -1710,13 +2051,18 @@ async function saveCategory() {
     );
 
     return;
+
   }
 
 
-  if (!slug) {
+  if (
+    !slug
+  ) {
 
     slug =
-      createSlug(name);
+      createSlug(
+        name
+      );
 
   }
 
@@ -1725,8 +2071,11 @@ async function saveCategory() {
     data,
     error
   } =
+
     await supabaseClient
+
       .from("categories")
+
       .insert({
 
         name,
@@ -1737,11 +2086,15 @@ async function saveCategory() {
           imageUrl || null
 
       })
+
       .select()
+
       .single();
 
 
-  if (error) {
+  if (
+    error
+  ) {
 
     console.error(
       "Insert category error:",
@@ -1755,6 +2108,7 @@ async function saveCategory() {
     );
 
     return;
+
   }
 
 
@@ -1764,6 +2118,7 @@ async function saveCategory() {
 
 
   renderCategories();
+
   updateProductCategoryFilter();
 
 
@@ -1774,6 +2129,7 @@ async function saveCategory() {
     "Catégorie ajoutée.",
     "success"
   );
+
 }
 
 
@@ -1788,12 +2144,18 @@ function editProduct(
   const product =
     STATE.products.find(
       item =>
-        String(item.id) ===
-        String(productId)
+        String(
+          item.id
+        ) ===
+        String(
+          productId
+        )
     );
 
 
-  if (!product) {
+  if (
+    !product
+  ) {
 
     showNotification(
       "Produit introuvable.",
@@ -1801,14 +2163,16 @@ function editProduct(
     );
 
     return;
+
   }
 
 
   openModal(`
 
     <h2>
-      Produit
+      Modifier le produit
     </h2>
+
 
     <p
       style="
@@ -1817,16 +2181,20 @@ function editProduct(
         font-size:12px;
       "
     >
+
       ${escapeHTML(
         product.name
       )}
+
     </p>
+
 
     <div
       style="
         margin-top:20px;
       "
     >
+
 
       <div
         class="form-group"
@@ -1886,12 +2254,52 @@ function editProduct(
       </div>
 
 
+      <div
+        class="form-group"
+      >
+
+        <label>
+          Statut
+        </label>
+
+        <select
+          id="editProductActive"
+        >
+
+          <option
+            value="true"
+            ${
+              product.active !== false
+                ? "selected"
+                : ""
+            }
+          >
+            Actif
+          </option>
+
+          <option
+            value="false"
+            ${
+              product.active === false
+                ? "selected"
+                : ""
+            }
+          >
+            Inactif
+          </option>
+
+        </select>
+
+      </div>
+
+
       <button
         class="primary-btn"
         id="updateProductBtn"
       >
         Enregistrer
       </button>
+
 
     </div>
 
@@ -1909,6 +2317,7 @@ function editProduct(
           product.id
         )
     );
+
 }
 
 
@@ -1921,6 +2330,7 @@ async function updateProduct(
 ) {
 
   const name =
+
     document
       .getElementById(
         "editProductName"
@@ -1930,6 +2340,7 @@ async function updateProduct(
 
 
   const price =
+
     Number(
       document
         .getElementById(
@@ -1940,6 +2351,7 @@ async function updateProduct(
 
 
   const stock =
+
     Number(
       document
         .getElementById(
@@ -1949,7 +2361,22 @@ async function updateProduct(
     );
 
 
-  if (!name) {
+  const activeValue =
+
+    document
+      .getElementById(
+        "editProductActive"
+      )
+      ?.value;
+
+
+  const active =
+    activeValue !== "false";
+
+
+  if (
+    !name
+  ) {
 
     showNotification(
       "Nom obligatoire.",
@@ -1957,12 +2384,18 @@ async function updateProduct(
     );
 
     return;
+
   }
 
 
   if (
-    !Number.isFinite(price) ||
+
+    !Number.isFinite(
+      price
+    ) ||
+
     price < 0
+
   ) {
 
     showNotification(
@@ -1971,12 +2404,18 @@ async function updateProduct(
     );
 
     return;
+
   }
 
 
   if (
-    !Number.isFinite(stock) ||
+
+    !Number.isFinite(
+      stock
+    ) ||
+
     stock < 0
+
   ) {
 
     showNotification(
@@ -1985,6 +2424,7 @@ async function updateProduct(
     );
 
     return;
+
   }
 
 
@@ -1992,26 +2432,36 @@ async function updateProduct(
     data,
     error
   } =
+
     await supabaseClient
+
       .from("products")
+
       .update({
 
         name,
 
         price,
 
-        stock
+        stock,
+
+        active
 
       })
+
       .eq(
         "id",
         productId
       )
+
       .select()
+
       .single();
 
 
-  if (error) {
+  if (
+    error
+  ) {
 
     console.error(
       "Update product error:",
@@ -2024,30 +2474,42 @@ async function updateProduct(
     );
 
     return;
+
   }
 
 
   const index =
+
     STATE.products.findIndex(
       product =>
-        String(product.id) ===
-        String(productId)
+        String(
+          product.id
+        ) ===
+        String(
+          productId
+        )
     );
 
 
-  if (index !== -1) {
+  if (
+    index !== -1
+  ) {
 
-    STATE.products[index] =
-      {
-        ...STATE.products[index],
-        ...data
-      };
+    STATE.products[index] = {
+
+      ...STATE.products[index],
+
+      ...data
+
+    };
 
   }
 
 
   renderProducts();
+
   updateDashboard();
+
   renderLowStock();
 
 
@@ -2058,6 +2520,7 @@ async function updateProduct(
     "Produit modifié avec succès.",
     "success"
   );
+
 }
 
 
@@ -2073,30 +2536,43 @@ function loadInventory() {
     );
 
 
-  if (!tbody) {
+  if (
+    !tbody
+  ) {
+
     return;
+
   }
 
 
-  if (!STATE.products.length) {
+  if (
+    !STATE.products.length
+  ) {
 
     tbody.innerHTML = `
+
       <tr>
+
         <td
           colspan="4"
           class="empty-row"
         >
           Aucun produit.
         </td>
+
       </tr>
+
     `;
 
     return;
+
   }
 
 
   tbody.innerHTML =
+
     STATE.products
+
       .map(
         product => {
 
@@ -2108,6 +2584,7 @@ function loadInventory() {
 
           let state =
             "Correct";
+
 
           let statusClass =
             "status-success";
@@ -2123,7 +2600,9 @@ function loadInventory() {
             statusClass =
               "status-danger";
 
-          } else if (
+          }
+
+          else if (
             stock <= 5
           ) {
 
@@ -2137,30 +2616,44 @@ function loadInventory() {
 
 
           return `
+
             <tr>
 
               <td>
+
                 <strong>
+
                   ${escapeHTML(
                     product.name
                   )}
+
                 </strong>
+
               </td>
 
+
               <td>
+
                 ${stock}
+
               </td>
 
+
               <td>
+
                 <span
                   class="
                     status
                     ${statusClass}
                   "
                 >
+
                   ${state}
+
                 </span>
+
               </td>
+
 
               <td>
 
@@ -2170,16 +2663,22 @@ function loadInventory() {
                     product.id
                   )}')"
                 >
+
                   Modifier
+
                 </button>
 
               </td>
 
             </tr>
+
           `;
+
         }
       )
+
       .join("");
+
 }
 
 
@@ -2202,22 +2701,33 @@ function renderOrders() {
     );
 
 
-  if (!tbody) {
+  if (
+    !tbody
+  ) {
+
     return;
+
   }
 
 
   tbody.innerHTML = `
+
     <tr>
+
       <td
         colspan="6"
         class="empty-row"
       >
+
         Les commandes seront connectées
         dans l'étape Commandes.
+
       </td>
+
     </tr>
+
   `;
+
 }
 
 
@@ -2233,22 +2743,33 @@ function loadCustomers() {
     );
 
 
-  if (!tbody) {
+  if (
+    !tbody
+  ) {
+
     return;
+
   }
 
 
   tbody.innerHTML = `
+
     <tr>
+
       <td
         colspan="6"
         class="empty-row"
       >
+
         Les clients seront connectés
         dans l'étape Clients.
+
       </td>
+
     </tr>
+
   `;
+
 }
 
 
@@ -2296,6 +2817,7 @@ function setupModal() {
 
     }
   );
+
 }
 
 
@@ -2303,8 +2825,21 @@ function openModal(
   content
 ) {
 
-  if (!DOM.modalOverlay) {
+  if (
+    !DOM.modalOverlay
+  ) {
+
     return;
+
+  }
+
+
+  if (
+    !DOM.modalContent
+  ) {
+
+    return;
+
   }
 
 
@@ -2315,6 +2850,7 @@ function openModal(
   DOM.modalOverlay.classList.add(
     "show"
   );
+
 }
 
 
@@ -2323,6 +2859,7 @@ function closeModal() {
   DOM.modalOverlay?.classList.remove(
     "show"
   );
+
 }
 
 
@@ -2333,23 +2870,33 @@ function closeModal() {
 async function handleLogout() {
 
   const confirmed =
+
     window.confirm(
       "Voulez-vous vraiment vous déconnecter ?"
     );
 
 
-  if (!confirmed) {
+  if (
+    !confirmed
+  ) {
+
     return;
+
   }
 
 
   const {
     error
   } =
-    await supabaseClient.auth.signOut();
+
+    await supabaseClient
+      .auth
+      .signOut();
 
 
-  if (error) {
+  if (
+    error
+  ) {
 
     console.error(
       error
@@ -2361,6 +2908,7 @@ async function handleLogout() {
     );
 
     return;
+
   }
 
 
@@ -2368,6 +2916,7 @@ async function handleLogout() {
     "Déconnexion effectuée.",
     "success"
   );
+
 }
 
 
@@ -2380,18 +2929,29 @@ function formatPrice(
 ) {
 
   const number =
-    Number(value) || 0;
+    Number(
+      value
+    ) || 0;
 
 
   return (
+
     new Intl.NumberFormat(
       "fr-FR"
-    ).format(number)
+    ).format(
+      number
+    )
+
     +
+
     " "
+
     +
+
     CONFIG.currency
+
   );
+
 }
 
 
@@ -2402,26 +2962,32 @@ function escapeHTML(
   return String(
     value ?? ""
   )
+
     .replaceAll(
       "&",
       "&amp;"
     )
+
     .replaceAll(
       "<",
       "&lt;"
     )
+
     .replaceAll(
       ">",
       "&gt;"
     )
+
     .replaceAll(
       '"',
       "&quot;"
     )
+
     .replaceAll(
       "'",
       "&#039;"
     );
+
 }
 
 
@@ -2429,22 +2995,30 @@ function createSlug(
   text
 ) {
 
-  return String(text)
+  return String(
+    text
+  )
+
     .toLowerCase()
+
     .normalize(
       "NFD"
     )
+
     .replace(
       /[\u0300-\u036f]/g,
       ""
     )
+
     .replace(
       /[^a-z0-9]+/g,
       "-"
     )
+
     .replace(
       /^-+|-+$/g,
       "");
+
 }
 
 
@@ -2475,24 +3049,37 @@ function showNotification(
 
 
   notification.style.cssText = `
+
     position:fixed;
+
     right:20px;
+
     bottom:20px;
+
     z-index:5000;
+
     max-width:380px;
+
     padding:14px 17px;
+
     border-radius:12px;
+
     background:${
       type === "error"
         ? "#c73535"
         : "#111"
     };
+
     color:#fff;
+
     font-size:12px;
+
     font-weight:600;
+
     box-shadow:
       0 15px 40px
       rgba(0,0,0,.18);
+
   `;
 
 
@@ -2503,10 +3090,13 @@ function showNotification(
 
   setTimeout(
     () => {
+
       notification.remove();
+
     },
     3500
   );
+
 }
 
 
@@ -2517,16 +3107,25 @@ function showNotification(
 window.showSection =
   showSection;
 
+
 window.closeModal =
   closeModal;
+
 
 window.editProduct =
   editProduct;
 
+
 window.JR_ADMIN = {
+
   STATE,
+
   supabaseClient,
+
   loadProducts,
+
   loadCategories,
+
   showSection
+
 };
