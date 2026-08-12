@@ -1,7 +1,12 @@
 /* =========================================================
    JR SHOP — CHECKOUT
-   Supabase + WhatsApp + Wilaya + Commune + Delivery
+   Supabase + WhatsApp + Wilaya + Commune + Livraison
 ========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+  loadCheckout();
+  setupDelivery();
+});
 
 
 /* =========================================================
@@ -12,37 +17,35 @@ const WHATSAPP_NUMBER = "213697005313";
 
 
 /* =========================================================
-   DELIVERY PRICES
-   58 WILAYAS
-   domicile / bureau
+   DELIVERY PRICES — 58 WILAYAS
+   Domicile / Bureau
 ========================================================= */
 
 const DELIVERY_PRICES = {
-
   "01": { domicile: 1100, bureau: 600 },
-  "02": { domicile: 690,  bureau: 400 },
-  "03": { domicile: 900,  bureau: 500 },
-  "04": { domicile: 850,  bureau: 400 },
-  "05": { domicile: 850,  bureau: 400 },
-  "06": { domicile: 790,  bureau: 400 },
-  "07": { domicile: 950,  bureau: 500 },
+  "02": { domicile: 690, bureau: 400 },
+  "03": { domicile: 900, bureau: 500 },
+  "04": { domicile: 850, bureau: 400 },
+  "05": { domicile: 850, bureau: 400 },
+  "06": { domicile: 790, bureau: 400 },
+  "07": { domicile: 950, bureau: 500 },
   "08": { domicile: 1000, bureau: 600 },
-  "09": { domicile: 600,  bureau: 400 },
-  "10": { domicile: 690,  bureau: 400 },
+  "09": { domicile: 600, bureau: 400 },
+  "10": { domicile: 690, bureau: 400 },
   "11": { domicile: 1100, bureau: 600 },
-  "12": { domicile: 850,  bureau: 400 },
-  "13": { domicile: 600,  bureau: 400 },
-  "14": { domicile: 700,  bureau: 400 },
-  "15": { domicile: 690,  bureau: 400 },
-  "16": { domicile: 500,  bureau: 400 },
-  "17": { domicile: 900,  bureau: 500 },
-  "18": { domicile: 790,  bureau: 400 },
-  "19": { domicile: 750,  bureau: 400 },
-  "20": { domicile: 790,  bureau: 400 },
-  "21": { domicile: 690,  bureau: 400 },
-  "22": { domicile: 600,  bureau: 400 },
-  "23": { domicile: 800,  bureau: 400 },
-  "24": { domicile: 850,  bureau: 450 },
+  "12": { domicile: 850, bureau: 400 },
+  "13": { domicile: 600, bureau: 400 },
+  "14": { domicile: 700, bureau: 400 },
+  "15": { domicile: 690, bureau: 400 },
+  "16": { domicile: 500, bureau: 400 },
+  "17": { domicile: 900, bureau: 500 },
+  "18": { domicile: 790, bureau: 400 },
+  "19": { domicile: 750, bureau: 400 },
+  "20": { domicile: 790, bureau: 400 },
+  "21": { domicile: 690, bureau: 400 },
+  "22": { domicile: 600, bureau: 400 },
+  "23": { domicile: 800, bureau: 400 },
+  "24": { domicile: 850, bureau: 450 },
   "25": { domicile: 800, bureau: 400 },
   "26": { domicile: 690, bureau: 400 },
   "27": { domicile: 600, bureau: 400 },
@@ -77,24 +80,7 @@ const DELIVERY_PRICES = {
   "56": { domicile: 1700, bureau: 1100 },
   "57": { domicile: 900, bureau: null },
   "58": { domicile: 990, bureau: 500 }
-
 };
-
-
-/* =========================================================
-   START
-========================================================= */
-
-document.addEventListener(
-  "DOMContentLoaded",
-  function () {
-
-    loadCheckout();
-
-    setupDelivery();
-
-  }
-);
 
 
 /* =========================================================
@@ -102,38 +88,17 @@ document.addEventListener(
 ========================================================= */
 
 function getCart() {
-
   try {
-
-    const cart =
-      JSON.parse(
-        localStorage.getItem(
-          "jrshop_cart"
-        )
-      );
-
-
-    if (Array.isArray(cart)) {
-
-      return cart;
-
-    }
-
-
-    return [];
-
-  } catch (error) {
-
-    console.error(
-      "Cart error:",
-      error
+    const cart = JSON.parse(
+      localStorage.getItem("jrshop_cart")
     );
 
+    return Array.isArray(cart) ? cart : [];
 
+  } catch (error) {
+    console.error("Cart error:", error);
     return [];
-
   }
-
 }
 
 
@@ -143,358 +108,319 @@ function getCart() {
 
 function loadCheckout() {
 
-  const cart =
-    getCart();
-
+  const cart = getCart();
 
   const container =
-    document.getElementById(
-      "checkoutContainer"
-    );
-
+    document.getElementById("checkoutContainer");
 
   if (!container) {
-
     return;
-
   }
-
 
   if (cart.length === 0) {
 
-    container.innerHTML =
+    container.innerHTML = `
+      <div class="card empty-state">
+        <h2>Votre panier est vide</h2>
 
-      '<div class="card empty-state">' +
+        <p>
+          Ajoutez au moins un produit avant de continuer.
+        </p>
 
-        '<h2>Votre panier est vide</h2>' +
+        <br>
 
-        '<p>' +
-          'Ajoutez au moins un produit avant de continuer.' +
-        '</p>' +
-
-        '<br>' +
-
-        '<a ' +
-          'href="index.html#products" ' +
-          'class="btn btn-primary">' +
-          'Découvrir les produits' +
-        '</a>' +
-
-      '</div>';
-
+        <a
+          href="index.html#products"
+          class="btn btn-primary"
+        >
+          Découvrir les produits
+        </a>
+      </div>
+    `;
 
     return;
-
   }
 
-
   renderSummary(cart);
-
   setupCheckoutForm(cart);
-
 }
 
 
 /* =========================================================
-   RENDER PRODUCTS
+   RENDER SUMMARY
 ========================================================= */
 
 function renderSummary(cart) {
 
   const itemsContainer =
-    document.getElementById(
-      "summaryItems"
-    );
-
+    document.getElementById("summaryItems");
 
   if (!itemsContainer) {
-
     return;
-
   }
-
 
   let html = "";
 
+  cart.forEach(function (item) {
 
-  cart.forEach(
-    function (item) {
+    const price =
+      Number(item.price || 0);
 
-      const price =
-        Number(
-          item.price || 0
-        );
+    const quantity =
+      Number(item.quantity || 0);
 
+    const itemTotal =
+      price * quantity;
 
-      const quantity =
-        Number(
-          item.quantity || 0
-        );
+    html += `
+      <div
+        class="summary-row"
+        style="
+          align-items:flex-start;
+          gap:12px;
+        "
+      >
 
+        <div>
 
-      const itemTotal =
-        price * quantity;
+          <strong>
+            ${escapeHTML(item.name)}
+          </strong>
 
+          <div
+            style="
+              font-size:.9rem;
+              opacity:.7;
+              margin-top:4px;
+            "
+          >
+            ${quantity} × ${formatPrice(price)}
+          </div>
 
-      html +=
+        </div>
 
-        '<div class="summary-row">' +
+        <strong>
+          ${formatPrice(itemTotal)}
+        </strong>
 
-          '<div>' +
+      </div>
+    `;
+  });
 
-            '<strong>' +
-              escapeHTML(
-                item.name
-              ) +
-            '</strong>' +
+  itemsContainer.innerHTML = html;
 
-            '<div ' +
-              'style="' +
-                'font-size:.9rem;' +
-                'opacity:.7;' +
-                'margin-top:4px;' +
-              '">' +
-
-              quantity +
-              ' × ' +
-              formatPrice(
-                price
-              ) +
-
-            '</div>' +
-
-          '</div>' +
-
-          '<strong>' +
-            formatPrice(
-              itemTotal
-            ) +
-          '</strong>' +
-
-        '</div>';
-
-    }
-  );
-
-
-  itemsContainer.innerHTML =
-    html;
-
-
-  updateTotals();
-
+  updateFinalTotal();
 }
 
 
 /* =========================================================
-   PRODUCTS TOTAL
+   CALCULATE PRODUCTS TOTAL
 ========================================================= */
 
 function calculateProductsTotal(cart) {
 
-  return cart.reduce(
-    function (
-      total,
-      item
-    ) {
+  return cart.reduce(function (total, item) {
 
-      return (
-        total +
-        Number(
-          item.price || 0
-        ) *
-        Number(
-          item.quantity || 0
-        )
-      );
+    return (
+      total +
+      Number(item.price || 0) *
+      Number(item.quantity || 0)
+    );
 
-    },
-    0
-  );
-
+  }, 0);
 }
 
 
 /* =========================================================
-   DELIVERY FEE
+   GET WILAYA CODE
+========================================================= */
+
+function getWilayaCode() {
+
+  const wilayaSelect =
+    document.getElementById("wilaya");
+
+  if (!wilayaSelect) {
+    return "";
+  }
+
+  const selectedOption =
+    wilayaSelect.options[
+      wilayaSelect.selectedIndex
+    ];
+
+  if (!selectedOption) {
+    return "";
+  }
+
+  /*
+     IMPORTANT:
+     On essaie plusieurs possibilités :
+     1. data-code="16"
+     2. value="16"
+     3. value="16 - Alger"
+     4. texte "16 - Alger"
+  */
+
+  const dataCode =
+    selectedOption.getAttribute("data-code");
+
+  if (dataCode) {
+    return String(dataCode).padStart(2, "0");
+  }
+
+  const value =
+    String(selectedOption.value || "").trim();
+
+  if (/^\d{1,2}$/.test(value)) {
+    return value.padStart(2, "0");
+  }
+
+  const valueMatch =
+    value.match(/\b(\d{1,2})\b/);
+
+  if (valueMatch) {
+    return valueMatch[1].padStart(2, "0");
+  }
+
+  const text =
+    String(selectedOption.textContent || "").trim();
+
+  const textMatch =
+    text.match(/\b(\d{1,2})\b/);
+
+  if (textMatch) {
+    return textMatch[1].padStart(2, "0");
+  }
+
+  return "";
+}
+
+
+/* =========================================================
+   GET DELIVERY FEE
 ========================================================= */
 
 function getDeliveryFee() {
 
-  const wilayaElement =
-    document.getElementById(
-      "wilaya"
-    );
+  const deliveryType =
+    document.getElementById("deliveryType");
 
-
-  const deliveryElement =
-    document.getElementById(
-      "deliveryType"
-    );
-
-
-  if (
-    !wilayaElement ||
-    !deliveryElement
-  ) {
-
+  if (!deliveryType) {
     return 0;
-
   }
-
 
   const wilayaCode =
-    String(
-      wilayaElement.value || ""
-    ).trim();
+    getWilayaCode();
 
-
-  const deliveryType =
-    deliveryElement.value;
-
-
-  if (
-    !wilayaCode ||
-    !deliveryType
-  ) {
-
+  if (!wilayaCode) {
     return 0;
-
   }
-
 
   const prices =
-    DELIVERY_PRICES[
-      wilayaCode
-    ];
-
+    DELIVERY_PRICES[wilayaCode];
 
   if (!prices) {
-
     return 0;
-
   }
 
+  const type =
+    deliveryType.value;
+
+  if (!type) {
+    return 0;
+  }
 
   const fee =
-    prices[
-      deliveryType
-    ];
-
+    prices[type];
 
   if (
     fee === null ||
     fee === undefined
   ) {
-
     return 0;
-
   }
 
-
-  return Number(
-    fee
-  );
-
+  return Number(fee);
 }
 
 
 /* =========================================================
-   UPDATE TOTALS
+   UPDATE DELIVERY DISPLAY
 ========================================================= */
 
-function updateTotals() {
+function updateDeliveryDisplay() {
+
+  const fee =
+    getDeliveryFee();
+
+  const deliveryFeeElement =
+    document.getElementById("deliveryFee");
+
+  const summaryDeliveryElement =
+    document.getElementById("summaryDelivery");
+
+  if (deliveryFeeElement) {
+
+    deliveryFeeElement.textContent =
+      formatPrice(fee);
+  }
+
+  if (summaryDeliveryElement) {
+
+    summaryDeliveryElement.textContent =
+      formatPrice(fee);
+  }
+
+  updateFinalTotal();
+}
+
+
+/* =========================================================
+   UPDATE FINAL TOTAL
+========================================================= */
+
+function updateFinalTotal() {
 
   const cart =
     getCart();
 
-
   const productsTotal =
-    calculateProductsTotal(
-      cart
-    );
-
+    calculateProductsTotal(cart);
 
   const deliveryFee =
     getDeliveryFee();
-
 
   const finalTotal =
     productsTotal +
     deliveryFee;
 
-
   const productsTotalElement =
-    document.getElementById(
-      "productsTotal"
-    );
+    document.getElementById("productsTotal");
 
+  const deliveryElement =
+    document.getElementById("summaryDelivery");
 
-  const deliveryFeeElement =
-    document.getElementById(
-      "deliveryFee"
-    );
+  const totalElement =
+    document.getElementById("summaryTotal");
 
-
-  const summaryDeliveryElement =
-    document.getElementById(
-      "summaryDelivery"
-    );
-
-
-  const summaryTotalElement =
-    document.getElementById(
-      "summaryTotal"
-    );
-
-
-  if (
-    productsTotalElement
-  ) {
+  if (productsTotalElement) {
 
     productsTotalElement.textContent =
-      formatPrice(
-        productsTotal
-      );
-
+      formatPrice(productsTotal);
   }
 
+  if (deliveryElement) {
 
-  if (
-    deliveryFeeElement
-  ) {
-
-    deliveryFeeElement.textContent =
-      formatPrice(
-        deliveryFee
-      );
-
+    deliveryElement.textContent =
+      formatPrice(deliveryFee);
   }
 
+  if (totalElement) {
 
-  if (
-    summaryDeliveryElement
-  ) {
-
-    summaryDeliveryElement.textContent =
-      formatPrice(
-        deliveryFee
-      );
-
+    totalElement.textContent =
+      formatPrice(finalTotal);
   }
-
-
-  if (
-    summaryTotalElement
-  ) {
-
-    summaryTotalElement.textContent =
-      formatPrice(
-        finalTotal
-      );
-
-  }
-
 }
 
 
@@ -504,44 +430,32 @@ function updateTotals() {
 
 function setupDelivery() {
 
-  const deliveryType =
-    document.getElementById(
-      "deliveryType"
-    );
-
-
   const wilayaSelect =
-    document.getElementById(
-      "wilaya"
-    );
+    document.getElementById("wilaya");
 
+  const deliveryType =
+    document.getElementById("deliveryType");
 
-  if (!deliveryType) {
-
+  if (!wilayaSelect || !deliveryType) {
     return;
-
   }
 
-
-  function refreshDelivery() {
+  function refreshDeliveryOptions() {
 
     const wilayaCode =
-      wilayaSelect
-        ? wilayaSelect.value
-        : "";
-
+      getWilayaCode();
 
     const prices =
-      DELIVERY_PRICES[
-        wilayaCode
-      ];
-
+      DELIVERY_PRICES[wilayaCode];
 
     const bureauOption =
       deliveryType.querySelector(
         'option[value="bureau"]'
       );
 
+    /*
+       BUREAU DISPONIBLE / NON DISPONIBLE
+    */
 
     if (bureauOption) {
 
@@ -550,53 +464,46 @@ function setupDelivery() {
         prices.bureau === null
       ) {
 
-        bureauOption.disabled =
-          true;
-
+        bureauOption.disabled = true;
 
         if (
-          deliveryType.value ===
-          "bureau"
+          deliveryType.value === "bureau"
         ) {
 
-          deliveryType.value =
-            "";
-
+          deliveryType.value = "";
         }
 
       } else {
 
-        bureauOption.disabled =
-          false;
-
+        bureauOption.disabled = false;
       }
-
     }
 
-
-    updateTotals();
-
+    updateDeliveryDisplay();
   }
+
+
+  wilayaSelect.addEventListener(
+    "change",
+    refreshDeliveryOptions
+  );
 
 
   deliveryType.addEventListener(
     "change",
-    refreshDelivery
+    refreshDeliveryOptions
   );
 
 
-  if (wilayaSelect) {
+  /*
+     Petit délai pour laisser
+     locations.js remplir les wilayas.
+  */
 
-    wilayaSelect.addEventListener(
-      "change",
-      refreshDelivery
-    );
-
-  }
-
-
-  refreshDelivery();
-
+  setTimeout(
+    refreshDeliveryOptions,
+    300
+  );
 }
 
 
@@ -607,17 +514,11 @@ function setupDelivery() {
 function setupCheckoutForm(cart) {
 
   const form =
-    document.getElementById(
-      "checkoutForm"
-    );
-
+    document.getElementById("checkoutForm");
 
   if (!form) {
-
     return;
-
   }
-
 
   form.addEventListener(
     "submit",
@@ -625,53 +526,34 @@ function setupCheckoutForm(cart) {
 
       event.preventDefault();
 
-
       const button =
         document.getElementById(
           "submitOrderButton"
         );
 
-
       const customerName =
-        getInputValue(
-          "customerName"
-        );
-
+        getValue("customerName");
 
       const phone =
-        getInputValue(
-          "phone"
-        );
-
+        getValue("phone");
 
       const wilaya =
-        getInputValue(
-          "wilaya"
-        );
+        getSelectedText("wilaya");
 
+      const wilayaCode =
+        getWilayaCode();
 
       const commune =
-        getInputValue(
-          "commune"
-        );
-
+        getSelectedText("commune");
 
       const deliveryType =
-        getInputValue(
-          "deliveryType"
-        );
-
+        getValue("deliveryType");
 
       const address =
-        getInputValue(
-          "address"
-        );
-
+        getValue("address");
 
       const notes =
-        getInputValue(
-          "notes"
-        );
+        getValue("notes");
 
 
       /* =========================
@@ -686,15 +568,10 @@ function setupCheckoutForm(cart) {
         );
 
         return;
-
       }
 
 
-      if (
-        !isValidPhone(
-          phone
-        )
-      ) {
+      if (!isValidPhone(phone)) {
 
         showMessage(
           "Veuillez entrer un numéro de téléphone valide.",
@@ -702,11 +579,10 @@ function setupCheckoutForm(cart) {
         );
 
         return;
-
       }
 
 
-      if (!wilaya) {
+      if (!wilayaCode) {
 
         showMessage(
           "Veuillez sélectionner votre wilaya.",
@@ -714,7 +590,6 @@ function setupCheckoutForm(cart) {
         );
 
         return;
-
       }
 
 
@@ -726,7 +601,6 @@ function setupCheckoutForm(cart) {
         );
 
         return;
-
       }
 
 
@@ -738,13 +612,11 @@ function setupCheckoutForm(cart) {
         );
 
         return;
-
       }
 
 
       if (
-        deliveryType ===
-          "domicile" &&
+        deliveryType === "domicile" &&
         !address
       ) {
 
@@ -754,13 +626,10 @@ function setupCheckoutForm(cart) {
         );
 
         return;
-
       }
 
 
-      if (
-        cart.length === 0
-      ) {
+      if (!cart.length) {
 
         showMessage(
           "Votre panier est vide.",
@@ -768,32 +637,26 @@ function setupCheckoutForm(cart) {
         );
 
         return;
-
       }
 
 
-      const deliveryPrices =
-        DELIVERY_PRICES[
-          wilaya
-        ];
+      const prices =
+        DELIVERY_PRICES[wilayaCode];
 
 
-      if (!deliveryPrices) {
+      if (!prices) {
 
         showMessage(
-          "Tarif de livraison introuvable pour cette wilaya.",
+          "Tarif de livraison indisponible pour cette wilaya.",
           "error"
         );
 
         return;
-
       }
 
 
       const deliveryFee =
-        deliveryPrices[
-          deliveryType
-        ];
+        prices[deliveryType];
 
 
       if (
@@ -807,22 +670,15 @@ function setupCheckoutForm(cart) {
         );
 
         return;
-
       }
 
 
-      /* =========================
-         BUTTON
-      ========================== */
-
       if (button) {
 
-        button.disabled =
-          true;
+        button.disabled = true;
 
         button.textContent =
           "Enregistrement...";
-
       }
 
 
@@ -833,16 +689,11 @@ function setupCheckoutForm(cart) {
         ========================== */
 
         const productsTotal =
-          calculateProductsTotal(
-            cart
-          );
-
+          calculateProductsTotal(cart);
 
         const total =
           productsTotal +
-          Number(
-            deliveryFee
-          );
+          Number(deliveryFee);
 
 
         /* =========================
@@ -850,34 +701,30 @@ function setupCheckoutForm(cart) {
         ========================== */
 
         const items =
-          cart.map(
-            function (item) {
+          cart.map(function (item) {
 
-              return {
+            return {
 
-                id:
-                  item.id,
+              id:
+                item.id,
 
-                name:
-                  item.name,
+              name:
+                item.name,
 
-                price:
-                  Number(
-                    item.price || 0
-                  ),
+              price:
+                Number(
+                  item.price || 0
+                ),
 
-                quantity:
-                  Number(
-                    item.quantity || 0
-                  ),
+              quantity:
+                Number(
+                  item.quantity || 0
+                ),
 
-                image_url:
-                  item.image_url || ""
-
-              };
-
-            }
-          );
+              image_url:
+                item.image_url || ""
+            };
+          });
 
 
         /* =========================
@@ -925,16 +772,13 @@ function setupCheckoutForm(cart) {
             deliveryType,
 
           delivery_fee:
-            Number(
-              deliveryFee
-            ),
+            Number(deliveryFee),
 
           total:
             total,
 
           status:
             "pending"
-
         };
 
 
@@ -942,29 +786,34 @@ function setupCheckoutForm(cart) {
            SUPABASE
         ========================== */
 
+        if (
+          typeof supabaseClient ===
+          "undefined"
+        ) {
+
+          throw new Error(
+            "Supabase n'est pas chargé. Vérifiez config.js."
+          );
+        }
+
+
         const result =
           await supabaseClient
             .from("orders")
-            .insert(
-              orderData
-            );
+            .insert(orderData);
 
 
-        if (
-          result.error
-        ) {
+        if (result.error) {
 
           console.error(
             "SUPABASE ERROR:",
             result.error
           );
 
-
           throw new Error(
             result.error.message ||
             "Impossible d'enregistrer la commande."
           );
-
         }
 
 
@@ -1006,13 +855,10 @@ function setupCheckoutForm(cart) {
               productsTotal,
 
             deliveryFee:
-              Number(
-                deliveryFee
-              ),
+              Number(deliveryFee),
 
             total:
               total
-
           });
 
 
@@ -1048,7 +894,6 @@ function setupCheckoutForm(cart) {
 
           button.textContent =
             "Commande enregistrée";
-
         }
 
 
@@ -1070,7 +915,6 @@ function setupCheckoutForm(cart) {
           error
         );
 
-
         showMessage(
           error.message ||
           "Une erreur est survenue.",
@@ -1085,152 +929,139 @@ function setupCheckoutForm(cart) {
 
           button.textContent =
             "Confirmer la commande";
-
         }
-
       }
-
     }
   );
-
 }
 
 
 /* =========================================================
-   INPUT VALUE
+   GET INPUT VALUE
 ========================================================= */
 
-function getInputValue(
-  id
-) {
+function getValue(id) {
 
   const element =
-    document.getElementById(
-      id
-    );
-
+    document.getElementById(id);
 
   if (!element) {
-
     return "";
-
   }
-
 
   return String(
     element.value || ""
   ).trim();
-
 }
 
 
 /* =========================================================
-   WHATSAPP MESSAGE
+   GET SELECTED TEXT
 ========================================================= */
 
-function createWhatsAppMessage(
-  data
-) {
+function getSelectedText(id) {
+
+  const select =
+    document.getElementById(id);
+
+  if (!select) {
+    return "";
+  }
+
+  const option =
+    select.options[
+      select.selectedIndex
+    ];
+
+  if (!option) {
+    return "";
+  }
+
+  return String(
+    option.textContent || ""
+  ).trim();
+}
+
+
+/* =========================================================
+   WHATSAPP
+========================================================= */
+
+function createWhatsAppMessage(data) {
 
   let message =
     "🛍️ Nouvelle commande - JR Shop\n\n";
-
 
   message +=
     "📦 Commande: " +
     data.orderId +
     "\n";
 
-
   message +=
     "👤 Nom: " +
     data.customerName +
     "\n";
-
 
   message +=
     "📞 Téléphone: " +
     data.phone +
     "\n";
 
-
   message +=
     "📍 Wilaya: " +
     data.wilaya +
     "\n";
-
 
   message +=
     "🏘️ Commune: " +
     data.commune +
     "\n";
 
-
   message +=
     "🚚 Livraison: " +
     (
-      data.deliveryType ===
-      "domicile"
+      data.deliveryType === "domicile"
         ? "Domicile"
         : "Bureau"
     ) +
     "\n";
 
-
-  if (
-    data.address
-  ) {
+  if (data.address) {
 
     message +=
       "🏠 Adresse: " +
       data.address +
       "\n";
-
   }
 
-
-  if (
-    data.notes
-  ) {
+  if (data.notes) {
 
     message +=
       "📝 Note: " +
       data.notes +
       "\n";
-
   }
-
 
   message +=
     "\n🛒 Produits:\n";
-
 
   data.cart.forEach(
     function (item) {
 
       const itemTotal =
-        Number(
-          item.price || 0
-        ) *
-        Number(
-          item.quantity || 0
-        );
-
+        Number(item.price || 0) *
+        Number(item.quantity || 0);
 
       message +=
-        "• " +
+        "- " +
         item.name +
         " × " +
         item.quantity +
         " = " +
-        formatPrice(
-          itemTotal
-        ) +
+        formatPrice(itemTotal) +
         "\n";
-
     }
   );
-
 
   message +=
     "\n💵 Total produits: " +
@@ -1238,13 +1069,11 @@ function createWhatsAppMessage(
       data.productsTotal
     );
 
-
   message +=
     "\n🚚 Frais livraison: " +
     formatPrice(
       data.deliveryFee
     );
-
 
   message +=
     "\n💰 Total final: " +
@@ -1252,9 +1081,7 @@ function createWhatsAppMessage(
       data.total
     );
 
-
   return message;
-
 }
 
 
@@ -1262,9 +1089,7 @@ function createWhatsAppMessage(
    PHONE VALIDATION
 ========================================================= */
 
-function isValidPhone(
-  phone
-) {
+function isValidPhone(phone) {
 
   const cleaned =
     phone.replace(
@@ -1272,16 +1097,14 @@ function isValidPhone(
       ""
     );
 
-
   return /^[+]?[0-9]{8,15}$/.test(
     cleaned
   );
-
 }
 
 
 /* =========================================================
-   MESSAGE
+   SHOW MESSAGE
 ========================================================= */
 
 function showMessage(
@@ -1294,52 +1117,38 @@ function showMessage(
       "checkoutMessage"
     );
 
-
   if (!element) {
-
     return;
-
   }
-
 
   element.style.display =
     "block";
 
-
   element.textContent =
     message;
-
 
   element.className =
     "checkout-message " +
     type;
 
-
   element.scrollIntoView({
     behavior: "smooth",
     block: "center"
   });
-
 }
 
 
 /* =========================================================
-   PRICE FORMAT
+   FORMAT PRICE
 ========================================================= */
 
-function formatPrice(
-  value
-) {
+function formatPrice(value) {
 
   return (
-    Number(
-      value || 0
-    ).toLocaleString(
-      "fr-DZ"
-    ) +
+    Number(value || 0)
+      .toLocaleString("fr-DZ") +
     " DA"
   );
-
 }
 
 
@@ -1347,32 +1156,15 @@ function formatPrice(
    HTML ESCAPE
 ========================================================= */
 
-function escapeHTML(
-  value
-) {
+function escapeHTML(value) {
 
   return String(
     value ?? ""
   )
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    )
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
+
