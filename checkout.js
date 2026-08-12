@@ -1,3 +1,8 @@
+/* =========================================================
+   JR SHOP — CHECKOUT
+   Supabase Orders + WhatsApp
+========================================================= */
+
 ```javascript
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -642,4 +647,3 @@ function escapeHTML(value) {
     .replace(/'/g, "&#039;");
 
 }
-```
