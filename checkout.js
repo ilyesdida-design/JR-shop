@@ -20,9 +20,73 @@ const WHATSAPP_NUMBER = "213697005313";
    DELIVERY PRICES — TEMPORARY
 ========================================================= */
 
+/* =========================================================
+   DELIVERY PRICES — 58 WILAYAS
+   Tarifs indicatifs 2026
+   domicile / stop-desk
+========================================================= */
+
 const DELIVERY_PRICES = {
-  domicile: 600,
-  bureau: 400
+
+  "01": { domicile: 1100, bureau: 600 },
+  "02": { domicile: 690,  bureau: 400 },
+  "03": { domicile: 900,  bureau: 500 },
+  "04": { domicile: 850,  bureau: 400 },
+  "05": { domicile: 850,  bureau: 400 },
+  "06": { domicile: 790,  bureau: 400 },
+  "07": { domicile: 950,  bureau: 500 },
+  "08": { domicile: 1000, bureau: 600 },
+  "09": { domicile: 600,  bureau: 400 },
+  "10": { domicile: 690,  bureau: 400 },
+  "11": { domicile: 1100, bureau: 600 },
+  "12": { domicile: 850,  bureau: 400 },
+  "13": { domicile: 600,  bureau: 400 },
+  "14": { domicile: 700,  bureau: 400 },
+  "15": { domicile: 690,  bureau: 400 },
+  "16": { domicile: 500,  bureau: 400 },
+  "17": { domicile: 900,  bureau: 500 },
+  "18": { domicile: 790,  bureau: 400 },
+  "19": { domicile: 750,  bureau: 400 },
+  "20": { domicile: 790,  bureau: 400 },
+  "21": { domicile: 690,  bureau: 400 },
+  "22": { domicile: 600,  bureau: 400 },
+  "23": { domicile: 800,  bureau: 400 },
+  "24": { domicile: 850,  bureau: 450 },
+  "25": { domicile: 800,  bureau: 400 },
+  "26": { domicile: 690,  bureau: 400 },
+  "27": { domicile: 600,  bureau: 400 },
+  "28": { domicile: 800,  bureau: 400 },
+  "29": { domicile: 650,  bureau: 400 },
+  "30": { domicile: 900,  bureau: 500 },
+  "31": { domicile: 450,  bureau: 250 },
+  "32": { domicile: 900,  bureau: 500 },
+  "33": { domicile: 1300, bureau: 600 },
+  "34": { domicile: 790,  bureau: 400 },
+  "35": { domicile: 690,  bureau: 350 },
+  "36": { domicile: 850,  bureau: 500 },
+  "37": { domicile: 1300, bureau: 600 },
+  "38": { domicile: 750,  bureau: 400 },
+  "39": { domicile: 950, bureau: 550 },
+  "40": { domicile: 800, bureau: 400 },
+  "41": { domicile: 800, bureau: 500 },
+  "42": { domicile: 690, bureau: 350 },
+  "43": { domicile: 690, bureau: 400 },
+  "44": { domicile: 690, bureau: 400 },
+  "45": { domicile: 900, bureau: 500 },
+  "46": { domicile: 600, bureau: 400 },
+  "47": { domicile: 990, bureau: 500 },
+  "48": { domicile: 690, bureau: 400 },
+  "49": { domicile: 1000, bureau: 750 },
+  "50": { domicile: 1700, bureau: 1100 },
+  "51": { domicile: 900, bureau: 600 },
+  "52": { domicile: 1100, bureau: 600 },
+  "53": { domicile: 1100, bureau: 600 },
+  "54": { domicile: 1700, bureau: 1100 },
+  "55": { domicile: 990, bureau: 500 },
+  "56": { domicile: 1700, bureau: 1100 },
+  "57": { domicile: 900, bureau: null },
+  "58": { domicile: 990, bureau: 500 }
+
 };
 
 
