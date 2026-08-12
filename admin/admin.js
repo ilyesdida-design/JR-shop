@@ -240,18 +240,17 @@ async function loadProducts() {
     error
   } = await supabaseClient
     .from("products")
-    .select(`
-      id,
-      name,
-      price,
-      old_price,
-      stock,
-      category_id,
-      image_url,
-      is_active,
-      active
-    `)
-    .order(
+.select(`
+  id,
+  name,
+  price,
+  old_price,
+  stock,
+  category_id,
+  image_url,
+  active
+`)
+     .order(
       "name",
       {
         ascending: true
