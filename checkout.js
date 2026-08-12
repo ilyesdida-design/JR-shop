@@ -1,26 +1,13 @@
 ```javascript
-/* =========================================================
-   JR SHOP — CHECKOUT
-   Supabase Orders + WhatsApp
-========================================================= */
+document.addEventListener("DOMContentLoaded", function () {
 
-document.addEventListener("DOMContentLoaded", () => {
   loadCheckout();
+
 });
 
 
-/* =========================================================
-   CONFIG
-========================================================= */
-
-// ضع رقم WhatsApp الخاص بـ JR Shop هنا
-// الجزائر: 213 + الرقم بدون + وبدون مسافات
 const WHATSAPP_NUMBER = "213697005313";
 
-
-/* =========================================================
-   CART
-========================================================= */
 
 function getCart() {
 
@@ -30,22 +17,22 @@ function getCart() {
       localStorage.getItem("jrshop_cart")
     );
 
-    return Array.isArray(cart)
-      ? cart
-      : [];
+    if (Array.isArray(cart)) {
+      return cart;
+    }
+
+    return [];
 
   } catch (error) {
 
     console.error("Cart error:", error);
 
     return [];
+
   }
+
 }
 
-
-/* =========================================================
-   LOAD CHECKOUT
-========================================================= */
 
 function loadCheckout() {
 
@@ -54,34 +41,22 @@ function loadCheckout() {
   const container =
     document.getElementById("checkoutContainer");
 
-  if (!container) return;
+  if (!container) {
+    return;
+  }
 
 
   if (cart.length === 0) {
 
-    container.innerHTML = `
-      <div class="card empty-state">
-
-        <h2>
-          Votre panier est vide
-        </h2>
-
-        <p>
-          Ajoutez au moins un produit
-          avant de continuer.
-        </p>
-
-        <br>
-
-        <a
-          href="index.html#products"
-          class="btn btn-primary"
-        >
-          Découvrir les produits
-        </a>
-
-      </div>
-    `;
+    container.innerHTML =
+      '<div class="card empty-state">' +
+      '<h2>Votre panier est vide</h2>' +
+      '<p>Ajoutez au moins un produit avant de continuer.</p>' +
+      '<br>' +
+      '<a href="index.html#products" class="btn btn-primary">' +
+      'Découvrir les produits' +
+      '</a>' +
+      '</div>';
 
     return;
   }
@@ -90,12 +65,9 @@ function loadCheckout() {
   renderSummary(cart);
 
   setupCheckoutForm(cart);
+
 }
 
-
-/* =========================================================
-   RENDER SUMMARY
-========================================================= */
 
 function renderSummary(cart) {
 
@@ -112,102 +84,91 @@ function renderSummary(cart) {
 
   let total = 0;
 
-
-  itemsContainer.innerHTML = cart
-    .map(item => {
-
-      const price =
-        Number(item.price || 0);
-
-      const quantity =
-        Number(item.quantity || 0);
-
-      const itemTotal =
-        price * quantity;
-
-      total += itemTotal;
+  let html = "";
 
 
-      return `
-        <div
-          class="summary-row"
-          style="
-            align-items:flex-start;
-            gap:12px;
-          "
-        >
+  cart.forEach(function (item) {
 
-          <div>
+    const price =
+      Number(item.price || 0);
 
-            <strong>
-              ${escapeHTML(item.name)}
-            </strong>
+    const quantity =
+      Number(item.quantity || 0);
 
-            <div
-              style="
-                font-size:.9rem;
-                opacity:.7;
-                margin-top:4px;
-              "
-            >
-              ${quantity} ×
-              ${formatPrice(price)}
-            </div>
+    const itemTotal =
+      price * quantity;
 
-          </div>
+    total += itemTotal;
 
-          <strong>
-            ${formatPrice(itemTotal)}
-          </strong>
 
-        </div>
-      `;
+    html +=
+      '<div class="summary-row">' +
 
-    })
-    .join("");
+      '<div>' +
 
+      '<strong>' +
+      escapeHTML(item.name) +
+      '</strong>' +
+
+      '<div style="font-size:.9rem;opacity:.7;margin-top:4px;">' +
+
+      quantity +
+      ' × ' +
+      formatPrice(price) +
+
+      '</div>' +
+
+      '</div>' +
+
+      '<strong>' +
+      formatPrice(itemTotal) +
+      '</strong>' +
+
+      '</div>';
+
+  });
+
+
+  itemsContainer.innerHTML = html;
 
   totalElement.textContent =
     formatPrice(total);
+
 }
 
-
-/* =========================================================
-   CALCULATE TOTAL
-========================================================= */
 
 function calculateTotal(cart) {
 
-  return cart.reduce(
-    (total, item) => {
+  let total = 0;
 
-      return (
-        total +
-        Number(item.price || 0) *
-        Number(item.quantity || 0)
-      );
 
-    },
-    0
-  );
+  cart.forEach(function (item) {
+
+    total +=
+      Number(item.price || 0) *
+      Number(item.quantity || 0);
+
+  });
+
+
+  return total;
+
 }
 
-
-/* =========================================================
-   CHECKOUT FORM
-========================================================= */
 
 function setupCheckoutForm(cart) {
 
   const form =
     document.getElementById("checkoutForm");
 
-  if (!form) return;
+  if (!form) {
+    return;
+  }
 
 
   form.addEventListener(
     "submit",
-    async event => {
+    async function (event) {
 
       event.preventDefault();
 
@@ -218,49 +179,41 @@ function setupCheckoutForm(cart) {
         );
 
 
-      const formData =
-        new FormData(form);
-
-
       const customerName =
-        String(
-          formData.get("customerName") || ""
-        ).trim();
+        document.getElementById(
+          "customerName"
+        ).value.trim();
 
 
       const phone =
-        String(
-          formData.get("phone") || ""
-        ).trim();
+        document.getElementById(
+          "phone"
+        ).value.trim();
 
 
       const wilaya =
-        String(
-          formData.get("wilaya") || ""
-        ).trim();
+        document.getElementById(
+          "wilaya"
+        ).value.trim();
 
 
       const commune =
-        String(
-          formData.get("commune") || ""
-        ).trim();
+        document.getElementById(
+          "commune"
+        ).value.trim();
 
 
       const address =
-        String(
-          formData.get("address") || ""
-        ).trim();
+        document.getElementById(
+          "address"
+        ).value.trim();
 
 
       const notes =
-        String(
-          formData.get("notes") || ""
-        ).trim();
+        document.getElementById(
+          "notes"
+        ).value.trim();
 
-
-      /* =========================
-         VALIDATION
-      ========================== */
 
       if (!customerName) {
 
@@ -317,7 +270,7 @@ function setupCheckoutForm(cart) {
       }
 
 
-      if (!cart.length) {
+      if (cart.length === 0) {
 
         showMessage(
           "Votre panier est vide.",
@@ -327,10 +280,6 @@ function setupCheckoutForm(cart) {
         return;
       }
 
-
-      /* =========================
-         DISABLE BUTTON
-      ========================== */
 
       if (button) {
 
@@ -344,148 +293,117 @@ function setupCheckoutForm(cart) {
 
       try {
 
-        /* =========================
-           TOTAL
-        ========================== */
-
         const total =
           calculateTotal(cart);
 
 
-        /* =========================
-           ORDER ITEMS
-        ========================== */
-
         const items =
-          cart.map(item => ({
+          cart.map(function (item) {
 
-            id:
-              item.id,
+            return {
 
-            name:
-              item.name,
+              id: item.id,
 
-            price:
-              Number(item.price || 0),
+              name: item.name,
 
-            quantity:
-              Number(item.quantity || 0),
+              price:
+                Number(item.price || 0),
 
-            image_url:
-              item.image_url || ""
+              quantity:
+                Number(item.quantity || 0),
 
-          }));
+              image_url:
+                item.image_url || ""
 
+            };
 
-        /* =========================
-           CREATE ORDER ID
-        ========================== */
+          });
+
 
         const orderId =
           crypto.randomUUID();
 
 
-        /* =========================
-           INSERT ORDER
-           
-           IMPORTANT:
-           We do NOT use .select()
-           because public users don't
-           have SELECT permission on
-           orders.
-        ========================== */
+        const orderData = {
 
-        const { error } =
+          id: orderId,
+
+          customer_name:
+            customerName,
+
+          phone:
+            phone,
+
+          wilaya:
+            wilaya,
+
+          commune:
+            commune,
+
+          address:
+            address,
+
+          notes:
+            notes || null,
+
+          items:
+            items,
+
+          total:
+            total,
+
+          status:
+            "pending"
+
+        };
+
+
+        const result =
           await supabaseClient
             .from("orders")
-            .insert({
-
-              id:
-                orderId,
-
-              customer_name:
-                customerName,
-
-              phone:
-                phone,
-
-              wilaya:
-                wilaya,
-
-              commune:
-                commune,
-
-              address:
-                address,
-
-              notes:
-                notes || null,
-
-              items:
-                items,
-
-              total:
-                total,
-
-              status:
-                "pending"
-
-            });
+            .insert(orderData);
 
 
-        if (error) {
+        if (result.error) {
 
           console.error(
-            "Supabase order error:",
-            error
+            "SUPABASE ERROR:",
+            result.error
           );
 
-          throw new Error(
-            "Impossible d'enregistrer la commande."
+          showMessage(
+            "Erreur Supabase : " +
+            result.error.message,
+            "error"
           );
+
+
+          if (button) {
+
+            button.disabled = false;
+
+            button.textContent =
+              "Confirmer la commande";
+
+          }
+
+          return;
         }
 
 
-        /* =========================
-           CREATE WHATSAPP MESSAGE
-        ========================== */
-
         const whatsappMessage =
-          createWhatsAppMessage({
+          createWhatsAppMessage(
+            orderId,
+            customerName,
+            phone,
+            wilaya,
+            commune,
+            address,
+            notes,
+            cart,
+            total
+          );
 
-            orderId:
-              orderId,
-
-            customerName:
-              customerName,
-
-            phone:
-              phone,
-
-            wilaya:
-              wilaya,
-
-            commune:
-              commune,
-
-            address:
-              address,
-
-            notes:
-              notes,
-
-            cart:
-              cart,
-
-            total:
-              total
-
-          });
-
-
-        /* =========================
-           WHATSAPP URL
-        ========================== */
 
         const whatsappUrl =
           "https://wa.me/" +
@@ -496,26 +414,15 @@ function setupCheckoutForm(cart) {
           );
 
 
-        /* =========================
-           CLEAR CART
-        ========================== */
-
         localStorage.removeItem(
           "jrshop_cart"
         );
 
 
-        /* =========================
-           SUCCESS MESSAGE
-        ========================== */
-
         showMessage(
           "Commande enregistrée avec succès. Ouverture de WhatsApp...",
           "success"
         );
-
-
-        form.reset();
 
 
         if (button) {
@@ -526,22 +433,18 @@ function setupCheckoutForm(cart) {
         }
 
 
-        /* =========================
-           OPEN WHATSAPP
-        ========================== */
-
-        setTimeout(() => {
+        setTimeout(function () {
 
           window.location.href =
             whatsappUrl;
 
-        }, 800);
+        }, 1000);
 
 
       } catch (error) {
 
         console.error(
-          "Checkout error:",
+          "CHECKOUT ERROR:",
           error
         );
 
@@ -566,70 +469,77 @@ function setupCheckoutForm(cart) {
 
     }
   );
+
 }
 
 
-/* =========================================================
-   WHATSAPP MESSAGE
-========================================================= */
-
-function createWhatsAppMessage(data) {
+function createWhatsAppMessage(
+  orderId,
+  customerName,
+  phone,
+  wilaya,
+  commune,
+  address,
+  notes,
+  cart,
+  total
+) {
 
   let message =
-    "🛍️ *Nouvelle commande - JR Shop*\n\n";
+    "Nouvelle commande - JR Shop\n\n";
 
 
   message +=
-    "📦 *Commande:* " +
-    data.orderId +
+    "Commande: " +
+    orderId +
     "\n";
 
 
   message +=
-    "👤 *Nom:* " +
-    data.customerName +
+    "Nom: " +
+    customerName +
     "\n";
 
 
   message +=
-    "📞 *Téléphone:* " +
-    data.phone +
+    "Telephone: " +
+    phone +
     "\n";
 
 
   message +=
-    "📍 *Wilaya:* " +
-    data.wilaya +
+    "Wilaya: " +
+    wilaya +
     "\n";
 
 
   message +=
-    "🏘️ *Commune:* " +
-    data.commune +
+    "Commune: " +
+    commune +
     "\n";
 
 
   message +=
-    "🏠 *Adresse:* " +
-    data.address +
+    "Adresse: " +
+    address +
     "\n";
 
 
-  if (data.notes) {
+  if (notes) {
 
     message +=
-      "📝 *Note:* " +
-      data.notes +
+      "Note: " +
+      notes +
       "\n";
 
   }
 
 
   message +=
-    "\n🛒 *Produits:*\n";
+    "\nProduits:\n";
 
 
-  data.cart.forEach(item => {
+  cart.forEach(function (item) {
 
     const itemTotal =
       Number(item.price || 0) *
@@ -637,9 +547,9 @@ function createWhatsAppMessage(data) {
 
 
     message +=
-      "• " +
+      "- " +
       item.name +
-      " × " +
+      " x " +
       item.quantity +
       " = " +
       formatPrice(itemTotal) +
@@ -649,18 +559,14 @@ function createWhatsAppMessage(data) {
 
 
   message +=
-    "\n💰 *Total: " +
-    formatPrice(data.total) +
-    "*";
+    "\nTotal: " +
+    formatPrice(total);
 
 
   return message;
+
 }
 
-
-/* =========================================================
-   PHONE VALIDATION
-========================================================= */
 
 function isValidPhone(phone) {
 
@@ -674,12 +580,9 @@ function isValidPhone(phone) {
   return /^[+]?[0-9]{8,15}$/.test(
     cleaned
   );
+
 }
 
-
-/* =========================================================
-   SHOW MESSAGE
-========================================================= */
 
 function showMessage(
   message,
@@ -692,7 +595,9 @@ function showMessage(
     );
 
 
-  if (!element) return;
+  if (!element) {
+    return;
+  }
 
 
   element.style.display =
@@ -712,34 +617,29 @@ function showMessage(
     behavior: "smooth",
     block: "center"
   });
+
 }
 
-
-/* =========================================================
-   FORMAT PRICE
-========================================================= */
 
 function formatPrice(value) {
 
   return (
     Number(value || 0)
-      .toLocaleString("fr-DZ")
-    + " DA"
+      .toLocaleString("fr-DZ") +
+    " DA"
   );
+
 }
 
 
-/* =========================================================
-   HTML ESCAPE
-========================================================= */
-
 function escapeHTML(value) {
 
-  return String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
 }
 ```
