@@ -1,102 +1,350 @@
 ```javascript
-const $ = (selector) => document.querySelector(selector);
+/* =========================================================
+   JR SHOP — CART.JS
+   Compatible avec :
+   - index.html
+   - app.js
+   - product-details.html
+   - cart.html
+   - checkout.html
+   - localStorage : jr_cart
+========================================================= */
 
 
-/* =========================
+/* =========================================================
+   HELPERS
+========================================================= */
+
+const $ = (selector) =>
+  document.querySelector(selector);
+
+
+/* =========================================================
    TOAST
-========================= */
+========================================================= */
 
 function toast(message) {
-  const toastBox = $("#toast");
+
+  const toastBox =
+    $("#toast");
 
   if (!toastBox) return;
 
-  toastBox.textContent = message;
+  toastBox.textContent =
+    message;
 
-  toastBox.classList.add("show");
+  toastBox.classList.add(
+    "show"
+  );
+
 
   setTimeout(() => {
-    toastBox.classList.remove("show");
+
+    toastBox.classList.remove(
+      "show"
+    );
+
   }, 2500);
 }
 
 
-/* =========================
+/* =========================================================
    CART
-========================= */
+========================================================= */
 
 function getCart() {
+
   try {
-    return JSON.parse(
-      localStorage.getItem("jr_cart") || "[]"
-    );
+
+    const cart =
+      JSON.parse(
+        localStorage.getItem(
+          "jr_cart"
+        ) || "[]"
+      );
+
+
+    return Array.isArray(cart)
+      ? cart
+      : [];
+
+
   } catch (error) {
-    console.error("Cart error:", error);
+
+    console.error(
+      "Cart error:",
+      error
+    );
+
     return [];
+
   }
 }
 
 
 function saveCart(cart) {
+
   localStorage.setItem(
     "jr_cart",
     JSON.stringify(cart)
   );
 
+
   render();
 }
 
 
-/* =========================
-   COUNT
-========================= */
+/* =========================================================
+   NORMALIZE CART
+========================================================= */
+
+function normalizeCartItem(item) {
+
+  if (!item) {
+    return null;
+  }
+
+
+  return {
+
+    product_id:
+      item.product_id ??
+      item.id ??
+      null,
+
+
+    variant_id:
+      item.variant_id ??
+      null,
+
+
+    name:
+      item.name ??
+      "Produit",
+
+
+    price:
+      Number(
+        item.price ?? 0
+      ),
+
+
+    old_price:
+      Number(
+        item.old_price ?? 0
+      ),
+
+
+    image_url:
+      item.image_url ??
+      item.image ??
+      "",
+
+
+    color:
+      item.color ??
+      null,
+
+
+    size:
+      item.size ??
+      null,
+
+
+    quantity:
+      Math.max(
+        1,
+        Number(
+          item.quantity ??
+          item.qty ??
+          1
+        )
+      ),
+
+
+    stock:
+      Number(
+        item.stock ?? 0
+      )
+
+  };
+}
+
+
+function getNormalizedCart() {
+
+  const cart =
+    getCart();
+
+
+  const normalized =
+    cart
+      .map(
+        normalizeCartItem
+      )
+      .filter(
+        item =>
+          item &&
+          item.product_id
+      );
+
+
+  /*
+    On sauvegarde directement
+    la nouvelle structure.
+  */
+
+  localStorage.setItem(
+    "jr_cart",
+    JSON.stringify(
+      normalized
+    )
+  );
+
+
+  return normalized;
+}
+
+
+/* =========================================================
+   CART COUNT
+========================================================= */
 
 function updateCartCount() {
-  const cartCount = $("#cartCount");
 
-  if (!cartCount) return;
+  const cartCount =
+    $("#cartCount");
 
-  const cart = getCart();
 
-  const count = cart.reduce(
-    (total, item) =>
-      total + Number(item.qty || 0),
-    0
-  );
+  if (!cartCount) {
+    return;
+  }
 
-  cartCount.textContent = count;
+
+  const cart =
+    getNormalizedCart();
+
+
+  const count =
+    cart.reduce(
+      (total, item) =>
+        total +
+        Number(
+          item.quantity || 0
+        ),
+      0
+    );
+
+
+  cartCount.textContent =
+    count;
 }
 
 
-/* =========================
+/* =========================================================
    MONEY
-========================= */
+========================================================= */
 
 function formatMoney(value) {
+
   return (
-    new Intl.NumberFormat("fr-DZ")
-      .format(Number(value || 0)) + " DA"
+
+    new Intl.NumberFormat(
+      "fr-DZ"
+    ).format(
+      Number(value || 0)
+    ) +
+
+    " DA"
+
   );
 }
 
 
-/* =========================
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHtml(value) {
+
+  return String(
+    value ?? ""
+  ).replace(
+    /[&<>"']/g,
+    character => ({
+
+      "&":
+        "&amp;",
+
+      "<":
+        "&lt;",
+
+      ">":
+        "&gt;",
+
+      '"':
+        "&quot;",
+
+      "'":
+        "&#039;"
+
+    })[character]
+  );
+}
+
+
+/* =========================================================
+   ITEM KEY
+   Important pour les variants
+========================================================= */
+
+function getItemKey(item) {
+
+  return (
+
+    String(
+      item.product_id
+    ) +
+
+    "_" +
+
+    String(
+      item.variant_id ||
+      "no-variant"
+    )
+
+  );
+}
+
+
+/* =========================================================
    RENDER CART
-========================= */
+========================================================= */
 
 function render() {
-  const cartBox = $("#cart");
 
-  if (!cartBox) return;
+  const cartBox =
+    $("#cart");
 
-  const cart = getCart();
+
+  if (!cartBox) {
+    return;
+  }
+
+
+  const cart =
+    getNormalizedCart();
+
 
   updateCartCount();
 
 
-  /* EMPTY CART */
+  /* =======================================================
+     EMPTY
+  ======================================================= */
 
   if (!cart.length) {
+
     cartBox.innerHTML = `
 
       <div class="card empty">
@@ -105,9 +353,11 @@ function render() {
           Votre panier est vide
         </h2>
 
+
         <p>
           Ajoutez des produits pour commencer.
         </p>
+
 
         <a
           class="btn primary"
@@ -120,119 +370,194 @@ function render() {
 
     `;
 
-    const checkout = $("#checkout");
+
+    const checkout =
+      $("#checkout");
+
 
     if (checkout) {
       checkout.hidden = true;
     }
 
+
     return;
   }
 
 
-  /* SHOW CHECKOUT */
+  /* =======================================================
+     SHOW CHECKOUT
+  ======================================================= */
 
-  const checkout = $("#checkout");
+  const checkout =
+    $("#checkout");
+
 
   if (checkout) {
     checkout.hidden = false;
   }
 
 
-  /* CART ITEMS */
+  /* =======================================================
+     ITEMS
+  ======================================================= */
 
-  cartBox.innerHTML = cart
-    .map((item, index) => {
-      const image =
-        item.image_url ||
-        "https://placehold.co/120x150?text=JR+Shop";
+  cartBox.innerHTML =
+    cart
+      .map(
+        (item, index) => {
 
-
-      const subtotal =
-        Number(item.price || 0) *
-        Number(item.qty || 0);
-
-
-      return `
-
-        <div class="cart-row card">
-
-          <img
-            src="${escapeHtml(image)}"
-            alt="${escapeHtml(item.name)}"
-          >
+          const image =
+            item.image_url ||
+            "https://placehold.co/120x150?text=JR+Shop";
 
 
-          <div>
-
-            <h3>
-              ${escapeHtml(item.name)}
-            </h3>
-
-            <p>
-              ${formatMoney(item.price)}
-            </p>
+          const quantity =
+            Number(
+              item.quantity || 1
+            );
 
 
-            <div class="qty">
+          const subtotal =
+            Number(
+              item.price || 0
+            ) *
+            quantity;
 
-              <button
-                type="button"
-                data-index="${index}"
-                data-action="minus"
+
+          const variantInfo = [
+
+            item.color
+              ? `Couleur : ${escapeHtml(item.color)}`
+              : "",
+
+            item.size
+              ? `Taille : ${escapeHtml(item.size)}`
+              : ""
+
+          ]
+            .filter(Boolean)
+            .join(" • ");
+
+
+          return `
+
+            <div
+              class="cart-row card"
+              data-index="${index}"
+            >
+
+              <img
+                src="${escapeHtml(image)}"
+                alt="${escapeHtml(
+                  item.name
+                )}"
+                loading="lazy"
               >
-                −
-              </button>
 
 
-              <b>
-                ${Number(item.qty || 0)}
-              </b>
+              <div class="cart-item-info">
+
+                <h3>
+                  ${escapeHtml(
+                    item.name
+                  )}
+                </h3>
 
 
-              <button
-                type="button"
-                data-index="${index}"
-                data-action="plus"
-              >
-                +
-              </button>
+                ${
+                  variantInfo
+                    ? `
+                      <p class="cart-variant">
+                        ${variantInfo}
+                      </p>
+                    `
+                    : ""
+                }
 
 
-              <button
-                type="button"
-                class="remove"
-                data-index="${index}"
-                data-action="remove"
-              >
-                Supprimer
-              </button>
+                <p>
+                  ${formatMoney(
+                    item.price
+                  )}
+                </p>
+
+
+                <div class="qty">
+
+                  <button
+                    type="button"
+                    data-index="${index}"
+                    data-action="minus"
+                    aria-label="Diminuer"
+                  >
+                    −
+                  </button>
+
+
+                  <b>
+                    ${quantity}
+                  </b>
+
+
+                  <button
+                    type="button"
+                    data-index="${index}"
+                    data-action="plus"
+                    aria-label="Augmenter"
+                  >
+                    +
+                  </button>
+
+
+                  <button
+                    type="button"
+                    class="remove"
+                    data-index="${index}"
+                    data-action="remove"
+                  >
+                    Supprimer
+                  </button>
+
+                </div>
+
+              </div>
+
+
+              <strong class="cart-subtotal">
+                ${formatMoney(
+                  subtotal
+                )}
+              </strong>
 
             </div>
 
-          </div>
+          `;
+
+        }
+      )
+      .join("");
 
 
-          <strong>
-            ${formatMoney(subtotal)}
-          </strong>
+  /* =======================================================
+     TOTAL
+  ======================================================= */
 
-        </div>
+  const total =
+    cart.reduce(
+      (sum, item) =>
 
-      `;
-    })
-    .join("");
+        sum +
 
+        Number(
+          item.price || 0
+        ) *
 
-  /* TOTAL */
+        Number(
+          item.quantity || 0
+        ),
 
-  const total = cart.reduce(
-    (sum, item) =>
-      sum +
-      Number(item.price || 0) *
-      Number(item.qty || 0),
-    0
-  );
+      0
+    );
 
 
   cartBox.innerHTML += `
@@ -243,8 +568,11 @@ function render() {
         Total
       </span>
 
+
       <strong>
-        ${formatMoney(total)}
+        ${formatMoney(
+          total
+        )}
       </strong>
 
     </div>
@@ -252,116 +580,193 @@ function render() {
   `;
 
 
-  /* BUTTON EVENTS */
+  /* =======================================================
+     BUTTON EVENTS
+  ======================================================= */
 
   document
-    .querySelectorAll("[data-action]")
-    .forEach((button) => {
-      button.addEventListener(
-        "click",
-        () => {
-          const index =
-            Number(button.dataset.index);
+    .querySelectorAll(
+      "[data-action]"
+    )
+    .forEach(
+      button => {
 
-          const action =
-            button.dataset.action;
+        button.addEventListener(
+          "click",
+          function () {
 
-          changeQuantity(
-            index,
-            action
-          );
-        }
-      );
-    });
+            const index =
+              Number(
+                button.dataset.index
+              );
+
+
+            const action =
+              button.dataset.action;
+
+
+            changeQuantity(
+              index,
+              action
+            );
+
+          }
+        );
+
+      }
+    );
 }
 
 
-/* =========================
+/* =========================================================
    CHANGE QUANTITY
-========================= */
+========================================================= */
 
-function changeQuantity(index, action) {
-  const cart = getCart();
+function changeQuantity(
+  index,
+  action
+) {
 
-  if (!cart[index]) return;
+  const cart =
+    getNormalizedCart();
 
 
-  /* MINUS */
-
-  if (action === "minus") {
-    cart[index].qty--;
-
-    if (cart[index].qty <= 0) {
-      cart.splice(index, 1);
-    }
+  if (!cart[index]) {
+    return;
   }
 
 
-  /* PLUS */
+  const item =
+    cart[index];
 
-  if (action === "plus") {
-    const stock =
-      Number(cart[index].stock || 0);
 
-    if (
-      stock > 0 &&
-      cart[index].qty >= stock
-    ) {
-      toast("Stock insuffisant");
+  let quantity =
+    Number(
+      item.quantity || 1
+    );
+
+
+  /* =======================================================
+     MINUS
+  ======================================================= */
+
+  if (
+    action === "minus"
+  ) {
+
+    quantity--;
+
+
+    if (quantity <= 0) {
+
+      cart.splice(
+        index,
+        1
+      );
+
+      saveCart(
+        cart
+      );
+
       return;
     }
 
-    cart[index].qty++;
+
+    item.quantity =
+      quantity;
+
   }
 
 
-  /* REMOVE */
+  /* =======================================================
+     PLUS
+  ======================================================= */
 
-  if (action === "remove") {
-    cart.splice(index, 1);
+  if (
+    action === "plus"
+  ) {
+
+    const stock =
+      Number(
+        item.stock || 0
+      );
+
+
+    if (
+      stock > 0 &&
+      quantity >= stock
+    ) {
+
+      toast(
+        "Stock insuffisant"
+      );
+
+      return;
+    }
+
+
+    /*
+      Si stock = 0 mais que l'ancien
+      panier contient déjà le produit,
+      on autorise seulement si aucune
+      limite n'est connue.
+    */
+
+    item.quantity =
+      quantity + 1;
+
   }
 
 
-  saveCart(cart);
-}
+  /* =======================================================
+     REMOVE
+  ======================================================= */
+
+  if (
+    action === "remove"
+  ) {
+
+    cart.splice(
+      index,
+      1
+    );
+
+  }
 
 
-/* =========================
-   ESCAPE HTML
-========================= */
-
-function escapeHtml(value) {
-  return String(value ?? "").replace(
-    /[&<>"']/g,
-    (character) => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#039;"
-    })[character]
+  saveCart(
+    cart
   );
 }
 
 
-/* =========================
+/* =========================================================
    CHECKOUT
-========================= */
+========================================================= */
 
-const orderForm = $("#orderForm");
+const orderForm =
+  $("#orderForm");
+
 
 if (orderForm) {
+
   orderForm.addEventListener(
     "submit",
-    async (event) => {
+    async function (event) {
+
       event.preventDefault();
 
 
-      const cart = getCart();
+      const cart =
+        getNormalizedCart();
 
 
       if (!cart.length) {
-        toast("Votre panier est vide");
+
+        toast(
+          "Votre panier est vide"
+        );
+
         return;
       }
 
@@ -373,39 +778,53 @@ if (orderForm) {
 
 
       if (button) {
-        button.disabled = true;
+
+        button.disabled =
+          true;
 
         button.textContent =
           "Envoi de la commande...";
+
       }
 
 
       try {
+
         const formData =
-          new FormData(orderForm);
+          new FormData(
+            orderForm
+          );
 
 
         const customerName =
           String(
-            formData.get("customer_name") || ""
+            formData.get(
+              "customer_name"
+            ) || ""
           ).trim();
 
 
         const phone =
           String(
-            formData.get("phone") || ""
+            formData.get(
+              "phone"
+            ) || ""
           ).trim();
 
 
         const address =
           String(
-            formData.get("address") || ""
+            formData.get(
+              "address"
+            ) || ""
           ).trim();
 
 
         const note =
           String(
-            formData.get("note") || ""
+            formData.get(
+              "note"
+            ) || ""
           ).trim();
 
 
@@ -414,6 +833,7 @@ if (orderForm) {
           !phone ||
           !address
         ) {
+
           toast(
             "Veuillez remplir les informations obligatoires"
           );
@@ -422,24 +842,40 @@ if (orderForm) {
         }
 
 
-        /* TOTAL */
+        /* =================================================
+           TOTAL
+        ================================================= */
 
         const total =
           cart.reduce(
             (sum, item) =>
+
               sum +
-              Number(item.price || 0) *
-              Number(item.qty || 0),
+
+              Number(
+                item.price || 0
+              ) *
+
+              Number(
+                item.quantity || 0
+              ),
+
             0
           );
 
 
-        /* CREATE ORDER */
+        /* =================================================
+           CREATE ORDER
+        ================================================= */
 
-        const { data: order, error } =
+        const {
+          data: order,
+          error: orderError
+        } =
           await supabaseClient
             .from("orders")
             .insert({
+
               customer_name:
                 customerName,
 
@@ -457,46 +893,78 @@ if (orderForm) {
 
               status:
                 "new"
+
             })
             .select()
             .single();
 
 
-        if (error) {
+        if (orderError) {
+
           console.error(
             "Order error:",
-            error
+            orderError
           );
 
-          throw error;
+          throw orderError;
         }
 
 
-        /* CREATE ORDER ITEMS */
+        if (
+          !order ||
+          !order.id
+        ) {
+
+          throw new Error(
+            "Commande créée sans ID."
+          );
+        }
+
+
+        /* =================================================
+           CREATE ORDER ITEMS
+        ================================================= */
 
         const items =
-          cart.map((item) => ({
-            order_id:
-              order.id,
+          cart.map(
+            item => ({
 
-            product_id:
-              item.id,
+              order_id:
+                order.id,
 
-            quantity:
-              Number(item.qty),
+              product_id:
+                item.product_id,
 
-            unit_price:
-              Number(item.price)
-          }));
+              variant_id:
+                item.variant_id ||
+                null,
+
+              quantity:
+                Number(
+                  item.quantity || 1
+                ),
+
+              unit_price:
+                Number(
+                  item.price || 0
+                )
+
+            })
+          );
 
 
-        const { error: itemsError } =
+        const {
+          error: itemsError
+        } =
           await supabaseClient
             .from("order_items")
-            .insert(items);
+            .insert(
+              items
+            );
 
 
         if (itemsError) {
+
           console.error(
             "Order items error:",
             itemsError
@@ -506,7 +974,9 @@ if (orderForm) {
         }
 
 
-        /* SUCCESS */
+        /* =================================================
+           SUCCESS
+        ================================================= */
 
         localStorage.removeItem(
           "jr_cart"
@@ -525,27 +995,47 @@ if (orderForm) {
 
 
       } catch (error) {
-        console.error(error);
+
+        console.error(
+          "Checkout error:",
+          error
+        );
+
 
         toast(
           "Erreur lors de la commande. Réessayez."
         );
 
+
       } finally {
+
         if (button) {
-          button.disabled = false;
+
+          button.disabled =
+            false;
 
           button.textContent =
             "Confirmer la commande";
+
         }
+
       }
+
     }
   );
+
 }
 
 
-/* =========================
-   START
-========================= */
+/* =========================================================
+   INITIALIZE
+========================================================= */
 
-render();
+document.addEventListener(
+  "DOMContentLoaded",
+  function () {
+
+    render();
+
+  }
+);
