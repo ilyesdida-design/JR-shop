@@ -13,7 +13,7 @@
   <style>
     .product-details {
       display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      grid-template-columns: 1.1fr 1fr;
       gap: 40px;
       margin: 35px 0 60px;
     }
@@ -22,16 +22,52 @@
     .product-info {
       background: #fff;
       border-radius: 18px;
-      padding: 22px;
+      padding: 20px;
       box-shadow: 0 8px 30px rgba(0,0,0,.06);
     }
 
-    .product-main-image {
+    .main-image-wrap {
       width: 100%;
       aspect-ratio: 1 / 1;
-      object-fit: contain;
+      overflow: hidden;
       border-radius: 14px;
-      background: #f7f7f7;
+      background: #f5f5f5;
+    }
+
+    .main-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .thumbs {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+      overflow-x: auto;
+    }
+
+    .thumb {
+      width: 75px;
+      height: 75px;
+      flex: 0 0 75px;
+      border: 2px solid transparent;
+      border-radius: 10px;
+      padding: 0;
+      overflow: hidden;
+      background: #f5f5f5;
+      cursor: pointer;
+    }
+
+    .thumb.active {
+      border-color: #111;
+    }
+
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .product-info h1 {
@@ -39,33 +75,62 @@
       font-size: 32px;
     }
 
-    .product-price {
-      font-size: 28px;
-      font-weight: 800;
+    .price-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
       margin: 18px 0;
     }
 
-    .product-old-price {
-      color: #999;
+    .current-price {
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    .old-price {
+      color: #888;
       text-decoration: line-through;
-      margin-left: 10px;
-      font-size: 18px;
     }
 
-    .product-stock {
-      display: inline-block;
-      margin: 10px 0 20px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: #f1f1f1;
-      font-size: 14px;
+    .stock {
+      margin: 15px 0;
+      font-weight: 600;
     }
 
-    .product-description {
-      line-height: 1.8;
-      color: #555;
-      white-space: pre-line;
-      margin: 20px 0;
+    .stock.ok {
+      color: #16803c;
+    }
+
+    .stock.out {
+      color: #c62828;
+    }
+
+    .option-group {
+      margin: 22px 0;
+    }
+
+    .option-group h3 {
+      margin-bottom: 10px;
+    }
+
+    .options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .option-btn {
+      border: 1px solid #ccc;
+      background: #fff;
+      padding: 10px 16px;
+      border-radius: 9px;
+      cursor: pointer;
+    }
+
+    .option-btn.active {
+      border-color: #111;
+      background: #111;
+      color: #fff;
     }
 
     .quantity-box {
@@ -76,39 +141,48 @@
     }
 
     .quantity-box button {
-      width: 42px;
-      height: 42px;
-      border: 1px solid #ddd;
+      width: 40px;
+      height: 40px;
+      border: 1px solid #ccc;
       background: #fff;
-      border-radius: 10px;
+      border-radius: 8px;
       cursor: pointer;
       font-size: 20px;
     }
 
-    .quantity-box input {
-      width: 60px;
-      height: 42px;
+    #quantity {
+      min-width: 35px;
       text-align: center;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      font-size: 16px;
+      font-weight: 700;
     }
 
-    .buy-actions {
+    .actions {
       display: grid;
-      gap: 12px;
-      margin-top: 20px;
+      gap: 10px;
+    }
+
+    .actions .btn {
+      width: 100%;
+    }
+
+    .description {
+      margin-top: 25px;
+      line-height: 1.7;
+      color: #555;
+      white-space: pre-line;
     }
 
     .back-link {
       display: inline-block;
       margin-top: 20px;
       text-decoration: none;
+      color: inherit;
     }
 
-    .loading-box {
+    .loading,
+    .error-box {
       text-align: center;
-      padding: 60px 20px;
+      padding: 50px 20px;
     }
 
     @media (max-width: 800px) {
@@ -118,7 +192,7 @@
       }
 
       .product-info h1 {
-        font-size: 26px;
+        font-size: 25px;
       }
     }
   </style>
@@ -146,12 +220,15 @@
 
 <main class="wrap">
 
+  <a class="back-link" href="index.html">
+    ← Retour aux produits
+  </a>
+
   <div id="productContainer">
 
 ```
-<div class="card loading-box">
+<div class="card loading">
   <h2>Chargement du produit...</h2>
-  <p>Veuillez patienter.</p>
 </div>
 ```
 
