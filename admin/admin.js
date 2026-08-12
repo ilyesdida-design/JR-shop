@@ -76,19 +76,116 @@ const CONFIG = {
 ========================================================= */
 
 const STATE = {
-  currentSection: "dashboard",
+/* =========================================================
+PRODUCT VARIANTS
+========================================================= */
 
-  products: [],
+const VARIANT_OPTIONS = {
 
-  categories: [],
+  colors: [
+    "Noir",
+    "Blanc",
+    "Rouge",
+    "Bleu",
+    "Vert",
+    "Jaune",
+    "Orange",
+    "Rose",
+    "Violet",
+    "Beige",
+    "Marron",
+    "Gris"
+  ],
 
-  orders: [],
+  clothingSizes: [
+    "XS",
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL",
+    "XXXL"
+  ],
 
-  customers: [],
+  shoeSizes: [
+    "36",
+    "37",
+    "38",
+    "39",
+    "40",
+    "41",
+    "42",
+    "43",
+    "44",
+    "45"
+  ]
 
-  loading: false
 };
 
+
+/* =========================================================
+LOAD PRODUCT VARIANTS
+========================================================= */
+
+async function loadProductVariants(
+  productId
+) {
+
+  if (!productId) {
+    return [];
+  }
+
+  const {
+    data,
+    error
+  } = await supabaseClient
+
+    .from("product_variants")
+
+    .select(`
+      id,
+      product_id,
+      color,
+      size,
+      price,
+      stock,
+      image_url,
+      is_active,
+      created_at,
+      updated_at
+    `)
+
+    .eq(
+      "product_id",
+      productId
+    )
+
+    .order(
+      "created_at",
+      {
+        ascending: true
+      }
+    );
+
+
+  if (error) {
+
+    console.error(
+      "Product variants error:",
+      error
+    );
+
+    showNotification(
+      "Erreur lors du chargement des variantes.",
+      "error"
+    );
+
+    return [];
+  }
+
+
+  return data || [];
+}
 
 /* =========================================================
    DOM
@@ -3857,6 +3954,1011 @@ window.JR_ADMIN = {
   loadProducts,
 
   loadCategories,
+
+  loadProductVariants,
+
+  saveProductVariant,
+
+  deleteProductVariant,
+
+  showSection
+
+};
+/* =========================================================
+VARIANT HELPERS
+========================================================= */
+
+function getVariantSizeOptions() {
+
+  return `
+    <option value="">Sans taille</option>
+
+    <optgroup label="Vêtements">
+      ${VARIANT_OPTIONS.clothingSizes
+        .map(size => `
+          <option value="${escapeHTML(size)}">
+            ${escapeHTML(size)}
+          </option>
+        `)
+        .join("")}
+    </optgroup>
+
+    <optgroup label="Chaussures">
+      ${VARIANT_OPTIONS.shoeSizes
+        .map(size => `
+          <option value="${escapeHTML(size)}">
+            ${escapeHTML(size)}
+          </option>
+        `)
+        .join("")}
+    </optgroup>
+  `;
+}
+
+
+function getVariantColorOptions() {
+
+  return `
+    <option value="">Sans couleur</option>
+
+    ${VARIANT_OPTIONS.colors
+      .map(color => `
+        <option value="${escapeHTML(color)}">
+          ${escapeHTML(color)}
+        </option>
+      `)
+      .join("")}
+  `;
+}
+
+
+/* =========================================================
+VARIANT FORM
+========================================================= */
+
+function renderVariantForm(
+  product
+) {
+
+  return `
+
+    <div
+      id="variantManager"
+      style="
+        margin-top:28px;
+        padding-top:22px;
+        border-top:1px solid #e5e5e5;
+      "
+    >
+
+      <div
+        style="
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          gap:12px;
+          margin-bottom:15px;
+        "
+      >
+
+        <div>
+
+          <h3
+            style="
+              margin:0;
+              font-size:18px;
+            "
+          >
+            Variantes du produit
+          </h3>
+
+          <p
+            style="
+              margin:5px 0 0;
+              color:#777;
+              font-size:12px;
+            "
+          >
+            Gérez les couleurs, tailles, prix et stocks.
+          </p>
+
+        </div>
+
+        <button
+          type="button"
+          id="addVariantBtn"
+          class="primary-btn"
+        >
+          ＋ Ajouter une variante
+        </button>
+
+      </div>
+
+
+      <div id="variantsList">
+
+        <div
+          style="
+            padding:15px;
+            background:#f7f7f7;
+            border-radius:10px;
+            color:#777;
+            font-size:13px;
+          "
+        >
+          Chargement des variantes...
+        </div>
+
+      </div>
+
+
+      <div
+        id="variantFormContainer"
+        style="
+          display:none;
+          margin-top:15px;
+          padding:18px;
+          border:1px solid #e5e5e5;
+          border-radius:12px;
+          background:#fafafa;
+        "
+      >
+
+        <h4
+          id="variantFormTitle"
+          style="
+            margin:0 0 15px;
+          "
+        >
+          Ajouter une variante
+        </h4>
+
+
+        <input
+          type="hidden"
+          id="editingVariantId"
+        >
+
+
+        <div
+          style="
+            display:grid;
+            grid-template-columns:
+              1fr 1fr;
+            gap:12px;
+          "
+        >
+
+          <div class="form-group">
+
+            <label>
+              Couleur
+            </label>
+
+            <select
+              id="variantColor"
+            >
+              ${getVariantColorOptions()}
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Taille / Pointure
+            </label>
+
+            <select
+              id="variantSize"
+            >
+              ${getVariantSizeOptions()}
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Prix
+            </label>
+
+            <input
+              id="variantPrice"
+              type="number"
+              min="0"
+              step="0.01"
+              placeholder="Prix du produit"
+            >
+
+            <small
+              style="
+                color:#777;
+                font-size:11px;
+              "
+            >
+              Laisser vide pour utiliser le prix du produit.
+            </small>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Stock
+            </label>
+
+            <input
+              id="variantStock"
+              type="number"
+              min="0"
+              step="1"
+              value="0"
+            >
+
+          </div>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Image de la variante
+          </label>
+
+          <input
+            id="variantImage"
+            type="url"
+            placeholder="https://..."
+          >
+
+        </div>
+
+
+        <label
+          style="
+            display:flex;
+            align-items:center;
+            gap:8px;
+            margin:12px 0 18px;
+          "
+        >
+
+          <input
+            id="variantActive"
+            type="checkbox"
+            checked
+          >
+
+          Variante active
+
+        </label>
+
+
+        <div
+          style="
+            display:grid;
+            grid-template-columns:
+              1fr 1fr;
+            gap:10px;
+          "
+        >
+
+          <button
+            type="button"
+            id="saveVariantBtn"
+            class="primary-btn"
+          >
+            Enregistrer
+          </button>
+
+
+          <button
+            type="button"
+            id="cancelVariantBtn"
+            class="secondary-btn"
+          >
+            Annuler
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+}
+
+
+/* =========================================================
+RENDER VARIANTS
+========================================================= */
+
+async function renderProductVariants(
+  productId
+) {
+
+  const container =
+    document.getElementById(
+      "variantsList"
+    );
+
+  if (!container) {
+    return;
+  }
+
+
+  const variants =
+    await loadProductVariants(
+      productId
+    );
+
+
+  if (!variants.length) {
+
+    container.innerHTML = `
+
+      <div
+        style="
+          padding:20px;
+          text-align:center;
+          background:#f7f7f7;
+          border-radius:10px;
+          color:#777;
+          font-size:13px;
+        "
+      >
+
+        Aucune variante.
+
+      </div>
+
+    `;
+
+    return;
+  }
+
+
+  container.innerHTML =
+    variants
+      .map(
+        variant => {
+
+          const price =
+            variant.price === null ||
+            variant.price === undefined
+              ? "Prix produit"
+              : formatPrice(
+                  variant.price
+                );
+
+
+          return `
+
+            <div
+              class="variant-admin-card"
+              data-variant-id="${escapeHTML(
+                variant.id
+              )}"
+              style="
+                display:flex;
+                align-items:center;
+                gap:12px;
+                padding:12px;
+                margin-bottom:10px;
+                border:1px solid #e5e5e5;
+                border-radius:12px;
+                background:#fff;
+              "
+            >
+
+              ${
+                variant.image_url
+
+                  ? `
+
+                    <img
+                      src="${escapeHTML(
+                        variant.image_url
+                      )}"
+                      alt=""
+                      style="
+                        width:58px;
+                        height:58px;
+                        object-fit:cover;
+                        border-radius:9px;
+                      "
+                    >
+
+                  `
+
+                  : `
+
+                    <div
+                      style="
+                        width:58px;
+                        height:58px;
+                        border-radius:9px;
+                        background:#f1f1f1;
+                        display:grid;
+                        place-items:center;
+                        font-weight:700;
+                      "
+                    >
+                      JR
+                    </div>
+
+                  `
+              }
+
+
+              <div
+                style="
+                  flex:1;
+                  min-width:0;
+                "
+              >
+
+                <strong>
+                  ${
+                    escapeHTML(
+                      variant.color ||
+                      "Sans couleur"
+                    )
+                  }
+
+                  —
+
+                  ${
+                    escapeHTML(
+                      variant.size ||
+                      "Sans taille"
+                    )
+                  }
+                </strong>
+
+
+                <div
+                  style="
+                    margin-top:5px;
+                    font-size:12px;
+                    color:#777;
+                  "
+                >
+
+                  ${price}
+
+                  ·
+
+                  Stock:
+                  ${Number(
+                    variant.stock || 0
+                  )}
+
+                </div>
+
+
+                <div
+                  style="
+                    margin-top:5px;
+                    font-size:11px;
+                  "
+                >
+
+                  ${
+                    variant.is_active
+                      ? "✓ Active"
+                      : "× Inactive"
+                  }
+
+                </div>
+
+              </div>
+
+
+              <div
+                style="
+                  display:flex;
+                  gap:6px;
+                  flex-wrap:wrap;
+                "
+              >
+
+                <button
+                  type="button"
+                  class="secondary-btn"
+                  onclick="editVariant('${escapeHTML(
+                    variant.id
+                  )}')"
+                >
+                  Modifier
+                </button>
+
+
+                <button
+                  type="button"
+                  class="secondary-btn"
+                  style="
+                    color:#c73535;
+                    border-color:#c73535;
+                  "
+                  onclick="deleteVariant('${escapeHTML(
+                    variant.id
+                  )}')"
+                >
+                  Supprimer
+                </button>
+
+              </div>
+
+            </div>
+
+          `;
+
+        }
+      )
+      .join("");
+}
+/* =========================================================
+OPEN VARIANT FORM
+========================================================= */
+
+function openVariantForm(
+  variant = null,
+  product = null
+) {
+
+  const form =
+    document.getElementById(
+      "variantFormContainer"
+    );
+
+  if (!form) {
+    return;
+  }
+
+
+  const title =
+    document.getElementById(
+      "variantFormTitle"
+    );
+
+  const idInput =
+    document.getElementById(
+      "editingVariantId"
+    );
+
+  const colorInput =
+    document.getElementById(
+      "variantColor"
+    );
+
+  const sizeInput =
+    document.getElementById(
+      "variantSize"
+    );
+
+  const priceInput =
+    document.getElementById(
+      "variantPrice"
+    );
+
+  const stockInput =
+    document.getElementById(
+      "variantStock"
+    );
+
+  const imageInput =
+    document.getElementById(
+      "variantImage"
+    );
+
+  const activeInput =
+    document.getElementById(
+      "variantActive"
+    );
+
+
+  const editing =
+    Boolean(
+      variant
+    );
+
+
+  if (title) {
+
+    title.textContent =
+      editing
+        ? "Modifier la variante"
+        : "Ajouter une variante";
+
+  }
+
+
+  if (idInput) {
+
+    idInput.value =
+      variant?.id ||
+      "";
+
+  }
+
+
+  if (colorInput) {
+
+    colorInput.value =
+      variant?.color ||
+      "";
+
+  }
+
+
+  if (sizeInput) {
+
+    sizeInput.value =
+      variant?.size ||
+      "";
+
+  }
+
+
+  if (priceInput) {
+
+    priceInput.value =
+      variant?.price ??
+      "";
+
+  }
+
+
+  if (stockInput) {
+
+    stockInput.value =
+      Number(
+        variant?.stock ||
+        0
+      );
+
+  }
+
+
+  if (imageInput) {
+
+    imageInput.value =
+      variant?.image_url ||
+      "";
+
+  }
+
+
+  if (activeInput) {
+
+    activeInput.checked =
+      variant
+        ? variant.is_active !== false
+        : true;
+
+  }
+
+
+  form.style.display =
+    "block";
+
+
+  form.scrollIntoView({
+    behavior:"smooth",
+    block:"nearest"
+  });
+
+
+  const saveButton =
+    document.getElementById(
+      "saveVariantBtn"
+    );
+
+
+  if (saveButton) {
+
+    saveButton.onclick =
+      () => saveVariant(
+        product?.id
+      );
+
+  }
+
+
+  const cancelButton =
+    document.getElementById(
+      "cancelVariantBtn"
+    );
+
+
+  if (cancelButton) {
+
+    cancelButton.onclick =
+      closeVariantForm;
+
+  }
+}
+
+
+/* =========================================================
+CLOSE VARIANT FORM
+========================================================= */
+
+function closeVariantForm() {
+
+  const form =
+    document.getElementById(
+      "variantFormContainer"
+    );
+
+  if (form) {
+
+    form.style.display =
+      "none";
+
+  }
+
+}
+
+
+/* =========================================================
+EDIT VARIANT
+========================================================= */
+
+async function editVariant(
+  variantId
+) {
+
+  const variant =
+    await getVariant(
+      variantId
+    );
+
+  if (!variant) {
+    return;
+  }
+
+
+  const product =
+    STATE.products.find(
+      item =>
+        String(item.id) ===
+        String(
+          variant.product_id
+        )
+    );
+
+
+  openVariantForm(
+    variant,
+    product
+  );
+}
+
+
+/* =========================================================
+GET VARIANT
+========================================================= */
+
+async function getVariant(
+  variantId
+) {
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+
+      .from(
+        "product_variants"
+      )
+
+      .select(`
+        id,
+        product_id,
+        color,
+        size,
+        price,
+        stock,
+        image_url,
+        is_active
+      `)
+
+      .eq(
+        "id",
+        variantId
+      )
+
+      .single();
+
+
+  if (error) {
+
+    console.error(
+      "Get variant error:",
+      error
+    );
+
+    showNotification(
+      "Impossible de charger la variante.",
+      "error"
+    );
+
+    return null;
+  }
+
+
+  return data;
+} 
+showSection
+
+};
+  STATE,
+
+  supabaseClient,
+
+  loadProducts,
+/* =========================================================
+   PRODUCT VARIANTS
+========================================================= */
+
+async function loadProductVariants(productId = null) {
+
+  let query = supabaseClient
+    .from("product_variants")
+    .select(`
+      id,
+      product_id,
+      color,
+      size,
+      price,
+      stock,
+      image_url,
+      is_active,
+      created_at,
+      updated_at
+    `)
+    .order("created_at", {
+      ascending: true
+    });
+
+  if (productId) {
+    query = query.eq(
+      "product_id",
+      productId
+    );
+  }
+
+  const {
+    data,
+    error
+  } = await query;
+
+  if (error) {
+    console.error(
+      "Product variants error:",
+      error
+    );
+
+    throw error;
+  }
+
+  return data || [];
+}/* =========================================================
+   SAVE PRODUCT VARIANT
+========================================================= */
+
+async function saveProductVariant({
+  productId,
+  color = null,
+  size = null,
+  price = null,
+  stock = 0,
+  imageUrl = null,
+  isActive = true
+}) {
+
+  if (!productId) {
+    throw new Error(
+      "product_id obligatoire."
+    );
+  }
+
+  const variantData = {
+    product_id: productId,
+
+    color:
+      color?.trim() || null,
+
+    size:
+      size?.trim() || null,
+
+    price:
+      price === null ||
+      price === "" ||
+      price === undefined
+        ? null
+        : Number(price),
+
+    stock:
+      Number(stock) || 0,
+
+    image_url:
+      imageUrl || null,
+
+    is_active:
+      isActive !== false
+  };
+
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .from("product_variants")
+    .insert(
+      variantData
+    )
+    .select()
+    .single();
+
+  if (error) {
+
+    console.error(
+      "Save variant error:",
+      error
+    );
+
+    throw error;
+  }
+
+  return data;
+}
+/* =========================================================
+   DELETE PRODUCT VARIANT
+========================================================= */
+
+async function deleteProductVariant(
+  variantId
+) {
+
+  if (!variantId) {
+    throw new Error(
+      "Variant ID obligatoire."
+    );
+  }
+
+  const {
+    error
+  } = await supabaseClient
+    .from("product_variants")
+    .delete()
+    .eq(
+      "id",
+      variantId
+    );
+
+  if (error) {
+
+    console.error(
+      "Delete variant error:",
+      error
+    );
+
+    throw error;
+  }
+
+  return true;
+}
+
+loadCategories,
 
   showSection
 
