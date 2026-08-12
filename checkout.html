@@ -243,11 +243,11 @@
                   </option>
 
                   <option value="domicile">
-                    🏠 Livraison à domicile
+                    🏠 Livraison à domicile — 600 DA
                   </option>
 
                   <option value="bureau">
-                    🏢 Livraison au bureau
+                    🏢 Livraison au bureau — 400 DA
                   </option>
 
                 </select>
@@ -307,7 +307,7 @@
               </div>
 
 
-              <!-- DELIVERY PRICE PREVIEW -->
+              <!-- DELIVERY PRICE -->
 
               <div
                 class="summary-row"
@@ -335,7 +335,10 @@
                 type="submit"
                 id="submitOrderButton"
                 class="btn btn-primary"
-                style="width:100%; margin-top:20px;"
+                style="
+                  width:100%;
+                  margin-top:20px;
+                "
               >
                 Confirmer la commande
               </button>
@@ -383,11 +386,9 @@
             </div>
 
 
-            <!-- DELIVERY TOTAL -->
+            <!-- DELIVERY -->
 
-            <div
-              class="summary-row"
-            >
+            <div class="summary-row">
 
               <span>
                 Livraison
@@ -511,12 +512,14 @@
 
 
   <!-- =========================
-       SUPABASE
+       SCRIPTS
   ========================== -->
 
-<script src="config.js"></script>
-<script src="locations.js"></script>
-<script src="checkout.js"></script>
+  <script src="config.js"></script>
+
+  <script src="locations.js"></script>
+
+  <script src="checkout.js"></script>
 
 </body>
 
