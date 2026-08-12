@@ -1,16 +1,33 @@
-/* =========================================================
-   JR SHOP — ADMIN
-   admin.js
-   ========================================================= */
-
 "use strict";
 
 /* =========================================================
-   CONFIGURATION
+   JR SHOP ADMIN
+   SUPABASE CONNECTION
 ========================================================= */
 
-const ADMIN_CONFIG = {
-  shopName: "JR Shop",
+const SUPABASE_URL =
+  "https://cstjgsuehmqcolajspqh.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_e_wQxqCrx21Qq1kRYKjFMg_yR6TQfKX";
+
+
+/* =========================================================
+   SUPABASE
+========================================================= */
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+/* =========================================================
+   CONFIG
+========================================================= */
+
+const CONFIG = {
   currency: "DA",
 
   sections: {
@@ -41,7 +58,7 @@ const ADMIN_CONFIG = {
 
     promotions: {
       title: "Promotions",
-      subtitle: "Gérez vos offres et codes promotionnels"
+      subtitle: "Gérez vos offres"
     },
 
     inventory: {
@@ -51,7 +68,7 @@ const ADMIN_CONFIG = {
 
     analytics: {
       title: "Statistiques",
-      subtitle: "Analysez les performances de votre boutique"
+      subtitle: "Analysez les performances"
     },
 
     settings: {
@@ -59,41 +76,6 @@ const ADMIN_CONFIG = {
       subtitle: "Configuration de votre boutique"
     }
   }
-};
-
-
-/* =========================================================
-   DOM
-========================================================= */
-
-const DOM = {
-  sidebar: document.querySelector(".sidebar"),
-  mobileMenuBtn: document.getElementById("mobileMenuBtn"),
-
-  pageTitle: document.getElementById("pageTitle"),
-  pageSubtitle: document.getElementById("pageSubtitle"),
-
-  navItems: document.querySelectorAll(".nav-item"),
-  pageSections: document.querySelectorAll(".page-section"),
-
-  quickActions: document.querySelectorAll("[data-section]"),
-
-  logoutBtn: document.getElementById("logoutBtn"),
-
-  modalOverlay: document.getElementById("modalOverlay"),
-  modalContent: document.getElementById("modalContent"),
-  closeModalBtn: document.getElementById("closeModalBtn"),
-
-  addProductBtn: document.getElementById("addProductBtn"),
-  addCategoryBtn: document.getElementById("addCategoryBtn"),
-
-  productSearch: document.getElementById("productSearch"),
-  productCategoryFilter: document.getElementById("productCategoryFilter"),
-  productStatusFilter: document.getElementById("productStatusFilter"),
-
-  customerSearch: document.getElementById("customerSearch"),
-
-  salesPeriod: document.getElementById("salesPeriod")
 };
 
 
@@ -114,28 +96,907 @@ const STATE = {
 
 
 /* =========================================================
+   DOM
+========================================================= */
+
+const DOM = {
+
+  sidebar:
+    document.querySelector(".sidebar"),
+
+  mobileMenuBtn:
+    document.getElementById("mobileMenuBtn"),
+
+  pageTitle:
+    document.getElementById("pageTitle"),
+
+  pageSubtitle:
+    document.getElementById("pageSubtitle"),
+
+  navItems:
+    document.querySelectorAll(".nav-item"),
+
+  pageSections:
+    document.querySelectorAll(".page-section"),
+
+  quickActions:
+    document.querySelectorAll("[data-section]"),
+
+  logoutBtn:
+    document.getElementById("logoutBtn"),
+
+  modalOverlay:
+    document.getElementById("modalOverlay"),
+
+  modalContent:
+    document.getElementById("modalContent"),
+
+  closeModalBtn:
+    document.getElementById("closeModalBtn"),
+
+  addProductBtn:
+    document.getElementById("addProductBtn"),
+
+  addCategoryBtn:
+    document.getElementById("addCategoryBtn"),
+
+  productSearch:
+    document.getElementById("productSearch"),
+
+  productCategoryFilter:
+    document.getElementById(
+      "productCategoryFilter"
+    ),
+
+  productStatusFilter:
+    document.getElementById(
+      "productStatusFilter"
+    ),
+
+  customerSearch:
+    document.getElementById(
+      "customerSearch"
+    )
+};
+
+
+/* =========================================================
    INIT
 ========================================================= */
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener(
+  "DOMContentLoaded",
+  init
+);
 
-  initializeAdmin();
 
-});
+async function init() {
 
-
-function initializeAdmin() {
+  console.log(
+    "JR Shop Admin started..."
+  );
 
   setupNavigation();
   setupMobileMenu();
   setupModal();
-  setupQuickActions();
   setupButtons();
   setupSearch();
 
-  loadInitialDashboard();
+  await loadAllData();
 
-  console.log("JR Shop Admin initialized.");
+  showSection("dashboard");
+}
+
+
+/* =========================================================
+   LOAD ALL DATA
+========================================================= */
+
+async function loadAllData() {
+
+  STATE.loading = true;
+
+  try {
+
+    await Promise.all([
+      loadProducts(),
+      loadCategories()
+    ]);
+
+    updateDashboard();
+
+  } catch (error) {
+
+    console.error(
+      "Erreur chargement:",
+      error
+    );
+
+    showNotification(
+      "Erreur lors du chargement des données Supabase.",
+      "error"
+    );
+
+  } finally {
+
+    STATE.loading = false;
+
+  }
+}
+
+
+/* =========================================================
+   PRODUCTS — SUPABASE
+========================================================= */
+
+async function loadProducts() {
+
+  console.log(
+    "Chargement des produits..."
+  );
+
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .from("products")
+    .select(`
+      id,
+      name,
+      price,
+      old_price,
+      stock,
+      category_id,
+      image_url,
+      is_active,
+      active
+    `)
+    .order(
+      "name",
+      {
+        ascending: true
+      }
+    );
+
+
+  if (error) {
+
+    console.error(
+      "Products error:",
+      error
+    );
+
+    throw error;
+  }
+
+
+  STATE.products =
+    data || [];
+
+
+  console.log(
+    "Produits chargés:",
+    STATE.products.length
+  );
+
+
+  renderProducts();
+  updateProductCategoryFilter();
+  updateDashboard();
+}
+
+
+/* =========================================================
+   CATEGORIES — SUPABASE
+========================================================= */
+
+async function loadCategories() {
+
+  console.log(
+    "Chargement des catégories..."
+  );
+
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .from("categories")
+    .select(`
+      id,
+      name,
+      slug,
+      image_url
+    `)
+    .order(
+      "name",
+      {
+        ascending: true
+      }
+    );
+
+
+  if (error) {
+
+    console.error(
+      "Categories error:",
+      error
+    );
+
+    throw error;
+  }
+
+
+  STATE.categories =
+    data || [];
+
+
+  console.log(
+    "Catégories chargées:",
+    STATE.categories.length
+  );
+
+
+  renderCategories();
+  updateProductCategoryFilter();
+}
+
+
+/* =========================================================
+   RENDER PRODUCTS
+========================================================= */
+
+function renderProducts(
+  products = STATE.products
+) {
+
+  const tbody =
+    document.getElementById(
+      "productsTableBody"
+    );
+
+
+  if (!tbody) {
+    return;
+  }
+
+
+  if (!products.length) {
+
+    tbody.innerHTML = `
+      <tr>
+        <td
+          colspan="6"
+          class="empty-row"
+        >
+          Aucun produit trouvé.
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+
+  tbody.innerHTML =
+    products
+      .map(
+        product => {
+
+          const category =
+            STATE.categories.find(
+              category =>
+                String(category.id) ===
+                String(product.category_id)
+            );
+
+
+          const isActive =
+            product.is_active !== false &&
+            product.active !== false;
+
+
+          const stock =
+            Number(product.stock || 0);
+
+
+          let stockClass =
+            "status-success";
+
+          let stockText =
+            `${stock}`;
+
+
+          if (stock === 0) {
+
+            stockClass =
+              "status-danger";
+
+          } else if (stock <= 5) {
+
+            stockClass =
+              "status-warning";
+
+          }
+
+
+          return `
+            <tr>
+
+              <td>
+
+                <div
+                  style="
+                    display:flex;
+                    align-items:center;
+                    gap:10px;
+                  "
+                >
+
+                  ${
+                    product.image_url
+                      ? `
+                        <img
+                          src="${escapeHTML(
+                            product.image_url
+                          )}"
+                          alt="${escapeHTML(
+                            product.name
+                          )}"
+                          style="
+                            width:48px;
+                            height:48px;
+                            object-fit:cover;
+                            border-radius:9px;
+                            background:#f1f1f1;
+                          "
+                        >
+                      `
+                      : `
+                        <div
+                          style="
+                            width:48px;
+                            height:48px;
+                            border-radius:9px;
+                            background:#f1f1f1;
+                            display:grid;
+                            place-items:center;
+                            font-weight:800;
+                          "
+                        >
+                          JR
+                        </div>
+                      `
+                  }
+
+                  <div>
+
+                    <strong>
+                      ${escapeHTML(
+                        product.name ||
+                        "Produit"
+                      )}
+                    </strong>
+
+                    ${
+                      product.old_price
+                        ? `
+                          <div
+                            style="
+                              color:#888;
+                              font-size:10px;
+                              text-decoration:line-through;
+                              margin-top:3px;
+                            "
+                          >
+                            ${formatPrice(
+                              product.old_price
+                            )}
+                          </div>
+                        `
+                        : ""
+                    }
+
+                  </div>
+
+                </div>
+
+              </td>
+
+
+              <td>
+                ${
+                  category
+                    ? escapeHTML(
+                        category.name
+                      )
+                    : "—"
+                }
+              </td>
+
+
+              <td>
+                <strong>
+                  ${formatPrice(
+                    product.price
+                  )}
+                </strong>
+              </td>
+
+
+              <td>
+
+                <span
+                  class="
+                    status
+                    ${stockClass}
+                  "
+                >
+                  ${stockText}
+                </span>
+
+              </td>
+
+
+              <td>
+
+                <span
+                  class="
+                    status
+                    ${
+                      isActive
+                        ? "status-success"
+                        : "status-neutral"
+                    }
+                  "
+                >
+                  ${
+                    isActive
+                      ? "Actif"
+                      : "Inactif"
+                  }
+                </span>
+
+              </td>
+
+
+              <td>
+
+                <button
+                  class="secondary-btn"
+                  onclick="editProduct('${escapeHTML(
+                    product.id
+                  )}')"
+                >
+                  Modifier
+                </button>
+
+              </td>
+
+            </tr>
+          `;
+        }
+      )
+      .join("");
+}
+
+
+/* =========================================================
+   PRODUCT CATEGORY FILTER
+========================================================= */
+
+function updateProductCategoryFilter() {
+
+  const select =
+    DOM.productCategoryFilter;
+
+
+  if (!select) {
+    return;
+  }
+
+
+  const currentValue =
+    select.value;
+
+
+  select.innerHTML = `
+    <option value="">
+      Toutes les catégories
+    </option>
+  `;
+
+
+  STATE.categories.forEach(
+    category => {
+
+      const option =
+        document.createElement(
+          "option"
+        );
+
+
+      option.value =
+        category.id;
+
+      option.textContent =
+        category.name;
+
+
+      select.appendChild(
+        option
+      );
+
+    }
+  );
+
+
+  select.value =
+    currentValue;
+}
+
+
+/* =========================================================
+   PRODUCT FILTER
+========================================================= */
+
+function filterProducts() {
+
+  const search =
+    (
+      DOM.productSearch?.value ||
+      ""
+    )
+      .trim()
+      .toLowerCase();
+
+
+  const category =
+    DOM.productCategoryFilter
+      ?.value || "";
+
+
+  const status =
+    DOM.productStatusFilter
+      ?.value || "";
+
+
+  const filtered =
+    STATE.products.filter(
+      product => {
+
+        const name =
+          String(
+            product.name || ""
+          ).toLowerCase();
+
+
+        const matchesSearch =
+          !search ||
+          name.includes(search);
+
+
+        const matchesCategory =
+          !category ||
+          String(
+            product.category_id
+          ) ===
+          String(category);
+
+
+        const isActive =
+          product.is_active !== false &&
+          product.active !== false;
+
+
+        const matchesStatus =
+          !status ||
+          (
+            status === "active" &&
+            isActive
+          ) ||
+          (
+            status === "inactive" &&
+            !isActive
+          );
+
+
+        return (
+          matchesSearch &&
+          matchesCategory &&
+          matchesStatus
+        );
+
+      }
+    );
+
+
+  renderProducts(
+    filtered
+  );
+}
+
+
+/* =========================================================
+   RENDER CATEGORIES
+========================================================= */
+
+function renderCategories() {
+
+  const container =
+    document.getElementById(
+      "categoriesGrid"
+    );
+
+
+  if (!container) {
+    return;
+  }
+
+
+  if (!STATE.categories.length) {
+
+    container.innerHTML = `
+      <div class="empty-state">
+
+        <div class="empty-icon">
+          ▦
+        </div>
+
+        <strong>
+          Aucune catégorie
+        </strong>
+
+        <p>
+          Aucune catégorie trouvée.
+        </p>
+
+      </div>
+    `;
+
+    return;
+  }
+
+
+  container.innerHTML =
+    STATE.categories
+      .map(
+        category => {
+
+          return `
+            <div
+              class="category-card"
+            >
+
+              <div
+                class="category-image"
+              >
+
+                ${
+                  category.image_url
+                    ? `
+                      <img
+                        src="${escapeHTML(
+                          category.image_url
+                        )}"
+                        alt="${escapeHTML(
+                          category.name
+                        )}"
+                        style="
+                          width:100%;
+                          height:100%;
+                          object-fit:cover;
+                        "
+                      >
+                    `
+                    : `
+                      <strong>
+                        JR
+                      </strong>
+                    `
+                }
+
+              </div>
+
+
+              <div
+                class="category-content"
+              >
+
+                <h3>
+                  ${escapeHTML(
+                    category.name
+                  )}
+                </h3>
+
+                <p>
+                  ${escapeHTML(
+                    category.slug || ""
+                  )}
+                </p>
+
+              </div>
+
+            </div>
+          `;
+        }
+      )
+      .join("");
+}
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+function updateDashboard() {
+
+  const products =
+    STATE.products;
+
+
+  const activeProducts =
+    products.filter(
+      product =>
+        product.is_active !== false &&
+        product.active !== false
+    );
+
+
+  const revenueElement =
+    document.getElementById(
+      "statRevenue"
+    );
+
+
+  const ordersElement =
+    document.getElementById(
+      "statOrders"
+    );
+
+
+  const productsElement =
+    document.getElementById(
+      "statProducts"
+    );
+
+
+  const customersElement =
+    document.getElementById(
+      "statCustomers"
+    );
+
+
+  if (revenueElement) {
+
+    revenueElement.textContent =
+      formatPrice(0);
+
+  }
+
+
+  if (ordersElement) {
+
+    ordersElement.textContent =
+      STATE.orders.length;
+
+  }
+
+
+  if (productsElement) {
+
+    productsElement.textContent =
+      activeProducts.length;
+
+  }
+
+
+  if (customersElement) {
+
+    customersElement.textContent =
+      STATE.customers.length;
+
+  }
+
+
+  renderLowStock();
+}
+
+
+/* =========================================================
+   LOW STOCK
+========================================================= */
+
+function renderLowStock() {
+
+  const container =
+    document.getElementById(
+      "lowStockContainer"
+    );
+
+
+  if (!container) {
+    return;
+  }
+
+
+  const lowStock =
+    STATE.products.filter(
+      product =>
+        Number(
+          product.stock || 0
+        ) <= 5
+    );
+
+
+  if (!lowStock.length) {
+
+    container.innerHTML = `
+      <div class="empty-state">
+
+        <div class="empty-icon">
+          ✓
+        </div>
+
+        <strong>
+          Stock correct
+        </strong>
+
+        <p>
+          Aucun produit en stock faible.
+        </p>
+
+      </div>
+    `;
+
+    return;
+  }
+
+
+  container.innerHTML =
+    lowStock
+      .slice(0, 8)
+      .map(
+        product => {
+
+          const stock =
+            Number(
+              product.stock || 0
+            );
+
+
+          return `
+            <div
+              class="low-stock-item"
+            >
+
+              <strong>
+                ${escapeHTML(
+                  product.name
+                )}
+              </strong>
+
+              <span
+                class="
+                  status
+                  ${
+                    stock === 0
+                      ? "status-danger"
+                      : "status-warning"
+                  }
+                "
+              >
+                ${
+                  stock === 0
+                    ? "Rupture"
+                    : `${stock} restant(s)`
+                }
+              </span>
+
+            </div>
+          `;
+        }
+      )
+      .join("");
 }
 
 
@@ -145,22 +1006,48 @@ function initializeAdmin() {
 
 function setupNavigation() {
 
-  DOM.navItems.forEach((item) => {
+  DOM.navItems.forEach(
+    item => {
 
-    item.addEventListener("click", () => {
+      item.addEventListener(
+        "click",
+        () => {
 
-      const section = item.dataset.section;
+          showSection(
+            item.dataset.section
+          );
 
-      if (!section) {
-        return;
-      }
+        }
+      );
 
-      showSection(section);
+    }
+  );
 
-    });
 
-  });
+  DOM.quickActions.forEach(
+    item => {
 
+      item.addEventListener(
+        "click",
+        () => {
+
+          const section =
+            item.dataset.section;
+
+
+          if (section) {
+
+            showSection(
+              section
+            );
+
+          }
+
+        }
+      );
+
+    }
+  );
 }
 
 
@@ -168,105 +1055,90 @@ function setupNavigation() {
    SHOW SECTION
 ========================================================= */
 
-function showSection(sectionName) {
+function showSection(
+  section
+) {
 
-  const config = ADMIN_CONFIG.sections[sectionName];
-
-  if (!config) {
-    console.warn("Section inconnue:", sectionName);
+  if (
+    !CONFIG.sections[
+      section
+    ]
+  ) {
     return;
   }
 
-  STATE.currentSection = sectionName;
+
+  STATE.currentSection =
+    section;
 
 
-  /* Active nav */
+  DOM.navItems.forEach(
+    item => {
 
-  DOM.navItems.forEach((item) => {
+      item.classList.toggle(
+        "active",
+        item.dataset.section ===
+        section
+      );
 
-    item.classList.toggle(
-      "active",
-      item.dataset.section === sectionName
+    }
+  );
+
+
+  DOM.pageSections.forEach(
+    page => {
+
+      page.classList.toggle(
+        "active",
+        page.id === section
+      );
+
+    }
+  );
+
+
+  DOM.pageTitle.textContent =
+    CONFIG.sections[
+      section
+    ].title;
+
+
+  DOM.pageSubtitle.textContent =
+    CONFIG.sections[
+      section
+    ].subtitle;
+
+
+  if (
+    window.innerWidth <= 900
+  ) {
+
+    DOM.sidebar?.classList.remove(
+      "open"
     );
-
-  });
-
-
-  /* Active page */
-
-  DOM.pageSections.forEach((section) => {
-
-    section.classList.toggle(
-      "active",
-      section.id === sectionName
-    );
-
-  });
-
-
-  /* Header */
-
-  DOM.pageTitle.textContent = config.title;
-  DOM.pageSubtitle.textContent = config.subtitle;
-
-
-  /* Close mobile sidebar */
-
-  if (window.innerWidth <= 900) {
-
-    DOM.sidebar?.classList.remove("open");
 
   }
 
 
-  /* Load section data */
+  if (section === "inventory") {
 
-  handleSectionLoad(sectionName);
-
-}
-
-
-/* =========================================================
-   SECTION LOAD
-========================================================= */
-
-function handleSectionLoad(sectionName) {
-
-  switch (sectionName) {
-
-    case "dashboard":
-      loadInitialDashboard();
-      break;
-
-    case "products":
-      loadProducts();
-      break;
-
-    case "categories":
-      loadCategories();
-      break;
-
-    case "orders":
-      loadOrders();
-      break;
-
-    case "customers":
-      loadCustomers();
-      break;
-
-    case "inventory":
-      loadInventory();
-      break;
-
-    case "analytics":
-      loadAnalytics();
-      break;
-
-    default:
-      break;
+    loadInventory();
 
   }
 
+
+  if (section === "products") {
+
+    renderProducts();
+
+  }
+
+
+  if (section === "categories") {
+
+    renderCategories();
+
+  }
 }
 
 
@@ -276,65 +1148,47 @@ function handleSectionLoad(sectionName) {
 
 function setupMobileMenu() {
 
-  if (!DOM.mobileMenuBtn || !DOM.sidebar) {
-    return;
-  }
+  DOM.mobileMenuBtn?.addEventListener(
+    "click",
+    () => {
 
-  DOM.mobileMenuBtn.addEventListener("click", () => {
-
-    DOM.sidebar.classList.toggle("open");
-
-  });
-
-
-  document.addEventListener("click", (event) => {
-
-    if (window.innerWidth > 900) {
-      return;
-    }
-
-    const clickedInsideSidebar =
-      DOM.sidebar.contains(event.target);
-
-    const clickedMenu =
-      DOM.mobileMenuBtn.contains(event.target);
-
-    if (
-      !clickedInsideSidebar &&
-      !clickedMenu
-    ) {
-
-      DOM.sidebar.classList.remove("open");
+      DOM.sidebar?.classList.toggle(
+        "open"
+      );
 
     }
-
-  });
-
-}
+  );
 
 
-/* =========================================================
-   QUICK ACTIONS
-========================================================= */
+  document.addEventListener(
+    "click",
+    event => {
 
-function setupQuickActions() {
-
-  DOM.quickActions.forEach((element) => {
-
-    element.addEventListener("click", () => {
-
-      const section = element.dataset.section;
-
-      if (!section) {
+      if (
+        window.innerWidth > 900
+      ) {
         return;
       }
 
-      showSection(section);
 
-    });
+      if (
+        DOM.sidebar?.contains(
+          event.target
+        ) ||
+        DOM.mobileMenuBtn?.contains(
+          event.target
+        )
+      ) {
+        return;
+      }
 
-  });
 
+      DOM.sidebar?.classList.remove(
+        "open"
+      );
+
+    }
+  );
 }
 
 
@@ -360,7 +1214,6 @@ function setupButtons() {
     "click",
     handleLogout
   );
-
 }
 
 
@@ -386,455 +1239,6 @@ function setupSearch() {
     "change",
     filterProducts
   );
-
-
-  DOM.customerSearch?.addEventListener(
-    "input",
-    filterCustomers
-  );
-
-}
-
-
-/* =========================================================
-   DASHBOARD
-========================================================= */
-
-function loadInitialDashboard() {
-
-  updateDashboardStats();
-
-}
-
-
-function updateDashboardStats() {
-
-  const revenueElement =
-    document.getElementById("statRevenue");
-
-  const ordersElement =
-    document.getElementById("statOrders");
-
-  const productsElement =
-    document.getElementById("statProducts");
-
-  const customersElement =
-    document.getElementById("statCustomers");
-
-
-  if (revenueElement) {
-
-    revenueElement.textContent =
-      formatPrice(0);
-
-  }
-
-
-  if (ordersElement) {
-
-    ordersElement.textContent =
-      STATE.orders.length;
-
-  }
-
-
-  if (productsElement) {
-
-    productsElement.textContent =
-      STATE.products.length;
-
-  }
-
-
-  if (customersElement) {
-
-    customersElement.textContent =
-      STATE.customers.length;
-
-  }
-
-}
-
-
-/* =========================================================
-   PRODUCTS
-========================================================= */
-
-function loadProducts() {
-
-  console.log("Loading products...");
-
-  renderProducts();
-
-}
-
-
-function renderProducts(products = STATE.products) {
-
-  const tbody =
-    document.getElementById("productsTableBody");
-
-  if (!tbody) {
-    return;
-  }
-
-
-  if (!products.length) {
-
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="6" class="empty-row">
-          Aucun produit chargé pour le moment.
-        </td>
-      </tr>
-    `;
-
-    return;
-  }
-
-
-  tbody.innerHTML = products.map((product) => {
-
-    const active =
-      product.is_active !== false;
-
-    return `
-      <tr>
-
-        <td>
-          <strong>
-            ${escapeHTML(product.name || "Produit")}
-          </strong>
-        </td>
-
-        <td>
-          ${escapeHTML(product.category_name || "—")}
-        </td>
-
-        <td>
-          ${formatPrice(product.price || 0)}
-        </td>
-
-        <td>
-          ${Number(product.stock || 0)}
-        </td>
-
-        <td>
-          <span class="status ${
-            active
-              ? "status-success"
-              : "status-neutral"
-          }">
-            ${active ? "Actif" : "Inactif"}
-          </span>
-        </td>
-
-        <td>
-          <button
-            class="secondary-btn"
-            onclick="editProduct('${product.id || ""}')"
-          >
-            Modifier
-          </button>
-        </td>
-
-      </tr>
-    `;
-
-  }).join("");
-
-}
-
-
-/* =========================================================
-   PRODUCT FILTER
-========================================================= */
-
-function filterProducts() {
-
-  const search =
-    DOM.productSearch?.value
-      ?.trim()
-      .toLowerCase() || "";
-
-
-  const category =
-    DOM.productCategoryFilter?.value || "";
-
-
-  const status =
-    DOM.productStatusFilter?.value || "";
-
-
-  const filtered =
-    STATE.products.filter((product) => {
-
-      const name =
-        String(product.name || "")
-          .toLowerCase();
-
-      const matchesSearch =
-        !search ||
-        name.includes(search);
-
-
-      const matchesCategory =
-        !category ||
-        String(product.category_id || "") === category;
-
-
-      const active =
-        product.is_active !== false;
-
-
-      const matchesStatus =
-        !status ||
-        (status === "active" && active) ||
-        (status === "inactive" && !active);
-
-
-      return (
-        matchesSearch &&
-        matchesCategory &&
-        matchesStatus
-      );
-
-    });
-
-
-  renderProducts(filtered);
-
-}
-
-
-/* =========================================================
-   EDIT PRODUCT
-========================================================= */
-
-function editProduct(productId) {
-
-  const product =
-    STATE.products.find(
-      (item) => String(item.id) === String(productId)
-    );
-
-
-  if (!product) {
-
-    showNotification(
-      "Produit introuvable.",
-      "error"
-    );
-
-    return;
-  }
-
-
-  openModal(`
-    <h2>Modifier le produit</h2>
-
-    <p style="
-      margin-top:8px;
-      color:#747982;
-      font-size:12px;
-    ">
-      ${escapeHTML(product.name || "Produit")}
-    </p>
-
-    <div style="margin-top:20px;">
-      <button
-        class="primary-btn"
-        onclick="closeModal()"
-      >
-        Fermer
-      </button>
-    </div>
-  `);
-
-}
-
-
-/* =========================================================
-   CATEGORIES
-========================================================= */
-
-function loadCategories() {
-
-  console.log("Loading categories...");
-
-  renderCategories();
-
-}
-
-
-function renderCategories() {
-
-  const container =
-    document.getElementById("categoriesGrid");
-
-  if (!container) {
-    return;
-  }
-
-
-  if (!STATE.categories.length) {
-
-    container.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-icon">▦</div>
-
-        <strong>
-          Aucune catégorie
-        </strong>
-
-        <p>
-          Les catégories seront chargées depuis Supabase.
-        </p>
-      </div>
-    `;
-
-    return;
-  }
-
-
-  container.innerHTML =
-    STATE.categories.map((category) => {
-
-      return `
-        <div class="category-card">
-
-          <div class="category-image">
-            ${
-              category.image_url
-                ? `<img
-                    src="${escapeHTML(category.image_url)}"
-                    alt="${escapeHTML(category.name || "")}"
-                    style="
-                      width:100%;
-                      height:100%;
-                      object-fit:cover;
-                    "
-                  >`
-                : "JR"
-            }
-          </div>
-
-          <div class="category-content">
-
-            <h3>
-              ${escapeHTML(category.name || "Catégorie")}
-            </h3>
-
-            <p>
-              ${escapeHTML(category.slug || "")}
-            </p>
-
-          </div>
-
-        </div>
-      `;
-
-    }).join("");
-
-}
-
-
-/* =========================================================
-   ADD CATEGORY
-========================================================= */
-
-function openAddCategoryModal() {
-
-  openModal(`
-
-    <h2>Ajouter une catégorie</h2>
-
-    <p style="
-      margin-top:7px;
-      color:#747982;
-      font-size:12px;
-    ">
-      Création d'une nouvelle catégorie.
-    </p>
-
-    <div style="margin-top:20px;">
-
-      <div class="form-group">
-
-        <label>
-          Nom de la catégorie
-        </label>
-
-        <input
-          id="newCategoryName"
-          type="text"
-          placeholder="Ex: Homme"
-        >
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label>
-          Slug
-        </label>
-
-        <input
-          id="newCategorySlug"
-          type="text"
-          placeholder="homme"
-        >
-
-      </div>
-
-
-      <button
-        class="primary-btn"
-        id="saveCategoryBtn"
-      >
-        Ajouter
-      </button>
-
-    </div>
-
-  `);
-
-
-  document
-    .getElementById("saveCategoryBtn")
-    ?.addEventListener(
-      "click",
-      saveCategoryPlaceholder
-    );
-
-}
-
-
-function saveCategoryPlaceholder() {
-
-  const name =
-    document.getElementById("newCategoryName")
-      ?.value
-      ?.trim();
-
-
-  if (!name) {
-
-    showNotification(
-      "Veuillez saisir un nom.",
-      "error"
-    );
-
-    return;
-  }
-
-
-  showNotification(
-    "La connexion Supabase sera ajoutée dans l'étape suivante.",
-    "info"
-  );
-
 }
 
 
@@ -846,19 +1250,26 @@ function openAddProductModal() {
 
   openModal(`
 
-    <h2>Ajouter un produit</h2>
+    <h2>
+      Ajouter un produit
+    </h2>
 
-    <p style="
-      margin-top:7px;
-      color:#747982;
-      font-size:12px;
-    ">
-      Nous allons connecter ce formulaire à votre table
-      <strong>products</strong>.
+    <p
+      style="
+        margin-top:7px;
+        color:#747982;
+        font-size:12px;
+      "
+    >
+      Formulaire connecté à Supabase.
     </p>
 
 
-    <div style="margin-top:20px;">
+    <div
+      style="
+        margin-top:20px;
+      "
+    >
 
       <div class="form-group">
 
@@ -895,6 +1306,23 @@ function openAddProductModal() {
       <div class="form-group">
 
         <label>
+          Ancien prix
+        </label>
+
+        <input
+          id="newProductOldPrice"
+          type="number"
+          min="0"
+          step="0.01"
+          placeholder="3000"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
           Stock
         </label>
 
@@ -908,6 +1336,58 @@ function openAddProductModal() {
       </div>
 
 
+      <div class="form-group">
+
+        <label>
+          Catégorie
+        </label>
+
+        <select
+          id="newProductCategory"
+        >
+
+          <option value="">
+            Choisir une catégorie
+          </option>
+
+          ${
+            STATE.categories
+              .map(
+                category => `
+                  <option
+                    value="${escapeHTML(
+                      category.id
+                    )}"
+                  >
+                    ${escapeHTML(
+                      category.name
+                    )}
+                  </option>
+                `
+              )
+              .join("")
+          }
+
+        </select>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Image URL
+        </label>
+
+        <input
+          id="newProductImage"
+          type="url"
+          placeholder="https://..."
+        >
+
+      </div>
+
+
       <button
         class="primary-btn"
         id="saveProductBtn"
@@ -916,42 +1396,80 @@ function openAddProductModal() {
       </button>
 
     </div>
-
   `);
 
 
   document
-    .getElementById("saveProductBtn")
+    .getElementById(
+      "saveProductBtn"
+    )
     ?.addEventListener(
       "click",
-      saveProductPlaceholder
+      saveProduct
     );
-
 }
 
 
-function saveProductPlaceholder() {
+/* =========================================================
+   SAVE PRODUCT
+========================================================= */
+
+async function saveProduct() {
 
   const name =
-    document.getElementById("newProductName")
+    document
+      .getElementById(
+        "newProductName"
+      )
       ?.value
-      ?.trim();
+      .trim();
 
 
   const price =
-    document.getElementById("newProductPrice")
+    document
+      .getElementById(
+        "newProductPrice"
+      )
+      ?.value;
+
+
+  const oldPrice =
+    document
+      .getElementById(
+        "newProductOldPrice"
+      )
       ?.value;
 
 
   const stock =
-    document.getElementById("newProductStock")
+    document
+      .getElementById(
+        "newProductStock"
+      )
       ?.value;
+
+
+  const categoryId =
+    document
+      .getElementById(
+        "newProductCategory"
+      )
+      ?.value;
+
+
+  const imageUrl =
+    document
+      .getElementById(
+        "newProductImage"
+      )
+      ?.value
+      .trim();
 
 
   if (!name) {
 
     showNotification(
-      "Veuillez saisir le nom du produit.",
+      "Nom du produit obligatoire.",
       "error"
     );
 
@@ -959,10 +1477,13 @@ function saveProductPlaceholder() {
   }
 
 
-  if (price === "" || Number(price) < 0) {
+  if (
+    price === "" ||
+    Number(price) < 0
+  ) {
 
     showNotification(
-      "Veuillez saisir un prix valide.",
+      "Prix invalide.",
       "error"
     );
 
@@ -970,22 +1491,696 @@ function saveProductPlaceholder() {
   }
 
 
-  if (stock === "" || Number(stock) < 0) {
+  if (
+    stock === "" ||
+    Number(stock) < 0
+  ) {
 
     showNotification(
-      "Veuillez saisir un stock valide.",
+      "Stock invalide.",
       "error"
     );
 
     return;
   }
+
+
+  const productData = {
+
+    name,
+
+    price:
+      Number(price),
+
+    old_price:
+      oldPrice === ""
+        ? null
+        : Number(oldPrice),
+
+    stock:
+      Number(stock),
+
+    category_id:
+      categoryId || null,
+
+    image_url:
+      imageUrl || null,
+
+    is_active:
+      true,
+
+    active:
+      true
+  };
+
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("products")
+      .insert(
+        productData
+      )
+      .select()
+      .single();
+
+
+  if (error) {
+
+    console.error(
+      "Insert product error:",
+      error
+    );
+
+    showNotification(
+      error.message ||
+      "Impossible d'ajouter le produit.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  STATE.products.push(
+    data
+  );
+
+
+  renderProducts();
+  updateDashboard();
+  renderLowStock();
+
+
+  closeModal();
 
 
   showNotification(
-    "La connexion Supabase sera ajoutée dans l'étape suivante.",
-    "info"
+    "Produit ajouté avec succès.",
+    "success"
+  );
+}
+
+
+/* =========================================================
+   ADD CATEGORY
+========================================================= */
+
+function openAddCategoryModal() {
+
+  openModal(`
+
+    <h2>
+      Ajouter une catégorie
+    </h2>
+
+    <div
+      style="
+        margin-top:20px;
+      "
+    >
+
+      <div class="form-group">
+
+        <label>
+          Nom
+        </label>
+
+        <input
+          id="newCategoryName"
+          type="text"
+          placeholder="Ex: Homme"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Slug
+        </label>
+
+        <input
+          id="newCategorySlug"
+          type="text"
+          placeholder="homme"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Image URL
+        </label>
+
+        <input
+          id="newCategoryImage"
+          type="url"
+          placeholder="https://..."
+        >
+
+      </div>
+
+
+      <button
+        class="primary-btn"
+        id="saveCategoryBtn"
+      >
+        Ajouter
+      </button>
+
+    </div>
+
+  `);
+
+
+  document
+    .getElementById(
+      "saveCategoryBtn"
+    )
+    ?.addEventListener(
+      "click",
+      saveCategory
+    );
+}
+
+
+/* =========================================================
+   SAVE CATEGORY
+========================================================= */
+
+async function saveCategory() {
+
+  const name =
+    document
+      .getElementById(
+        "newCategoryName"
+      )
+      ?.value
+      .trim();
+
+
+  let slug =
+    document
+      .getElementById(
+        "newCategorySlug"
+      )
+      ?.value
+      .trim();
+
+
+  const imageUrl =
+    document
+      .getElementById(
+        "newCategoryImage"
+      )
+      ?.value
+      .trim();
+
+
+  if (!name) {
+
+    showNotification(
+      "Nom obligatoire.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  if (!slug) {
+
+    slug =
+      createSlug(name);
+
+  }
+
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("categories")
+      .insert({
+
+        name,
+
+        slug,
+
+        image_url:
+          imageUrl || null
+
+      })
+      .select()
+      .single();
+
+
+  if (error) {
+
+    console.error(
+      "Insert category error:",
+      error
+    );
+
+    showNotification(
+      error.message ||
+      "Impossible d'ajouter la catégorie.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  STATE.categories.push(
+    data
   );
 
+
+  renderCategories();
+  updateProductCategoryFilter();
+
+
+  closeModal();
+
+
+  showNotification(
+    "Catégorie ajoutée.",
+    "success"
+  );
+}
+
+
+/* =========================================================
+   EDIT PRODUCT
+========================================================= */
+
+function editProduct(
+  productId
+) {
+
+  const product =
+    STATE.products.find(
+      item =>
+        String(item.id) ===
+        String(productId)
+    );
+
+
+  if (!product) {
+
+    showNotification(
+      "Produit introuvable.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  openModal(`
+
+    <h2>
+      Produit
+    </h2>
+
+    <p
+      style="
+        margin-top:8px;
+        color:#747982;
+        font-size:12px;
+      "
+    >
+      ${escapeHTML(
+        product.name
+      )}
+    </p>
+
+    <div
+      style="
+        margin-top:20px;
+      "
+    >
+
+      <div
+        class="form-group"
+      >
+
+        <label>
+          Nom
+        </label>
+
+        <input
+          id="editProductName"
+          value="${escapeHTML(
+            product.name || ""
+          )}"
+        >
+
+      </div>
+
+
+      <div
+        class="form-group"
+      >
+
+        <label>
+          Prix
+        </label>
+
+        <input
+          id="editProductPrice"
+          type="number"
+          min="0"
+          value="${Number(
+            product.price || 0
+          )}"
+        >
+
+      </div>
+
+
+      <div
+        class="form-group"
+      >
+
+        <label>
+          Stock
+        </label>
+
+        <input
+          id="editProductStock"
+          type="number"
+          min="0"
+          value="${Number(
+            product.stock || 0
+          )}"
+        >
+
+      </div>
+
+
+      <button
+        class="primary-btn"
+        id="updateProductBtn"
+      >
+        Enregistrer
+      </button>
+
+    </div>
+
+  `);
+
+
+  document
+    .getElementById(
+      "updateProductBtn"
+    )
+    ?.addEventListener(
+      "click",
+      () =>
+        updateProduct(
+          product.id
+        )
+    );
+}
+
+
+/* =========================================================
+   UPDATE PRODUCT
+========================================================= */
+
+async function updateProduct(
+  productId
+) {
+
+  const name =
+    document
+      .getElementById(
+        "editProductName"
+      )
+      ?.value
+      .trim();
+
+
+  const price =
+    Number(
+      document
+        .getElementById(
+          "editProductPrice"
+        )
+        ?.value
+    );
+
+
+  const stock =
+    Number(
+      document
+        .getElementById(
+          "editProductStock"
+        )
+        ?.value
+    );
+
+
+  if (!name) {
+
+    showNotification(
+      "Nom obligatoire.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  if (
+    !Number.isFinite(price) ||
+    price < 0
+  ) {
+
+    showNotification(
+      "Prix invalide.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  if (
+    !Number.isFinite(stock) ||
+    stock < 0
+  ) {
+
+    showNotification(
+      "Stock invalide.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("products")
+      .update({
+
+        name,
+
+        price,
+
+        stock
+
+      })
+      .eq(
+        "id",
+        productId
+      )
+      .select()
+      .single();
+
+
+  if (error) {
+
+    console.error(
+      "Update product error:",
+      error
+    );
+
+    showNotification(
+      error.message,
+      "error"
+    );
+
+    return;
+  }
+
+
+  const index =
+    STATE.products.findIndex(
+      product =>
+        String(product.id) ===
+        String(productId)
+    );
+
+
+  if (index !== -1) {
+
+    STATE.products[index] =
+      {
+        ...STATE.products[index],
+        ...data
+      };
+
+  }
+
+
+  renderProducts();
+  updateDashboard();
+  renderLowStock();
+
+
+  closeModal();
+
+
+  showNotification(
+    "Produit modifié avec succès.",
+    "success"
+  );
+}
+
+
+/* =========================================================
+   INVENTORY
+========================================================= */
+
+function loadInventory() {
+
+  const tbody =
+    document.getElementById(
+      "inventoryTableBody"
+    );
+
+
+  if (!tbody) {
+    return;
+  }
+
+
+  if (!STATE.products.length) {
+
+    tbody.innerHTML = `
+      <tr>
+        <td
+          colspan="4"
+          class="empty-row"
+        >
+          Aucun produit.
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+
+  tbody.innerHTML =
+    STATE.products
+      .map(
+        product => {
+
+          const stock =
+            Number(
+              product.stock || 0
+            );
+
+
+          let state =
+            "Correct";
+
+          let statusClass =
+            "status-success";
+
+
+          if (
+            stock === 0
+          ) {
+
+            state =
+              "Rupture";
+
+            statusClass =
+              "status-danger";
+
+          } else if (
+            stock <= 5
+          ) {
+
+            state =
+              "Stock faible";
+
+            statusClass =
+              "status-warning";
+
+          }
+
+
+          return `
+            <tr>
+
+              <td>
+                <strong>
+                  ${escapeHTML(
+                    product.name
+                  )}
+                </strong>
+              </td>
+
+              <td>
+                ${stock}
+              </td>
+
+              <td>
+                <span
+                  class="
+                    status
+                    ${statusClass}
+                  "
+                >
+                  ${state}
+                </span>
+              </td>
+
+              <td>
+
+                <button
+                  class="secondary-btn"
+                  onclick="editProduct('${escapeHTML(
+                    product.id
+                  )}')"
+                >
+                  Modifier
+                </button>
+
+              </td>
+
+            </tr>
+          `;
+        }
+      )
+      .join("");
 }
 
 
@@ -1003,66 +2198,27 @@ function loadOrders() {
 function renderOrders() {
 
   const tbody =
-    document.getElementById("ordersTableBody");
+    document.getElementById(
+      "ordersTableBody"
+    );
+
 
   if (!tbody) {
     return;
   }
 
 
-  if (!STATE.orders.length) {
-
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="6" class="empty-row">
-          Aucune commande.
-        </td>
-      </tr>
-    `;
-
-    return;
-  }
-
-
-  tbody.innerHTML =
-    STATE.orders.map((order) => {
-
-      return `
-        <tr>
-
-          <td>
-            #${escapeHTML(order.id || "")}
-          </td>
-
-          <td>
-            ${escapeHTML(order.customer_name || "Client")}
-          </td>
-
-          <td>
-            ${formatDate(order.created_at)}
-          </td>
-
-          <td>
-            ${formatPrice(order.total || 0)}
-          </td>
-
-          <td>
-            <span class="status status-neutral">
-              ${escapeHTML(order.status || "Nouveau")}
-            </span>
-          </td>
-
-          <td>
-            <button class="secondary-btn">
-              Détails
-            </button>
-          </td>
-
-        </tr>
-      `;
-
-    }).join("");
-
+  tbody.innerHTML = `
+    <tr>
+      <td
+        colspan="6"
+        class="empty-row"
+      >
+        Les commandes seront connectées
+        dans l'étape Commandes.
+      </td>
+    </tr>
+  `;
 }
 
 
@@ -1072,210 +2228,28 @@ function renderOrders() {
 
 function loadCustomers() {
 
-  renderCustomers();
-
-}
-
-
-function renderCustomers(customers = STATE.customers) {
-
   const tbody =
-    document.getElementById("customersTableBody");
+    document.getElementById(
+      "customersTableBody"
+    );
+
 
   if (!tbody) {
     return;
   }
 
 
-  if (!customers.length) {
-
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="6" class="empty-row">
-          Aucun client.
-        </td>
-      </tr>
-    `;
-
-    return;
-  }
-
-
-  tbody.innerHTML =
-    customers.map((customer) => {
-
-      return `
-        <tr>
-
-          <td>
-            <strong>
-              ${escapeHTML(customer.name || "Client")}
-            </strong>
-          </td>
-
-          <td>
-            ${escapeHTML(customer.email || "—")}
-          </td>
-
-          <td>
-            ${escapeHTML(customer.phone || "—")}
-          </td>
-
-          <td>
-            ${Number(customer.orders_count || 0)}
-          </td>
-
-          <td>
-            ${formatPrice(customer.total_spent || 0)}
-          </td>
-
-          <td>
-            <button class="secondary-btn">
-              Voir
-            </button>
-          </td>
-
-        </tr>
-      `;
-
-    }).join("");
-
-}
-
-
-/* =========================================================
-   CUSTOMER FILTER
-========================================================= */
-
-function filterCustomers() {
-
-  const search =
-    DOM.customerSearch?.value
-      ?.trim()
-      .toLowerCase() || "";
-
-
-  const filtered =
-    STATE.customers.filter((customer) => {
-
-      const name =
-        String(customer.name || "")
-          .toLowerCase();
-
-      const email =
-        String(customer.email || "")
-          .toLowerCase();
-
-
-      return (
-        !search ||
-        name.includes(search) ||
-        email.includes(search)
-      );
-
-    });
-
-
-  renderCustomers(filtered);
-
-}
-
-
-/* =========================================================
-   INVENTORY
-========================================================= */
-
-function loadInventory() {
-
-  const tbody =
-    document.getElementById("inventoryTableBody");
-
-  if (!tbody) {
-    return;
-  }
-
-
-  if (!STATE.products.length) {
-
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="4" class="empty-row">
-          Aucun produit.
-        </td>
-      </tr>
-    `;
-
-    return;
-  }
-
-
-  tbody.innerHTML =
-    STATE.products.map((product) => {
-
-      const stock =
-        Number(product.stock || 0);
-
-
-      let state = "Correct";
-      let statusClass = "status-success";
-
-
-      if (stock === 0) {
-
-        state = "Rupture";
-        statusClass = "status-danger";
-
-      } else if (stock <= 5) {
-
-        state = "Stock faible";
-        statusClass = "status-warning";
-
-      }
-
-
-      return `
-        <tr>
-
-          <td>
-            <strong>
-              ${escapeHTML(product.name || "Produit")}
-            </strong>
-          </td>
-
-          <td>
-            ${stock}
-          </td>
-
-          <td>
-            <span class="status ${statusClass}">
-              ${state}
-            </span>
-          </td>
-
-          <td>
-            <button class="secondary-btn">
-              Modifier
-            </button>
-          </td>
-
-        </tr>
-      `;
-
-    }).join("");
-
-}
-
-
-/* =========================================================
-   ANALYTICS
-========================================================= */
-
-function loadAnalytics() {
-
-  console.log(
-    "Analytics ready for Supabase connection."
-  );
-
+  tbody.innerHTML = `
+    <tr>
+      <td
+        colspan="6"
+        class="empty-row"
+      >
+        Les clients seront connectés
+        dans l'étape Clients.
+      </td>
+    </tr>
+  `;
 }
 
 
@@ -1293,10 +2267,11 @@ function setupModal() {
 
   DOM.modalOverlay?.addEventListener(
     "click",
-    (event) => {
+    event => {
 
       if (
-        event.target === DOM.modalOverlay
+        event.target ===
+        DOM.modalOverlay
       ) {
 
         closeModal();
@@ -1309,10 +2284,11 @@ function setupModal() {
 
   document.addEventListener(
     "keydown",
-    (event) => {
+    event => {
 
       if (
-        event.key === "Escape"
+        event.key ===
+        "Escape"
       ) {
 
         closeModal();
@@ -1321,11 +2297,12 @@ function setupModal() {
 
     }
   );
-
 }
 
 
-function openModal(content) {
+function openModal(
+  content
+) {
 
   if (!DOM.modalOverlay) {
     return;
@@ -1339,7 +2316,6 @@ function openModal(content) {
   DOM.modalOverlay.classList.add(
     "show"
   );
-
 }
 
 
@@ -1348,7 +2324,6 @@ function closeModal() {
   DOM.modalOverlay?.classList.remove(
     "show"
   );
-
 }
 
 
@@ -1356,7 +2331,7 @@ function closeModal() {
    LOGOUT
 ========================================================= */
 
-function handleLogout() {
+async function handleLogout() {
 
   const confirmed =
     window.confirm(
@@ -1369,38 +2344,127 @@ function handleLogout() {
   }
 
 
-  /*
-    Supabase Auth sera ajouté ici.
-  */
+  const {
+    error
+  } =
+    await supabaseClient.auth.signOut();
+
+
+  if (error) {
+
+    console.error(
+      error
+    );
+
+    showNotification(
+      error.message,
+      "error"
+    );
+
+    return;
+  }
+
 
   showNotification(
-    "Déconnexion prête pour Supabase Auth.",
-    "info"
+    "Déconnexion effectuée.",
+    "success"
   );
-
 }
 
 
 /* =========================================================
-   NOTIFICATION
+   HELPERS
 ========================================================= */
+
+function formatPrice(
+  value
+) {
+
+  const number =
+    Number(value) || 0;
+
+
+  return (
+    new Intl.NumberFormat(
+      "fr-FR"
+    ).format(number)
+    +
+    " "
+    +
+    CONFIG.currency
+  );
+}
+
+
+function escapeHTML(
+  value
+) {
+
+  return String(
+    value ?? ""
+  )
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+}
+
+
+function createSlug(
+  text
+) {
+
+  return String(text)
+    .toLowerCase()
+    .normalize(
+      "NFD"
+    )
+    .replace(
+      /[\u0300-\u036f]/g,
+      ""
+    )
+    .replace(
+      /[^a-z0-9]+/g,
+      "-"
+    )
+    .replace(
+      /^-+|-+$/g,
+      "");
+}
+
 
 function showNotification(
   message,
   type = "info"
 ) {
 
-  const existing =
-    document.querySelector(
+  document
+    .querySelector(
       ".admin-notification"
-    );
-
-
-  existing?.remove();
+    )
+    ?.remove();
 
 
   const notification =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
 
   notification.className =
@@ -1411,25 +2475,25 @@ function showNotification(
     message;
 
 
-  const background =
-    type === "error"
-      ? "#c73535"
-      : "#111";
-
-
   notification.style.cssText = `
     position:fixed;
     right:20px;
     bottom:20px;
     z-index:5000;
-    max-width:360px;
+    max-width:380px;
     padding:14px 17px;
     border-radius:12px;
-    background:${background};
+    background:${
+      type === "error"
+        ? "#c73535"
+        : "#111"
+    };
     color:#fff;
     font-size:12px;
     font-weight:600;
-    box-shadow:0 15px 40px rgba(0,0,0,.18);
+    box-shadow:
+      0 15px 40px
+      rgba(0,0,0,.18);
   `;
 
 
@@ -1438,93 +2502,32 @@ function showNotification(
   );
 
 
-  setTimeout(() => {
-
-    notification.remove();
-
-  }, 3500);
-
-}
-
-
-/* =========================================================
-   HELPERS
-========================================================= */
-
-function formatPrice(value) {
-
-  const number =
-    Number(value) || 0;
-
-
-  return (
-    new Intl.NumberFormat(
-      "fr-FR"
-    ).format(number) +
-    " " +
-    ADMIN_CONFIG.currency
+  setTimeout(
+    () => {
+      notification.remove();
+    },
+    3500
   );
-
-}
-
-
-function formatDate(value) {
-
-  if (!value) {
-    return "—";
-  }
-
-
-  const date =
-    new Date(value);
-
-
-  if (Number.isNaN(date.getTime())) {
-    return "—";
-  }
-
-
-  return date.toLocaleDateString(
-    "fr-FR"
-  );
-
-}
-
-
-function escapeHTML(value) {
-
-  return String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-
 }
 
 
 /* =========================================================
-   GLOBAL FUNCTIONS
-   Needed by inline buttons
+   GLOBAL
 ========================================================= */
 
-window.showSection = showSection;
-window.closeModal = closeModal;
-window.editProduct = editProduct;
+window.showSection =
+  showSection;
 
+window.closeModal =
+  closeModal;
 
-/* =========================================================
-   DEBUG
-========================================================= */
+window.editProduct =
+  editProduct;
 
 window.JR_ADMIN = {
   STATE,
-  showSection,
-  openModal,
-  closeModal,
+  supabaseClient,
   loadProducts,
   loadCategories,
-  loadOrders,
-  loadCustomers
+  showSection
 };
-
