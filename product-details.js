@@ -1,26 +1,44 @@
 /* =========================================================
 JR SHOP — PRODUCT DETAILS
-Compatible avec :
-
-* products
-* product_variants
-* jr_cart
-* cart.js
-  ========================================================= */
+========================================================= */
 
 let product = null;
 let variants = [];
-let selectedVariant = null;
+
 let selectedColor = null;
 let selectedSize = null;
+let selectedVariant = null;
 let quantity = 1;
 
-const $ = (selector) =>
+/* =========================================================
+HELPERS
+========================================================= */
+
+const $ = selector =>
 document.querySelector(selector);
 
-/* =========================================================
-TOAST
-========================================================= */
+function escapeHtml(value) {
+
+return String(value ?? "").replace(
+/[&<>"']/g,
+char => ({
+"&": "&",
+"<": "<",
+">": ">",
+'"': """,
+"'": "'"
+})[char]
+);
+}
+
+function money(value) {
+
+return (
+new Intl.NumberFormat("fr-DZ")
+.format(Number(value || 0)) +
+" DA"
+);
+}
 
 function toast(message) {
 
@@ -29,6 +47,7 @@ const box = $("#toast");
 if (!box) return;
 
 box.textContent = message;
+
 box.classList.add("show");
 
 setTimeout(() => {
@@ -37,45 +56,10 @@ box.classList.remove("show");
 }
 
 /* =========================================================
-ESCAPE HTML
+CART
 ========================================================= */
 
-function escapeHtml(value) {
-
-return String(value ?? "").replace(
-/[&<>"']/g,
-character => ({
-"&": "&",
-"<": "<",
-">": ">",
-'"': """,
-"'": "'"
-})[character]
-);
-}
-
-/* =========================================================
-MONEY
-========================================================= */
-
-function money(value) {
-
-return (
-new Intl.NumberFormat("fr-DZ").format(
-Number(value || 0)
-) + " DA"
-);
-}
-
-/* =========================================================
-CART COUNT
-========================================================= */
-
-function updateCartCount() {
-
-const cartCount = $("#cartCount");
-
-if (!cartCount) return;
+function getCart() {
 
 try {
 
@@ -84,36 +68,54 @@ const cart = JSON.parse(
   localStorage.getItem("jr_cart") || "[]"
 );
 
-const count = cart.reduce(
-  (total, item) =>
-    total +
-    Number(
-      item.quantity ??
-      item.qty ??
-      0
-    ),
-  0
-);
-
-cartCount.textContent = count;
+return Array.isArray(cart)
+  ? cart
+  : [];
 ```
 
-} catch (error) {
+} catch {
 
 ```
-console.error(
-  "Cart count error:",
-  error
-);
-
-cartCount.textContent = "0";
+return [];
 ```
 
 }
+}
+
+function saveCart(cart) {
+
+localStorage.setItem(
+"jr_cart",
+JSON.stringify(cart)
+);
+
+updateCartCount();
+}
+
+function updateCartCount() {
+
+const box = $("#cartCount");
+
+if (!box) return;
+
+const cart = getCart();
+
+const count = cart.reduce(
+(total, item) =>
+total +
+Number(
+item.quantity ??
+item.qty ??
+0
+),
+0
+);
+
+box.textContent = count;
 }
 
 /* =========================================================
-GET PRODUCT ID
+PRODUCT ID
 ========================================================= */
 
 function getProductId() {
@@ -127,18 +129,29 @@ return params.get("id");
 }
 
 /* =========================================================
+IMAGE
+========================================================= */
+
+function getImage(item) {
+
+return (
+item?.image_url ||
+item?.image ||
+"https://placehold.co/800x1000?text=JR+Shop"
+);
+}
+
+/* =========================================================
 LOAD PRODUCT
 ========================================================= */
 
 async function loadProduct() {
 
-const container =
-$("#productContainer");
+const box =
+$("#productDetails");
 
 const productId =
 getProductId();
-
-if (!container) return;
 
 if (!productId) {
 
@@ -155,47 +168,54 @@ return;
 try {
 
 ```
-const {
-  data,
-  error
-} =
+const result =
   await supabaseClient
     .from("products")
     .select("*")
     .eq("id", productId)
-    .eq("is_active", true)
-    .single();
+    .maybeSingle();
 
 
-if (error) {
+if (result.error) {
+  throw result.error;
+}
 
-  console.error(
-    "Product error:",
-    error
-  );
+
+if (!result.data) {
 
   showError(
-    "Impossible de charger ce produit."
+    "Ce produit n'existe pas."
   );
 
   return;
 }
 
 
-if (!data) {
+product =
+  result.data;
 
-  showError(
-    "Produit introuvable."
+
+const variantsResult =
+  await supabaseClient
+    .from("product_variants")
+    .select("*")
+    .eq("product_id", product.id);
+
+
+if (!variantsResult.error) {
+
+  variants =
+    variantsResult.data || [];
+
+} else {
+
+  variants = [];
+
+  console.warn(
+    "Variants:",
+    variantsResult.error
   );
-
-  return;
 }
-
-
-product = data;
-
-
-await loadVariants();
 
 
 renderProduct();
@@ -205,12 +225,12 @@ renderProduct();
 
 ```
 console.error(
-  "Product loading error:",
+  "Product error:",
   error
 );
 
 showError(
-  "Une erreur est survenue."
+  "Impossible de charger le produit."
 );
 ```
 
@@ -218,273 +238,36 @@ showError(
 }
 
 /* =========================================================
-LOAD VARIANTS
+ERROR
 ========================================================= */
 
-async function loadVariants() {
+function showError(message) {
 
-if (!product?.id) return;
+const box =
+$("#productDetails");
 
-try {
+if (!box) return;
 
-```
-const {
-  data,
-  error
-} =
-  await supabaseClient
-    .from("product_variants")
-    .select("*")
-    .eq("product_id", product.id);
-
-
-if (error) {
-
-  /*
-    Si la table ou certaines colonnes
-    ne sont pas encore utilisées,
-    on garde le produit fonctionnel.
-  */
-
-  console.warn(
-    "Variants not available:",
-    error.message
-  );
-
-  variants = [];
-
-  return;
-}
-
-
-variants = data || [];
-```
-
-} catch (error) {
+box.innerHTML = `
 
 ```
-console.warn(
-  "Variants loading error:",
-  error
-);
+<div class="error">
 
-variants = [];
+  <h2>
+    ${escapeHtml(message)}
+  </h2>
+
+  <a
+    class="btn primary"
+    href="index.html"
+  >
+    Retour aux produits
+  </a>
+
+</div>
 ```
 
-}
-}
-
-/* =========================================================
-IMAGE LIST
-========================================================= */
-
-function getProductImages() {
-
-const images = [];
-
-if (product?.image_url) {
-images.push(product.image_url);
-}
-
-/*
-Support de plusieurs formats
-possibles pour les futures images.
-*/
-
-if (
-Array.isArray(
-product?.images
-)
-) {
-
-```
-product.images.forEach(image => {
-
-  const url =
-    typeof image === "string"
-      ? image
-      : image?.url ||
-        image?.image_url;
-
-  if (
-    url &&
-    !images.includes(url)
-  ) {
-    images.push(url);
-  }
-
-});
-```
-
-}
-
-if (!images.length) {
-
-```
-images.push(
-  "https://placehold.co/700x800?text=JR+Shop"
-);
-```
-
-}
-
-return images;
-}
-
-/* =========================================================
-COLORS
-========================================================= */
-
-function getColors() {
-
-return [
-...new Set(
-variants
-.map(
-variant =>
-variant.color
-)
-.filter(Boolean)
-)
-];
-}
-
-/* =========================================================
-SIZES
-========================================================= */
-
-function getSizes() {
-
-return [
-...new Set(
-variants
-.map(
-variant =>
-variant.size
-)
-.filter(Boolean)
-)
-];
-}
-
-/* =========================================================
-FIND SELECTED VARIANT
-========================================================= */
-
-function findVariant() {
-
-if (!variants.length) {
-
-```
-selectedVariant = null;
-
-return;
-```
-
-}
-
-let matches =
-variants.filter(
-variant => {
-
-```
-    const colorMatch =
-      !selectedColor ||
-      String(
-        variant.color ?? ""
-      ) === String(
-        selectedColor
-      );
-
-    const sizeMatch =
-      !selectedSize ||
-      String(
-        variant.size ?? ""
-      ) === String(
-        selectedSize
-      );
-
-    return (
-      colorMatch &&
-      sizeMatch
-    );
-  }
-);
-```
-
-selectedVariant =
-matches.length
-? matches[0]
-: null;
-}
-
-/* =========================================================
-CURRENT STOCK
-========================================================= */
-
-function getCurrentStock() {
-
-if (selectedVariant) {
-
-```
-return Number(
-  selectedVariant.stock || 0
-);
-```
-
-}
-
-return Number(
-product?.stock || 0
-);
-}
-
-/* =========================================================
-CURRENT PRICE
-========================================================= */
-
-function getCurrentPrice() {
-
-if (
-selectedVariant &&
-selectedVariant.price != null
-) {
-
-```
-return Number(
-  selectedVariant.price
-);
-```
-
-}
-
-return Number(
-product?.price || 0
-);
-}
-
-/* =========================================================
-CURRENT OLD PRICE
-========================================================= */
-
-function getCurrentOldPrice() {
-
-if (
-selectedVariant &&
-selectedVariant.old_price != null
-) {
-
-```
-return Number(
-  selectedVariant.old_price
-);
-```
-
-}
-
-return Number(
-product?.old_price || 0
-);
+`;
 }
 
 /* =========================================================
@@ -493,124 +276,137 @@ RENDER PRODUCT
 
 function renderProduct() {
 
-const container =
-$("#productContainer");
+const box =
+$("#productDetails");
 
-if (!container || !product) {
-return;
-}
+if (!box || !product) return;
 
-const images =
-getProductImages();
-
-const colors =
-getColors();
-
-const sizes =
-getSizes();
-
-if (
-colors.length &&
-!selectedColor
-) {
-selectedColor =
-colors[0];
-}
-
-if (
-sizes.length &&
-!selectedSize
-) {
-selectedSize =
-sizes[0];
-}
-
-findVariant();
-
-const price =
-getCurrentPrice();
+const mainImage =
+getImage(product);
 
 const oldPrice =
-getCurrentOldPrice();
+Number(product.old_price || 0);
 
-const stock =
-getCurrentStock();
+const currentPrice =
+Number(product.price || 0);
 
-container.innerHTML = `
+const discount =
+oldPrice > currentPrice &&
+oldPrice > 0
+? Math.round(
+((oldPrice - currentPrice) /
+oldPrice) *
+100
+)
+: 0;
+
+const colors = [
+...new Set(
+variants
+.map(v => v.color)
+.filter(Boolean)
+)
+];
+
+const sizes = [
+...new Set(
+variants
+.map(v => v.size)
+.filter(Boolean)
+)
+];
+
+const images = [
+product.image_url,
+product.image_2,
+product.image_3,
+product.image_4
+].filter(Boolean);
+
+if (!images.length) {
+images.push(mainImage);
+}
+
+box.innerHTML = `
 
 ```
-<section class="product-details">
+<div class="product-layout">
 
   <!-- GALLERY -->
 
-  <div class="product-gallery">
+  <div class="gallery">
 
-    <div class="main-image-wrap">
+    <div class="thumbs" id="thumbs">
 
-      <img
-        id="mainProductImage"
-        src="${escapeHtml(images[0])}"
-        alt="${escapeHtml(product.name)}"
-      >
+      ${images.map(
+        (image, index) => `
+
+          <button
+            type="button"
+            class="thumb ${
+              index === 0
+                ? "active"
+                : ""
+            }"
+            data-image="${escapeHtml(image)}"
+          >
+
+            <img
+              src="${escapeHtml(image)}"
+              alt="${escapeHtml(product.name)}"
+            >
+
+          </button>
+
+        `
+      ).join("")}
 
     </div>
 
 
-    <div class="thumbs">
+    <div class="main-image-box">
 
-      ${images.map((image, index) => `
-
-        <button
-          type="button"
-          class="thumb ${
-            index === 0
-              ? "active"
-              : ""
-          }"
-          data-image="${escapeHtml(image)}"
-        >
-
-          <img
-            src="${escapeHtml(image)}"
-            alt="${escapeHtml(product.name)}"
-            loading="lazy"
-          >
-
-        </button>
-
-      `).join("")}
+      <img
+        id="mainImage"
+        class="main-image"
+        src="${escapeHtml(mainImage)}"
+        alt="${escapeHtml(product.name)}"
+      >
 
     </div>
 
   </div>
 
 
-  <!-- INFO -->
+  <!-- PRODUCT INFO -->
 
   <div class="product-info">
 
-    <h1>
+    <div class="product-brand">
+      JR SHOP
+    </div>
+
+
+    <h1 class="product-name">
       ${escapeHtml(product.name)}
     </h1>
 
 
-    <div class="price-box">
+    <div class="price-line">
 
-      <strong
-        id="productPrice"
-        class="current-price"
-      >
-        ${money(price)}
+      <strong class="price">
+        ${money(currentPrice)}
       </strong>
 
       ${
-        oldPrice > price
+        oldPrice > currentPrice
           ? `
-            <span
-              id="productOldPrice"
-              class="old-price"
-            >
+            <span class="old-price">
               ${money(oldPrice)}
+            </span>
+
+            <span class="sale">
+              -${discount}%
             </span>
           `
           : ""
@@ -619,57 +415,45 @@ container.innerHTML = `
     </div>
 
 
-    <div
-      id="stockText"
-      class="stock ${
-        stock > 0
-          ? "ok"
-          : "out"
-      }"
-    >
-
-      ${
-        stock > 0
-          ? `Stock disponible : ${stock}`
-          : "Rupture de stock"
-      }
-
+    <div class="rating">
+      <span>★★★★★</span>
+      <span> Aucun avis</span>
     </div>
 
-
-    <!-- COLORS -->
 
     ${
       colors.length
         ? `
 
-          <div class="option-group">
+          <div class="option-section">
 
-            <h3>
-              Couleur
-            </h3>
+            <div class="option-header">
 
-            <div
-              id="colors"
-              class="options"
-            >
+              <strong>
+                Couleur :
+                <span id="selectedColorLabel">
+                  Choisissez
+                </span>
+              </strong>
 
-              ${colors.map(color => `
+            </div>
 
-                <button
-                  type="button"
-                  class="option-btn ${
-                    String(color) ===
-                    String(selectedColor)
-                      ? "active"
-                      : ""
-                  }"
-                  data-color="${escapeHtml(color)}"
-                >
-                  ${escapeHtml(color)}
-                </button>
 
-              `).join("")}
+            <div class="options">
+
+              ${colors.map(
+                color => `
+
+                  <button
+                    type="button"
+                    class="option color-option"
+                    data-color="${escapeHtml(color)}"
+                  >
+                    ${escapeHtml(color)}
+                  </button>
+
+                `
+              ).join("")}
 
             </div>
 
@@ -679,40 +463,48 @@ container.innerHTML = `
         : ""
     }
 
-
-    <!-- SIZES -->
 
     ${
       sizes.length
         ? `
 
-          <div class="option-group">
+          <div class="option-section">
 
-            <h3>
-              Taille
-            </h3>
+            <div class="option-header">
 
-            <div
-              id="sizes"
-              class="options"
-            >
+              <strong>
+                Taille :
+                <span id="selectedSizeLabel">
+                  Choisissez
+                </span>
+              </strong>
 
-              ${sizes.map(size => `
+              <button
+                type="button"
+                class="size-guide-btn"
+                id="sizeGuideButton"
+              >
+                Guide des tailles
+              </button>
 
-                <button
-                  type="button"
-                  class="option-btn ${
-                    String(size) ===
-                    String(selectedSize)
-                      ? "active"
-                      : ""
-                  }"
-                  data-size="${escapeHtml(size)}"
-                >
-                  ${escapeHtml(size)}
-                </button>
+            </div>
 
-              `).join("")}
+
+            <div class="options">
+
+              ${sizes.map(
+                size => `
+
+                  <button
+                    type="button"
+                    class="option"
+                    data-size="${escapeHtml(size)}"
+                  >
+                    ${escapeHtml(size)}
+                  </button>
+
+                `
+              ).join("")}
 
             </div>
 
@@ -723,26 +515,32 @@ container.innerHTML = `
     }
 
 
-    <!-- QUANTITY -->
+    <div class="stock" id="stockStatus">
+      ${getAvailableStock() > 0
+        ? "✓ Disponible"
+        : "Rupture de stock"}
+    </div>
 
-    <div class="quantity-box">
+
+    <div class="quantity">
 
       <button
         type="button"
-        id="minusBtn"
+        id="minus"
       >
         −
       </button>
 
-
-      <span id="quantity">
-        1
-      </span>
-
+      <input
+        id="quantity"
+        type="number"
+        value="1"
+        min="1"
+      >
 
       <button
         type="button"
-        id="plusBtn"
+        id="plus"
       >
         +
       </button>
@@ -750,29 +548,21 @@ container.innerHTML = `
     </div>
 
 
-    <!-- ACTIONS -->
-
     <div class="actions">
 
       <button
         type="button"
-        id="addToCartBtn"
-        class="btn primary"
-        ${stock <= 0 ? "disabled" : ""}
+        id="addButton"
+        class="action-btn add-btn"
       >
-        ${
-          stock > 0
-            ? "Ajouter au panier"
-            : "Rupture de stock"
-        }
+        Ajouter au panier
       </button>
 
 
       <button
         type="button"
-        id="buyNowBtn"
-        class="btn"
-        ${stock <= 0 ? "disabled" : ""}
+        id="buyButton"
+        class="action-btn buy-btn"
       >
         Acheter maintenant
       </button>
@@ -780,168 +570,170 @@ container.innerHTML = `
     </div>
 
 
-    <!-- DESCRIPTION -->
+    <div class="delivery-box">
 
-    ${
-      product.description
-        ? `
+      <div class="delivery-row">
 
-          <div class="description">
+        <span>🚚</span>
 
-            <h2>
-              Description
-            </h2>
+        <div>
+          <strong>Livraison</strong>
+          Livraison à domicile en Algérie.
+        </div>
 
-            <p>
-              ${escapeHtml(
-                product.description
-              )}
-            </p>
+      </div>
 
-          </div>
 
-        `
-        : ""
-    }
+      <div class="delivery-row">
+
+        <span>↩️</span>
+
+        <div>
+          <strong>Retours</strong>
+          Consultez notre politique de retour.
+        </div>
+
+      </div>
+
+
+      <div class="delivery-row">
+
+        <span>🔒</span>
+
+        <div>
+          <strong>Paiement</strong>
+          Paiement sécurisé à la livraison.
+        </div>
+
+      </div>
+
+    </div>
 
   </div>
+
+</div>
+
+
+<!-- DETAILS -->
+
+<section class="details-section">
+
+  <div class="details-block">
+
+    <h2>
+      Description
+    </h2>
+
+    <div class="description">
+
+      ${escapeHtml(
+        product.description ||
+        product.details ||
+        "Découvrez ce produit JR Shop."
+      )}
+
+    </div>
+
+  </div>
+
+
+  ${
+    sizes.length
+      ? `
+
+        <div
+          class="details-block"
+          id="sizeGuide"
+        >
+
+          <h2>
+            Guide des tailles
+          </h2>
+
+
+          <table class="size-table">
+
+            <thead>
+
+              <tr>
+                <th>Taille</th>
+                <th>Poitrine</th>
+                <th>Taille</th>
+                <th>Hanches</th>
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              <tr>
+                <td>S</td>
+                <td>88-92</td>
+                <td>72-76</td>
+                <td>90-94</td>
+              </tr>
+
+              <tr>
+                <td>M</td>
+                <td>92-96</td>
+                <td>76-80</td>
+                <td>94-98</td>
+              </tr>
+
+              <tr>
+                <td>L</td>
+                <td>96-100</td>
+                <td>80-84</td>
+                <td>98-102</td>
+              </tr>
+
+              <tr>
+                <td>XL</td>
+                <td>100-106</td>
+                <td>84-90</td>
+                <td>102-108</td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      `
+      : ""
+  }
 
 </section>
 ```
 
 `;
 
-bindProductEvents();
+const breadcrumb =
+$("#breadcrumbProduct");
+
+if (breadcrumb) {
+breadcrumb.textContent =
+product.name;
+}
+
+setupGallery();
+
+setupVariants();
+
+setupQuantity();
+
+setupActions();
+
+updateProductState();
 }
 
 /* =========================================================
-UPDATE PRODUCT UI
+GALLERY
 ========================================================= */
 
-function updateProductUI() {
-
-findVariant();
-
-const price =
-getCurrentPrice();
-
-const oldPrice =
-getCurrentOldPrice();
-
-const stock =
-getCurrentStock();
-
-const priceBox =
-$("#productPrice");
-
-if (priceBox) {
-priceBox.textContent =
-money(price);
-}
-
-const oldPriceBox =
-$("#productOldPrice");
-
-if (oldPriceBox) {
-
-```
-if (oldPrice > price) {
-
-  oldPriceBox.textContent =
-    money(oldPrice);
-
-  oldPriceBox.style.display =
-    "";
-
-} else {
-
-  oldPriceBox.style.display =
-    "none";
-}
-```
-
-}
-
-const stockText =
-$("#stockText");
-
-if (stockText) {
-
-```
-stockText.className =
-  "stock " +
-  (
-    stock > 0
-      ? "ok"
-      : "out"
-  );
-
-stockText.textContent =
-  stock > 0
-    ? `Stock disponible : ${stock}`
-    : "Rupture de stock";
-```
-
-}
-
-quantity =
-Math.min(
-quantity,
-Math.max(
-stock,
-1
-)
-);
-
-if (quantity < 1) {
-quantity = 1;
-}
-
-const quantityBox =
-$("#quantity");
-
-if (quantityBox) {
-quantityBox.textContent =
-quantity;
-}
-
-const addButton =
-$("#addToCartBtn");
-
-const buyButton =
-$("#buyNowBtn");
-
-if (addButton) {
-
-```
-addButton.disabled =
-  stock <= 0;
-
-addButton.textContent =
-  stock > 0
-    ? "Ajouter au panier"
-    : "Rupture de stock";
-```
-
-}
-
-if (buyButton) {
-
-```
-buyButton.disabled =
-  stock <= 0;
-```
-
-}
-}
-
-/* =========================================================
-EVENTS
-========================================================= */
-
-function bindProductEvents() {
-
-/* IMAGES */
+function setupGallery() {
 
 document
 .querySelectorAll(".thumb")
@@ -955,11 +747,14 @@ document
       const image =
         button.dataset.image;
 
+
       const main =
-        $("#mainProductImage");
+        $("#mainImage");
+
 
       if (main) {
-        main.src = image;
+        main.src =
+          image;
       }
 
 
@@ -975,17 +770,23 @@ document
       button.classList.add(
         "active"
       );
+
     }
   );
+
 });
 ```
 
-/* COLORS */
+}
+
+/* =========================================================
+VARIANTS
+========================================================= */
+
+function setupVariants() {
 
 document
-.querySelectorAll(
-"[data-color]"
-)
+.querySelectorAll("[data-color]")
 .forEach(button => {
 
 ```
@@ -995,6 +796,7 @@ document
 
       selectedColor =
         button.dataset.color;
+
 
       document
         .querySelectorAll(
@@ -1006,25 +808,31 @@ document
           )
         );
 
+
       button.classList.add(
         "active"
       );
 
 
-      quantity = 1;
+      const label =
+        $("#selectedColorLabel");
 
-      updateProductUI();
+
+      if (label) {
+        label.textContent =
+          selectedColor;
+      }
+
+
+      updateProductState();
     }
   );
+
 });
 ```
 
-/* SIZES */
-
 document
-.querySelectorAll(
-"[data-size]"
-)
+.querySelectorAll("[data-size]")
 .forEach(button => {
 
 ```
@@ -1034,6 +842,7 @@ document
 
       selectedSize =
         button.dataset.size;
+
 
       document
         .querySelectorAll(
@@ -1045,58 +854,309 @@ document
           )
         );
 
+
       button.classList.add(
         "active"
       );
 
 
-      quantity = 1;
+      const label =
+        $("#selectedSizeLabel");
 
-      updateProductUI();
+
+      if (label) {
+        label.textContent =
+          selectedSize;
+      }
+
+
+      updateProductState();
     }
   );
+
 });
 ```
 
-/* MINUS */
-
-const minus =
-$("#minusBtn");
-
-if (minus) {
+$("#sizeGuideButton")
+?.addEventListener(
+"click",
+() => {
 
 ```
-minus.addEventListener(
-  "click",
-  () => {
+    $("#sizeGuide")
+      ?.scrollIntoView({
+        behavior: "smooth"
+      });
 
-    quantity =
-      Math.max(
-        1,
-        quantity - 1
-      );
-
-    updateProductUI();
   }
 );
 ```
 
 }
 
-/* PLUS */
+/* =========================================================
+SELECT VARIANT
+========================================================= */
 
-const plus =
-$("#plusBtn");
+function findVariant() {
 
-if (plus) {
+if (!variants.length) {
+return null;
+}
+
+let matches =
+[...variants];
+
+if (selectedColor) {
 
 ```
-plus.addEventListener(
-  "click",
-  () => {
+matches =
+  matches.filter(
+    variant =>
+      String(
+        variant.color || ""
+      ) ===
+      String(
+        selectedColor
+      )
+  );
+```
 
+}
+
+if (selectedSize) {
+
+```
+matches =
+  matches.filter(
+    variant =>
+      String(
+        variant.size || ""
+      ) ===
+      String(
+        selectedSize
+      )
+  );
+```
+
+}
+
+return matches[0] || null;
+}
+
+/* =========================================================
+STOCK
+========================================================= */
+
+function getAvailableStock() {
+
+const variant =
+findVariant();
+
+if (variants.length) {
+
+```
+if (!variant) {
+  return 0;
+}
+
+
+return Number(
+  variant.stock || 0
+);
+```
+
+}
+
+return Number(
+product?.stock || 0
+);
+}
+
+/* =========================================================
+PRODUCT STATE
+========================================================= */
+
+function updateProductState() {
+
+const variant =
+findVariant();
+
+selectedVariant =
+variant;
+
+const stock =
+getAvailableStock();
+
+const stockBox =
+$("#stockStatus");
+
+const addButton =
+$("#addButton");
+
+const buyButton =
+$("#buyButton");
+
+const input =
+$("#quantity");
+
+if (variants.length && !variant) {
+
+```
+if (stockBox) {
+
+  stockBox.textContent =
+    "Choisissez la couleur et la taille";
+
+  stockBox.className =
+    "stock";
+
+}
+
+
+if (addButton) {
+  addButton.disabled = true;
+}
+
+
+if (buyButton) {
+  buyButton.disabled = true;
+}
+
+
+return;
+```
+
+}
+
+if (stock <= 0) {
+
+```
+if (stockBox) {
+
+  stockBox.textContent =
+    "Rupture de stock";
+
+  stockBox.className =
+    "stock out";
+
+}
+
+
+if (addButton) {
+  addButton.disabled = true;
+}
+
+
+if (buyButton) {
+  buyButton.disabled = true;
+}
+
+
+return;
+```
+
+}
+
+if (stock <= 5) {
+
+```
+if (stockBox) {
+
+  stockBox.textContent =
+    `✓ Plus que ${stock} disponible(s)`;
+
+  stockBox.className =
+    "stock ok";
+
+}
+```
+
+} else {
+
+```
+if (stockBox) {
+
+  stockBox.textContent =
+    "✓ Disponible";
+
+  stockBox.className =
+    "stock ok";
+
+}
+```
+
+}
+
+if (addButton) {
+addButton.disabled = false;
+}
+
+if (buyButton) {
+buyButton.disabled = false;
+}
+
+if (input) {
+
+```
+input.max =
+  stock;
+
+
+if (
+  Number(input.value) >
+  stock
+) {
+
+  input.value =
+    stock;
+
+  quantity =
+    stock;
+}
+```
+
+}
+}
+
+/* =========================================================
+QUANTITY
+========================================================= */
+
+function setupQuantity() {
+
+const input =
+$("#quantity");
+
+$("#minus")
+?.addEventListener(
+"click",
+() => {
+
+```
+    quantity =
+      Math.max(
+        1,
+        quantity - 1
+      );
+
+
+    input.value =
+      quantity;
+
+  }
+);
+```
+
+$("#plus")
+?.addEventListener(
+"click",
+() => {
+
+```
     const stock =
-      getCurrentStock();
+      getAvailableStock();
+
 
     if (
       stock > 0 &&
@@ -1110,72 +1170,84 @@ plus.addEventListener(
       return;
     }
 
+
     quantity++;
 
-    updateProductUI();
+
+    input.value =
+      quantity;
+
   }
 );
 ```
 
-}
-
-/* ADD TO CART */
-
-const addButton =
-$("#addToCartBtn");
-
-if (addButton) {
+input?.addEventListener(
+"input",
+() => {
 
 ```
-addButton.addEventListener(
-  "click",
-  () => {
-
-    addProductToCart(
-      false
+  let value =
+    Number(
+      input.value || 1
     );
+
+
+  if (value < 1) {
+    value = 1;
   }
-);
-```
+
+
+  const stock =
+    getAvailableStock();
+
+
+  if (
+    stock > 0 &&
+    value > stock
+  ) {
+
+    value =
+      stock;
+  }
+
+
+  quantity =
+    value;
+
+  input.value =
+    value;
 
 }
-
-/* BUY NOW */
-
-const buyButton =
-$("#buyNowBtn");
-
-if (buyButton) {
-
 ```
-buyButton.addEventListener(
-  "click",
-  () => {
 
-    addProductToCart(
-      true
-    );
-  }
 );
-```
-
-}
 }
 
 /* =========================================================
-ADD PRODUCT TO CART
+ADD TO CART
 ========================================================= */
 
-function addProductToCart(
-goToCheckout
-) {
+function addToCart() {
 
 if (!product) return;
 
-findVariant();
-
 const stock =
-getCurrentStock();
+getAvailableStock();
+
+if (
+variants.length &&
+!selectedVariant
+) {
+
+```
+toast(
+  "Veuillez choisir une couleur et une taille"
+);
+
+return;
+```
+
+}
 
 if (stock <= 0) {
 
@@ -1189,9 +1261,7 @@ return;
 
 }
 
-if (
-quantity > stock
-) {
+if (quantity > stock) {
 
 ```
 toast(
@@ -1203,69 +1273,45 @@ return;
 
 }
 
-/*
-Structure compatible avec
-cart.js actuel.
-*/
-
-const cart =
-getCart();
-
-const productId =
-product.id;
+const price =
+Number(
+selectedVariant?.price ??
+product.price ??
+0
+);
 
 const variantId =
 selectedVariant?.id ||
 null;
 
-const itemKey =
-String(productId) +
-"_" +
-String(
-variantId ||
-"no-variant"
-);
+const cart =
+getCart();
 
-const existingIndex =
-cart.findIndex(
-item => {
-
-```
-    const existingProductId =
-      item.product_id ??
-      item.id;
-
-    const existingVariantId =
-      item.variant_id ??
-      null;
-
-    const existingKey =
-      String(
-        existingProductId
-      ) +
-      "_" +
-      String(
-        existingVariantId ||
-        "no-variant"
-      );
-
-    return (
-      existingKey ===
-      itemKey
-    );
-  }
-);
-```
-
-if (
-existingIndex >= 0
-) {
-
-```
 const existing =
-  cart[existingIndex];
+cart.find(
+item =>
 
+```
+    String(
+      item.product_id ??
+      item.id
+    ) ===
+    String(product.id)
 
+    &&
+
+    String(
+      item.variant_id || ""
+    ) ===
+    String(
+      variantId || ""
+    )
+);
+```
+
+if (existing) {
+
+```
 const oldQuantity =
   Number(
     existing.quantity ??
@@ -1293,10 +1339,6 @@ existing.quantity =
   quantity;
 
 
-/*
-  Nettoyage ancien format.
-*/
-
 delete existing.qty;
 ```
 
@@ -1306,7 +1348,7 @@ delete existing.qty;
 cart.push({
 
   product_id:
-    productId,
+    product.id,
 
   variant_id:
     variantId,
@@ -1315,14 +1357,15 @@ cart.push({
     product.name,
 
   price:
-    getCurrentPrice(),
+    price,
 
   old_price:
-    getCurrentOldPrice(),
+    Number(
+      product.old_price || 0
+    ),
 
   image_url:
-    product.image_url ||
-    "",
+    getImage(product),
 
   color:
     selectedVariant?.color ??
@@ -1339,28 +1382,13 @@ cart.push({
 
   stock:
     stock
+
 });
 ```
 
 }
 
-localStorage.setItem(
-"jr_cart",
-JSON.stringify(cart)
-);
-
-updateCartCount();
-
-if (goToCheckout) {
-
-```
-window.location.href =
-  "cart.html";
-
-return;
-```
-
-}
+saveCart(cart);
 
 toast(
 "Produit ajouté au panier ✅"
@@ -1368,79 +1396,56 @@ toast(
 }
 
 /* =========================================================
-CART READER
+BUY NOW
 ========================================================= */
 
-function getCart() {
+function buyNow() {
 
-try {
+const before =
+getCart().length;
+
+addToCart();
+
+setTimeout(() => {
 
 ```
 const cart =
-  JSON.parse(
-    localStorage.getItem(
-      "jr_cart"
-    ) || "[]"
-  );
+  getCart();
 
-return Array.isArray(cart)
-  ? cart
-  : [];
-```
 
-} catch (error) {
+if (
+  cart.length >= before
+) {
 
-```
-console.error(
-  "Cart read error:",
-  error
-);
-
-return [];
-```
-
+  window.location.href =
+    "cart.html";
 }
+```
+
+}, 250);
 }
 
 /* =========================================================
-ERROR
+ACTIONS
 ========================================================= */
 
-function showError(message) {
+function setupActions() {
 
-const container =
-$("#productContainer");
+$("#addButton")
+?.addEventListener(
+"click",
+addToCart
+);
 
-if (!container) return;
-
-container.innerHTML = `
-
-```
-<div class="card error-box">
-
-  <h2>
-    ${escapeHtml(message)}
-  </h2>
-
-  <p>
-    Le produit demandé n'est pas disponible.
-  </p>
-
-  <a
-    href="index.html"
-    class="btn primary"
-  >
-    Retour aux produits
-  </a>
-
-</div>
-```
-
-`;
+$("#buyButton")
+?.addEventListener(
+"click",
+buyNow
+);
 }
 
 /* =========================================================
-INITIALIZE
+START
 ========================================================= */
 
 document.addEventListener(
