@@ -1,673 +1,176 @@
-const $ = (selector) => document.querySelector(selector);
+<!DOCTYPE html>
 
-/* =========================
-TOAST
-========================= */
+<html lang="fr">
 
-function toast(message) {
-const box = $("#toast");
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-if (!box) return;
+  <title>Produit — JR Shop</title>
 
-box.textContent = message;
-box.classList.add("show");
+  <link rel="stylesheet" href="style.css">
 
-setTimeout(() => {
-box.classList.remove("show");
-}, 2500);
-}
-
-/* =========================
-CART
-========================= */
-
-function getCart() {
-try {
-return JSON.parse(
-localStorage.getItem("jr_cart") || "[]"
-);
-} catch (error) {
-console.error("Cart error:", error);
-return [];
-}
-}
-
-function saveCart(cart) {
-localStorage.setItem(
-"jr_cart",
-JSON.stringify(cart)
-);
-
-updateCartCount();
-}
-
-function updateCartCount() {
-const countBox = $("#cartCount");
-
-if (!countBox) return;
-
-const cart = getCart();
-
-const count = cart.reduce(
-(total, item) =>
-total + Number(item.qty || 0),
-0
-);
-
-countBox.textContent = count;
-}
-
-/* =========================
-MONEY
-========================= */
-
-function money(value) {
-return (
-new Intl.NumberFormat("fr-DZ")
-.format(Number(value || 0)) + " DA"
-);
-}
-
-/* =========================
-ESCAPE HTML
-========================= */
-
-function escapeHtml(value) {
-return String(value ?? "").replace(
-/[&<>"']/g,
-(character) => ({
-"&": "&",
-"<": "<",
-">": ">",
-'"': """,
-"'": "'"
-})[character]
-);
-}
-
-/* =========================
-GET PRODUCT ID
-========================= */
-
-function getProductId() {
-const params =
-new URLSearchParams(
-window.location.search
-);
-
-return params.get("id");
-}
-
-/* =========================
-ADD TO CART
-========================= */
-
-function addProductToCart(product, quantity) {
-if (!product) return;
-
-const stock =
-Number(product.stock || 0);
-
-if (stock <= 0) {
-toast("Produit en rupture de stock");
-return;
-}
-
-quantity =
-Math.floor(Number(quantity || 1));
-
-if (quantity < 1) {
-quantity = 1;
-}
-
-if (quantity > stock) {
-toast("Stock insuffisant");
-return;
-}
-
-const cart = getCart();
-
-const existing =
-cart.find(
-(item) =>
-String(item.id) ===
-String(product.id)
-);
-
-if (existing) {
-
-```
-const newQuantity =
-  Number(existing.qty || 0) +
-  quantity;
-
-if (newQuantity > stock) {
-  toast("Stock insuffisant");
-  return;
-}
-
-existing.qty = newQuantity;
-```
-
-} else {
-
-```
-cart.push({
-  id: product.id,
-
-  name: product.name,
-
-  price:
-    Number(product.price || 0),
-
-  image_url:
-    product.image_url ||
-    product.image ||
-    "",
-
-  qty: quantity,
-
-  stock: stock
-});
-```
-
-}
-
-saveCart(cart);
-
-toast(
-"Produit ajouté au panier ✅"
-);
-}
-
-/* =========================
-RENDER PRODUCT
-========================= */
-
-function renderProduct(product) {
-
-const container =
-$("#productContainer");
-
-if (!container) return;
-
-const image =
-product.image_url ||
-product.image ||
-"https://placehold.co/800x800?text=JR+Shop";
-
-const stock =
-Number(product.stock || 0);
-
-const oldPrice =
-Number(product.old_price || 0);
-
-container.innerHTML = `
-
-```
-<div class="product-details">
-
-  <!-- IMAGE -->
-
-  <div class="product-gallery">
-
-    <img
-      class="product-main-image"
-      src="${escapeHtml(image)}"
-      alt="${escapeHtml(product.name)}"
-    >
-
-  </div>
-
-
-  <!-- INFO -->
-
-  <div class="product-info">
-
-    <a
-      href="index.html"
-      class="back-link"
-    >
-      ← Retour aux produits
-    </a>
-
-
-    <h1>
-      ${escapeHtml(product.name)}
-    </h1>
-
-
-    <div class="product-price">
-
-      ${money(product.price)}
-
-      ${
-        oldPrice > Number(product.price || 0)
-          ? `
-            <span class="product-old-price">
-              ${money(oldPrice)}
-            </span>
-          `
-          : ""
-      }
-
-    </div>
-
-
-    <div class="product-stock">
-
-      ${
-        stock > 0
-          ? `Disponible — ${stock} en stock`
-          : "Rupture de stock"
-      }
-
-    </div>
-
-
-    ${
-      product.description
-        ? `
-          <div class="product-description">
-            ${escapeHtml(product.description)}
-          </div>
-        `
-        : `
-          <div class="product-description">
-            Découvrez ce produit JR Shop.
-          </div>
-        `
+  <style>
+    .product-details {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 40px;
+      margin: 35px 0 60px;
     }
 
-
-    ${
-      stock > 0
-        ? `
-
-          <div class="quantity-box">
-
-            <button
-              type="button"
-              id="minusBtn"
-            >
-              −
-            </button>
-
-
-            <input
-              id="quantity"
-              type="number"
-              min="1"
-              max="${stock}"
-              value="1"
-            >
-
-
-            <button
-              type="button"
-              id="plusBtn"
-            >
-              +
-            </button>
-
-          </div>
-
-
-          <div class="buy-actions">
-
-            <button
-              type="button"
-              class="btn primary"
-              id="addToCartBtn"
-            >
-              Ajouter au panier
-            </button>
-
-
-            <button
-              type="button"
-              class="btn"
-              id="buyNowBtn"
-            >
-              Acheter maintenant
-            </button>
-
-          </div>
-
-        `
-        : `
-
-          <button
-            type="button"
-            class="btn"
-            disabled
-          >
-            Rupture de stock
-          </button>
-
-        `
+    .product-gallery,
+    .product-info {
+      background: #fff;
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.06);
     }
 
-  </div>
+    .product-main-image {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
+      border-radius: 14px;
+      background: #f7f7f7;
+    }
 
+    .product-info h1 {
+      margin-top: 0;
+      font-size: 32px;
+    }
+
+    .product-price {
+      font-size: 28px;
+      font-weight: 800;
+      margin: 18px 0;
+    }
+
+    .product-old-price {
+      color: #999;
+      text-decoration: line-through;
+      margin-left: 10px;
+      font-size: 18px;
+    }
+
+    .product-stock {
+      display: inline-block;
+      margin: 10px 0 20px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #f1f1f1;
+      font-size: 14px;
+    }
+
+    .product-description {
+      line-height: 1.8;
+      color: #555;
+      white-space: pre-line;
+      margin: 20px 0;
+    }
+
+    .quantity-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .quantity-box button {
+      width: 42px;
+      height: 42px;
+      border: 1px solid #ddd;
+      background: #fff;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    .quantity-box input {
+      width: 60px;
+      height: 42px;
+      text-align: center;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+
+    .buy-actions {
+      display: grid;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+      text-decoration: none;
+    }
+
+    .loading-box {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    @media (max-width: 800px) {
+      .product-details {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .product-info h1 {
+        font-size: 26px;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="wrap nav">
+
+```
+<a class="logo" href="index.html">
+  JR <span>Shop</span>
+</a>
+
+<a class="cart-link" href="cart.html">
+  🛒 Panier
+  <b id="cartCount">0</b>
+</a>
+```
+
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div id="productContainer">
+
+```
+<div class="card loading-box">
+  <h2>Chargement du produit...</h2>
+  <p>Veuillez patienter.</p>
 </div>
 ```
 
-`;
-
-if (stock <= 0) return;
-
-const quantityInput =
-$("#quantity");
-
-const minusBtn =
-$("#minusBtn");
-
-const plusBtn =
-$("#plusBtn");
-
-const addBtn =
-$("#addToCartBtn");
-
-const buyBtn =
-$("#buyNowBtn");
-
-function getQuantity() {
-
-```
-let quantity =
-  Number(
-    quantityInput.value
-  );
-
-if (!Number.isFinite(quantity)) {
-  quantity = 1;
-}
-
-quantity =
-  Math.floor(quantity);
-
-if (quantity < 1) {
-  quantity = 1;
-}
-
-if (quantity > stock) {
-  quantity = stock;
-}
-
-quantityInput.value =
-  quantity;
-
-return quantity;
-```
-
-}
-
-minusBtn.addEventListener(
-"click",
-() => {
-
-```
-  let quantity =
-    getQuantity();
-
-  quantity--;
-
-  if (quantity < 1) {
-    quantity = 1;
-  }
-
-  quantityInput.value =
-    quantity;
-}
-```
-
-);
-
-plusBtn.addEventListener(
-"click",
-() => {
-
-```
-  let quantity =
-    getQuantity();
-
-  quantity++;
-
-  if (quantity > stock) {
-    quantity = stock;
-    toast("Stock maximum atteint");
-  }
-
-  quantityInput.value =
-    quantity;
-}
-```
-
-);
-
-quantityInput.addEventListener(
-"change",
-getQuantity
-);
-
-addBtn.addEventListener(
-"click",
-() => {
-
-```
-  const quantity =
-    getQuantity();
-
-  addProductToCart(
-    product,
-    quantity
-  );
-
-}
-```
-
-);
-
-buyBtn.addEventListener(
-"click",
-() => {
-
-```
-  const quantity =
-    getQuantity();
-
-  const cart =
-    getCart();
-
-  const existing =
-    cart.find(
-      (item) =>
-        String(item.id) ===
-        String(product.id)
-    );
-
-  if (existing) {
-
-    const newQuantity =
-      Number(existing.qty || 0) +
-      quantity;
-
-    if (newQuantity > stock) {
-      toast("Stock insuffisant");
-      return;
-    }
-
-    existing.qty =
-      newQuantity;
-
-  } else {
-
-    cart.push({
-      id: product.id,
-
-      name: product.name,
-
-      price:
-        Number(product.price || 0),
-
-      image_url:
-        product.image_url ||
-        product.image ||
-        "",
-
-      qty: quantity,
-
-      stock: stock
-    });
-
-  }
-
-  saveCart(cart);
-
-  window.location.href =
-    "cart.html";
-
-}
-```
-
-);
-}
-
-/* =========================
-LOAD PRODUCT
-========================= */
-
-async function loadProduct() {
-
-const container =
-$("#productContainer");
-
-if (!container) return;
-
-const productId =
-getProductId();
-
-if (!productId) {
-
-```
-container.innerHTML = `
-
-  <div class="card empty">
-
-    <h2>
-      Produit introuvable
-    </h2>
-
-    <p>
-      Aucun identifiant de produit
-      n'a été fourni.
-    </p>
-
-    <a
-      href="index.html"
-      class="btn primary"
-    >
-      Retour à la boutique
-    </a>
-
   </div>
 
-`;
+</main>
 
-return;
-```
+<div
+  id="toast"
+  class="toast"
+  role="status"
+  aria-live="polite">
+</div>
 
-}
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
-try {
+<script src="config.js"></script>
 
-```
-const {
-  data,
-  error
-} =
-  await supabaseClient
-    .from("products")
-    .select("*")
-    .eq("id", productId)
-    .eq("is_active", true)
-    .single();
+<script src="product-details.js"></script>
 
-
-if (error) {
-
-  console.error(
-    "Product Supabase error:",
-    error
-  );
-
-  throw error;
-}
-
-
-if (!data) {
-
-  throw new Error(
-    "Product not found"
-  );
-
-}
-
-
-renderProduct(data);
-```
-
-} catch (error) {
-
-```
-console.error(
-  "Load product error:",
-  error
-);
-
-
-container.innerHTML = `
-
-  <div class="card empty">
-
-    <h2>
-      Impossible de charger le produit
-    </h2>
-
-    <p>
-      Vérifiez l'identifiant du produit
-      ou votre connexion Supabase.
-    </p>
-
-    <a
-      href="index.html"
-      class="btn primary"
-    >
-      Retour à la boutique
-    </a>
-
-  </div>
-
-`;
-```
-
-}
-}
-
-/* =========================
-START
-========================= */
-
-document.addEventListener(
-"DOMContentLoaded",
-() => {
-
-```
-updateCartCount();
-
-loadProduct();
-```
-
-}
-);
+</body>
+</html>
