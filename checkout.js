@@ -3,7 +3,6 @@
    Supabase Orders + WhatsApp
 ========================================================= */
 
-```javascript
 document.addEventListener("DOMContentLoaded", function () {
 
   loadCheckout();
