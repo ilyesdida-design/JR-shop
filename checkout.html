@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Finaliser la commande - JR Shop"
+  >
+
+  <title>Commande - JR Shop</title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
+</head>
+
+
+<body>
+
+  <!-- =========================
+       HEADER
+  ========================== -->
+
+  <header class="site-header">
+
+    <div class="container nav">
+
+      <a
+        href="index.html"
+        class="logo"
+      >
+        JR<span>Shop</span>
+      </a>
+
+
+      <nav class="nav-links">
+
+        <a href="index.html">
+          Accueil
+        </a>
+
+        <a href="index.html#categories">
+          Catégories
+        </a>
+
+        <a href="index.html#products">
+          Produits
+        </a>
+
+        <a href="cart.html">
+          Panier
+        </a>
+
+      </nav>
+
+
+      <a
+        href="cart.html"
+        class="btn btn-outline"
+      >
+        Retour au panier
+      </a>
+
+    </div>
+
+  </header>
+
+
+  <!-- =========================
+       CHECKOUT
+  ========================== -->
+
+  <main>
+
+    <section class="section">
+
+      <div class="container">
+
+        <div class="section-header">
+
+          <div>
+
+            <h1 class="section-title">
+              Finaliser la commande
+            </h1>
+
+            <p class="section-subtitle">
+              Remplissez vos informations pour
+              confirmer votre commande.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="checkoutMessage"
+          class="checkout-message"
+          style="display:none;"
+        ></div>
+
+
+        <div
+          id="checkoutContainer"
+          class="checkout-layout"
+        >
+
+          <div class="card">
+
+            <h2>
+              Informations de livraison
+            </h2>
+
+
+            <form
+              id="checkoutForm"
+              novalidate
+            >
+
+              <!-- NAME -->
+
+              <div class="form-group">
+
+                <label for="customerName">
+                  Nom complet
+                </label>
+
+                <input
+                  type="text"
+                  id="customerName"
+                  name="customerName"
+                  placeholder="Votre nom complet"
+                  autocomplete="name"
+                  required
+                >
+
+              </div>
+
+
+              <!-- PHONE -->
+
+              <div class="form-group">
+
+                <label for="phone">
+                  Téléphone
+                </label>
+
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  placeholder="05 / 06 / 07 XX XX XX XX"
+                  autocomplete="tel"
+                  required
+                >
+
+              </div>
+
+
+              <!-- WILAYA -->
+
+              <div class="form-group">
+
+                <label for="wilaya">
+                  Wilaya
+                </label>
+
+                <input
+                  type="text"
+                  id="wilaya"
+                  name="wilaya"
+                  placeholder="Votre wilaya"
+                  autocomplete="address-level1"
+                  required
+                >
+
+              </div>
+
+
+              <!-- COMMUNE -->
+
+              <div class="form-group">
+
+                <label for="commune">
+                  Commune
+                </label>
+
+                <input
+                  type="text"
+                  id="commune"
+                  name="commune"
+                  placeholder="Votre commune"
+                  autocomplete="address-level2"
+                  required
+                >
+
+              </div>
+
+
+              <!-- ADDRESS -->
+
+              <div class="form-group">
+
+                <label for="address">
+                  Adresse
+                </label>
+
+                <textarea
+                  id="address"
+                  name="address"
+                  rows="4"
+                  placeholder="Adresse complète de livraison"
+                  autocomplete="street-address"
+                  required
+                ></textarea>
+
+              </div>
+
+
+              <!-- NOTES -->
+
+              <div class="form-group">
+
+                <label for="notes">
+                  Note supplémentaire
+                  <span
+                    style="
+                      font-weight:normal;
+                      opacity:.7;
+                    "
+                  >
+                    (optionnel)
+                  </span>
+                </label>
+
+                <textarea
+                  id="notes"
+                  name="notes"
+                  rows="3"
+                  placeholder="Instructions particulières..."
+                ></textarea>
+
+              </div>
+
+
+              <!-- SUBMIT -->
+
+              <button
+                type="submit"
+                id="submitOrderButton"
+                class="btn btn-primary"
+                style="width:100%;"
+              >
+                Confirmer la commande
+              </button>
+
+            </form>
+
+          </div>
+
+
+          <!-- ORDER SUMMARY -->
+
+          <aside
+            id="checkoutSummary"
+            class="card"
+          >
+
+            <h2>
+              Votre commande
+            </h2>
+
+
+            <div
+              id="summaryItems"
+            >
+              Chargement...
+            </div>
+
+
+            <div
+              class="summary-row summary-total"
+              style="margin-top:20px;"
+            >
+
+              <span>
+                Total
+              </span>
+
+              <strong
+                id="summaryTotal"
+              >
+                0 DA
+              </strong>
+
+            </div>
+
+          </aside>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- =========================
+       FOOTER
+  ========================== -->
+
+  <footer class="site-footer">
+
+    <div class="container">
+
+      <div class="footer-inner">
+
+        <div>
+
+          <div class="footer-title">
+            JR Shop
+          </div>
+
+          <p class="footer-text">
+            Votre boutique en ligne pour découvrir
+            des produits de qualité.
+          </p>
+
+        </div>
+
+
+        <div>
+
+          <div class="footer-title">
+            Navigation
+          </div>
+
+          <div class="footer-links">
+
+            <a href="index.html">
+              Accueil
+            </a>
+
+            <a href="index.html#products">
+              Produits
+            </a>
+
+            <a href="cart.html">
+              Panier
+            </a>
+
+          </div>
+
+        </div>
+
+
+        <div>
+
+          <div class="footer-title">
+            JR Shop
+          </div>
+
+          <div class="footer-links">
+
+            <a href="cart.html">
+              Modifier le panier
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="footer-bottom">
+
+        © 2026 JR Shop. Tous droits réservés.
+
+      </div>
+
+    </div>
+
+  </footer>
+
+
+  <!-- =========================
+       SUPABASE
+  ========================== -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script src="config.js"></script>
+
+  <script src="checkout.js"></script>
+
+</body>
+
+</html>
