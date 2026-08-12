@@ -2,7 +2,13 @@
 
 /* =========================================================
    JR SHOP ADMIN PRO
-   PRODUCTS + CATEGORIES + IMAGE UPLOAD
+   PART 1 / 3
+   CONFIG + STATE + DOM + INIT + NAVIGATION
+   + PRODUCTS/CATEGORIES LOADING
+========================================================= */
+
+/* =========================================================
+   SUPABASE
 ========================================================= */
 
 const SUPABASE_URL =
@@ -18,11 +24,18 @@ const supabaseClient =
   );
 
 
+/* =========================================================
+   CONFIG
+========================================================= */
+
 const CONFIG = {
+
   currency: "DA",
+
   imageBucket: "product-images",
 
   sections: {
+
     dashboard: {
       title: "Dashboard",
       subtitle: "Vue générale de votre boutique"
@@ -67,17 +80,14 @@ const CONFIG = {
       title: "Paramètres",
       subtitle: "Configuration de votre boutique"
     }
+
   }
+
 };
 
 
 /* =========================================================
-   STATE
-========================================================= */
-
-const STATE = {
-/* =========================================================
-PRODUCT VARIANTS
+   VARIANT OPTIONS
 ========================================================= */
 
 const VARIANT_OPTIONS = {
@@ -124,68 +134,27 @@ const VARIANT_OPTIONS = {
 
 
 /* =========================================================
-LOAD PRODUCT VARIANTS
+   STATE
 ========================================================= */
 
-async function loadProductVariants(
-  productId
-) {
+const STATE = {
 
-  if (!productId) {
-    return [];
-  }
+  currentSection: "dashboard",
 
-  const {
-    data,
-    error
-  } = await supabaseClient
+  loading: false,
 
-    .from("product_variants")
+  products: [],
 
-    .select(`
-      id,
-      product_id,
-      color,
-      size,
-      price,
-      stock,
-      image_url,
-      is_active,
-      created_at,
-      updated_at
-    `)
+  categories: [],
 
-    .eq(
-      "product_id",
-      productId
-    )
+  orders: [],
 
-    .order(
-      "created_at",
-      {
-        ascending: true
-      }
-    );
+  customers: [],
 
+  variants: []
 
-  if (error) {
+};
 
-    console.error(
-      "Product variants error:",
-      error
-    );
-
-    showNotification(
-      "Erreur lors du chargement des variantes.",
-      "error"
-    );
-
-    return [];
-  }
-
-
-  return data || [];
-}
 
 /* =========================================================
    DOM
@@ -275,6 +244,7 @@ const DOM = {
     document.getElementById(
       "customerSearch"
     )
+
 };
 
 
@@ -309,11 +279,12 @@ async function init() {
   showSection(
     "dashboard"
   );
+
 }
 
 
 /* =========================================================
-   LOAD ALL
+   LOAD ALL DATA
 ========================================================= */
 
 async function loadAllData() {
@@ -332,6 +303,7 @@ async function loadAllData() {
   } catch (error) {
 
     console.error(
+      "Load all data error:",
       error
     );
 
@@ -343,12 +315,14 @@ async function loadAllData() {
   } finally {
 
     STATE.loading = false;
+
   }
+
 }
 
 
 /* =========================================================
-   PRODUCTS
+   LOAD PRODUCTS
 ========================================================= */
 
 async function loadProducts() {
@@ -393,6 +367,7 @@ async function loadProducts() {
     );
 
     throw error;
+
   }
 
 
@@ -405,11 +380,12 @@ async function loadProducts() {
   updateProductCategoryFilter();
 
   updateDashboard();
+
 }
 
 
 /* =========================================================
-   CATEGORIES
+   LOAD CATEGORIES
 ========================================================= */
 
 async function loadCategories() {
@@ -445,6 +421,7 @@ async function loadCategories() {
     );
 
     throw error;
+
   }
 
 
@@ -455,6 +432,7 @@ async function loadCategories() {
   renderCategories();
 
   updateProductCategoryFilter();
+
 }
 
 
@@ -472,7 +450,9 @@ function renderProducts(
     );
 
 
-  if (!tbody) return;
+  if (!tbody) {
+    return;
+  }
 
 
   if (!products.length) {
@@ -493,6 +473,7 @@ function renderProducts(
     `;
 
     return;
+
   }
 
 
@@ -536,6 +517,7 @@ function renderProducts(
 
             stockClass =
               "status-warning";
+
           }
 
 
@@ -605,6 +587,7 @@ function renderProducts(
                       )}
                     </strong>
 
+
                     ${
                       product.featured
 
@@ -651,6 +634,7 @@ function renderProducts(
                     product.price
                   )}
                 </strong>
+
 
                 ${
                   product.old_price
@@ -718,6 +702,7 @@ function renderProducts(
               <td>
 
                 <button
+                  type="button"
                   class="secondary-btn"
                   onclick="editProduct('${escapeHTML(
                     product.id
@@ -735,6 +720,7 @@ function renderProducts(
         }
       )
       .join("");
+
 }
 
 
@@ -748,7 +734,9 @@ function updateProductCategoryFilter() {
     DOM.productCategoryFilter;
 
 
-  if (!select) return;
+  if (!select) {
+    return;
+  }
 
 
   const oldValue =
@@ -791,11 +779,12 @@ function updateProductCategoryFilter() {
 
   select.value =
     oldValue;
+
 }
 
 
 /* =========================================================
-   FILTER
+   FILTER PRODUCTS
 ========================================================= */
 
 function filterProducts() {
@@ -811,12 +800,14 @@ function filterProducts() {
 
   const category =
     DOM.productCategoryFilter
-      ?.value || "";
+      ?.value ||
+    "";
 
 
   const status =
     DOM.productStatusFilter
-      ?.value || "";
+      ?.value ||
+    "";
 
 
   const filtered =
@@ -857,10 +848,12 @@ function filterProducts() {
 
         const matchesStatus =
           !status ||
+
           (
             status === "active" &&
             active
           ) ||
+
           (
             status === "inactive" &&
             !active
@@ -872,6 +865,7 @@ function filterProducts() {
           matchesCategory &&
           matchesStatus
         );
+
       }
     );
 
@@ -879,7 +873,1062 @@ function filterProducts() {
   renderProducts(
     filtered
   );
+
 }
+
+
+/* =========================================================
+   CATEGORIES RENDER
+========================================================= */
+
+function renderCategories() {
+
+  const container =
+    document.getElementById(
+      "categoriesGrid"
+    );
+
+
+  if (!container) {
+    return;
+  }
+
+
+  if (!STATE.categories.length) {
+
+    container.innerHTML = `
+
+      <div class="empty-state">
+
+        <strong>
+          Aucune catégorie
+        </strong>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    STATE.categories
+      .map(
+        category => `
+
+          <div
+            class="category-card"
+          >
+
+            <div
+              class="category-image"
+            >
+
+              ${
+                category.image_url
+
+                  ? `
+
+                    <img
+                      src="${escapeHTML(
+                        category.image_url
+                      )}"
+                      alt="${escapeHTML(
+                        category.name
+                      )}"
+                      style="
+                        width:100%;
+                        height:100%;
+                        object-fit:cover;
+                      "
+                    >
+
+                  `
+
+                  : `
+
+                    <strong>
+                      JR
+                    </strong>
+
+                  `
+              }
+
+            </div>
+
+
+            <div
+              class="category-content"
+            >
+
+              <h3>
+                ${escapeHTML(
+                  category.name
+                )}
+              </h3>
+
+              <p>
+                ${escapeHTML(
+                  category.slug || ""
+                )}
+              </p>
+
+            </div>
+
+          </div>
+
+        `
+      )
+      .join("");
+
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function setupNavigation() {
+
+  DOM.navItems.forEach(
+    item => {
+
+      item.addEventListener(
+        "click",
+        () => {
+
+          showSection(
+            item.dataset.section
+          );
+
+        }
+      );
+
+    }
+  );
+
+
+  DOM.quickActions.forEach(
+    item => {
+
+      item.addEventListener(
+        "click",
+        () => {
+
+          const section =
+            item.dataset.section;
+
+
+          if (section) {
+
+            showSection(
+              section
+            );
+
+          }
+
+        }
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   SHOW SECTION
+========================================================= */
+
+function showSection(
+  section
+) {
+
+  if (
+    !CONFIG.sections[
+      section
+    ]
+  ) {
+    return;
+  }
+
+
+  STATE.currentSection =
+    section;
+
+
+  DOM.navItems.forEach(
+    item => {
+
+      item.classList.toggle(
+        "active",
+        item.dataset.section ===
+        section
+      );
+
+    }
+  );
+
+
+  DOM.pageSections.forEach(
+    page => {
+
+      page.classList.toggle(
+        "active",
+        page.id ===
+        section
+      );
+
+    }
+  );
+
+
+  if (DOM.pageTitle) {
+
+    DOM.pageTitle.textContent =
+      CONFIG.sections[
+        section
+      ].title;
+
+  }
+
+
+  if (DOM.pageSubtitle) {
+
+    DOM.pageSubtitle.textContent =
+      CONFIG.sections[
+        section
+      ].subtitle;
+
+  }
+
+
+  if (
+    window.innerWidth <= 900
+  ) {
+
+    DOM.sidebar?.classList.remove(
+      "open"
+    );
+
+  }
+
+
+  if (
+    section === "products"
+  ) {
+
+    renderProducts();
+
+  }
+
+
+  if (
+    section === "categories"
+  ) {
+
+    renderCategories();
+
+  }
+
+
+  if (
+    section === "inventory"
+  ) {
+
+    loadInventory();
+
+  }
+
+
+  if (
+    section === "orders"
+  ) {
+
+    loadOrders();
+
+  }
+
+
+  if (
+    section === "customers"
+  ) {
+
+    loadCustomers();
+
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE MENU
+========================================================= */
+
+function setupMobileMenu() {
+
+  DOM.mobileMenuBtn?.addEventListener(
+    "click",
+    () => {
+
+      DOM.sidebar?.classList.toggle(
+        "open"
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+function setupButtons() {
+
+  DOM.addProductBtn?.addEventListener(
+    "click",
+    openAddProductModal
+  );
+
+
+  DOM.addCategoryBtn?.addEventListener(
+    "click",
+    openAddCategoryModal
+  );
+
+
+  DOM.logoutBtn?.addEventListener(
+    "click",
+    handleLogout
+  );
+
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+function setupSearch() {
+
+  DOM.productSearch?.addEventListener(
+    "input",
+    filterProducts
+  );
+
+
+  DOM.productCategoryFilter?.addEventListener(
+    "change",
+    filterProducts
+  );
+
+
+  DOM.productStatusFilter?.addEventListener(
+    "change",
+    filterProducts
+  );
+
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+function setupModal() {
+
+  DOM.closeModalBtn?.addEventListener(
+    "click",
+    closeModal
+  );
+
+
+  DOM.modalOverlay?.addEventListener(
+    "click",
+    event => {
+
+      if (
+        event.target ===
+        DOM.modalOverlay
+      ) {
+
+        closeModal();
+
+      }
+
+    }
+  );
+
+
+  document.addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.key ===
+        "Escape"
+      ) {
+
+        closeModal();
+
+      }
+
+    }
+  );
+
+}
+
+
+function openModal(
+  content
+) {
+
+  if (
+    !DOM.modalOverlay ||
+    !DOM.modalContent
+  ) {
+    return;
+  }
+
+
+  DOM.modalContent.innerHTML =
+    content;
+
+
+  DOM.modalOverlay.classList.add(
+    "show"
+  );
+
+}
+
+
+function closeModal() {
+
+  DOM.modalOverlay?.classList.remove(
+    "show"
+  );
+
+}
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function formatPrice(
+  value
+) {
+
+  const number =
+    Number(value) || 0;
+
+
+  return (
+    new Intl.NumberFormat(
+      "fr-FR"
+    ).format(number) +
+    " " +
+    CONFIG.currency
+  );
+
+}
+
+
+function createSlug(
+  text
+) {
+
+  return String(
+    text || ""
+  )
+
+    .toLowerCase()
+
+    .normalize(
+      "NFD"
+    )
+
+    .replace(
+      /[\u0300-\u036f]/g,
+      ""
+    )
+
+    .replace(
+      /[^a-z0-9]+/g,
+      "-"
+    )
+
+    .replace(
+      /^-+|-+$/g,
+      ""
+    );
+
+}
+
+
+function escapeHTML(
+  value
+) {
+
+  return String(
+    value ?? ""
+  )
+
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+
+}
+
+
+/* =========================================================
+   NOTIFICATION
+========================================================= */
+
+function showNotification(
+  message,
+  type = "info"
+) {
+
+  document
+    .querySelector(
+      ".admin-notification"
+    )
+    ?.remove();
+
+
+  const notification =
+    document.createElement(
+      "div"
+    );
+
+
+  notification.className =
+    "admin-notification";
+
+
+  notification.textContent =
+    message;
+
+
+  notification.style.cssText = `
+
+    position:fixed;
+
+    right:20px;
+
+    bottom:20px;
+
+    z-index:9999;
+
+    max-width:380px;
+
+    padding:14px 18px;
+
+    border-radius:12px;
+
+    background:${
+      type === "error"
+        ? "#c73535"
+        : "#111"
+    };
+
+    color:#fff;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    box-shadow:
+      0 15px 40px
+      rgba(0,0,0,.18);
+
+  `;
+
+
+  document.body.appendChild(
+    notification
+  );
+
+
+  setTimeout(
+    () => {
+
+      notification.remove();
+
+    },
+    3500
+  );
+
+}
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+function updateDashboard() {
+
+  const activeProducts =
+    STATE.products.filter(
+      product =>
+        product.active !== false
+    );
+
+
+  const revenue =
+    document.getElementById(
+      "statRevenue"
+    );
+
+
+  const orders =
+    document.getElementById(
+      "statOrders"
+    );
+
+
+  const products =
+    document.getElementById(
+      "statProducts"
+    );
+
+
+  const customers =
+    document.getElementById(
+      "statCustomers"
+    );
+
+
+  if (revenue) {
+
+    revenue.textContent =
+      formatPrice(0);
+
+  }
+
+
+  if (orders) {
+
+    orders.textContent =
+      STATE.orders.length;
+
+  }
+
+
+  if (products) {
+
+    products.textContent =
+      activeProducts.length;
+
+  }
+
+
+  if (customers) {
+
+    customers.textContent =
+      STATE.customers.length;
+
+  }
+
+
+  renderLowStock();
+
+}
+
+
+/* =========================================================
+   LOW STOCK
+========================================================= */
+
+function renderLowStock() {
+
+  const container =
+    document.getElementById(
+      "lowStockContainer"
+    );
+
+
+  if (!container) {
+    return;
+  }
+
+
+  const products =
+    STATE.products.filter(
+      product =>
+        Number(
+          product.stock || 0
+        ) <= 5
+    );
+
+
+  if (!products.length) {
+
+    container.innerHTML = `
+
+      <div class="empty-state">
+
+        <strong>
+          Stock correct
+        </strong>
+
+        <p>
+          Aucun produit en stock faible.
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    products
+      .slice(0, 8)
+      .map(
+        product => {
+
+          const stock =
+            Number(
+              product.stock || 0
+            );
+
+
+          return `
+
+            <div
+              class="low-stock-item"
+            >
+
+              <strong>
+                ${escapeHTML(
+                  product.name
+                )}
+              </strong>
+
+
+              <span
+                class="
+                  status
+                  ${
+                    stock === 0
+                      ? "status-danger"
+                      : "status-warning"
+                  }
+                "
+              >
+
+                ${
+                  stock === 0
+                    ? "Rupture"
+                    : `${stock} restant(s)`
+                }
+
+              </span>
+
+            </div>
+
+          `;
+
+        }
+      )
+      .join("");
+
+}
+
+
+/* =========================================================
+   INVENTORY
+========================================================= */
+
+function loadInventory() {
+
+  const tbody =
+    document.getElementById(
+      "inventoryTableBody"
+    );
+
+
+  if (!tbody) {
+    return;
+  }
+
+
+  tbody.innerHTML =
+    STATE.products
+      .map(
+        product => {
+
+          const stock =
+            Number(
+              product.stock || 0
+            );
+
+
+          let state =
+            "Correct";
+
+
+          let statusClass =
+            "status-success";
+
+
+          if (stock === 0) {
+
+            state =
+              "Rupture";
+
+            statusClass =
+              "status-danger";
+
+          } else if (
+            stock <= 5
+          ) {
+
+            state =
+              "Stock faible";
+
+            statusClass =
+              "status-warning";
+
+          }
+
+
+          return `
+
+            <tr>
+
+              <td>
+
+                <strong>
+                  ${escapeHTML(
+                    product.name
+                  )}
+                </strong>
+
+              </td>
+
+
+              <td>
+                ${stock}
+              </td>
+
+
+              <td>
+
+                <span
+                  class="
+                    status
+                    ${statusClass}
+                  "
+                >
+                  ${state}
+                </span>
+
+              </td>
+
+
+              <td>
+
+                <button
+                  type="button"
+                  class="secondary-btn"
+                  onclick="editProduct('${escapeHTML(
+                    product.id
+                  )}')"
+                >
+                  Modifier
+                </button>
+
+              </td>
+
+            </tr>
+
+          `;
+
+        }
+      )
+      .join("");
+
+}
+
+
+/* =========================================================
+   ORDERS
+========================================================= */
+
+function loadOrders() {
+
+  const tbody =
+    document.getElementById(
+      "ordersTableBody"
+    );
+
+
+  if (!tbody) {
+    return;
+  }
+
+
+  tbody.innerHTML = `
+
+    <tr>
+
+      <td
+        colspan="6"
+        class="empty-row"
+      >
+        Les commandes seront connectées
+        dans l'étape Commandes.
+      </td>
+
+    </tr>
+
+  `;
+
+}
+
+
+/* =========================================================
+   CUSTOMERS
+========================================================= */
+
+function loadCustomers() {
+
+  const tbody =
+    document.getElementById(
+      "customersTableBody"
+    );
+
+
+  if (!tbody) {
+    return;
+  }
+
+
+  tbody.innerHTML = `
+
+    <tr>
+
+      <td
+        colspan="6"
+        class="empty-row"
+      >
+        Les clients seront connectés
+        dans l'étape Clients.
+      </td>
+
+    </tr>
+
+  `;
+
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+async function handleLogout() {
+
+  const confirmed =
+    window.confirm(
+      "Voulez-vous vraiment vous déconnecter ?"
+    );
+
+
+  if (!confirmed) {
+    return;
+  }
+
+
+  const {
+    error
+  } =
+    await supabaseClient
+      .auth
+      .signOut();
+
+
+  if (error) {
+
+    showNotification(
+      error.message,
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  showNotification(
+    "Déconnexion effectuée.",
+    "success"
+  );
+
+}
+
+
+/* =========================================================
+   GLOBAL
+   PART 1
+========================================================= */
+
+window.showSection =
+  showSection;
+
+window.closeModal =
+  closeModal;
+
+window.JR_ADMIN = {
+
+  STATE,
+
+  supabaseClient,
+
+  loadProducts,
+
+  loadCategories,
+
+  showSection
+
+};
+
+/* =========================================================
+   JR SHOP ADMIN PRO
+   PART 2 / 3
+   PRODUCTS + IMAGES + CATEGORIES
+========================================================= */
 
 
 /* =========================================================
@@ -963,8 +2012,7 @@ function openAddProductModal() {
       <div
         style="
           display:grid;
-          grid-template-columns:
-            1fr 1fr;
+          grid-template-columns:1fr 1fr;
           gap:12px;
         "
       >
@@ -1008,8 +2056,7 @@ function openAddProductModal() {
       <div
         style="
           display:grid;
-          grid-template-columns:
-            1fr 1fr;
+          grid-template-columns:1fr 1fr;
           gap:12px;
         "
       >
@@ -1172,6 +2219,7 @@ function openAddProductModal() {
         id="saveProductBtn"
         class="primary-btn"
         style="width:100%"
+        type="button"
       >
         Ajouter le produit
       </button>
@@ -1205,6 +2253,7 @@ function openAddProductModal() {
           createSlug(
             nameInput.value
           );
+
       }
 
     }
@@ -1250,11 +2299,12 @@ function openAddProductModal() {
       "click",
       saveProduct
     );
+
 }
 
 
 /* =========================================================
-   IMAGE PREVIEW
+   IMAGE PREVIEW - MAIN
 ========================================================= */
 
 function previewMainImage(
@@ -1271,7 +2321,9 @@ function previewMainImage(
     );
 
 
-  if (!preview) return;
+  if (!preview) {
+    return;
+  }
 
 
   if (!file) {
@@ -1280,6 +2332,7 @@ function previewMainImage(
       "";
 
     return;
+
   }
 
 
@@ -1293,6 +2346,7 @@ function previewMainImage(
 
     <img
       src="${url}"
+      alt="Preview"
       style="
         width:120px;
         height:120px;
@@ -1303,8 +2357,13 @@ function previewMainImage(
     >
 
   `;
+
 }
 
+
+/* =========================================================
+   IMAGE PREVIEW - EXTRA
+========================================================= */
 
 function previewExtraImages(
   event
@@ -1322,7 +2381,9 @@ function previewExtraImages(
     );
 
 
-  if (!gallery) return;
+  if (!gallery) {
+    return;
+  }
 
 
   gallery.innerHTML =
@@ -1340,6 +2401,7 @@ function previewExtraImages(
 
             <img
               src="${url}"
+              alt="Image"
               style="
                 width:70px;
                 height:70px;
@@ -1354,6 +2416,7 @@ function previewExtraImages(
         }
       )
       .join("");
+
 }
 
 
@@ -1378,8 +2441,16 @@ async function uploadImage(
     "jpg";
 
 
+  const safeExtension =
+    extension.replace(
+      /[^a-z0-9]/g,
+      ""
+    ) ||
+    "jpg";
+
+
   const fileName =
-    `${Date.now()}-${crypto.randomUUID()}.${extension}`;
+    `${Date.now()}-${crypto.randomUUID()}.${safeExtension}`;
 
 
   const filePath =
@@ -1418,6 +2489,7 @@ async function uploadImage(
     );
 
     throw error;
+
   }
 
 
@@ -1434,7 +2506,9 @@ async function uploadImage(
       );
 
 
-  return data.publicUrl;
+  return data?.publicUrl ||
+    null;
+
 }
 
 
@@ -1523,7 +2597,8 @@ async function saveProduct() {
         .getElementById(
           "newProductFiles"
         )
-        ?.files || []
+        ?.files ||
+      []
     );
 
 
@@ -1545,18 +2620,28 @@ async function saveProduct() {
 
 
   const price =
-    Number(priceValue);
+    Number(
+      priceValue
+    );
 
 
   const stock =
-    Number(stockValue);
+    Number(
+      stockValue
+    );
 
 
   const oldPrice =
     oldPriceValue === ""
       ? null
-      : Number(oldPriceValue);
+      : Number(
+          oldPriceValue
+        );
 
+
+  /* -------------------------
+     VALIDATION
+  ------------------------- */
 
   if (!name) {
 
@@ -1566,12 +2651,11 @@ async function saveProduct() {
     );
 
     return;
+
   }
 
 
-  if (
-    !mainFile
-  ) {
+  if (!mainFile) {
 
     showNotification(
       "Choisissez une image principale.",
@@ -1579,6 +2663,7 @@ async function saveProduct() {
     );
 
     return;
+
   }
 
 
@@ -1593,6 +2678,7 @@ async function saveProduct() {
     );
 
     return;
+
   }
 
 
@@ -1607,6 +2693,27 @@ async function saveProduct() {
     );
 
     return;
+
+  }
+
+
+  if (
+    oldPrice !== null &&
+    (
+      !Number.isFinite(
+        oldPrice
+      ) ||
+      oldPrice < 0
+    )
+  ) {
+
+    showNotification(
+      "Ancien prix invalide.",
+      "error"
+    );
+
+    return;
+
   }
 
 
@@ -1619,14 +2726,23 @@ async function saveProduct() {
 
       button.textContent =
         "Upload des images...";
+
     }
 
+
+    /* -------------------------
+       MAIN IMAGE
+    ------------------------- */
 
     const mainImageUrl =
       await uploadImage(
         mainFile
       );
 
+
+    /* -------------------------
+       EXTRA IMAGES
+    ------------------------- */
 
     const extraImageUrls =
       [];
@@ -1648,20 +2764,29 @@ async function saveProduct() {
         extraImageUrls.push(
           url
         );
+
       }
+
     }
 
+
+    /* -------------------------
+       PRODUCT DATA
+    ------------------------- */
 
     const productData = {
 
       category_id:
-        categoryId || null,
+        categoryId ||
+        null,
 
       name,
 
       slug:
         slugValue ||
-        createSlug(name),
+        createSlug(
+          name
+        ),
 
       description:
         description ||
@@ -1691,8 +2816,13 @@ async function saveProduct() {
 
       button.textContent =
         "Enregistrement...";
+
     }
 
+
+    /* -------------------------
+       INSERT
+    ------------------------- */
 
     const {
       data,
@@ -1700,7 +2830,9 @@ async function saveProduct() {
     } =
       await supabaseClient
 
-        .from("products")
+        .from(
+          "products"
+        )
 
         .insert(
           productData
@@ -1711,10 +2843,13 @@ async function saveProduct() {
 
 
     if (error) {
-
       throw error;
     }
 
+
+    /* -------------------------
+       UPDATE STATE
+    ------------------------- */
 
     STATE.products.unshift(
       data
@@ -1726,7 +2861,6 @@ async function saveProduct() {
     updateDashboard();
 
     renderLowStock();
-
 
     closeModal();
 
@@ -1761,8 +2895,11 @@ async function saveProduct() {
 
       button.textContent =
         "Ajouter le produit";
+
     }
+
   }
+
 }
 
 
@@ -1790,6 +2927,7 @@ function editProduct(
     );
 
     return;
+
   }
 
 
@@ -1806,6 +2944,7 @@ function editProduct(
     <h2>
       Modifier le produit
     </h2>
+
 
     <p
       style="
@@ -1834,8 +2973,10 @@ function editProduct(
 
         <input
           id="editProductName"
+          type="text"
           value="${escapeHTML(
-            product.name || ""
+            product.name ||
+            ""
           )}"
         >
 
@@ -1850,8 +2991,10 @@ function editProduct(
 
         <input
           id="editProductSlug"
+          type="text"
           value="${escapeHTML(
-            product.slug || ""
+            product.slug ||
+            ""
           )}"
         >
 
@@ -1872,7 +3015,8 @@ function editProduct(
             resize:vertical;
           "
         >${escapeHTML(
-          product.description || ""
+          product.description ||
+          ""
         )}</textarea>
 
       </div>
@@ -1881,8 +3025,7 @@ function editProduct(
       <div
         style="
           display:grid;
-          grid-template-columns:
-            1fr 1fr;
+          grid-template-columns:1fr 1fr;
           gap:12px;
         "
       >
@@ -1899,7 +3042,8 @@ function editProduct(
             min="0"
             step="0.01"
             value="${Number(
-              product.price || 0
+              product.price ||
+              0
             )}"
           >
 
@@ -1931,8 +3075,7 @@ function editProduct(
       <div
         style="
           display:grid;
-          grid-template-columns:
-            1fr 1fr;
+          grid-template-columns:1fr 1fr;
           gap:12px;
         "
       >
@@ -1947,8 +3090,10 @@ function editProduct(
             id="editProductStock"
             type="number"
             min="0"
+            step="1"
             value="${Number(
-              product.stock || 0
+              product.stock ||
+              0
             )}"
           >
 
@@ -2012,6 +3157,7 @@ function editProduct(
           Image actuelle
         </label>
 
+
         ${
           product.image_url
 
@@ -2021,6 +3167,7 @@ function editProduct(
                 src="${escapeHTML(
                   product.image_url
                 )}"
+                alt=""
                 style="
                   width:120px;
                   height:120px;
@@ -2078,6 +3225,7 @@ function editProduct(
           Images supplémentaires
         </label>
 
+
         <div
           style="
             display:flex;
@@ -2096,6 +3244,7 @@ function editProduct(
                     src="${escapeHTML(
                       url
                     )}"
+                    alt=""
                     style="
                       width:65px;
                       height:65px;
@@ -2131,7 +3280,13 @@ function editProduct(
         "
       >
 
-        <label>
+        <label
+          style="
+            display:flex;
+            gap:8px;
+            align-items:center;
+          "
+        >
 
           <input
             id="editProductFeatured"
@@ -2148,7 +3303,13 @@ function editProduct(
         </label>
 
 
-        <label>
+        <label
+          style="
+            display:flex;
+            gap:8px;
+            align-items:center;
+          "
+        >
 
           <input
             id="editProductActive"
@@ -2170,8 +3331,7 @@ function editProduct(
       <div
         style="
           display:grid;
-          grid-template-columns:
-            1fr 1fr;
+          grid-template-columns:1fr 1fr;
           gap:10px;
         "
       >
@@ -2179,6 +3339,7 @@ function editProduct(
         <button
           id="updateProductBtn"
           class="primary-btn"
+          type="button"
         >
           Enregistrer
         </button>
@@ -2187,6 +3348,7 @@ function editProduct(
         <button
           id="deleteProductBtn"
           class="secondary-btn"
+          type="button"
           style="
             color:#c73535;
             border-color:#c73535;
@@ -2197,10 +3359,20 @@ function editProduct(
 
       </div>
 
+
+      <!--
+        PART 3 ajoutera ici automatiquement
+        le gestionnaire des variantes.
+      -->
+
     </div>
 
   `);
 
+
+  /* -------------------------
+     NEW IMAGE PREVIEW
+  ------------------------- */
 
   document
     .getElementById(
@@ -2223,7 +3395,9 @@ function editProduct(
         if (
           !file ||
           !preview
-        ) return;
+        ) {
+          return;
+        }
 
 
         const url =
@@ -2236,6 +3410,7 @@ function editProduct(
 
           <img
             src="${url}"
+            alt="Preview"
             style="
               width:120px;
               height:120px;
@@ -2245,9 +3420,14 @@ function editProduct(
           >
 
         `;
+
       }
     );
 
+
+  /* -------------------------
+     UPDATE BUTTON
+  ------------------------- */
 
   document
     .getElementById(
@@ -2262,6 +3442,10 @@ function editProduct(
     );
 
 
+  /* -------------------------
+     DELETE BUTTON
+  ------------------------- */
+
   document
     .getElementById(
       "deleteProductBtn"
@@ -2273,6 +3457,13 @@ function editProduct(
           product.id
         )
     );
+
+
+  /*
+    PART 3 will add the
+    variants manager here.
+  */
+
 }
 
 
@@ -2292,7 +3483,16 @@ async function updateProduct(
     );
 
 
-  if (!product) return;
+  if (!product) {
+
+    showNotification(
+      "Produit introuvable.",
+      "error"
+    );
+
+    return;
+
+  }
 
 
   const button =
@@ -2378,7 +3578,8 @@ async function updateProduct(
         .getElementById(
           "editProductFiles"
         )
-        ?.files || []
+        ?.files ||
+      []
     );
 
 
@@ -2402,8 +3603,14 @@ async function updateProduct(
   const oldPrice =
     oldPriceValue === ""
       ? null
-      : Number(oldPriceValue);
+      : Number(
+          oldPriceValue
+        );
 
+
+  /* -------------------------
+     VALIDATION
+  ------------------------- */
 
   if (!name) {
 
@@ -2413,6 +3620,7 @@ async function updateProduct(
     );
 
     return;
+
   }
 
 
@@ -2427,6 +3635,7 @@ async function updateProduct(
     );
 
     return;
+
   }
 
 
@@ -2441,6 +3650,27 @@ async function updateProduct(
     );
 
     return;
+
+  }
+
+
+  if (
+    oldPrice !== null &&
+    (
+      !Number.isFinite(
+        oldPrice
+      ) ||
+      oldPrice < 0
+    )
+  ) {
+
+    showNotification(
+      "Ancien prix invalide.",
+      "error"
+    );
+
+    return;
+
   }
 
 
@@ -2453,8 +3683,13 @@ async function updateProduct(
 
       button.textContent =
         "Enregistrement...";
+
     }
 
+
+    /* -------------------------
+       IMAGE PRINCIPALE
+    ------------------------- */
 
     let imageUrl =
       product.image_url ||
@@ -2467,14 +3702,21 @@ async function updateProduct(
         await uploadImage(
           newImage
         );
+
     }
 
+
+    /* -------------------------
+       EXTRA IMAGES
+    ------------------------- */
 
     let images =
       Array.isArray(
         product.images
       )
-        ? [...product.images]
+        ? [
+            ...product.images
+          ]
         : [];
 
 
@@ -2494,20 +3736,29 @@ async function updateProduct(
         images.push(
           url
         );
+
       }
+
     }
 
+
+    /* -------------------------
+       UPDATE DATA
+    ------------------------- */
 
     const updateData = {
 
       category_id:
-        categoryId || null,
+        categoryId ||
+        null,
 
       name,
 
       slug:
         slug ||
-        createSlug(name),
+        createSlug(
+          name
+        ),
 
       description:
         description ||
@@ -2538,7 +3789,9 @@ async function updateProduct(
     } =
       await supabaseClient
 
-        .from("products")
+        .from(
+          "products"
+        )
 
         .update(
           updateData
@@ -2554,10 +3807,13 @@ async function updateProduct(
 
 
     if (error) {
-
       throw error;
     }
 
+
+    /* -------------------------
+       UPDATE STATE
+    ------------------------- */
 
     const index =
       STATE.products.findIndex(
@@ -2567,10 +3823,13 @@ async function updateProduct(
       );
 
 
-    if (index !== -1) {
+    if (
+      index !== -1
+    ) {
 
       STATE.products[index] =
         data;
+
     }
 
 
@@ -2592,6 +3851,7 @@ async function updateProduct(
   } catch (error) {
 
     console.error(
+      "Update product error:",
       error
     );
 
@@ -2612,8 +3872,11 @@ async function updateProduct(
 
       button.textContent =
         "Enregistrer";
+
     }
+
   }
+
 }
 
 
@@ -2633,7 +3896,9 @@ async function deleteProduct(
     );
 
 
-  if (!product) return;
+  if (!product) {
+    return;
+  }
 
 
   const confirmed =
@@ -2660,17 +3925,56 @@ async function deleteProduct(
 
     button.textContent =
       "Suppression...";
+
   }
 
 
   try {
+
+    /*
+      Supprimer d'abord les variantes
+      du produit pour éviter les
+      problèmes de relation.
+    */
+
+    const {
+      error:
+        variantDeleteError
+    } =
+      await supabaseClient
+
+        .from(
+          "product_variants"
+        )
+
+        .delete()
+
+        .eq(
+          "product_id",
+          productId
+        );
+
+
+    if (
+      variantDeleteError
+    ) {
+
+      console.warn(
+        "Variant delete warning:",
+        variantDeleteError
+      );
+
+    }
+
 
     const {
       error
     } =
       await supabaseClient
 
-        .from("products")
+        .from(
+          "products"
+        )
 
         .delete()
 
@@ -2681,7 +3985,6 @@ async function deleteProduct(
 
 
     if (error) {
-
       throw error;
     }
 
@@ -2712,6 +4015,7 @@ async function deleteProduct(
   } catch (error) {
 
     console.error(
+      "Delete product error:",
       error
     );
 
@@ -2732,118 +4036,16 @@ async function deleteProduct(
 
       button.textContent =
         "🗑 Supprimer";
+
     }
+
   }
+
 }
 
 
 /* =========================================================
-   CATEGORIES
-========================================================= */
-
-function renderCategories() {
-
-  const container =
-    document.getElementById(
-      "categoriesGrid"
-    );
-
-
-  if (!container) return;
-
-
-  if (!STATE.categories.length) {
-
-    container.innerHTML = `
-
-      <div class="empty-state">
-
-        <strong>
-          Aucune catégorie
-        </strong>
-
-      </div>
-
-    `;
-
-    return;
-  }
-
-
-  container.innerHTML =
-    STATE.categories
-      .map(
-        category => `
-
-          <div
-            class="category-card"
-          >
-
-            <div
-              class="category-image"
-            >
-
-              ${
-                category.image_url
-
-                  ? `
-
-                    <img
-                      src="${escapeHTML(
-                        category.image_url
-                      )}"
-                      alt="${escapeHTML(
-                        category.name
-                      )}"
-                      style="
-                        width:100%;
-                        height:100%;
-                        object-fit:cover;
-                      "
-                    >
-
-                  `
-
-                  : `
-
-                    <strong>
-                      JR
-                    </strong>
-
-                  `
-              }
-
-            </div>
-
-
-            <div
-              class="category-content"
-            >
-
-              <h3>
-                ${escapeHTML(
-                  category.name
-                )}
-              </h3>
-
-              <p>
-                ${escapeHTML(
-                  category.slug || ""
-                )}
-              </p>
-
-            </div>
-
-          </div>
-
-        `
-      )
-      .join("");
-}
-
-
-/* =========================================================
-   ADD CATEGORY
+   ADD CATEGORY MODAL
 ========================================================= */
 
 function openAddCategoryModal() {
@@ -2910,6 +4112,7 @@ function openAddCategoryModal() {
         id="saveCategoryBtn"
         class="primary-btn"
         style="width:100%"
+        type="button"
       >
         Ajouter
       </button>
@@ -2943,7 +4146,9 @@ function openAddCategoryModal() {
           createSlug(
             nameInput.value
           );
+
       }
+
     }
   );
 
@@ -2954,6 +4159,7 @@ function openAddCategoryModal() {
 
       slugInput.dataset.edited =
         "true";
+
     }
   );
 
@@ -2966,6 +4172,7 @@ function openAddCategoryModal() {
       "click",
       saveCategory
     );
+
 }
 
 
@@ -2974,6 +4181,12 @@ function openAddCategoryModal() {
 ========================================================= */
 
 async function saveCategory() {
+
+  const button =
+    document.getElementById(
+      "saveCategoryBtn"
+    );
+
 
   const name =
     document
@@ -3010,75 +4223,1180 @@ async function saveCategory() {
     );
 
     return;
+
   }
 
 
   if (!slug) {
 
     slug =
-      createSlug(name);
+      createSlug(
+        name
+      );
+
   }
 
 
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
+  try {
 
-      .from("categories")
+    if (button) {
 
-      .insert({
+      button.disabled =
+        true;
 
-        name,
+      button.textContent =
+        "Ajout...";
 
-        slug,
-
-        image_url:
-          imageUrl || null
-
-      })
-
-      .select()
-      .single();
+    }
 
 
-  if (error) {
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+
+        .from(
+          "categories"
+        )
+
+        .insert({
+
+          name,
+
+          slug,
+
+          image_url:
+            imageUrl ||
+            null
+
+        })
+
+        .select()
+        .single();
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    STATE.categories.push(
+      data
+    );
+
+
+    STATE.categories.sort(
+      (a, b) =>
+        String(
+          a.name
+        ).localeCompare(
+          String(
+            b.name
+          )
+        )
+    );
+
+
+    renderCategories();
+
+    updateProductCategoryFilter();
+
+    closeModal();
+
 
     showNotification(
-      error.message,
+      "Catégorie ajoutée.",
+      "success"
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "Save category error:",
+      error
+    );
+
+
+    showNotification(
+      error.message ||
+      "Erreur lors de l'ajout de la catégorie.",
+      "error"
+    );
+
+
+  } finally {
+
+    if (button) {
+
+      button.disabled =
+        false;
+
+      button.textContent =
+        "Ajouter";
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   GLOBAL EXPORTS - PART 2
+========================================================= */
+
+window.editProduct =
+  editProduct;
+
+window.deleteProduct =
+  deleteProduct;
+
+window.saveProduct =
+  saveProduct;
+
+window.saveCategory =
+  saveCategory;
+
+window.openAddProductModal =
+  openAddProductModal;
+
+window.openAddCategoryModal =
+  openAddCategoryModal;
+
+window.uploadImage =
+  uploadImage;
+
+/* =========================================================
+   EDIT PRODUCT
+========================================================= */
+
+function editProduct(productId) {
+
+  const product = STATE.products.find(
+    item => String(item.id) === String(productId)
+  );
+
+  if (!product) {
+    showNotification(
+      "Produit introuvable.",
+      "error"
+    );
+    return;
+  }
+
+  const images = Array.isArray(product.images)
+    ? product.images
+    : [];
+
+  openModal(`
+    <h2>Modifier le produit</h2>
+
+    <p style="
+      color:#777;
+      font-size:12px;
+      margin-top:6px;
+    ">
+      ${escapeHTML(product.name || "")}
+    </p>
+
+    <div style="margin-top:20px;">
+
+      <div class="form-group">
+        <label>Nom *</label>
+
+        <input
+          id="editProductName"
+          type="text"
+          value="${escapeHTML(product.name || "")}"
+        >
+      </div>
+
+      <div class="form-group">
+        <label>Slug</label>
+
+        <input
+          id="editProductSlug"
+          type="text"
+          value="${escapeHTML(product.slug || "")}"
+        >
+      </div>
+
+      <div class="form-group">
+        <label>Description</label>
+
+        <textarea
+          id="editProductDescription"
+          rows="4"
+          style="width:100%;resize:vertical;"
+        >${escapeHTML(product.description || "")}</textarea>
+      </div>
+
+      <div style="
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:12px;
+      ">
+
+        <div class="form-group">
+          <label>Prix</label>
+
+          <input
+            id="editProductPrice"
+            type="number"
+            min="0"
+            step="0.01"
+            value="${Number(product.price || 0)}"
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Ancien prix</label>
+
+          <input
+            id="editProductOldPrice"
+            type="number"
+            min="0"
+            step="0.01"
+            value="${product.old_price ?? ""}"
+          >
+        </div>
+
+      </div>
+
+      <div style="
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:12px;
+      ">
+
+        <div class="form-group">
+          <label>Stock</label>
+
+          <input
+            id="editProductStock"
+            type="number"
+            min="0"
+            step="1"
+            value="${Number(product.stock || 0)}"
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Catégorie</label>
+
+          <select id="editProductCategory">
+
+            <option value="">
+              Sans catégorie
+            </option>
+
+            ${STATE.categories.map(category => `
+              <option
+                value="${escapeHTML(category.id)}"
+                ${
+                  String(category.id) ===
+                  String(product.category_id)
+                    ? "selected"
+                    : ""
+                }
+              >
+                ${escapeHTML(category.name)}
+              </option>
+            `).join("")}
+
+          </select>
+        </div>
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Image actuelle</label>
+
+        ${
+          product.image_url
+            ? `
+              <img
+                src="${escapeHTML(product.image_url)}"
+                alt=""
+                style="
+                  width:120px;
+                  height:120px;
+                  object-fit:cover;
+                  border-radius:12px;
+                  margin-top:8px;
+                "
+              >
+            `
+            : `
+              <div style="
+                padding:20px;
+                background:#f4f4f4;
+                border-radius:10px;
+              ">
+                Aucune image
+              </div>
+            `
+        }
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Remplacer l'image</label>
+
+        <input
+          id="editProductFile"
+          type="file"
+          accept="image/*"
+        >
+
+        <div
+          id="editProductPreview"
+          style="margin-top:10px;"
+        ></div>
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Images supplémentaires</label>
+
+        <div style="
+          display:flex;
+          gap:8px;
+          flex-wrap:wrap;
+          margin-bottom:10px;
+        ">
+
+          ${
+            images.map(url => `
+              <img
+                src="${escapeHTML(url)}"
+                alt=""
+                style="
+                  width:65px;
+                  height:65px;
+                  object-fit:cover;
+                  border-radius:8px;
+                "
+              >
+            `).join("")
+          }
+
+        </div>
+
+        <input
+          id="editProductFiles"
+          type="file"
+          accept="image/*"
+          multiple
+        >
+
+      </div>
+
+      <div style="
+        display:flex;
+        gap:20px;
+        flex-wrap:wrap;
+        margin:15px 0;
+      ">
+
+        <label style="
+          display:flex;
+          gap:8px;
+          align-items:center;
+        ">
+
+          <input
+            id="editProductFeatured"
+            type="checkbox"
+            ${product.featured ? "checked" : ""}
+          >
+
+          ★ Vedette
+
+        </label>
+
+        <label style="
+          display:flex;
+          gap:8px;
+          align-items:center;
+        ">
+
+          <input
+            id="editProductActive"
+            type="checkbox"
+            ${product.active !== false ? "checked" : ""}
+          >
+
+          Actif
+
+        </label>
+
+      </div>
+
+      <div style="
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+      ">
+
+        <button
+          id="updateProductBtn"
+          class="primary-btn"
+        >
+          Enregistrer
+        </button>
+
+        <button
+          id="deleteProductBtn"
+          class="secondary-btn"
+          style="
+            color:#c73535;
+            border-color:#c73535;
+          "
+        >
+          🗑 Supprimer
+        </button>
+
+      </div>
+
+      <!-- VARIANTS -->
+      ${renderVariantForm(product)}
+
+    </div>
+  `);
+
+  document
+    .getElementById("editProductFile")
+    ?.addEventListener("change", event => {
+
+      const file = event.target.files?.[0];
+
+      const preview =
+        document.getElementById(
+          "editProductPreview"
+        );
+
+      if (!file || !preview) return;
+
+      const url =
+        URL.createObjectURL(file);
+
+      preview.innerHTML = `
+        <img
+          src="${url}"
+          alt=""
+          style="
+            width:120px;
+            height:120px;
+            object-fit:cover;
+            border-radius:12px;
+          "
+        >
+      `;
+    });
+
+  document
+    .getElementById("updateProductBtn")
+    ?.addEventListener(
+      "click",
+      () => updateProduct(product.id)
+    );
+
+  document
+    .getElementById("deleteProductBtn")
+    ?.addEventListener(
+      "click",
+      () => deleteProduct(product.id)
+    );
+
+  document
+    .getElementById("addVariantBtn")
+    ?.addEventListener(
+      "click",
+      () => openVariantForm(null, product)
+    );
+
+  renderProductVariants(product.id);
+}
+
+
+/* =========================================================
+   UPDATE PRODUCT
+========================================================= */
+
+async function updateProduct(productId) {
+
+  const product = STATE.products.find(
+    item => String(item.id) === String(productId)
+  );
+
+  if (!product) return;
+
+  const button =
+    document.getElementById(
+      "updateProductBtn"
+    );
+
+  const name =
+    document
+      .getElementById("editProductName")
+      ?.value
+      .trim();
+
+  const slug =
+    document
+      .getElementById("editProductSlug")
+      ?.value
+      .trim();
+
+  const description =
+    document
+      .getElementById("editProductDescription")
+      ?.value
+      .trim();
+
+  const price =
+    Number(
+      document
+        .getElementById("editProductPrice")
+        ?.value
+    );
+
+  const oldPriceValue =
+    document
+      .getElementById("editProductOldPrice")
+      ?.value;
+
+  const stock =
+    Number(
+      document
+        .getElementById("editProductStock")
+        ?.value
+    );
+
+  const categoryId =
+    document
+      .getElementById("editProductCategory")
+      ?.value;
+
+  const newImage =
+    document
+      .getElementById("editProductFile")
+      ?.files?.[0];
+
+  const extraFiles =
+    Array.from(
+      document
+        .getElementById("editProductFiles")
+        ?.files || []
+    );
+
+  const featured =
+    document
+      .getElementById("editProductFeatured")
+      ?.checked || false;
+
+  const active =
+    document
+      .getElementById("editProductActive")
+      ?.checked !== false;
+
+  const oldPrice =
+    oldPriceValue === ""
+      ? null
+      : Number(oldPriceValue);
+
+  if (!name) {
+    showNotification(
+      "Nom obligatoire.",
+      "error"
+    );
+    return;
+  }
+
+  if (
+    !Number.isFinite(price) ||
+    price < 0
+  ) {
+    showNotification(
+      "Prix invalide.",
+      "error"
+    );
+    return;
+  }
+
+  if (
+    !Number.isInteger(stock) ||
+    stock < 0
+  ) {
+    showNotification(
+      "Stock invalide.",
+      "error"
+    );
+    return;
+  }
+
+  if (
+    oldPrice !== null &&
+    (
+      !Number.isFinite(oldPrice) ||
+      oldPrice < 0
+    )
+  ) {
+    showNotification(
+      "Ancien prix invalide.",
+      "error"
+    );
+    return;
+  }
+
+  try {
+
+    if (button) {
+      button.disabled = true;
+      button.textContent =
+        "Enregistrement...";
+    }
+
+    let imageUrl =
+      product.image_url || null;
+
+    if (newImage) {
+      imageUrl =
+        await uploadImage(
+          newImage
+        );
+    }
+
+    let images =
+      Array.isArray(product.images)
+        ? [...product.images]
+        : [];
+
+    for (const file of extraFiles) {
+
+      const url =
+        await uploadImage(file);
+
+      if (url) {
+        images.push(url);
+      }
+    }
+
+    const updateData = {
+
+      category_id:
+        categoryId || null,
+
+      name,
+
+      slug:
+        slug ||
+        createSlug(name),
+
+      description:
+        description || null,
+
+      price,
+
+      old_price:
+        oldPrice,
+
+      stock,
+
+      image_url:
+        imageUrl,
+
+      images,
+
+      featured,
+
+      active
+
+    };
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from("products")
+        .update(updateData)
+        .eq("id", productId)
+        .select()
+        .single();
+
+    if (error) {
+      throw error;
+    }
+
+    const index =
+      STATE.products.findIndex(
+        item =>
+          String(item.id) ===
+          String(productId)
+      );
+
+    if (index !== -1) {
+      STATE.products[index] = data;
+    }
+
+    renderProducts();
+    updateDashboard();
+    renderLowStock();
+
+    showNotification(
+      "Produit modifié avec succès.",
+      "success"
+    );
+
+    /*
+      On recharge le modal pour que
+      les variantes restent disponibles.
+    */
+
+    closeModal();
+
+  } catch (error) {
+
+    console.error(
+      "Update product error:",
+      error
+    );
+
+    showNotification(
+      error.message ||
+      "Erreur modification produit.",
+      "error"
+    );
+
+  } finally {
+
+    if (button) {
+      button.disabled = false;
+      button.textContent =
+        "Enregistrer";
+    }
+
+  }
+}
+
+
+/* =========================================================
+   DELETE PRODUCT
+========================================================= */
+
+async function deleteProduct(productId) {
+
+  const product =
+    STATE.products.find(
+      item =>
+        String(item.id) ===
+        String(productId)
+    );
+
+  if (!product) return;
+
+  const confirmed =
+    window.confirm(
+      `Supprimer définitivement "${product.name}" ?`
+    );
+
+  if (!confirmed) return;
+
+  const button =
+    document.getElementById(
+      "deleteProductBtn"
+    );
+
+  if (button) {
+    button.disabled = true;
+    button.textContent =
+      "Suppression...";
+  }
+
+  try {
+
+    /*
+      Supprimer d'abord les variantes
+      liées au produit.
+    */
+
+    const {
+      error: variantsError
+    } =
+      await supabaseClient
+        .from("product_variants")
+        .delete()
+        .eq(
+          "product_id",
+          productId
+        );
+
+    if (variantsError) {
+      throw variantsError;
+    }
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from("products")
+        .delete()
+        .eq(
+          "id",
+          productId
+        );
+
+    if (error) {
+      throw error;
+    }
+
+    STATE.products =
+      STATE.products.filter(
+        item =>
+          String(item.id) !==
+          String(productId)
+      );
+
+    renderProducts();
+    updateDashboard();
+    renderLowStock();
+
+    closeModal();
+
+    showNotification(
+      "Produit supprimé avec succès.",
+      "success"
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Delete product error:",
+      error
+    );
+
+    showNotification(
+      error.message ||
+      "Erreur suppression produit.",
+      "error"
+    );
+
+  } finally {
+
+    if (button) {
+      button.disabled = false;
+      button.textContent =
+        "🗑 Supprimer";
+    }
+
+  }
+}
+
+
+/* =========================================================
+   CATEGORIES
+========================================================= */
+
+function renderCategories() {
+
+  const container =
+    document.getElementById(
+      "categoriesGrid"
+    );
+
+  if (!container) return;
+
+  if (!STATE.categories.length) {
+
+    container.innerHTML = `
+      <div class="empty-state">
+        <strong>
+          Aucune catégorie
+        </strong>
+      </div>
+    `;
+
+    return;
+  }
+
+  container.innerHTML =
+    STATE.categories
+      .map(category => `
+
+        <div class="category-card">
+
+          <div class="category-image">
+
+            ${
+              category.image_url
+                ? `
+                  <img
+                    src="${escapeHTML(
+                      category.image_url
+                    )}"
+                    alt="${escapeHTML(
+                      category.name
+                    )}"
+                    style="
+                      width:100%;
+                      height:100%;
+                      object-fit:cover;
+                    "
+                  >
+                `
+                : `
+                  <strong>JR</strong>
+                `
+            }
+
+          </div>
+
+          <div class="category-content">
+
+            <h3>
+              ${escapeHTML(
+                category.name
+              )}
+            </h3>
+
+            <p>
+              ${escapeHTML(
+                category.slug || ""
+              )}
+            </p>
+
+          </div>
+
+        </div>
+
+      `)
+      .join("");
+}
+
+
+/* =========================================================
+   ADD CATEGORY
+========================================================= */
+
+function openAddCategoryModal() {
+
+  openModal(`
+
+    <h2>
+      Ajouter une catégorie
+    </h2>
+
+    <div style="margin-top:20px;">
+
+      <div class="form-group">
+
+        <label>
+          Nom *
+        </label>
+
+        <input
+          id="newCategoryName"
+          type="text"
+          placeholder="Ex: Homme"
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label>
+          Slug
+        </label>
+
+        <input
+          id="newCategorySlug"
+          type="text"
+          placeholder="homme"
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label>
+          Image URL
+        </label>
+
+        <input
+          id="newCategoryImage"
+          type="url"
+          placeholder="https://..."
+        >
+
+      </div>
+
+      <button
+        id="saveCategoryBtn"
+        class="primary-btn"
+        style="width:100%"
+      >
+        Ajouter
+      </button>
+
+    </div>
+
+  `);
+
+  const nameInput =
+    document.getElementById(
+      "newCategoryName"
+    );
+
+  const slugInput =
+    document.getElementById(
+      "newCategorySlug"
+    );
+
+  nameInput?.addEventListener(
+    "input",
+    () => {
+
+      if (!slugInput.dataset.edited) {
+
+        slugInput.value =
+          createSlug(
+            nameInput.value
+          );
+
+      }
+
+    }
+  );
+
+  slugInput?.addEventListener(
+    "input",
+    () => {
+
+      slugInput.dataset.edited =
+        "true";
+
+    }
+  );
+
+  document
+    .getElementById("saveCategoryBtn")
+    ?.addEventListener(
+      "click",
+      saveCategory
+    );
+}
+
+
+/* =========================================================
+   SAVE CATEGORY
+========================================================= */
+
+async function saveCategory() {
+
+  const name =
+    document
+      .getElementById(
+        "newCategoryName"
+      )
+      ?.value
+      .trim();
+
+  let slug =
+    document
+      .getElementById(
+        "newCategorySlug"
+      )
+      ?.value
+      .trim();
+
+  const imageUrl =
+    document
+      .getElementById(
+        "newCategoryImage"
+      )
+      ?.value
+      .trim();
+
+  if (!name) {
+
+    showNotification(
+      "Nom obligatoire.",
       "error"
     );
 
     return;
   }
 
+  if (!slug) {
+    slug = createSlug(name);
+  }
 
-  STATE.categories.push(
-    data
-  );
+  try {
 
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from("categories")
+        .insert({
 
-  STATE.categories.sort(
-    (a, b) =>
-      String(a.name)
-        .localeCompare(
-          String(b.name)
-        )
-  );
+          name,
 
+          slug,
 
-  renderCategories();
+          image_url:
+            imageUrl || null
 
-  updateProductCategoryFilter();
+        })
+        .select()
+        .single();
 
-  closeModal();
+    if (error) {
+      throw error;
+    }
 
+    STATE.categories.push(data);
 
-  showNotification(
-    "Catégorie ajoutée.",
-    "success"
-  );
+    STATE.categories.sort(
+      (a, b) =>
+        String(a.name)
+          .localeCompare(
+            String(b.name)
+          )
+    );
+
+    renderCategories();
+    updateProductCategoryFilter();
+
+    closeModal();
+
+    showNotification(
+      "Catégorie ajoutée.",
+      "success"
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Save category error:",
+      error
+    );
+
+    showNotification(
+      error.message ||
+      "Erreur lors de l'ajout.",
+      "error"
+    );
+
+  }
 }
 
 
@@ -3094,58 +5412,45 @@ function updateDashboard() {
         product.active !== false
     );
 
-
   const revenue =
     document.getElementById(
       "statRevenue"
     );
-
 
   const orders =
     document.getElementById(
       "statOrders"
     );
 
-
   const products =
     document.getElementById(
       "statProducts"
     );
-
 
   const customers =
     document.getElementById(
       "statCustomers"
     );
 
-
   if (revenue) {
-
     revenue.textContent =
       formatPrice(0);
   }
 
-
   if (orders) {
-
     orders.textContent =
       STATE.orders.length;
   }
 
-
   if (products) {
-
     products.textContent =
       activeProducts.length;
   }
 
-
   if (customers) {
-
     customers.textContent =
       STATE.customers.length;
   }
-
 
   renderLowStock();
 }
@@ -3162,18 +5467,13 @@ function renderLowStock() {
       "lowStockContainer"
     );
 
-
   if (!container) return;
-
 
   const products =
     STATE.products.filter(
       product =>
-        Number(
-          product.stock || 0
-        ) <= 5
+        Number(product.stock || 0) <= 5
     );
-
 
   if (!products.length) {
 
@@ -3196,55 +5496,50 @@ function renderLowStock() {
     return;
   }
 
-
   container.innerHTML =
     products
       .slice(0, 8)
-      .map(
-        product => {
+      .map(product => {
 
-          const stock =
-            Number(
-              product.stock || 0
-            );
+        const stock =
+          Number(
+            product.stock || 0
+          );
 
+        return `
 
-          return `
+          <div class="low-stock-item">
 
-            <div
-              class="low-stock-item"
-            >
+            <strong>
+              ${escapeHTML(
+                product.name
+              )}
+            </strong>
 
-              <strong>
-                ${escapeHTML(
-                  product.name
-                )}
-              </strong>
-
-              <span
-                class="
-                  status
-                  ${
-                    stock === 0
-                      ? "status-danger"
-                      : "status-warning"
-                  }
-                "
-              >
-
+            <span
+              class="
+                status
                 ${
                   stock === 0
-                    ? "Rupture"
-                    : `${stock} restant(s)`
+                    ? "status-danger"
+                    : "status-warning"
                 }
+              "
+            >
 
-              </span>
+              ${
+                stock === 0
+                  ? "Rupture"
+                  : `${stock} restant(s)`
+              }
 
-            </div>
+            </span>
 
-          `;
-        }
-      )
+          </div>
+
+        `;
+
+      })
       .join("");
 }
 
@@ -3260,96 +5555,104 @@ function loadInventory() {
       "inventoryTableBody"
     );
 
-
   if (!tbody) return;
 
+  if (!STATE.products.length) {
+
+    tbody.innerHTML = `
+      <tr>
+        <td
+          colspan="4"
+          class="empty-row"
+        >
+          Aucun produit.
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
 
   tbody.innerHTML =
     STATE.products
-      .map(
-        product => {
+      .map(product => {
 
-          const stock =
-            Number(
-              product.stock || 0
-            );
+        const stock =
+          Number(
+            product.stock || 0
+          );
 
+        let state =
+          "Correct";
 
-          let state =
-            "Correct";
+        let statusClass =
+          "status-success";
 
+        if (stock === 0) {
 
-          let statusClass =
-            "status-success";
+          state =
+            "Rupture";
 
+          statusClass =
+            "status-danger";
 
-          if (stock === 0) {
+        } else if (stock <= 5) {
 
-            state =
-              "Rupture";
+          state =
+            "Stock faible";
 
-            statusClass =
-              "status-danger";
+          statusClass =
+            "status-warning";
 
-          } else if (
-            stock <= 5
-          ) {
-
-            state =
-              "Stock faible";
-
-            statusClass =
-              "status-warning";
-          }
-
-
-          return `
-
-            <tr>
-
-              <td>
-                <strong>
-                  ${escapeHTML(
-                    product.name
-                  )}
-                </strong>
-              </td>
-
-              <td>
-                ${stock}
-              </td>
-
-              <td>
-
-                <span
-                  class="
-                    status
-                    ${statusClass}
-                  "
-                >
-                  ${state}
-                </span>
-
-              </td>
-
-              <td>
-
-                <button
-                  class="secondary-btn"
-                  onclick="editProduct('${escapeHTML(
-                    product.id
-                  )}')"
-                >
-                  Modifier
-                </button>
-
-              </td>
-
-            </tr>
-
-          `;
         }
-      )
+
+        return `
+
+          <tr>
+
+            <td>
+              <strong>
+                ${escapeHTML(
+                  product.name
+                )}
+              </strong>
+            </td>
+
+            <td>
+              ${stock}
+            </td>
+
+            <td>
+
+              <span
+                class="
+                  status
+                  ${statusClass}
+                "
+              >
+                ${state}
+              </span>
+
+            </td>
+
+            <td>
+
+              <button
+                class="secondary-btn"
+                onclick="editProduct('${escapeHTML(
+                  product.id
+                )}')"
+              >
+                Modifier
+              </button>
+
+            </td>
+
+          </tr>
+
+        `;
+
+      })
       .join("");
 }
 
@@ -3365,9 +5668,7 @@ function loadOrders() {
       "ordersTableBody"
     );
 
-
   if (!tbody) return;
-
 
   tbody.innerHTML = `
 
@@ -3398,9 +5699,7 @@ function loadCustomers() {
       "customersTableBody"
     );
 
-
   if (!tbody) return;
-
 
   tbody.innerHTML = `
 
@@ -3419,577 +5718,35 @@ function loadCustomers() {
   `;
 }
 
-
 /* =========================================================
-   NAVIGATION
-========================================================= */
-
-function setupNavigation() {
-
-  DOM.navItems.forEach(
-    item => {
-
-      item.addEventListener(
-        "click",
-        () => {
-
-          showSection(
-            item.dataset.section
-          );
-
-        }
-      );
-
-    }
-  );
-
-
-  DOM.quickActions.forEach(
-    item => {
-
-      item.addEventListener(
-        "click",
-        () => {
-
-          const section =
-            item.dataset.section;
-
-
-          if (section) {
-
-            showSection(
-              section
-            );
-          }
-
-        }
-      );
-
-    }
-  );
-}
-
-
-/* =========================================================
-   SHOW SECTION
-========================================================= */
-
-function showSection(
-  section
-) {
-
-  if (
-    !CONFIG.sections[
-      section
-    ]
-  ) return;
-
-
-  STATE.currentSection =
-    section;
-
-
-  DOM.navItems.forEach(
-    item => {
-
-      item.classList.toggle(
-        "active",
-        item.dataset.section ===
-        section
-      );
-
-    }
-  );
-
-
-  DOM.pageSections.forEach(
-    page => {
-
-      page.classList.toggle(
-        "active",
-        page.id === section
-      );
-
-    }
-  );
-
-
-  if (DOM.pageTitle) {
-
-    DOM.pageTitle.textContent =
-      CONFIG.sections[
-        section
-      ].title;
-  }
-
-
-  if (DOM.pageSubtitle) {
-
-    DOM.pageSubtitle.textContent =
-      CONFIG.sections[
-        section
-      ].subtitle;
-  }
-
-
-  if (
-    window.innerWidth <= 900
-  ) {
-
-    DOM.sidebar?.classList.remove(
-      "open"
-    );
-  }
-
-
-  if (
-    section === "products"
-  ) {
-
-    renderProducts();
-  }
-
-
-  if (
-    section === "categories"
-  ) {
-
-    renderCategories();
-  }
-
-
-  if (
-    section === "inventory"
-  ) {
-
-    loadInventory();
-  }
-
-
-  if (
-    section === "orders"
-  ) {
-
-    loadOrders();
-  }
-
-
-  if (
-    section === "customers"
-  ) {
-
-    loadCustomers();
-  }
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-function setupMobileMenu() {
-
-  DOM.mobileMenuBtn?.addEventListener(
-    "click",
-    () => {
-
-      DOM.sidebar?.classList.toggle(
-        "open"
-      );
-
-    }
-  );
-}
-
-
-/* =========================================================
-   BUTTONS
-========================================================= */
-
-function setupButtons() {
-
-  DOM.addProductBtn?.addEventListener(
-    "click",
-    openAddProductModal
-  );
-
-
-  DOM.addCategoryBtn?.addEventListener(
-    "click",
-    openAddCategoryModal
-  );
-
-
-  DOM.logoutBtn?.addEventListener(
-    "click",
-    handleLogout
-  );
-}
-
-
-/* =========================================================
-   SEARCH
-========================================================= */
-
-function setupSearch() {
-
-  DOM.productSearch?.addEventListener(
-    "input",
-    filterProducts
-  );
-
-
-  DOM.productCategoryFilter?.addEventListener(
-    "change",
-    filterProducts
-  );
-
-
-  DOM.productStatusFilter?.addEventListener(
-    "change",
-    filterProducts
-  );
-}
-
-
-/* =========================================================
-   MODAL
-========================================================= */
-
-function setupModal() {
-
-  DOM.closeModalBtn?.addEventListener(
-    "click",
-    closeModal
-  );
-
-
-  DOM.modalOverlay?.addEventListener(
-    "click",
-    event => {
-
-      if (
-        event.target ===
-        DOM.modalOverlay
-      ) {
-
-        closeModal();
-      }
-
-    }
-  );
-
-
-  document.addEventListener(
-    "keydown",
-    event => {
-
-      if (
-        event.key ===
-        "Escape"
-      ) {
-
-        closeModal();
-      }
-
-    }
-  );
-}
-
-
-function openModal(
-  content
-) {
-
-  if (
-    !DOM.modalOverlay ||
-    !DOM.modalContent
-  ) return;
-
-
-  DOM.modalContent.innerHTML =
-    content;
-
-
-  DOM.modalOverlay.classList.add(
-    "show"
-  );
-}
-
-
-function closeModal() {
-
-  DOM.modalOverlay?.classList.remove(
-    "show"
-  );
-}
-
-
-/* =========================================================
-   LOGOUT
-========================================================= */
-
-async function handleLogout() {
-
-  const confirmed =
-    window.confirm(
-      "Voulez-vous vraiment vous déconnecter ?"
-    );
-
-
-  if (!confirmed) return;
-
-
-  const {
-    error
-  } =
-    await supabaseClient
-      .auth
-      .signOut();
-
-
-  if (error) {
-
-    showNotification(
-      error.message,
-      "error"
-    );
-
-    return;
-  }
-
-
-  showNotification(
-    "Déconnexion effectuée.",
-    "success"
-  );
-}
-
-
-/* =========================================================
-   HELPERS
-========================================================= */
-
-function formatPrice(
-  value
-) {
-
-  const number =
-    Number(value) || 0;
-
-
-  return (
-    new Intl.NumberFormat(
-      "fr-FR"
-    ).format(number)
-    +
-    " "
-    +
-    CONFIG.currency
-  );
-}
-
-
-function createSlug(
-  text
-) {
-
-  return String(
-    text || ""
-  )
-
-    .toLowerCase()
-
-    .normalize(
-      "NFD"
-    )
-
-    .replace(
-      /[\u0300-\u036f]/g,
-      ""
-    )
-
-    .replace(
-      /[^a-z0-9]+/g,
-      "-"
-    )
-
-    .replace(
-      /^-+|-+$/g,
-      "");
-}
-
-
-function escapeHTML(
-  value
-) {
-
-  return String(
-    value ?? ""
-  )
-
-    .replaceAll(
-      "&",
-      "&amp;"
-    )
-
-    .replaceAll(
-      "<",
-      "&lt;"
-    )
-
-    .replaceAll(
-      ">",
-      "&gt;"
-    )
-
-    .replaceAll(
-      '"',
-      "&quot;"
-    )
-
-    .replaceAll(
-      "'",
-      "&#039;"
-    );
-}
-
-
-function showNotification(
-  message,
-  type = "info"
-) {
-
-  document
-    .querySelector(
-      ".admin-notification"
-    )
-    ?.remove();
-
-
-  const notification =
-    document.createElement(
-      "div"
-    );
-
-
-  notification.className =
-    "admin-notification";
-
-
-  notification.textContent =
-    message;
-
-
-  notification.style.cssText = `
-
-    position:fixed;
-
-    right:20px;
-
-    bottom:20px;
-
-    z-index:9999;
-
-    max-width:380px;
-
-    padding:14px 18px;
-
-    border-radius:12px;
-
-    background:${
-      type === "error"
-        ? "#c73535"
-        : "#111"
-    };
-
-    color:#fff;
-
-    font-size:13px;
-
-    font-weight:600;
-
-    box-shadow:
-      0 15px 40px
-      rgba(0,0,0,.18);
-
-  `;
-
-
-  document.body.appendChild(
-    notification
-  );
-
-
-  setTimeout(
-    () => {
-
-      notification.remove();
-
-    },
-    3500
-  );
-}
-
-
-/* =========================================================
-   GLOBAL
-========================================================= */
-
-window.showSection =
-  showSection;
-
-window.closeModal =
-  closeModal;
-
-window.editProduct =
-  editProduct;
-
-window.JR_ADMIN = {
-
-  STATE,
-
-  supabaseClient,
-
-  loadProducts,
-
-  loadCategories,
-
-  loadProductVariants,
-
-  saveProductVariant,
-
-  deleteProductVariant,
-
-  showSection
-
-};
-/* =========================================================
-VARIANT HELPERS
+   VARIANT FORM HELPERS
 ========================================================= */
 
 function getVariantSizeOptions() {
-
   return `
     <option value="">Sans taille</option>
 
     <optgroup label="Vêtements">
       ${VARIANT_OPTIONS.clothingSizes
-        .map(size => `
-          <option value="${escapeHTML(size)}">
-            ${escapeHTML(size)}
-          </option>
-        `)
+        .map(
+          size => `
+            <option value="${escapeHTML(size)}">
+              ${escapeHTML(size)}
+            </option>
+          `
+        )
         .join("")}
     </optgroup>
 
     <optgroup label="Chaussures">
       ${VARIANT_OPTIONS.shoeSizes
-        .map(size => `
-          <option value="${escapeHTML(size)}">
-            ${escapeHTML(size)}
-          </option>
-        `)
+        .map(
+          size => `
+            <option value="${escapeHTML(size)}">
+              ${escapeHTML(size)}
+            </option>
+          `
+        )
         .join("")}
     </optgroup>
   `;
@@ -3997,31 +5754,28 @@ function getVariantSizeOptions() {
 
 
 function getVariantColorOptions() {
-
   return `
     <option value="">Sans couleur</option>
 
     ${VARIANT_OPTIONS.colors
-      .map(color => `
-        <option value="${escapeHTML(color)}">
-          ${escapeHTML(color)}
-        </option>
-      `)
+      .map(
+        color => `
+          <option value="${escapeHTML(color)}">
+            ${escapeHTML(color)}
+          </option>
+        `
+      )
       .join("")}
   `;
 }
 
 
 /* =========================================================
-VARIANT FORM
+   VARIANT MANAGER HTML
 ========================================================= */
 
-function renderVariantForm(
-  product
-) {
-
+function renderVariantManager(product) {
   return `
-
     <div
       id="variantManager"
       style="
@@ -4042,7 +5796,6 @@ function renderVariantForm(
       >
 
         <div>
-
           <h3
             style="
               margin:0;
@@ -4061,7 +5814,6 @@ function renderVariantForm(
           >
             Gérez les couleurs, tailles, prix et stocks.
           </p>
-
         </div>
 
         <button
@@ -4123,8 +5875,7 @@ function renderVariantForm(
         <div
           style="
             display:grid;
-            grid-template-columns:
-              1fr 1fr;
+            grid-template-columns:1fr 1fr;
             gap:12px;
           "
         >
@@ -4135,9 +5886,7 @@ function renderVariantForm(
               Couleur
             </label>
 
-            <select
-              id="variantColor"
-            >
+            <select id="variantColor">
               ${getVariantColorOptions()}
             </select>
 
@@ -4150,9 +5899,7 @@ function renderVariantForm(
               Taille / Pointure
             </label>
 
-            <select
-              id="variantSize"
-            >
+            <select id="variantSize">
               ${getVariantSizeOptions()}
             </select>
 
@@ -4242,8 +5989,7 @@ function renderVariantForm(
         <div
           style="
             display:grid;
-            grid-template-columns:
-              1fr 1fr;
+            grid-template-columns:1fr 1fr;
             gap:10px;
           "
         >
@@ -4270,81 +6016,88 @@ function renderVariantForm(
       </div>
 
     </div>
-
   `;
 }
 
 
 /* =========================================================
-RENDER VARIANTS
+   RENDER VARIANTS
 ========================================================= */
 
-async function renderProductVariants(
-  productId
-) {
+async function renderProductVariants(productId) {
 
   const container =
-    document.getElementById(
-      "variantsList"
-    );
+    document.getElementById("variantsList");
 
   if (!container) {
     return;
   }
 
-
-  const variants =
-    await loadProductVariants(
-      productId
-    );
-
-
-  if (!variants.length) {
+  try {
 
     container.innerHTML = `
-
       <div
         style="
-          padding:20px;
-          text-align:center;
+          padding:15px;
           background:#f7f7f7;
           border-radius:10px;
           color:#777;
           font-size:13px;
         "
       >
-
-        Aucune variante.
-
+        Chargement des variantes...
       </div>
-
     `;
 
-    return;
-  }
+    const variants =
+      await loadProductVariants(productId);
+
+    if (!variants.length) {
+
+      container.innerHTML = `
+        <div
+          style="
+            padding:20px;
+            text-align:center;
+            background:#f7f7f7;
+            border-radius:10px;
+            color:#777;
+            font-size:13px;
+          "
+        >
+          Aucune variante.
+        </div>
+      `;
+
+      return;
+    }
 
 
-  container.innerHTML =
-    variants
-      .map(
-        variant => {
+    container.innerHTML =
+      variants
+        .map(variant => {
 
           const price =
             variant.price === null ||
             variant.price === undefined
               ? "Prix produit"
-              : formatPrice(
-                  variant.price
-                );
+              : formatPrice(variant.price);
+
+          const stock =
+            Number(variant.stock || 0);
+
+          const stockClass =
+            stock === 0
+              ? "status-danger"
+              : stock <= 5
+                ? "status-warning"
+                : "status-success";
 
 
           return `
-
             <div
               class="variant-admin-card"
-              data-variant-id="${escapeHTML(
-                variant.id
-              )}"
+              data-variant-id="${escapeHTML(variant.id)}"
               style="
                 display:flex;
                 align-items:center;
@@ -4359,13 +6112,9 @@ async function renderProductVariants(
 
               ${
                 variant.image_url
-
                   ? `
-
                     <img
-                      src="${escapeHTML(
-                        variant.image_url
-                      )}"
+                      src="${escapeHTML(variant.image_url)}"
                       alt=""
                       style="
                         width:58px;
@@ -4374,11 +6123,8 @@ async function renderProductVariants(
                         border-radius:9px;
                       "
                     >
-
                   `
-
                   : `
-
                     <div
                       style="
                         width:58px;
@@ -4392,7 +6138,6 @@ async function renderProductVariants(
                     >
                       JR
                     </div>
-
                   `
               }
 
@@ -4405,21 +6150,15 @@ async function renderProductVariants(
               >
 
                 <strong>
-                  ${
-                    escapeHTML(
-                      variant.color ||
-                      "Sans couleur"
-                    )
-                  }
+                  ${escapeHTML(
+                    variant.color || "Sans couleur"
+                  )}
 
                   —
 
-                  ${
-                    escapeHTML(
-                      variant.size ||
-                      "Sans taille"
-                    )
-                  }
+                  ${escapeHTML(
+                    variant.size || "Sans taille"
+                  )}
                 </strong>
 
 
@@ -4430,16 +6169,27 @@ async function renderProductVariants(
                     color:#777;
                   "
                 >
-
                   ${price}
-
                   ·
-
                   Stock:
-                  ${Number(
-                    variant.stock || 0
-                  )}
+                  ${stock}
+                </div>
 
+
+                <div
+                  style="
+                    margin-top:6px;
+                  "
+                >
+                  <span
+                    class="status ${stockClass}"
+                  >
+                    ${
+                      stock === 0
+                        ? "Rupture"
+                        : `${stock} en stock`
+                    }
+                  </span>
                 </div>
 
 
@@ -4449,13 +6199,11 @@ async function renderProductVariants(
                     font-size:11px;
                   "
                 >
-
                   ${
                     variant.is_active
                       ? "✓ Active"
                       : "× Inactive"
                   }
-
                 </div>
 
               </div>
@@ -4472,9 +6220,7 @@ async function renderProductVariants(
                 <button
                   type="button"
                   class="secondary-btn"
-                  onclick="editVariant('${escapeHTML(
-                    variant.id
-                  )}')"
+                  onclick="editVariant('${escapeHTML(variant.id)}')"
                 >
                   Modifier
                 </button>
@@ -4487,9 +6233,7 @@ async function renderProductVariants(
                     color:#c73535;
                     border-color:#c73535;
                   "
-                  onclick="deleteVariant('${escapeHTML(
-                    variant.id
-                  )}')"
+                  onclick="deleteVariant('${escapeHTML(variant.id)}')"
                 >
                   Supprimer
                 </button>
@@ -4497,15 +6241,36 @@ async function renderProductVariants(
               </div>
 
             </div>
-
           `;
+        })
+        .join("");
 
-        }
-      )
-      .join("");
+  } catch (error) {
+
+    console.error(
+      "Render variants error:",
+      error
+    );
+
+    container.innerHTML = `
+      <div
+        style="
+          padding:15px;
+          background:#fff1f1;
+          border-radius:10px;
+          color:#c73535;
+          font-size:13px;
+        "
+      >
+        Impossible de charger les variantes.
+      </div>
+    `;
+  }
 }
+
+
 /* =========================================================
-OPEN VARIANT FORM
+   OPEN VARIANT FORM
 ========================================================= */
 
 function openVariantForm(
@@ -4565,9 +6330,7 @@ function openVariantForm(
 
 
   const editing =
-    Boolean(
-      variant
-    );
+    Boolean(variant);
 
 
   if (title) {
@@ -4576,43 +6339,34 @@ function openVariantForm(
       editing
         ? "Modifier la variante"
         : "Ajouter une variante";
-
   }
 
 
   if (idInput) {
 
     idInput.value =
-      variant?.id ||
-      "";
-
+      variant?.id || "";
   }
 
 
   if (colorInput) {
 
     colorInput.value =
-      variant?.color ||
-      "";
-
+      variant?.color || "";
   }
 
 
   if (sizeInput) {
 
     sizeInput.value =
-      variant?.size ||
-      "";
-
+      variant?.size || "";
   }
 
 
   if (priceInput) {
 
     priceInput.value =
-      variant?.price ??
-      "";
-
+      variant?.price ?? "";
   }
 
 
@@ -4620,19 +6374,15 @@ function openVariantForm(
 
     stockInput.value =
       Number(
-        variant?.stock ||
-        0
+        variant?.stock || 0
       );
-
   }
 
 
   if (imageInput) {
 
     imageInput.value =
-      variant?.image_url ||
-      "";
-
+      variant?.image_url || "";
   }
 
 
@@ -4642,7 +6392,6 @@ function openVariantForm(
       variant
         ? variant.is_active !== false
         : true;
-
   }
 
 
@@ -4661,14 +6410,13 @@ function openVariantForm(
       "saveVariantBtn"
     );
 
-
   if (saveButton) {
 
     saveButton.onclick =
-      () => saveVariant(
-        product?.id
-      );
-
+      () =>
+        saveVariantFromForm(
+          product?.id
+        );
   }
 
 
@@ -4677,18 +6425,16 @@ function openVariantForm(
       "cancelVariantBtn"
     );
 
-
   if (cancelButton) {
 
     cancelButton.onclick =
       closeVariantForm;
-
   }
 }
 
 
 /* =========================================================
-CLOSE VARIANT FORM
+   CLOSE VARIANT FORM
 ========================================================= */
 
 function closeVariantForm() {
@@ -4702,24 +6448,284 @@ function closeVariantForm() {
 
     form.style.display =
       "none";
-
   }
-
 }
 
 
 /* =========================================================
-EDIT VARIANT
+   SAVE VARIANT FROM FORM
+========================================================= */
+
+async function saveVariantFromForm(
+  productId
+) {
+
+  if (!productId) {
+
+    showNotification(
+      "Produit introuvable.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  const id =
+    document.getElementById(
+      "editingVariantId"
+    )?.value || "";
+
+
+  const color =
+    document.getElementById(
+      "variantColor"
+    )?.value || "";
+
+
+  const size =
+    document.getElementById(
+      "variantSize"
+    )?.value || "";
+
+
+  const priceValue =
+    document.getElementById(
+      "variantPrice"
+    )?.value;
+
+
+  const stockValue =
+    document.getElementById(
+      "variantStock"
+    )?.value;
+
+
+  const imageUrl =
+    document.getElementById(
+      "variantImage"
+    )?.value.trim() || null;
+
+
+  const isActive =
+    document.getElementById(
+      "variantActive"
+    )?.checked !== false;
+
+
+  const price =
+    priceValue === "" ||
+    priceValue === null ||
+    priceValue === undefined
+      ? null
+      : Number(priceValue);
+
+
+  const stock =
+    Number(stockValue);
+
+
+  if (
+    !Number.isFinite(stock) ||
+    !Number.isInteger(stock) ||
+    stock < 0
+  ) {
+
+    showNotification(
+      "Stock de variante invalide.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  if (
+    price !== null &&
+    (
+      !Number.isFinite(price) ||
+      price < 0
+    )
+  ) {
+
+    showNotification(
+      "Prix de variante invalide.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  if (!color && !size) {
+
+    showNotification(
+      "Choisissez au moins une couleur ou une taille.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  const button =
+    document.getElementById(
+      "saveVariantBtn"
+    );
+
+
+  try {
+
+    if (button) {
+
+      button.disabled =
+        true;
+
+      button.textContent =
+        "Enregistrement...";
+    }
+
+
+    const variantData = {
+
+      product_id:
+        productId,
+
+      color:
+        color.trim() || null,
+
+      size:
+        size.trim() || null,
+
+      price,
+
+      stock,
+
+      image_url:
+        imageUrl,
+
+      is_active:
+        isActive
+
+    };
+
+
+    let data;
+    let error;
+
+
+    if (id) {
+
+      const result =
+        await supabaseClient
+          .from("product_variants")
+          .update(variantData)
+          .eq("id", id)
+          .select()
+          .single();
+
+      data =
+        result.data;
+
+      error =
+        result.error;
+
+    } else {
+
+      const result =
+        await supabaseClient
+          .from("product_variants")
+          .insert(variantData)
+          .select()
+          .single();
+
+      data =
+        result.data;
+
+      error =
+        result.error;
+    }
+
+
+    if (error) {
+
+      if (
+        error.code ===
+        "23505"
+      ) {
+
+        throw new Error(
+          "Cette combinaison couleur / taille existe déjà pour ce produit."
+        );
+      }
+
+      throw error;
+    }
+
+
+    closeVariantForm();
+
+
+    await renderProductVariants(
+      productId
+    );
+
+
+    showNotification(
+      id
+        ? "Variante modifiée avec succès."
+        : "Variante ajoutée avec succès.",
+      "success"
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "Save variant error:",
+      error
+    );
+
+
+    showNotification(
+      error.message ||
+      "Erreur lors de l'enregistrement de la variante.",
+      "error"
+    );
+
+
+  } finally {
+
+    if (button) {
+
+      button.disabled =
+        false;
+
+      button.textContent =
+        "Enregistrer";
+    }
+  }
+}
+
+
+/* =========================================================
+   EDIT VARIANT
 ========================================================= */
 
 async function editVariant(
   variantId
 ) {
 
+  if (!variantId) {
+    return;
+  }
+
+
   const variant =
     await getVariant(
       variantId
     );
+
 
   if (!variant) {
     return;
@@ -4736,6 +6742,17 @@ async function editVariant(
     );
 
 
+  if (!product) {
+
+    showNotification(
+      "Produit de la variante introuvable.",
+      "error"
+    );
+
+    return;
+  }
+
+
   openVariantForm(
     variant,
     product
@@ -4744,7 +6761,7 @@ async function editVariant(
 
 
 /* =========================================================
-GET VARIANT
+   GET VARIANT
 ========================================================= */
 
 async function getVariant(
@@ -4756,11 +6773,7 @@ async function getVariant(
     error
   } =
     await supabaseClient
-
-      .from(
-        "product_variants"
-      )
-
+      .from("product_variants")
       .select(`
         id,
         product_id,
@@ -4769,14 +6782,14 @@ async function getVariant(
         price,
         stock,
         image_url,
-        is_active
+        is_active,
+        created_at,
+        updated_at
       `)
-
       .eq(
         "id",
         variantId
       )
-
       .single();
 
 
@@ -4787,179 +6800,346 @@ async function getVariant(
       error
     );
 
+
     showNotification(
       "Impossible de charger la variante.",
       "error"
     );
+
 
     return null;
   }
 
 
   return data;
-} 
-showSection
-
-};
-  STATE,
-
-  supabaseClient,
-
-  loadProducts,
-/* =========================================================
-   PRODUCT VARIANTS
-========================================================= */
-
-async function loadProductVariants(productId = null) {
-
-  let query = supabaseClient
-    .from("product_variants")
-    .select(`
-      id,
-      product_id,
-      color,
-      size,
-      price,
-      stock,
-      image_url,
-      is_active,
-      created_at,
-      updated_at
-    `)
-    .order("created_at", {
-      ascending: true
-    });
-
-  if (productId) {
-    query = query.eq(
-      "product_id",
-      productId
-    );
-  }
-
-  const {
-    data,
-    error
-  } = await query;
-
-  if (error) {
-    console.error(
-      "Product variants error:",
-      error
-    );
-
-    throw error;
-  }
-
-  return data || [];
-}/* =========================================================
-   SAVE PRODUCT VARIANT
-========================================================= */
-
-async function saveProductVariant({
-  productId,
-  color = null,
-  size = null,
-  price = null,
-  stock = 0,
-  imageUrl = null,
-  isActive = true
-}) {
-
-  if (!productId) {
-    throw new Error(
-      "product_id obligatoire."
-    );
-  }
-
-  const variantData = {
-    product_id: productId,
-
-    color:
-      color?.trim() || null,
-
-    size:
-      size?.trim() || null,
-
-    price:
-      price === null ||
-      price === "" ||
-      price === undefined
-        ? null
-        : Number(price),
-
-    stock:
-      Number(stock) || 0,
-
-    image_url:
-      imageUrl || null,
-
-    is_active:
-      isActive !== false
-  };
-
-  const {
-    data,
-    error
-  } = await supabaseClient
-    .from("product_variants")
-    .insert(
-      variantData
-    )
-    .select()
-    .single();
-
-  if (error) {
-
-    console.error(
-      "Save variant error:",
-      error
-    );
-
-    throw error;
-  }
-
-  return data;
 }
+
+
 /* =========================================================
-   DELETE PRODUCT VARIANT
+   DELETE VARIANT
 ========================================================= */
 
-async function deleteProductVariant(
+async function deleteVariant(
   variantId
 ) {
 
   if (!variantId) {
-    throw new Error(
-      "Variant ID obligatoire."
-    );
+    return;
   }
 
-  const {
-    error
-  } = await supabaseClient
-    .from("product_variants")
-    .delete()
-    .eq(
-      "id",
+
+  const variant =
+    await getVariant(
       variantId
     );
 
-  if (error) {
+
+  if (!variant) {
+    return;
+  }
+
+
+  const product =
+    STATE.products.find(
+      item =>
+        String(item.id) ===
+        String(
+          variant.product_id
+        )
+    );
+
+
+  const variantName = [
+    variant.color,
+    variant.size
+  ]
+    .filter(Boolean)
+    .join(" — ") ||
+    "cette variante";
+
+
+  const confirmed =
+    window.confirm(
+      `Supprimer "${variantName}" ?`
+    );
+
+
+  if (!confirmed) {
+    return;
+  }
+
+
+  try {
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from("product_variants")
+        .delete()
+        .eq(
+          "id",
+          variantId
+        );
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    if (product) {
+
+      await renderProductVariants(
+        product.id
+      );
+    }
+
+
+    showNotification(
+      "Variante supprimée avec succès.",
+      "success"
+    );
+
+
+  } catch (error) {
 
     console.error(
       "Delete variant error:",
       error
     );
 
-    throw error;
-  }
 
-  return true;
+    showNotification(
+      error.message ||
+      "Erreur lors de la suppression de la variante.",
+      "error"
+    );
+  }
 }
 
-loadCategories,
 
-  showSection
+/* =========================================================
+   ADD VARIANT BUTTON
+========================================================= */
+
+document.addEventListener(
+  "click",
+  event => {
+
+    const button =
+      event.target.closest(
+        "#addVariantBtn"
+      );
+
+    if (!button) {
+      return;
+    }
+
+
+    const productId =
+      button.dataset.productId;
+
+
+    if (!productId) {
+
+      showNotification(
+        "Produit introuvable.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    const product =
+      STATE.products.find(
+        item =>
+          String(item.id) ===
+          String(productId)
+      );
+
+
+    openVariantForm(
+      null,
+      product
+    );
+  }
+);
+
+
+/* =========================================================
+   GLOBAL FUNCTIONS
+========================================================= */
+
+window.editVariant =
+  editVariant;
+
+window.deleteVariant =
+  deleteVariant;
+
+window.getVariant =
+  getVariant;
+
+window.renderProductVariants =
+  renderProductVariants;
+
+
+/* =========================================================
+   UPDATE EDIT PRODUCT MODAL
+   Add variants section
+========================================================= */
+
+const originalEditProduct =
+  window.editProduct;
+
+
+/*
+  On ouvre la section variantes après
+  chargement du modal produit.
+*/
+
+async function addVariantsToEditModal(
+  product
+) {
+
+  const modalContent =
+    document.getElementById(
+      "modalContent"
+    );
+
+  if (!modalContent) {
+    return;
+  }
+
+
+  const existing =
+    document.getElementById(
+      "variantManager"
+    );
+
+
+  if (existing) {
+    existing.remove();
+  }
+
+
+  const managerHTML =
+    renderVariantManager(
+      product
+    );
+
+
+  modalContent.insertAdjacentHTML(
+    "beforeend",
+    managerHTML
+  );
+
+
+  const addButton =
+    document.getElementById(
+      "addVariantBtn"
+    );
+
+
+  if (addButton) {
+
+    addButton.dataset.productId =
+      product.id;
+  }
+
+
+  await renderProductVariants(
+    product.id
+  );
+}
+
+
+/* =========================================================
+   PATCH EDIT PRODUCT
+========================================================= */
+
+const oldEditProduct =
+  window.editProduct;
+
+
+window.editProduct =
+  async function(productId) {
+
+    oldEditProduct(
+      productId
+    );
+
+
+    setTimeout(
+      async () => {
+
+        const product =
+          STATE.products.find(
+            item =>
+              String(item.id) ===
+              String(productId)
+          );
+
+
+        if (!product) {
+          return;
+        }
+
+
+        await addVariantsToEditModal(
+          product
+        );
+
+      },
+      100
+    );
+  };
+
+
+/* =========================================================
+   FINAL ADMIN API
+========================================================= */
+
+window.JR_ADMIN = {
+
+  STATE,
+
+  CONFIG,
+
+  supabaseClient,
+
+  loadProducts,
+
+  loadCategories,
+
+  loadProductVariants,
+
+  renderProductVariants,
+
+  saveProductVariant,
+
+  deleteProductVariant,
+
+  getVariant,
+
+  editVariant,
+
+  deleteVariant,
+
+  showSection,
+
+  openModal,
+
+  closeModal
 
 };
+
+
+/* =========================================================
+   END
+========================================================= */
+
+console.log(
+  "JR Shop Admin Pro — READY ✓"
+);
