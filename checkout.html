@@ -95,14 +95,15 @@
             </h1>
 
             <p class="section-subtitle">
-              Remplissez vos informations pour
-              confirmer votre commande.
+              Remplissez vos informations pour confirmer votre commande.
             </p>
 
           </div>
 
         </div>
 
+
+        <!-- MESSAGE -->
 
         <div
           id="checkoutMessage"
@@ -111,10 +112,17 @@
         ></div>
 
 
+        <!-- CHECKOUT -->
+
         <div
           id="checkoutContainer"
           class="checkout-layout"
         >
+
+
+          <!-- =========================
+               CUSTOMER INFORMATION
+          ========================== -->
 
           <div class="card">
 
@@ -127,6 +135,7 @@
               id="checkoutForm"
               novalidate
             >
+
 
               <!-- NAME -->
 
@@ -176,14 +185,17 @@
                   Wilaya
                 </label>
 
-                <input
-                  type="text"
+                <select
                   id="wilaya"
                   name="wilaya"
-                  placeholder="Votre wilaya"
-                  autocomplete="address-level1"
                   required
                 >
+
+                  <option value="">
+                    Sélectionnez votre wilaya
+                  </option>
+
+                </select>
 
               </div>
 
@@ -196,21 +208,59 @@
                   Commune
                 </label>
 
-                <input
-                  type="text"
+                <select
                   id="commune"
                   name="commune"
-                  placeholder="Votre commune"
-                  autocomplete="address-level2"
+                  required
+                  disabled
+                >
+
+                  <option value="">
+                    Sélectionnez d'abord la wilaya
+                  </option>
+
+                </select>
+
+              </div>
+
+
+              <!-- DELIVERY TYPE -->
+
+              <div class="form-group">
+
+                <label for="deliveryType">
+                  Type de livraison
+                </label>
+
+                <select
+                  id="deliveryType"
+                  name="deliveryType"
                   required
                 >
+
+                  <option value="">
+                    Choisir le type de livraison
+                  </option>
+
+                  <option value="domicile">
+                    🏠 Livraison à domicile
+                  </option>
+
+                  <option value="bureau">
+                    🏢 Livraison au bureau
+                  </option>
+
+                </select>
 
               </div>
 
 
               <!-- ADDRESS -->
 
-              <div class="form-group">
+              <div
+                class="form-group"
+                id="addressGroup"
+              >
 
                 <label for="address">
                   Adresse
@@ -233,7 +283,9 @@
               <div class="form-group">
 
                 <label for="notes">
+
                   Note supplémentaire
+
                   <span
                     style="
                       font-weight:normal;
@@ -242,6 +294,7 @@
                   >
                     (optionnel)
                   </span>
+
                 </label>
 
                 <textarea
@@ -254,23 +307,48 @@
               </div>
 
 
+              <!-- DELIVERY PRICE PREVIEW -->
+
+              <div
+                class="summary-row"
+                style="
+                  margin-top:15px;
+                  padding:15px;
+                  border-radius:12px;
+                "
+              >
+
+                <span>
+                  Frais de livraison
+                </span>
+
+                <strong id="deliveryFee">
+                  0 DA
+                </strong>
+
+              </div>
+
+
               <!-- SUBMIT -->
 
               <button
                 type="submit"
                 id="submitOrderButton"
                 class="btn btn-primary"
-                style="width:100%;"
+                style="width:100%; margin-top:20px;"
               >
                 Confirmer la commande
               </button>
+
 
             </form>
 
           </div>
 
 
-          <!-- ORDER SUMMARY -->
+          <!-- =========================
+               ORDER SUMMARY
+          ========================== -->
 
           <aside
             id="checkoutSummary"
@@ -282,12 +360,47 @@
             </h2>
 
 
-            <div
-              id="summaryItems"
-            >
+            <div id="summaryItems">
               Chargement...
             </div>
 
+
+            <!-- PRODUCTS TOTAL -->
+
+            <div
+              class="summary-row"
+              style="margin-top:20px;"
+            >
+
+              <span>
+                Total produits
+              </span>
+
+              <strong id="productsTotal">
+                0 DA
+              </strong>
+
+            </div>
+
+
+            <!-- DELIVERY TOTAL -->
+
+            <div
+              class="summary-row"
+            >
+
+              <span>
+                Livraison
+              </span>
+
+              <strong id="summaryDelivery">
+                0 DA
+              </strong>
+
+            </div>
+
+
+            <!-- FINAL TOTAL -->
 
             <div
               class="summary-row summary-total"
@@ -298,15 +411,14 @@
                 Total
               </span>
 
-              <strong
-                id="summaryTotal"
-              >
+              <strong id="summaryTotal">
                 0 DA
               </strong>
 
             </div>
 
           </aside>
+
 
         </div>
 
@@ -326,6 +438,7 @@
     <div class="container">
 
       <div class="footer-inner">
+
 
         <div>
 
@@ -382,6 +495,7 @@
 
         </div>
 
+
       </div>
 
 
@@ -405,6 +519,7 @@
   <script src="config.js"></script>
 
   <script src="checkout.js"></script>
+
 
 </body>
 
